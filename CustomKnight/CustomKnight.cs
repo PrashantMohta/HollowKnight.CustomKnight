@@ -9,6 +9,9 @@ namespace CustomKnight
     {
         public const string KNIGHT_PNG = "Knight.png";
         public const string SPRINT_PNG = "Sprint.png";
+        public const string WRAITHS_PNG = "Wraiths.png";
+        public const string SHRIEK_PNG = "VoidSpells.png";
+        public const string VS_PNG = "VS.png";
         public const string IMAGE_FOLDER = "CustomKnight";
 
         public static readonly string DATA_DIR = Path.GetFullPath(Application.dataPath + "/Managed/Mods/" + IMAGE_FOLDER);
@@ -20,10 +23,10 @@ namespace CustomKnight
                 Directory.CreateDirectory(DATA_DIR);
             }
 
-            if (!File.Exists(DATA_DIR + "/" + KNIGHT_PNG) || !File.Exists(DATA_DIR + "/" + SPRINT_PNG))
+            if (!File.Exists(DATA_DIR + "/" + KNIGHT_PNG) || !File.Exists(DATA_DIR + "/" + SPRINT_PNG) || !File.Exists(DATA_DIR + "/" + WRAITHS_PNG) || !File.Exists(DATA_DIR + "/" + SHRIEK_PNG))
             {
-                Log("Could not find one or both of the required spritesheets");
-                Log($"To use this mod, place two files \"{KNIGHT_PNG}\" and \"{SPRINT_PNG}\" in the folder \"{IMAGE_FOLDER}\"");
+                Log("Could not find one or more of the required spritesheets");
+                Log($"To use this mod, place two files \"{KNIGHT_PNG}\", \"{SPRINT_PNG}\", \"{WRAITHS_PNG}\", \"{SHRIEK_PNG}\", and \"{VS_PNG}\" in the folder \"{IMAGE_FOLDER}\"");
                 return;
             }
 
@@ -32,7 +35,7 @@ namespace CustomKnight
             ModHooks.Instance.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
         }
 
-        public override string GetVersion() => "1.0.0";
+        public override string GetVersion() => "1.2.0";
 
         public void Unload()
         {
