@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Modding;
+using ModCommon;
 
 namespace CustomKnight
 {
@@ -16,12 +18,14 @@ namespace CustomKnight
         public static Texture2D DefaultWraithsTex { get; private set; }
         public static Texture2D DefaultShriekTex { get; private set; }
         public static Texture2D DefaultVSTex { get; private set; }
+        public static Texture2D DefaultHudTex { get; private set; }
 
         public static Texture2D KnightTex { get; private set; }
         public static Texture2D SprintTex { get; private set; }
         public static Texture2D WraithsTex { get; private set; }
         public static Texture2D ShriekTex { get; private set; }
         public static Texture2D VSTex { get; private set; }
+        public static Texture2D HudTex { get; private set; }
 
         public static bool LoadComplete { get; private set; }
 
@@ -60,6 +64,14 @@ namespace CustomKnight
                         }
                     }
                 }
+                foreach (tk2dSprite i in GameCameras.instance.hudCanvas.GetComponentsInChildren<tk2dSprite>())
+                {
+                    if (i.name == "Health 1")
+                    {
+                        DefaultHudTex = i.GetCurrentSpriteDef().material.mainTexture as Texture2D;
+                        break;
+                    }
+                }
             }
         }
 
@@ -70,7 +82,7 @@ namespace CustomKnight
                 Destroy(loader);
             }
 
-            if (HeroController.instance != null && DefaultKnightTex != null && DefaultSprintTex != null && DefaultWraithsTex != null && DefaultShriekTex != null)
+            if (HeroController.instance != null && DefaultKnightTex != null && DefaultSprintTex != null && DefaultWraithsTex != null && DefaultShriekTex != null && DefaultHudTex != null)
             {
                 HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultKnightTex;
                 HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = DefaultSprintTex;
@@ -101,6 +113,15 @@ namespace CustomKnight
                                 break;
                             }
                         }
+                    }
+                }
+
+                foreach (tk2dSprite i in GameCameras.instance.hudCanvas.GetComponentsInChildren<tk2dSprite>())
+                {
+                    if (i.name == "Health 1")
+                    {
+                        i.GetCurrentSpriteDef().material.mainTexture = DefaultHudTex;
+                        break;
                     }
                 }
             }
@@ -165,6 +186,11 @@ namespace CustomKnight
                 Destroy(VSTex);
             }
 
+            if (HudTex != null)
+            {
+                Destroy(HudTex);
+            }
+
             LoadComplete = false;
         }
 
@@ -177,12 +203,14 @@ namespace CustomKnight
             WWW wraiths = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.WRAITHS_PNG).Replace("\\", "/"));
             WWW shriek = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SHRIEK_PNG).Replace("\\", "/"));
             WWW vs = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.VS_PNG).Replace("\\", "/"));
+            WWW hud = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.HUD_PNG).Replace("\\", "/"));
 
             yield return knight;
             yield return sprint;
             yield return wraiths;
             yield return shriek;
             yield return vs;
+            yield return hud;
 
             DestroyObjects();
 
@@ -191,6 +219,8 @@ namespace CustomKnight
             WraithsTex = wraiths.textureNonReadable;
             ShriekTex = shriek.textureNonReadable;
             VSTex = vs.textureNonReadable;
+            HudTex = hud.textureNonReadable;
+
 
             Modding.Logger.Log("[CustomKnight] - Texture load done");
             ModifyHeroTextures();
@@ -212,7 +242,8 @@ namespace CustomKnight
             HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = SprintTex;
 
             foreach (Transform child in HeroController.instance.gameObject.transform)
-            {
+            { 
+                
                 if (child.name == "Spells")
                 {
                     foreach (Transform spellsChild in child)
@@ -239,7 +270,14 @@ namespace CustomKnight
                     }
                 }
             }
-
+            foreach (tk2dSprite i in GameCameras.instance.hudCanvas.GetComponentsInChildren<tk2dSprite>())
+            {
+                if (i.name == "Health 1")
+                {
+                    i.GetCurrentSpriteDef().material.mainTexture = HudTex;
+                    break;
+                }
+            }
             texRoutineRunning = false;
         }
     }
