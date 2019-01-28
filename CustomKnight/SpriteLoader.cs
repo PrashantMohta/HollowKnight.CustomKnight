@@ -19,6 +19,7 @@ namespace CustomKnight
         public static Texture2D DefaultShriekTex { get; private set; }
         public static Texture2D DefaultVSTex { get; private set; }
         public static Texture2D DefaultHudTex { get; private set; }
+        public static Texture2D DefaultOrbFull { get; private set; }
 
         public static Texture2D KnightTex { get; private set; }
         public static Texture2D SprintTex { get; private set; }
@@ -26,6 +27,7 @@ namespace CustomKnight
         public static Texture2D ShriekTex { get; private set; }
         public static Texture2D VSTex { get; private set; }
         public static Texture2D HudTex { get; private set; }
+        public static Texture2D OrbFull { get; private set; }
 
         public static bool LoadComplete { get; private set; }
 
@@ -72,6 +74,13 @@ namespace CustomKnight
                         break;
                     }
                 }
+                foreach (SpriteRenderer i in GameCameras.instance.hudCanvas.GetComponentsInChildren<SpriteRenderer>(true))
+                {
+                    if (i.name == "Orb Full")
+                    {
+                        DefaultOrbFull = i.sprite.texture;
+                    }
+                }
             }
         }
 
@@ -82,7 +91,7 @@ namespace CustomKnight
                 Destroy(loader);
             }
 
-            if (HeroController.instance != null && DefaultKnightTex != null && DefaultSprintTex != null && DefaultWraithsTex != null && DefaultShriekTex != null && DefaultHudTex != null)
+            if (HeroController.instance != null && DefaultKnightTex != null && DefaultSprintTex != null && DefaultWraithsTex != null && DefaultShriekTex != null && DefaultHudTex != null && DefaultOrbFull != null)
             {
                 HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultKnightTex;
                 HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = DefaultSprintTex;
@@ -115,7 +124,6 @@ namespace CustomKnight
                         }
                     }
                 }
-
                 foreach (tk2dSprite i in GameCameras.instance.hudCanvas.GetComponentsInChildren<tk2dSprite>())
                 {
                     if (i.name == "Health 1")
@@ -124,6 +132,14 @@ namespace CustomKnight
                         break;
                     }
                 }
+                foreach (SpriteRenderer i in GameCameras.instance.hudCanvas.GetComponentsInChildren<SpriteRenderer>(true))
+                {
+                    if (i.name == "Orb Full")
+                    {
+                        i.sprite = Sprite.Create(DefaultOrbFull, new Rect(0, 0, DefaultOrbFull.width, DefaultOrbFull.height), new Vector2(0.5f, 0.5f));
+                    }
+                }
+
             }
 
             if (texRoutineRunning && GameManager.instance != null)
@@ -191,6 +207,11 @@ namespace CustomKnight
                 Destroy(HudTex);
             }
 
+            if (OrbFull != null)
+            {
+                Destroy(OrbFull);
+            }
+
             LoadComplete = false;
         }
 
@@ -204,6 +225,7 @@ namespace CustomKnight
             WWW shriek = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SHRIEK_PNG).Replace("\\", "/"));
             WWW vs = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.VS_PNG).Replace("\\", "/"));
             WWW hud = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.HUD_PNG).Replace("\\", "/"));
+            WWW full = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.FULL_PNG).Replace("\\", "/"));
 
             yield return knight;
             yield return sprint;
@@ -211,6 +233,7 @@ namespace CustomKnight
             yield return shriek;
             yield return vs;
             yield return hud;
+            yield return full;
 
             DestroyObjects();
 
@@ -220,6 +243,7 @@ namespace CustomKnight
             ShriekTex = shriek.textureNonReadable;
             VSTex = vs.textureNonReadable;
             HudTex = hud.textureNonReadable;
+            OrbFull = full.textureNonReadable;
 
 
             Modding.Logger.Log("[CustomKnight] - Texture load done");
@@ -276,6 +300,17 @@ namespace CustomKnight
                 {
                     i.GetCurrentSpriteDef().material.mainTexture = HudTex;
                     break;
+                }
+            }
+            foreach (SpriteRenderer i in GameCameras.instance.hudCanvas.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                if (i.name == "Orb Full")
+                {
+                    i.sprite = Sprite.Create(OrbFull, new Rect(0, 0, OrbFull.width, OrbFull.height), new Vector2(0.5f, 0.5f));
+                }
+                else if (i.name == "Pulse Sprite")
+                {
+                    if (i.gameObject != null) Destroy(i.gameObject);
                 }
             }
             texRoutineRunning = false;

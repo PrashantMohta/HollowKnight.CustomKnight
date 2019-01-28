@@ -13,6 +13,7 @@ namespace CustomKnight
         public const string SHRIEK_PNG = "VoidSpells.png";
         public const string VS_PNG = "VS.png";
         public const string HUD_PNG = "Hud.png";
+        public const string FULL_PNG = "OrbFull.png";
         public const string IMAGE_FOLDER = "CustomKnight";
 
         public static readonly string DATA_DIR = Path.GetFullPath(Application.dataPath + "/Managed/Mods/" + IMAGE_FOLDER);
@@ -27,7 +28,7 @@ namespace CustomKnight
             if (!File.Exists(DATA_DIR + "/" + KNIGHT_PNG) || !File.Exists(DATA_DIR + "/" + SPRINT_PNG) || !File.Exists(DATA_DIR + "/" + WRAITHS_PNG) || !File.Exists(DATA_DIR + "/" + SHRIEK_PNG))
             {
                 Log("Could not find one or more of the required spritesheets");
-                Log($"To use this mod, place two files \"{KNIGHT_PNG}\", \"{SPRINT_PNG}\", \"{WRAITHS_PNG}\", \"{SHRIEK_PNG}\", \"{VS_PNG}\" and \"{HUD_PNG}\" in the folder \"{IMAGE_FOLDER}\"");
+                Log($"To use this mod, place two files \"{KNIGHT_PNG}\", \"{SPRINT_PNG}\", \"{WRAITHS_PNG}\", \"{SHRIEK_PNG}\", \"{VS_PNG}\", \"{HUD_PNG}\", and \"{FULL_PNG}\" in the folder \"{IMAGE_FOLDER}\"");
                 return;
             }
 
