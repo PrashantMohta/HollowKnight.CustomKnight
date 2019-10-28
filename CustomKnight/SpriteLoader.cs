@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using Modding;
+using System.Linq;
 using ModCommon;
 
 namespace CustomKnight
@@ -28,6 +29,7 @@ namespace CustomKnight
         public static Texture2D VSTex { get; private set; }
         public static Texture2D HudTex { get; private set; }
         public static Texture2D OrbFull { get; private set; }
+        public static Texture2D GeoTex { get; private set; }
 
         public static bool LoadComplete { get; private set; }
 
@@ -212,6 +214,11 @@ namespace CustomKnight
                 Destroy(OrbFull);
             }
 
+            if (GeoTex != null)
+            {
+                Destroy(GeoTex);
+            }
+
             LoadComplete = false;
         }
 
@@ -226,6 +233,7 @@ namespace CustomKnight
             WWW vs = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.VS_PNG).Replace("\\", "/"));
             WWW hud = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.HUD_PNG).Replace("\\", "/"));
             WWW full = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.FULL_PNG).Replace("\\", "/"));
+            WWW geo = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.GEO_PNG).Replace("\\", "/"));
 
             yield return knight;
             yield return sprint;
@@ -234,6 +242,7 @@ namespace CustomKnight
             yield return vs;
             yield return hud;
             yield return full;
+            yield return geo;
 
             DestroyObjects();
 
@@ -244,6 +253,7 @@ namespace CustomKnight
             VSTex = vs.textureNonReadable;
             HudTex = hud.textureNonReadable;
             OrbFull = full.textureNonReadable;
+            GeoTex = geo.textureNonReadable;
 
 
             Modding.Logger.Log("[CustomKnight] - Texture load done");
@@ -252,7 +262,6 @@ namespace CustomKnight
             LoadComplete = true;
             Destroy(gameObject);
         }
-
         private static IEnumerator SetHeroTex()
         {
             while (!LoadComplete || HeroController.instance == null)
