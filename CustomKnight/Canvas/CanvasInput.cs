@@ -22,7 +22,6 @@ namespace CustomKnight.Canvas
             
             _inputName = name;
             
-            Log("Creating inputObject");
             _inputObject = new GameObject();
             _inputObject.AddComponent<CanvasRenderer>();
             RectTransform inputTransform = _inputObject.AddComponent<RectTransform>();
@@ -36,19 +35,16 @@ namespace CustomKnight.Canvas
             image.type = Image.Type.Sliced;
             _inputField = _inputObject.AddComponent<InputField>();
 
-            Log("Setting inputObject Transform");
             _inputObject.transform.SetParent(parent.transform, false);
             inputTransform.SetScaleX(size.x / bgSubSection.width);
             inputTransform.SetScaleY(size.y / bgSubSection.height);
             
-            Log("Setting inputObject Anchor");
             Vector2 pos = new Vector2((position.x + ((size.x / bgSubSection.width) * bgSubSection.width) / 2f) / 1920f, (1080f - (position.y + ((size.y / bgSubSection.height) * bgSubSection.height) / 2f)) / 1080f);
             inputTransform.anchorMin = pos;
             inputTransform.anchorMax = pos;
             
             Object.DontDestroyOnLoad(_inputObject);
             
-            Log("Creating Text Object");
             _textObject = new GameObject("Text");
             _textObject.AddComponent<RectTransform>().sizeDelta = new Vector2(bgSubSection.width, bgSubSection.height);
             Text textTxt = _textObject.AddComponent<Text>();
@@ -59,7 +55,6 @@ namespace CustomKnight.Canvas
             _textObject.transform.SetParent(_inputObject.transform, false);
             Object.DontDestroyOnLoad(_textObject);
             
-            Log("Creating Placeholder Object");
             _placeholderObj = new GameObject("Placeholder");
             _placeholderObj.AddComponent<RectTransform>().sizeDelta = new Vector2(bgSubSection.width, bgSubSection.height);
             Text placeholderTxt = _placeholderObj.AddComponent<Text>();

@@ -52,6 +52,16 @@ namespace CustomKnight.Canvas
             }
         }
 
+        public float GetWidth()
+        {
+            return sz.x;
+        }
+
+        public float GetHeight()
+        {
+            return sz.y;
+        }
+
         public void SetWidth(float width)
         {
             if (imageObj != null)

@@ -75,15 +75,15 @@
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Networking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.Networking.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
@@ -116,7 +116,6 @@
     <Compile Include="SpriteLoader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\Button_BG.png" />
     <EmbeddedResource Include="Images\Panel_BG.png" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -35,14 +35,12 @@ namespace CustomKnight
         public static Texture2D DefaultQuirrelTex { get; private set; }
         public static Texture2D DefaultWebbedTex { get; private set; }
         public static Texture2D DefaultDNTex { get; private set; }
-        //public static Texture2D DefaultP4Tex { get; private set; }
         public static  Texture2D DefaultHornetTex { get; private set; }
         public static Texture2D DefaultBirthTex { get; private set; }
-        public static Texture2D DefaultSkullLTex { get; private set; }
-        public static Texture2D DefaultSkullRTex { get; private set; }
         public static Texture2D DefaultBaldurTex { get; private set; }
         public static Texture2D DefaultFlukeTex { get; private set; }
         public static Texture2D DefaultGrimmTex { get; private set; }
+        public static Texture2D DefaultShieldTex { get; private set; }
         public static Texture2D DefaultWeaverTex { get; private set; }
         public static Texture2D DefaultWombTex { get; private set; }
 
@@ -64,11 +62,10 @@ namespace CustomKnight
         public static Texture2D DNTex { get; private set; }
         public static Texture2D HornetTex { get; private set; }
         public static Texture2D BirthTex { get; private set; }
-        public static Texture2D SkullLTex { get; private set; }
-        public static Texture2D SkullRTex { get; private set; }
         public static Texture2D BaldurTex { get; private set; }
         public static Texture2D FlukeTex { get; private set; }
         public static Texture2D GrimmTex { get; private set; }
+        public static Texture2D ShieldTex { get; private set; }
         public static Texture2D WeaverTex { get; private set; }
         public static Texture2D WombTex { get; private set; }
 
@@ -76,7 +73,28 @@ namespace CustomKnight
 
         public static void PullDefaultTextures()
         {
-            if (HeroController.instance != null && (DefaultKnightTex == null || DefaultSprintTex == null || DefaultWraithsTex == null || DefaultVoidTex == null))
+            if (HeroController.instance != null && 
+                (DefaultKnightTex == null ||
+                 DefaultSprintTex == null || 
+                 DefaultUnnTex == null || 
+                 DefaultWraithsTex == null || 
+                 DefaultVoidTex == null ||
+                 DefaultCloakTex == null ||
+                 DefaultShriekTex == null ||
+                 DefaultWingsTex == null ||
+                 DefaultQuirrelTex == null ||
+                 DefaultWebbedTex == null ||
+                 DefaultDreamTex == null ||
+                 DefaultDNTex == null ||
+                 DefaultHornetTex == null ||
+                 DefaultBirthTex == null ||
+                 DefaultBaldurTex == null ||
+                 DefaultFlukeTex == null ||
+                 DefaultGrimmTex == null ||
+                 DefaultShieldTex == null ||
+                 DefaultWeaverTex == null ||
+                 DefaultWombTex == null)
+                )
             {
                 DefaultKnightTex = HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 DefaultSprintTex = HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture as Texture2D;
@@ -92,12 +110,10 @@ namespace CustomKnight
                 DefaultHornetTex = CustomKnight.GameObjects["Hornet"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 DefaultBirthTex = CustomKnight.GameObjects["Birth"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
 
-                DefaultSkullLTex = CustomKnight.GameObjects["Skull Left"].GetComponent<SpriteRenderer>().sprite.texture;
-                DefaultSkullRTex = CustomKnight.GameObjects["Skull Right"].GetComponent<SpriteRenderer>().sprite.texture;
-                
                 DefaultBaldurTex = _baldur.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 DefaultFlukeTex = _fluke.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 DefaultGrimmTex = _grimm.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
+                DefaultShieldTex = _shield.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 DefaultWeaverTex = _weaver.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 DefaultWombTex = _womb.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
                 
@@ -155,14 +171,26 @@ namespace CustomKnight
             }
 
             if (HeroController.instance != null && 
-                DefaultKnightTex != null && 
+                DefaultKnightTex != null &&
                 DefaultSprintTex != null && 
+                DefaultUnnTex != null &&
                 DefaultWraithsTex != null && 
                 DefaultVoidTex != null &&
-                DefaultVSTex != null &&
-                DefaultHudTex != null && 
-                DefaultOrbFull != null &&
-                 DefaultUnnTex != null)
+                DefaultCloakTex != null &&
+                DefaultShriekTex != null &&
+                DefaultWingsTex != null &&
+                DefaultQuirrelTex != null &&
+                DefaultWebbedTex != null &&
+                DefaultDreamTex != null &&
+                DefaultDNTex != null &&
+                DefaultHornetTex != null &&
+                DefaultBirthTex != null &&
+                DefaultBaldurTex != null &&
+                DefaultFlukeTex != null &&
+                DefaultGrimmTex != null &&
+                DefaultShieldTex != null &&
+                DefaultWeaverTex != null &&
+                DefaultWombTex != null)
             {
                 HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultKnightTex;
                 HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = DefaultSprintTex;
@@ -175,18 +203,13 @@ namespace CustomKnight
                 CustomKnight.GameObjects["Webbed"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultWebbedTex;
                 CustomKnight.GameObjects["Dream"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultDreamTex;
                 CustomKnight.GameObjects["DN"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultDNTex;
-                //CustomKnight.GameObjects["P4"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultP4Tex;
                 CustomKnight.GameObjects["Hornet"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultHornetTex;
                 CustomKnight.GameObjects["Birth"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultBirthTex;
                 
-                Vector2 skullLPivot = CustomKnight.GameObjects["Skull Left"].GetComponent<SpriteRenderer>().sprite.pivot; 
-                CustomKnight.GameObjects["Skull Left"].GetComponent<SpriteRenderer>().sprite = Sprite.Create(DefaultSkullLTex, new Rect(0, 0, DefaultSkullLTex.width, DefaultSkullLTex.height), skullLPivot);
-                Vector2 skullRPivot = CustomKnight.GameObjects["Skull Right"].GetComponent<SpriteRenderer>().sprite.pivot; 
-                CustomKnight.GameObjects["Skull Right"].GetComponent<SpriteRenderer>().sprite = Sprite.Create(DefaultSkullRTex, new Rect(0, 0, DefaultSkullRTex.width, DefaultSkullRTex.height), skullRPivot);
-
                 _baldur.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultBaldurTex;
                 _fluke.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultFlukeTex;
                 _grimm.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultGrimmTex;
+                _shield.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultShieldTex;
                 _weaver.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultWeaverTex;
                 _womb.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DefaultWombTex;
 
@@ -234,8 +257,7 @@ namespace CustomKnight
                     }
                 }
             }
-
-            Log("E");
+            
             if (texRoutineRunning && GameManager.instance != null)
             {
                 GameManager.instance.StopCoroutine(setTexRoutine);
@@ -249,7 +271,6 @@ namespace CustomKnight
         {
             if (loader == null)
             {
-                Log("Creating new Loader");
                 loader = new GameObject("Loader");
                 loader.AddComponent<SpriteLoader>();
                 DontDestroyOnLoad(loader);
@@ -260,7 +281,6 @@ namespace CustomKnight
         {
             if (!texRoutineRunning)
             {
-                Log("Running SetHeroTex");
                 setTexRoutine = GameManager.instance.StartCoroutine(SetHeroTex());
                 texRoutineRunning = true;
             }
@@ -269,6 +289,7 @@ namespace CustomKnight
         private static GameObject _baldur;
         private static GameObject _fluke;
         private static GameObject _grimm;
+        private static GameObject _shield;
         private static GameObject _weaver;
         private static GameObject _womb;
         public IEnumerator Start()
@@ -285,43 +306,23 @@ namespace CustomKnight
             PlayMakerFSM spawnGrimmchild = charmEffects.LocateMyFSM("Spawn Grimmchild");
             _grimm = spawnGrimmchild.GetAction<SpawnObjectFromGlobalPool>("Spawn", 2).gameObject.Value;
 
+            PlayMakerFSM spawnOrbitShield = charmEffects.LocateMyFSM("Spawn Orbit Shield");
+            GameObject orbitShield = spawnOrbitShield.GetAction<SpawnObjectFromGlobalPool>("Spawn", 2).gameObject.Value;
+            _shield = orbitShield.FindGameObjectInChildren("Shield");
+            Texture2D tex =(Texture2D) _shield.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture;
+            Texture2D readable = DuplicateTexture(tex);
+            byte[] bytes = readable.EncodeToPNG();
+            File.WriteAllBytes(Path.Combine(Application.streamingAssetsPath, "Shield.png"), bytes);
+            
             PlayMakerFSM weaverlingControl = charmEffects.LocateMyFSM("Weaverling Control");
             _weaver = weaverlingControl.GetAction<SpawnObjectFromGlobalPool>("Spawn", 0).gameObject.Value;
 
             PlayMakerFSM hatchlingSpawn = charmEffects.LocateMyFSM("Hatchling Spawn");
             _womb = hatchlingSpawn.GetAction<SpawnObjectFromGlobalPool>("Hatch", 2).gameObject.Value;
 
-            StartCoroutine(LoadSprites());
-
-            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChanged;
+            LoadSprites();
         }
-
-        private void OnSceneChanged(Scene prevScene, Scene nextScene)
-        {
-            if (nextScene.name == "Dream_Final_Boss" || nextScene.name == "GG_Radiance")
-            {
-                Log("Modifying Skull Pieces...");
-                GameObject skullLeft = GameObject.Find("Boss Control").FindGameObjectInChildren("Absolute Radiance").FindGameObjectInChildren("Death").FindGameObjectInChildren("Knight Split").FindGameObjectInChildren("hollow_knight_skull_left");
-                Log("skullLeft null? " + (skullLeft == null));
-                Log("SkullLTex null? " + (SkullLTex == null));
-                Log("Creating L Rect");
-                Rect skullLRect = new Rect(0, 0, SkullLTex.width, SkullLTex.height);
-                Log("Creating L Pivot");
-                Vector2 skullLPivot = skullLeft.GetComponent<SpriteRenderer>().sprite.pivot;
-                Log("Changing L Sprite");
-                skullLeft.GetComponent<SpriteRenderer>().sprite = Sprite.Create(SkullLTex, skullLRect, skullLPivot);
-                Log("Getting R");
-                GameObject skullRight = GameObject.Find("Boss Control").FindGameObjectInChildren("Absolute Radiance").FindGameObjectInChildren("Death").FindGameObjectInChildren("Knight Split").FindGameObjectInChildren("hollow_knight_skull_left (1)");
-                Log("Creating R Rect");
-                Rect skullRRect = new Rect(0, 0, SkullRTex.width, SkullRTex.height);
-                Log("Creating R Pivot");
-                Vector2 skullRPivot = skullRight.GetComponent<SpriteRenderer>().sprite.pivot;
-                Log("Changing R Sprite");
-                skullRight.GetComponent<SpriteRenderer>().sprite = Sprite.Create(SkullRTex, skullRRect, skullRPivot);
-                Log("Modified Skull Pieces!");
-            }
-        }
-
+        
         public static Texture2D DuplicateTexture(Texture2D source)
         {
             RenderTexture renderTex = RenderTexture.GetTemporary(
@@ -351,7 +352,7 @@ namespace CustomKnight
 
             if (SprintTex != null)
             {
-                Destroy(KnightTex);
+                Destroy(SprintTex);
             }
 
             if (WraithsTex != null)
@@ -419,11 +420,6 @@ namespace CustomKnight
                 Destroy(DNTex);
             }
 
-            /*if (P4Tex != null)
-            {
-                Destroy(P4Tex);
-            }*/
-
             if (HornetTex != null)
             {
                 Destroy(HornetTex);
@@ -432,16 +428,6 @@ namespace CustomKnight
             if (BirthTex != null)
             {
                 Destroy(BirthTex);
-            }
-
-            if (SkullLTex != null)
-            {
-                Destroy(SkullLTex);
-            }
-
-            if (SkullRTex != null)
-            {
-                Destroy(SkullRTex);
             }
 
             if (BaldurTex != null)
@@ -459,6 +445,11 @@ namespace CustomKnight
                 Destroy(GrimmTex);
             }
 
+            if (ShieldTex != null)
+            {
+                Destroy(ShieldTex);
+            }
+            
             if (WeaverTex != null)
             {
                 Destroy(WeaverTex);
@@ -472,255 +463,275 @@ namespace CustomKnight
             LoadComplete = false;
         }
 
-        private IEnumerator LoadSprites()
+        private void LoadSprites()
         {
-            Modding.Logger.Log("[CustomKnight] - Starting texture load");
-
             LoadComplete = false;
             
             if (!CustomKnight.KnightMissing)
             {
-                WWW knight = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.KNIGHT_PNG).Replace("\\", "/"));
-                yield return knight;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.KNIGHT_PNG).Replace("\\", "/"));
                 if (KnightTex != null)
                 {
                     Destroy(KnightTex);
                 }
-                KnightTex = knight.textureNonReadable;
+                KnightTex = new Texture2D(1, 1);
+                KnightTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.SprintMissing)
             {
-                WWW sprint = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.SPRINT_PNG).Replace("\\", "/"));
-                yield return sprint;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.SPRINT_PNG).Replace("\\", "/"));
                 if (SprintTex != null)
                 {
                     Destroy(SprintTex);
                 }
-                SprintTex = sprint.textureNonReadable;
+                SprintTex = new Texture2D(1, 1);
+                SprintTex.LoadImage(bytes);
+            }
+            
+            if (!CustomKnight.UnnMissing)
+            {
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.UNN_PNG).Replace("\\", "/"));
+                if (UnnTex != null)
+                {
+                    Destroy(UnnTex);
+                }
+                UnnTex = new Texture2D(1, 1);
+                UnnTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.WraithsMissing)
             {
-                WWW wraiths = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WRAITHS_PNG).Replace("\\", "/"));
-                yield return wraiths;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WRAITHS_PNG).Replace("\\", "/"));
                 if (WraithsTex != null)
                 {
                     Destroy(WraithsTex);
                 }
-                WraithsTex = wraiths.textureNonReadable;
+                WraithsTex = new Texture2D(1, 1);
+                WraithsTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.VoidMissing)
             {
-                WWW @void = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.VOID_PNG).Replace("\\", "/"));
-                yield return @void;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.VOID_PNG).Replace("\\", "/"));
                 if (VoidTex != null)
                 {
                     Destroy(VoidTex);
                 }
-                VoidTex = @void.textureNonReadable;
+                VoidTex = new Texture2D(1, 1);
+                VoidTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.VSMissing)
             {
-                WWW vs = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.VS_PNG).Replace("\\", "/"));
-                yield return vs;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.VS_PNG).Replace("\\", "/"));
                 if (VSTex != null)
                 {
                     Destroy(VSTex);
                 }
-                VSTex = vs.textureNonReadable;
+                VSTex = new Texture2D(1, 1);
+                VSTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.HUDMissing)
             {
-                WWW hud = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.HUD_PNG).Replace("\\", "/"));
-                yield return hud;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.HUD_PNG).Replace("\\", "/"));
                 if (HudTex != null)
                 {
                     Destroy(HudTex);
                 }
-                HudTex = hud.textureNonReadable;
+                HudTex = new Texture2D(1, 1); 
+                HudTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.FullMissing)
             {
-                WWW orb = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.FULL_PNG).Replace("\\", "/"));
-                yield return orb;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.FULL_PNG).Replace("\\", "/"));
                 if (OrbFull != null)
                 {
                     Destroy(OrbFull);
                 }
-                OrbFull = orb.textureNonReadable;
+                OrbFull = new Texture2D(1, 1);
+                OrbFull.LoadImage(bytes);
             }
             
             if (!CustomKnight.GeoMissing)
             {
-                WWW geo= new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.GEO_PNG).Replace("\\", "/"));
-                yield return geo;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.GEO_PNG).Replace("\\", "/"));
                 if (GeoTex != null)
                 {
                     Destroy(GeoTex);
                 }
-                GeoTex = geo.textureNonReadable;
+                GeoTex = new Texture2D(1, 1);
+                GeoTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.DreamMissing)
             {
-                WWW dream = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.DREAM_PNG).Replace("\\", "/"));
-                yield return dream;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.DREAM_PNG).Replace("\\", "/"));
                 if (DreamTex != null)
                 {
                     Destroy(DreamTex);
                 }
-                DreamTex = dream.textureNonReadable;
+                DreamTex = new Texture2D(1, 1);
+                DreamTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.CloakMissing)
             {
-                WWW cloak = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.CLOAK_PNG).Replace("\\", "/"));
-                yield return cloak;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.CLOAK_PNG).Replace("\\", "/"));
                 if (CloakTex != null)
                 {
                     Destroy(CloakTex);
                 }
-                CloakTex = cloak.textureNonReadable;
+                CloakTex = new Texture2D(1, 1);
+                CloakTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.ShriekMissing)
             {
-                WWW shriek = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.SHRIEK_PNG).Replace("\\", "/"));
-                yield return shriek;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.SHRIEK_PNG).Replace("\\", "/"));
                 if (ShriekTex != null)
                 {
                     Destroy(ShriekTex);
                 }
-                ShriekTex = shriek.textureNonReadable;
+                ShriekTex = new Texture2D(1, 1);
+                ShriekTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.WingsMissing)
             {
-                WWW wings = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WINGS_PNG).Replace("\\", "/"));
-                yield return wings;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WINGS_PNG).Replace("\\", "/"));
                 if (WingsTex != null)
                 {
                     Destroy(WingsTex);
                 }
-                WingsTex = wings.textureNonReadable;
+                WingsTex = new Texture2D(1, 1);
+                WingsTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.QuirrelMissing)
             {
-                WWW quirrel = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.QUIRREL_PNG).Replace("\\", "/"));
-                yield return quirrel;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.QUIRREL_PNG).Replace("\\", "/"));
                 if (QuirrelTex != null)
                 {
                     Destroy(QuirrelTex);
                 }
-                QuirrelTex = quirrel.textureNonReadable;
+                QuirrelTex = new Texture2D(1, 1);
+                QuirrelTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.WebbedMissing)
             {
-                WWW webbed = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WEBBED_PNG).Replace("\\", "/"));
-                yield return webbed;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WEBBED_PNG).Replace("\\", "/"));
                 if (WebbedTex != null)
                 {
                     Destroy(WebbedTex);
                 }
-                WebbedTex = webbed.textureNonReadable;
+                WebbedTex = new Texture2D(1, 1);
+                WebbedTex.LoadImage(bytes);
             }
-            
+
             if (!CustomKnight.DNMissing)
             {
-                WWW dn = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.DN_PNG).Replace("\\", "/"));
-                yield return dn;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.DN_PNG).Replace("\\", "/"));
                 if (DNTex != null)
                 {
                     Destroy(DNTex);
                 }
-                DNTex = dn.textureNonReadable;
+
+                DNTex = new Texture2D(1, 1);
+                DNTex.LoadImage(bytes);
             }
-            
+
             if (!CustomKnight.HornetMissing)
             {
-                WWW hornet = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.HORNET_PNG).Replace("\\", "/"));
-                yield return hornet;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.HORNET_PNG).Replace("\\", "/"));
                 if (HornetTex != null)
                 {
                     Destroy(HornetTex);
                 }
-                HornetTex = hornet.textureNonReadable;
+                HornetTex = new Texture2D(1, 1);
+                HornetTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.BirthMissing)
             {
-                WWW birth = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.BIRTH_PNG).Replace("\\", "/"));
-                yield return birth;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.BIRTH_PNG).Replace("\\", "/"));
                 if (BirthTex != null)
                 {
                     Destroy(BirthTex);
                 }
-                BirthTex = birth.textureNonReadable;
+                BirthTex = new Texture2D(1, 1);
+                BirthTex.LoadImage(bytes);    
             }
             
             if (!CustomKnight.BaldurMissing)
             {
-                WWW baldur = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.BALDUR_PNG).Replace("\\", "/"));
-                yield return baldur;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.BALDUR_PNG).Replace("\\", "/"));
                 if (BaldurTex != null)
                 {
                     Destroy(BaldurTex);
                 }
-                BaldurTex = baldur.textureNonReadable;
+                BaldurTex = new Texture2D(1, 1);
+                BaldurTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.FlukeMissing)
             {
-                WWW fluke = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.FLUKE_PNG).Replace("\\", "/"));
-                yield return fluke;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.FLUKE_PNG).Replace("\\", "/"));
                 if (FlukeTex != null)
                 {
                     Destroy(FlukeTex);
                 }
-                FlukeTex = fluke.textureNonReadable;
+                FlukeTex = new Texture2D(1, 1);
+                FlukeTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.GrimmMissing)
             {
-                WWW grimm = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.GRIMM_PNG).Replace("\\", "/"));
-                yield return grimm;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.GRIMM_PNG).Replace("\\", "/"));
                 if (GrimmTex != null)
                 {
                     Destroy(GrimmTex);
                 }
-                GrimmTex = grimm.textureNonReadable;
+                GrimmTex = new Texture2D(1, 1);
+                GrimmTex.LoadImage(bytes);
+            }
+            
+            if (!CustomKnight.ShieldMissing)
+            {
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.SHIELD_PNG).Replace("\\", "/"));
+                if (ShieldTex != null)
+                {
+                    Destroy(ShieldTex);
+                }
+                ShieldTex = new Texture2D(1, 1);
+                ShieldTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.WeaverMissing)
             {
-                WWW weaver = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WEAVER_PNG).Replace("\\", "/"));
-                yield return weaver;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WEAVER_PNG).Replace("\\", "/"));
                 if (WeaverTex != null)
                 {
                     Destroy(WeaverTex);
                 }
-                WeaverTex = weaver.textureNonReadable;
+                WeaverTex = new Texture2D(1, 1);
+                WeaverTex.LoadImage(bytes);
             }
             
             if (!CustomKnight.WombMissing)
             {
-                WWW womb = new WWW(("file:///" + CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WOMB_PNG).Replace("\\", "/"));
-                yield return womb;
+                byte[] bytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + CustomKnight.WOMB_PNG).Replace("\\", "/"));
                 if (WombTex != null)
                 {
                     Destroy(WombTex);
                 }
-                WombTex = womb.textureNonReadable;
+                WombTex = new Texture2D(1, 1);
+                WombTex.LoadImage(bytes);
             }
-
-            Log("Texture load done");
+            
             ModifyHeroTextures();
 
             LoadComplete = true;
@@ -736,99 +747,26 @@ namespace CustomKnight
 
             PullDefaultTextures();
 
-            if (!CustomKnight.KnightMissing)
-            {
-                HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = KnightTex;
-            }
-
-            if (!CustomKnight.SprintMissing)
-            {
-                HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = SprintTex;
-            }
-
-            if (!CustomKnight.UnnMissing)
-            {
-                HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Slug Up").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = UnnTex;
-            }
-
-            if (!CustomKnight.CloakMissing)
-            {
-                CustomKnight.GameObjects["Cloak"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CloakTex;
-            }
-
-            if (!CustomKnight.ShriekMissing)
-            {
-                CustomKnight.GameObjects["Shriek"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = ShriekTex;    
-            }
-
-            if (!CustomKnight.WingsMissing)
-            {
-                CustomKnight.GameObjects["Wings"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = WingsTex;    
-            }
-
-            if (!CustomKnight.QuirrelMissing)
-            {
-                CustomKnight.GameObjects["Quirrel"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = QuirrelTex;    
-            }
-
-            if (!CustomKnight.WebbedMissing)
-            {
-                CustomKnight.GameObjects["Webbed"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = WebbedTex;    
-            }
-
-            if (!CustomKnight.DreamMissing)
-            {
-                CustomKnight.GameObjects["Dream"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DreamTex;    
-            }
-
-            if (!CustomKnight.DNMissing)
-            {
-                CustomKnight.GameObjects["DN"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = DNTex;    
-            }
-
-            if (!CustomKnight.HornetMissing)
-            {
-                CustomKnight.GameObjects["Hornet"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = HornetTex;    
-            }
-
-            if (!CustomKnight.BirthMissing)
-            {
-                CustomKnight.GameObjects["Birth"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = BirthTex;    
-            }
+            HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.KnightMissing ? DefaultKnightTex : KnightTex;
+            HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = CustomKnight.SprintMissing ? DefaultSprintTex : SprintTex;
+            HeroController.instance.GetComponent<tk2dSpriteAnimator>().GetClipByName("Slug Up").frames[0].spriteCollection.spriteDefinitions[0].material.mainTexture = CustomKnight.UnnMissing ? DefaultUnnTex : UnnTex;
             
-            /*Vector2 skullLPivot = CustomKnight.GameObjects["Skull Left"].GetComponent<SpriteRenderer>().sprite.pivot;
-            skullLPivot = new Vector2(SkullLTex.width / 2.0f, SkullLTex.height / 2.0f); 
-            Log("Skull L Pivot: " + skullLPivot);
-            CustomKnight.GameObjects["Skull Left"].GetComponent<SpriteRenderer>().sprite = Sprite.Create(SkullLTex, new Rect(0, 0, SkullLTex.width, SkullLTex.height), skullLPivot);
-            Vector2 skullRPivot = CustomKnight.GameObjects["Skull Right"].GetComponent<SpriteRenderer>().sprite.pivot;
-            skullRPivot = new Vector2(SkullRTex.width / 2.0f, SkullRTex.height / 2.0f);
-            Log("Skull R Pivot: " + skullRPivot);
-            CustomKnight.GameObjects["Skull Right"].GetComponent<SpriteRenderer>().sprite = Sprite.Create(SkullRTex, new Rect(0, 0, SkullRTex.width, SkullRTex.height), skullRPivot);*/
+            CustomKnight.GameObjects["Cloak"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.CloakMissing ? DefaultCloakTex : CloakTex;
+            CustomKnight.GameObjects["Shriek"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.ShriekMissing ? DefaultShriekTex : ShriekTex;
+            CustomKnight.GameObjects["Wings"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.WingsMissing ? DefaultWingsTex : WingsTex;
+            CustomKnight.GameObjects["Quirrel"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.QuirrelMissing ? DefaultQuirrelTex : QuirrelTex;
+            CustomKnight.GameObjects["Webbed"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.WebbedMissing ? DefaultWebbedTex : WebbedTex;
+            CustomKnight.GameObjects["Dream"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.DreamMissing ? DefaultDreamTex : DreamTex;
+            CustomKnight.GameObjects["DN"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.DNMissing ? DefaultDNTex : DNTex;
+            CustomKnight.GameObjects["Hornet"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.HornetMissing ? DefaultHornetTex : HornetTex;
+            CustomKnight.GameObjects["Birth"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.BirthMissing ? DefaultBirthTex : BirthTex;
 
-            if (!CustomKnight.BaldurMissing)
-            {
-                _baldur.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = BaldurTex;    
-            }
-
-            if (!CustomKnight.FlukeMissing)
-            {
-                _fluke.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = FlukeTex;    
-            }
-
-            if (!CustomKnight.GrimmMissing)
-            {
-                _grimm.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = GrimmTex;    
-            }
-
-            if (!CustomKnight.WeaverMissing)
-            {
-                _weaver.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = WeaverTex;    
-            }
-
-            if (!CustomKnight.WombMissing)
-            {
-                _womb.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = WombTex;    
-            }
+            _baldur.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.BaldurMissing ? DefaultBaldurTex : BaldurTex;
+            _fluke.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.FlukeMissing ? DefaultFlukeTex : FlukeTex;
+            _grimm.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.GrimmMissing ? DefaultGrimmTex : GrimmTex;
+            _shield.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.ShieldMissing ? DefaultShieldTex : ShieldTex;
+            _weaver.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.WeaverMissing ? DefaultWeaverTex : WeaverTex;
+            _womb.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.WombMissing ? DefaultWombTex : WombTex;
             
             foreach (Transform child in HeroController.instance.gameObject.transform)
             {
@@ -838,17 +776,11 @@ namespace CustomKnight
                     {
                         if (spellsChild.name == "Scr Heads" || spellsChild.name == "Scr Base")
                         {
-                            if (!CustomKnight.WraithsMissing)
-                            {
-                                spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = WraithsTex;    
-                            }
+                            spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.WraithsMissing ? DefaultWraithsTex : WraithsTex;
                         }
                         else if (spellsChild.name == "Scr Heads 2" || spellsChild.name == "Scr Base 2")
                         {
-                            if (!CustomKnight.VoidMissing)
-                            {
-                                spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = VoidTex;    
-                            }
+                            spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.VoidMissing ? DefaultVoidTex : VoidTex;
                         }
                     }
                 }
@@ -858,10 +790,7 @@ namespace CustomKnight
                     {
                         if (focusChild.name == "Heal Anim")
                         {
-                            if (!CustomKnight.VSMissing)
-                            {
-                                focusChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = VSTex;
-                            }
+                            focusChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.VSMissing ? DefaultVSTex : VSTex;
                             break;
                         }
                     }
@@ -871,10 +800,7 @@ namespace CustomKnight
             {
                 if (i.name == "Health 1")
                 {
-                    if (!CustomKnight.HUDMissing)
-                    {
-                        i.GetCurrentSpriteDef().material.mainTexture = HudTex;
-                    }
+                    i.GetCurrentSpriteDef().material.mainTexture = CustomKnight.HUDMissing ? DefaultHudTex : HudTex;
                     break;
                 }
             }
@@ -882,10 +808,8 @@ namespace CustomKnight
             {
                 if (i.name == "Orb Full")
                 {
-                    if (!CustomKnight.FullMissing)
-                    {
-                        i.sprite = Sprite.Create(OrbFull, new Rect(0, 0, OrbFull.width, OrbFull.height), new Vector2(0.5f, 0.5f));    
-                    }
+                    Texture2D tex = CustomKnight.FullMissing ? DefaultOrbFull : OrbFull;
+                    i.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                 }
                 else if (i.name == "Pulse Sprite")
                 {
@@ -893,7 +817,6 @@ namespace CustomKnight
                 }
             }
             
-            Log("Setting texRoutineRunning false");
             texRoutineRunning = false;
         }
 

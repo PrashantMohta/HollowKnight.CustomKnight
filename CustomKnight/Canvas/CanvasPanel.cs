@@ -19,7 +19,7 @@ namespace CustomKnight.Canvas
 
         public bool active = true;
 
-        public CanvasPanel(GameObject parent, Texture2D tex, Vector2 pos, Vector2 sz, Rect bgSubSection, bool scrollable = false)
+        public CanvasPanel(GameObject parent, Texture2D tex, Vector2 pos, Vector2 sz, Rect bgSubSection)
         {
             if (parent == null) return;
 
@@ -165,6 +165,11 @@ namespace CustomKnight.Canvas
             background.SetWidth(sz.x);
             background.SetHeight(sz.y);
             background.SetPosition(position);
+        }
+
+        public float GetHeight()
+        {
+            return background.GetHeight();
         }
 
         public void SetPosition(Vector2 pos)

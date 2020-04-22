@@ -12,6 +12,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Object = System.Object;
+using Random = UnityEngine.Random;
 
 namespace CustomKnight
 {
@@ -35,11 +37,10 @@ namespace CustomKnight
         public const string SHRIEK_PNG = "Shriek.png";
         public const string HORNET_PNG = "Hornet.png";
         public const string BIRTH_PNG = "Birthplace.png";
-        public const string SKULLL_PNG = "SkullLeft.png";
-        public const string SKULLR_PNG = "SkullRight.png";
         public const string BALDUR_PNG = "Baldur.png";
         public const string FLUKE_PNG = "Fluke.png";
         public const string GRIMM_PNG = "Grimm.png";
+        public const string SHIELD_PNG = "Shield.png";
         public const string WEAVER_PNG = "Weaver.png";
         public const string WOMB_PNG = "Hatchling.png";
         public const string SKINS_FOLDER = "CustomKnight";
@@ -66,6 +67,7 @@ namespace CustomKnight
         public static bool BaldurMissing;
         public static bool FlukeMissing;
         public static bool GrimmMissing;
+        public static bool ShieldMissing;
         public static bool WeaverMissing;
         public static bool WombMissing;
 
@@ -84,8 +86,6 @@ namespace CustomKnight
                 ("Deepnest_East_12", "Hornet Blizzard Return Scene"),
                 ("Deepnest_Spider_Town", "RestBench Spider/Webbed Knight"),
                 ("Dream_Abyss", "End Cutscene/Dummy"),
-                ("Dream_Final_Boss", "Boss Control/Radiance/Death/Knight Split/hollow_knight_skull_left"),
-                ("Dream_Final_Boss", "Boss Control/Radiance/Death/Knight Split/hollow_knight_skull_left (1)"),
                 ("GG_Door_5_Finale", "abyss_door_5_cutscene_sequence/main_chars"),
                 ("GG_Vengefly", "Boss Scene Controller/Dream Entry/Knight Dream Arrival"),
                 ("RestingGrounds_07", "Dream Moth/Knight Dummy"),
@@ -111,16 +111,8 @@ namespace CustomKnight
                 GameObjects.Add("Hornet", preloadedObjects["Deepnest_East_12"]["Hornet Blizzard Return Scene"]);
                 GameObjects.Add("Webbed", preloadedObjects["Deepnest_Spider_Town"]["RestBench Spider/Webbed Knight"]);
                 GameObjects.Add("Birth", preloadedObjects["Dream_Abyss"]["End Cutscene/Dummy"]);
-                GameObjects.Add("Skull Left", preloadedObjects["Dream_Final_Boss"]["Boss Control/Radiance/Death/Knight Split/hollow_knight_skull_left"]);
-                GameObjects.Add("Skull Right", preloadedObjects["Dream_Final_Boss"]["Boss Control/Radiance/Death/Knight Split/hollow_knight_skull_left (1)"]);
-                GameObjects.Add("P4", preloadedObjects["GG_Door_5_Finale"]["abyss_door_5_cutscene_sequence/main_chars"]);
                 GameObjects.Add("Dream", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("DN", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
-                
-                /*Texture2D tex = (Texture2D) GameObjects["Skull Left"].GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture;
-                Texture2D readableTex = SpriteLoader.duplicateTexture(tex);
-                byte[] bytes = readableTex.EncodeToPNG();
-                File.WriteAllBytes(Path.Combine(Application.streamingAssetsPath, "SkullLeft.png"), bytes);*/
             }
 
             Instance = this;
@@ -137,8 +129,9 @@ namespace CustomKnight
             }
 
             if (SKIN_FOLDER == null)
-            { 
-                SKIN_FOLDER = new DirectoryInfo(Directory.GetDirectories(DATA_DIR)[0]).Name;   
+            {
+                int index = Random.Range(0, Directory.GetDirectories(DATA_DIR).Length - 1);
+                SKIN_FOLDER = new DirectoryInfo(Directory.GetDirectories(DATA_DIR)[index]).Name;   
             }
 
             if (!File.Exists((DATA_DIR + "/" + SKIN_FOLDER + "/" + KNIGHT_PNG).Replace("\\", "/")))
@@ -267,6 +260,12 @@ namespace CustomKnight
                 GrimmMissing = true;
             }
             
+            if (!File.Exists((DATA_DIR + "/" + SKIN_FOLDER + "/" + SHIELD_PNG).Replace("\\", "/")))
+            {
+                Log($"Missing file {SHIELD_PNG} from folder {SKIN_FOLDER}.");
+                ShieldMissing = true;
+            }
+            
             if (!File.Exists((DATA_DIR + "/" + SKIN_FOLDER + "/" + WEAVER_PNG).Replace("\\", "/")))
             {
                 Log($"Missing file {WEAVER_PNG} from folder {SKIN_FOLDER}.");
@@ -317,11 +316,12 @@ namespace CustomKnight
             BaldurMissing = false;
             FlukeMissing = false;
             GrimmMissing = false;
+            ShieldMissing = false;
             WeaverMissing = false;
             WombMissing = false;
         }
         
-        public override string GetVersion() => "1.2.2";
+        public override string GetVersion() => "1.2.1";
 
         public void Unload()
         {
@@ -329,6 +329,7 @@ namespace CustomKnight
             ModHooks.Instance.AfterSavegameLoadHook -= SpriteLoader.ModifyHeroTextures;
             On.GeoControl.Start -= GeoControl_Start;
             SpriteLoader.UnloadAll();
+            UnityEngine.Object.Destroy(GameObject.Find("Canvas"));
         }
     }
 }
