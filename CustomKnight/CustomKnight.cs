@@ -71,7 +71,7 @@ namespace CustomKnight
         public static bool WeaverMissing;
         public static bool WombMissing;
 
-        public static readonly string DATA_DIR = Path.GetFullPath(Application.dataPath + "/Managed/Mods/" + SKINS_FOLDER);
+        public static string DATA_DIR;
 
         public static CustomKnight Instance { get; private set; }
 
@@ -96,11 +96,17 @@ namespace CustomKnight
 
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
-            GUIController.Instance.BuildMenus();
-
-            GC.Collect();
-            
             ResetBools();
+
+            switch (SystemInfo.operatingSystemFamily)
+            {
+                case OperatingSystemFamily.MacOSX:
+                    DATA_DIR = Path.GetFullPath(Application.dataPath + "/Resources/Data/Managed/Mods/" + SKINS_FOLDER);
+                    break;
+                default:
+                    DATA_DIR = Path.GetFullPath(Application.dataPath + "/Managed/Mods/" + SKINS_FOLDER);
+                    break;
+            }
             
             if (preloadedObjects != null)
             {
@@ -277,6 +283,10 @@ namespace CustomKnight
                 Log($"Missing file {WOMB_PNG} from folder {SKIN_FOLDER}.");
                 WombMissing = true;
             }
+            
+            GUIController.Instance.BuildMenus();
+
+            GC.Collect();
             
             SpriteLoader.Load();
 

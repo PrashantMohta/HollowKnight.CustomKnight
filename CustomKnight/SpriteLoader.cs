@@ -309,11 +309,7 @@ namespace CustomKnight
             PlayMakerFSM spawnOrbitShield = charmEffects.LocateMyFSM("Spawn Orbit Shield");
             GameObject orbitShield = spawnOrbitShield.GetAction<SpawnObjectFromGlobalPool>("Spawn", 2).gameObject.Value;
             _shield = orbitShield.FindGameObjectInChildren("Shield");
-            Texture2D tex =(Texture2D) _shield.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture;
-            Texture2D readable = DuplicateTexture(tex);
-            byte[] bytes = readable.EncodeToPNG();
-            File.WriteAllBytes(Path.Combine(Application.streamingAssetsPath, "Shield.png"), bytes);
-            
+
             PlayMakerFSM weaverlingControl = charmEffects.LocateMyFSM("Weaverling Control");
             _weaver = weaverlingControl.GetAction<SpawnObjectFromGlobalPool>("Spawn", 0).gameObject.Value;
 
@@ -322,27 +318,7 @@ namespace CustomKnight
 
             LoadSprites();
         }
-        
-        public static Texture2D DuplicateTexture(Texture2D source)
-        {
-            RenderTexture renderTex = RenderTexture.GetTemporary(
-                source.width,
-                source.height,
-                0,
-                RenderTextureFormat.Default,
-                RenderTextureReadWrite.Linear);
 
-            Graphics.Blit(source, renderTex);
-            RenderTexture previous = RenderTexture.active;
-            RenderTexture.active = renderTex;
-            Texture2D readableTex = new Texture2D(source.width, source.height);
-            readableTex.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-            readableTex.Apply();
-            RenderTexture.active = previous;
-            RenderTexture.ReleaseTemporary(renderTex);
-            return readableTex;
-        }
-        
         private static void DestroyObjects()
         {
             if (KnightTex != null)
