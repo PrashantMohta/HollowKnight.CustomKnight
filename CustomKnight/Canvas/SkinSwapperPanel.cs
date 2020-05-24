@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using HutongGames.PlayMaker.Actions;
+using InControl;
 using ModCommon;
 using ModCommon.Util;
+using Modding;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -56,7 +60,7 @@ namespace CustomKnight.Canvas
                 if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/Icon.png").Replace("\\", "/")))
                 {
                     byte[] iconBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/Icon.png").Replace("\\", "/"));
-                    Texture2D icon = new Texture2D(1, 1);
+                    Texture2D icon = new Texture2D(2, 2);
                     bool isLoaded = icon.LoadImage(iconBytes);
                     if (isLoaded)
                     {
@@ -66,17 +70,17 @@ namespace CustomKnight.Canvas
                 else if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/icon.png").Replace("\\", "/")))
                 {
                     byte[] iconBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/icon.png").Replace("\\", "/"));
-                    Texture2D icon = new Texture2D(1, 1);
+                    Texture2D icon = new Texture2D(2, 2);
                     bool isLoaded = icon.LoadImage(iconBytes);
                     if (isLoaded)
                     {
                         tex = Resize(icon, imageWidth, imageHeight);
                     }
                 }
-                else if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/" + CustomKnight.KNIGHT_PNG).Replace("\\", "/")))
+                else if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/Knight.png").Replace("\\", "/")))
                 {
-                    byte[] knightBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/" + CustomKnight.KNIGHT_PNG).Replace("\\", "/"));
-                    Texture2D knightTex = new Texture2D(1, 1);
+                    byte[] knightBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/Knight.png").Replace("\\", "/"));
+                    Texture2D knightTex = new Texture2D(2, 2);
                     bool isLoaded = knightTex.LoadImage(knightBytes);
 
                     if (isLoaded)
@@ -108,43 +112,55 @@ namespace CustomKnight.Canvas
                 GC.Collect();
             }
 
+            Panel.SetActive(false, true);
+            
             Vector2 newPanelSize = new Vector2(GUIController.Instance.images["Panel_BG"].width, y);
             Panel.ResizeBG(newPanelSize);
+            
+            On.HeroController.Pause += OnPause;
+            On.HeroController.UnPause += OnUnpause;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
         }
 
         private static void ChangeSkin(string buttonName)
         {
             CustomKnight.SKIN_FOLDER = buttonName;
+            GameManager.instance.StartCoroutine(ChangeSkinRoutine());
+        }
+
+        private static IEnumerator ChangeSkinRoutine()
+        {
             HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
             Panel.SetActive(false, true);
             CustomKnight.Instance.Initialize(null);
+
+            yield return new WaitUntil(() => SpriteLoader.LoadComplete);
+            
             Panel.SetActive(true, false);
         }
         
-        public static void Update()
+        private static void OnPause(On.HeroController.orig_Pause orig, HeroController hc)
         {
-            if (Panel == null)
-            {
-                return;
-            }
+            Panel.SetActive(true, false);
+            
+            orig(hc);
+        }
+        
+        private static void OnUnpause(On.HeroController.orig_UnPause orig, HeroController hc)
+        {
+            Panel.SetActive(false, true);
+            
+            orig(hc);
+        }
 
-            if (GameManager.instance.IsGamePaused())
+        private static void OnSceneChange(Scene prevScene, Scene nextScene)
+        {
+            if (nextScene.name == "Menu_Title")
             {
-                if (!Panel.active)
-                {
-                    Panel.SetActive(true, false);    
-                }
-            }
-            else
-            {
-                if (Panel.active)
-                {
-                    Panel.SetActive(false, true);   
-                }
+                Panel.SetActive(false, true);
             }
         }
 
-        
         // Taken from https://stackoverflow.com/questions/56949217/how-to-resize-a-texture2d-using-height-and-width
         private static Texture2D Resize(Texture2D texture2D ,int targetX,int targetY)
         {

@@ -17,13 +17,13 @@ namespace CustomKnight.Canvas
         
         public void BuildMenus()
         {
-            if (!GameObject.Find("Canvas"))
+            if (!GameObject.Find("Custom Knight Canvas"))
             {
                 Log("Building Canvas");
                 
                 LoadResources();
                 
-                canvas = new GameObject("Canvas");
+                canvas = new GameObject("Custom Knight Canvas");
                 canvas.AddComponent<UnityEngine.Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
                 CanvasScaler scaler = canvas.AddComponent<CanvasScaler>();
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -36,11 +36,6 @@ namespace CustomKnight.Canvas
 
                 DontDestroyOnLoad(canvas);
             }
-        }
-
-        public void Update()
-        {
-            SkinSwapperPanel.Update();
         }
 
         public static GUIController Instance

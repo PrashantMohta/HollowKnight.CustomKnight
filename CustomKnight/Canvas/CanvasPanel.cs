@@ -15,7 +15,6 @@ namespace CustomKnight.Canvas
         private Dictionary<string, CanvasPanel> panels = new Dictionary<string, CanvasPanel>();
         private Dictionary<string, CanvasImage> images = new Dictionary<string, CanvasImage>();
         private Dictionary<string, CanvasText> texts = new Dictionary<string, CanvasText>();
-        private Dictionary<string, CanvasInput> inputs = new Dictionary<string, CanvasInput>();
 
         public bool active = true;
 
@@ -35,8 +34,6 @@ namespace CustomKnight.Canvas
             position = pos;
             canvas = parent;
             background = new CanvasImage(parent, tex, pos, sz, bgSubSection);
-
-            active = true;
         }
 
         public CanvasButton AddButton(string name, Texture2D tex, Vector2 pos, Vector2 sz, UnityAction<string> func, Rect bgSubSection, Font font = null, string text = null, int fontSize = 13)
@@ -74,15 +71,6 @@ namespace CustomKnight.Canvas
             texts.Add(name, t);
 
             return t;
-        }
-
-        public CanvasInput AddInput(string name, Texture2D texture, Vector2 position, Vector2 size, Rect bgSubSection, Font font = null, string inputText = "", string placeholderText = "", int fontSize = 13)
-        {
-            CanvasInput input = new CanvasInput(canvas, name, texture, position, size, bgSubSection, font, inputText, placeholderText, fontSize);
-
-            inputs.Add(name, input);
-
-            return input;
         }
         
         public CanvasButton GetButton(string buttonName, string panelName = null)
@@ -139,22 +127,7 @@ namespace CustomKnight.Canvas
 
             return null;
         }
-
-        public CanvasInput GetInput(string inputName, string panelName = null)
-        {
-            if (panelName != null && panels.ContainsKey(panelName))
-            {
-                return panels[panelName].GetInput(inputName);
-            }
-
-            if (inputs.ContainsKey(inputName))
-            {
-                return inputs[inputName];
-            }
-
-            return null;
-        }
-
+        
         public void UpdateBackground(Texture2D tex, Rect subSection)
         {
             background.UpdateImage(tex, subSection);
@@ -184,11 +157,6 @@ namespace CustomKnight.Canvas
                 button.SetPosition(button.GetPosition() - deltaPos);
             }
 
-            foreach (CanvasInput input in inputs.Values)
-            {
-                input.SetPosition(input.GetPosition() - deltaPos);
-            }
-            
             foreach (CanvasText text in texts.Values)
             {
                 text.SetPosition(text.GetPosition() - deltaPos);
@@ -228,11 +196,6 @@ namespace CustomKnight.Canvas
                 image.SetActive(b);
             }
 
-            foreach (CanvasInput input in inputs.Values)
-            {
-                input.SetActive(b);
-            }
-            
             foreach (CanvasText t in texts.Values)
             {
                 t.SetActive(b);
@@ -291,11 +254,6 @@ namespace CustomKnight.Canvas
             foreach (CanvasImage image in images.Values)
             {
                 image.Destroy();
-            }
-
-            foreach (CanvasInput input in inputs.Values)
-            {
-                input.Destroy();
             }
 
             foreach (CanvasText t in texts.Values)
