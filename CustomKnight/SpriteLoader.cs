@@ -46,6 +46,8 @@ namespace CustomKnight
                 CustomKnight.Textures["Sprint"].defaultTex = _sprintMat.mainTexture as Texture2D;
                 CustomKnight.Textures["Unn"].defaultTex = _unnMat.mainTexture as Texture2D;
 
+                CustomKnight.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
+
                 if (CustomKnight.settings.Preloads)
                 {
                     CustomKnight.Textures["Cloak"].defaultTex = _cloakMat.mainTexture as Texture2D;
@@ -122,6 +124,8 @@ namespace CustomKnight
                 _sprintMat.mainTexture = CustomKnight.Textures["Sprint"].defaultTex;
                 _unnMat.mainTexture = CustomKnight.Textures["Unn"].defaultTex;
 
+                _shadeMat.mainTexture = CustomKnight.Textures["Shade"].defaultTex;
+
                 if (CustomKnight.settings.Preloads)
                 {
                     _cloakMat.mainTexture = CustomKnight.Textures["Cloak"].defaultTex;
@@ -174,6 +178,8 @@ namespace CustomKnight
         }
 
         private static Material _knightMat;
+
+        private static Material _shadeMat;
         private static Material _sprintMat;
         private static Material _unnMat;
 
@@ -205,11 +211,15 @@ namespace CustomKnight
             yield return new WaitUntil(() => HeroController.instance != null);
             
             GameObject hc = HeroController.instance.gameObject;
-            
+            SceneManager sm = GameManager.instance.GetSceneManager().GetComponent<SceneManager>();
+
             tk2dSpriteAnimator anim = hc.GetComponent<tk2dSpriteAnimator>();
             _knightMat = anim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
             _sprintMat = anim.GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material;
             _unnMat = anim.GetClipByName("Slug Up").frames[0].spriteCollection.spriteDefinitions[0].material;
+            
+            tk2dSpriteAnimator shadeAnim = sm.hollowShadeObject.GetComponent<tk2dSpriteAnimator>();
+            _shadeMat = shadeAnim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
 
             if (CustomKnight.settings.Preloads)
             {
@@ -351,6 +361,10 @@ namespace CustomKnight
             _unnMat.mainTexture = CustomKnight.Textures["Unn"].missing
                 ? CustomKnight.Textures["Unn"].defaultTex
                 : CustomKnight.Textures["Unn"].tex;
+
+            _shadeMat.mainTexture = CustomKnight.Textures["Shade"].missing 
+                ? CustomKnight.Textures["Shade"].defaultTex
+                : CustomKnight.Textures["Shade"].tex;
 
             if (CustomKnight.settings.Preloads)
             {
