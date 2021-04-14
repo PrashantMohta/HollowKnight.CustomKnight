@@ -49,6 +49,7 @@ namespace CustomKnight
             "Knight",
             "Sprint",
             "Shade",
+            "ShadeOrb",
             "Wraiths",
             "VoidSpells",
             "VS",

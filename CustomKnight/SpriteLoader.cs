@@ -10,6 +10,7 @@ using ModCommon;
 using ModCommon.Util;
 using UnityEngine.Assertions.Must;
 
+
 namespace CustomKnight
 {
     internal class SpriteLoader : MonoBehaviour
@@ -47,6 +48,7 @@ namespace CustomKnight
                 CustomKnight.Textures["Unn"].defaultTex = _unnMat.mainTexture as Texture2D;
 
                 CustomKnight.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
+                CustomKnight.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
 
                 if (CustomKnight.settings.Preloads)
                 {
@@ -126,6 +128,17 @@ namespace CustomKnight
 
                 _shadeMat.mainTexture = CustomKnight.Textures["Shade"].defaultTex;
 
+                _shadeOrbMat.mainTexture = CustomKnight.Textures["ShadeOrb"].defaultTex;
+
+                _shadeOrbReformMat.mainTexture = _shadeOrbMat.mainTexture;
+
+                _shadeOrbRetreatMat.mainTexture = _shadeOrbMat.mainTexture;
+
+                _shadeOrbChargeMat.mainTexture = _shadeOrbMat.mainTexture;
+
+                _shadeOrbDepartMat.mainTexture = _shadeOrbMat.mainTexture;
+
+                _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
                 if (CustomKnight.settings.Preloads)
                 {
                     _cloakMat.mainTexture = CustomKnight.Textures["Cloak"].defaultTex;
@@ -180,6 +193,14 @@ namespace CustomKnight
         private static Material _knightMat;
 
         private static Material _shadeMat;
+        private static Material _shadeOrbReformMat;
+        private static Material _shadeOrbRetreatMat;
+        private static Material _shadeOrbChargeMat;
+        private static Material _shadeOrbDepartMat;
+        private static Material _shadeOrbQuakeMat;
+
+        private static Material _shadeOrbMat;
+
         private static Material _sprintMat;
         private static Material _unnMat;
 
@@ -212,7 +233,7 @@ namespace CustomKnight
             
             GameObject hc = HeroController.instance.gameObject;
             SceneManager sm = GameManager.instance.GetSceneManager().GetComponent<SceneManager>();
-
+          
             tk2dSpriteAnimator anim = hc.GetComponent<tk2dSpriteAnimator>();
             _knightMat = anim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
             _sprintMat = anim.GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material;
@@ -220,6 +241,12 @@ namespace CustomKnight
             
             tk2dSpriteAnimator shadeAnim = sm.hollowShadeObject.GetComponent<tk2dSpriteAnimator>();
             _shadeMat = shadeAnim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
+            _shadeOrbMat = sm.hollowShadeObject.FindGameObjectInChildren("Shade Particles").GetComponent<ParticleSystemRenderer>().material;
+            _shadeOrbReformMat = sm.hollowShadeObject.FindGameObjectInChildren("Reform Particles").GetComponent<ParticleSystemRenderer>().material;
+            _shadeOrbRetreatMat = sm.hollowShadeObject.FindGameObjectInChildren("Retreat Particles").GetComponent<ParticleSystemRenderer>().material;
+            _shadeOrbChargeMat = sm.hollowShadeObject.FindGameObjectInChildren("Charge Particles").GetComponent<ParticleSystemRenderer>().material;
+            _shadeOrbDepartMat = sm.hollowShadeObject.FindGameObjectInChildren("Depart Particles").GetComponent<ParticleSystemRenderer>().material;
+            _shadeOrbQuakeMat = sm.hollowShadeObject.FindGameObjectInChildren("Quake Particles").GetComponent<ParticleSystemRenderer>().material;
 
             if (CustomKnight.settings.Preloads)
             {
@@ -352,6 +379,7 @@ namespace CustomKnight
                 PullDefaultTextures();
             }
 
+
             _knightMat.mainTexture = CustomKnight.Textures["Knight"].missing
                 ? CustomKnight.Textures["Knight"].defaultTex
                 : CustomKnight.Textures["Knight"].tex;
@@ -365,6 +393,20 @@ namespace CustomKnight
             _shadeMat.mainTexture = CustomKnight.Textures["Shade"].missing 
                 ? CustomKnight.Textures["Shade"].defaultTex
                 : CustomKnight.Textures["Shade"].tex;
+                
+            _shadeOrbMat.mainTexture = CustomKnight.Textures["ShadeOrb"].missing 
+                ? CustomKnight.Textures["ShadeOrb"].defaultTex
+                : CustomKnight.Textures["ShadeOrb"].tex;
+
+            _shadeOrbReformMat.mainTexture = _shadeOrbMat.mainTexture;
+
+            _shadeOrbRetreatMat.mainTexture = _shadeOrbMat.mainTexture;
+
+            _shadeOrbChargeMat.mainTexture = _shadeOrbMat.mainTexture;
+
+            _shadeOrbDepartMat.mainTexture = _shadeOrbMat.mainTexture;
+
+            _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
 
             if (CustomKnight.settings.Preloads)
             {
