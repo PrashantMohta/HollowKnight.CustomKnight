@@ -197,7 +197,7 @@ namespace CustomKnight
             orig(geo);
         }
 
-        public override string GetVersion() => "1.2.2";
+        public override string GetVersion() => "1.2.3";
 
         private void ResetTextures()
         {
