@@ -16,13 +16,33 @@ namespace CustomKnight.Canvas
         {
             Log("Building Skin Swapper Panel");
             y = 30.0f;
-
+            int imageWidth = 300;
+            int panelHeight = 1080;
+            int imageHeight = 60;
+            Texture2D texture2D = new Texture2D(imageWidth, panelHeight);
+            for (int i = 0; i < imageWidth; i++)
+            {
+                for (int j = 0; j < panelHeight; j++)
+                {
+                    texture2D.SetPixel(i, j, Color.clear);
+                }
+            }
+            texture2D.Apply();
+            Texture2D texture2D2 = new Texture2D(imageWidth, imageHeight);
+            for (int k = 0; k < imageWidth; k++)
+            {
+                for (int l = 0; l < imageHeight; l++)
+                {
+                    texture2D2.SetPixel(k, l, Color.clear);
+                }
+            }
+            texture2D2.Apply();
             Panel = new CanvasPanel(
                 canvas,
-                GUIController.Instance.images["Panel_BG"],
+                texture2D,
                 new Vector2(0, y), 
                 Vector2.zero,
-                new Rect(0, 0, GUIController.Instance.images["Panel_BG"].width, 60)
+                new Rect(0, 0, imageWidth, 60)
             );
 
             float textHeight = 90;
@@ -30,7 +50,7 @@ namespace CustomKnight.Canvas
                 "Change Skin Text",
                 "Change Skin",
                 new Vector2(0, y),
-                new Vector2(GUIController.Instance.images["Panel_BG"].width, textHeight), 
+                new Vector2(imageWidth, textHeight), 
                 GUIController.Instance.trajanNormal,
                 24,
                 FontStyle.Bold,
@@ -44,53 +64,11 @@ namespace CustomKnight.Canvas
             {
                 string directoryName = new DirectoryInfo(path).Name;
                 
-                Texture2D tex = null;
                 
-                int imageHeight = 128;
-                int imageWidth = 300;
-                
-                if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/Icon.png").Replace("\\", "/")))
-                {
-                    byte[] iconBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/Icon.png").Replace("\\", "/"));
-                    Texture2D icon = new Texture2D(2, 2);
-                    bool isLoaded = icon.LoadImage(iconBytes, true);
-                    if (isLoaded)
-                    {
-                        tex = Resize(icon, imageWidth, imageHeight);
-                    }
-                }
-                else if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/icon.png").Replace("\\", "/")))
-                {
-                    byte[] iconBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/icon.png").Replace("\\", "/"));
-                    Texture2D icon = new Texture2D(2, 2);
-                    bool isLoaded = icon.LoadImage(iconBytes, true);
-                    if (isLoaded)
-                    {
-                        tex = Resize(icon, imageWidth, imageHeight);
-                    }
-                }
-                else if (File.Exists((CustomKnight.DATA_DIR + "/" + directoryName + "/Knight.png").Replace("\\", "/")))
-                {
-                    byte[] knightBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/Knight.png").Replace("\\", "/"));
-                    Texture2D knightTex = new Texture2D(2, 2);
-                    bool isLoaded = knightTex.LoadImage(knightBytes, true);
-
-                    if (isLoaded)
-                    {
-                        Color[] colors = knightTex.GetPixels(2890, 2523, imageWidth, imageHeight);
-                        tex = new Texture2D(imageWidth, imageHeight);
-                        tex.SetPixels(colors);
-                        tex.Apply();
-                    }
-                }
-                else
-                {
-                    tex = new Texture2D(imageWidth, imageHeight);
-                }
 
                 Panel.AddButton(
                     directoryName,
-                    tex,
+                    texture2D2,
                     new Vector2(0, y),
                     Vector2.zero,
                     ChangeSkin,
@@ -106,7 +84,7 @@ namespace CustomKnight.Canvas
 
             Panel.SetActive(false, true);
             
-            Vector2 newPanelSize = new Vector2(GUIController.Instance.images["Panel_BG"].width, y);
+            Vector2 newPanelSize = new Vector2(imageWidth, y);
             Panel.ResizeBG(newPanelSize);
             
             On.HeroController.Pause += OnPause;
