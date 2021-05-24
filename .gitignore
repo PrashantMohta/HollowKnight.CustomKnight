@@ -328,3 +328,8 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+#Vanilla files
+CustomKnight/Vanilla
+
+.DS_Store
