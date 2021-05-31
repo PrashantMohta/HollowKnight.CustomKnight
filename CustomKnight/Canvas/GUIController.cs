@@ -47,7 +47,7 @@ namespace CustomKnight.Canvas
                     _instance = FindObjectOfType<GUIController>();
                     if (_instance == null)
                     {
-                        Modding.Logger.LogWarn("[Custom Knight] Couldn't find GUIController");
+                        Modding.Logger.LogWarn("[Multiplayer] Couldn't find GUIController");
 
                         GameObject GUIController = new GameObject("GUI Controller");
                         _instance = GUIController.AddComponent<GUIController>();
@@ -108,7 +108,7 @@ namespace CustomKnight.Canvas
                         imageStream.Read(buffer, 0, buffer.Length);
 
                         Texture2D tex = new Texture2D(1, 1);
-                        tex.LoadImage(buffer.ToArray(), true);
+                        tex.LoadImage(buffer.ToArray());
 
                         string[] split = res.Split('.');
                         string internalName = split[split.Length - 2];

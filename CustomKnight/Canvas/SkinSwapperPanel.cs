@@ -1,8 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using HutongGames.PlayMaker.Actions;
+using InControl;
+using ModCommon;
+using ModCommon.Util;
+using Modding;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace CustomKnight.Canvas
 {
@@ -53,7 +61,7 @@ namespace CustomKnight.Canvas
                 {
                     byte[] iconBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/Icon.png").Replace("\\", "/"));
                     Texture2D icon = new Texture2D(2, 2);
-                    bool isLoaded = icon.LoadImage(iconBytes, true);
+                    bool isLoaded = icon.LoadImage(iconBytes);
                     if (isLoaded)
                     {
                         tex = Resize(icon, imageWidth, imageHeight);
@@ -63,7 +71,7 @@ namespace CustomKnight.Canvas
                 {
                     byte[] iconBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/icon.png").Replace("\\", "/"));
                     Texture2D icon = new Texture2D(2, 2);
-                    bool isLoaded = icon.LoadImage(iconBytes, true);
+                    bool isLoaded = icon.LoadImage(iconBytes);
                     if (isLoaded)
                     {
                         tex = Resize(icon, imageWidth, imageHeight);
@@ -73,7 +81,7 @@ namespace CustomKnight.Canvas
                 {
                     byte[] knightBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + directoryName + "/Knight.png").Replace("\\", "/"));
                     Texture2D knightTex = new Texture2D(2, 2);
-                    bool isLoaded = knightTex.LoadImage(knightBytes, true);
+                    bool isLoaded = knightTex.LoadImage(knightBytes);
 
                     if (isLoaded)
                     {
@@ -117,19 +125,24 @@ namespace CustomKnight.Canvas
         private static void ChangeSkin(string buttonName)
         {
             CustomKnight.SKIN_FOLDER = buttonName;
-            CustomKnight.settings.DefaultSkin = buttonName;
-            
+            GameManager.instance.StartCoroutine(ChangeSkinRoutine());
+        }
+
+        private static IEnumerator ChangeSkinRoutine()
+        {
             HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
             Panel.SetActive(false, true);
-            Log("Number of Textures: " + UnityEngine.Object.FindObjectsOfType<Texture2D>().Length);
             CustomKnight.Instance.Initialize(null);
+
+            yield return new WaitUntil(() => SpriteLoader.LoadComplete);
+            
             Panel.SetActive(true, false);
         }
         
         private static void OnPause(On.HeroController.orig_Pause orig, HeroController hc)
         {
             Panel.SetActive(true, false);
-
+            
             orig(hc);
         }
         

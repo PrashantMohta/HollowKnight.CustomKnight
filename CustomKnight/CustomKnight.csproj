@@ -97,7 +97,6 @@
     <Compile Include="Canvas\Scroller.cs" />
     <Compile Include="Canvas\SkinSwapperPanel.cs" />
     <Compile Include="CustomKnight.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SpriteLoader.cs" />

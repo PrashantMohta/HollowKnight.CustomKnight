@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -108,8 +107,111 @@ namespace CustomKnight
                         CustomKnight.Textures["OrbFull"].defaultTex = i.sprite.texture;
                     }
                 }
+
+                GameObject dreamNail = GameManager.instance.inventoryFSM.gameObject.FindGameObjectInChildren("Dream Nail");
+                var sr = dreamNail.GetComponent<SpriteRenderer>();
+                CustomKnight.CustomKnightTexture invTexture = CustomKnight.Textures["Inventory"];
+                invTexture.defaultTex = sr.sprite.texture;
                 
-                CustomKnight.Textures["Inventory"].defaultTex = CharmIconList.Instance.nymmCharm.texture;
+                PlayMakerFSM charmShowIfCollected;
+                Sprite brokenSprite;
+                
+                for (int charmNum = 1; charmNum <= 40; charmNum++)
+                {
+                    string charmName;
+                    CustomKnight.CustomKnightTexture texture;
+
+                    switch (charmNum)
+                    {
+                        case 23:
+                            charmName = "Charm_" + charmNum + "_Fragile";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+
+                            charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
+                            brokenSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value as Sprite;
+                            charmName = "Charm_" + charmNum + "_Broken";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = brokenSprite;
+                                
+                            charmName = "Charm_" + charmNum + "_Unbreakable";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.unbreakableHeart;
+
+                            break;
+                        case 24:
+                            charmName = "Charm_" + charmNum + "_Fragile";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+
+                            charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
+                            brokenSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value as Sprite;
+                            charmName = "Charm_" + charmNum + "_Broken";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = brokenSprite;
+                            
+                            charmName = "Charm_" + charmNum + "_Unbreakable";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.unbreakableGreed;
+
+                            break;
+                        case 25:
+                            charmName = "Charm_" + charmNum + "_Fragile";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+
+                            charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
+                            brokenSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value as Sprite;
+                            charmName = "Charm_" + charmNum + "_Broken";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = brokenSprite;
+                            
+                            charmName = "Charm_" + charmNum + "_Unbreakable";
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.unbreakableStrength;
+
+                            break;
+                        case 36:
+                            charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
+
+                            CustomKnight.CustomKnightTexture kingsoulLeft = CustomKnight.Textures["Charm_" + charmNum + "_Left"]; 
+                            kingsoulLeft.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value as Sprite;
+
+                            CustomKnight.CustomKnightTexture kingsoulRight = CustomKnight.Textures["Charm_" + charmNum + "_Right"]; 
+                            kingsoulRight.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value as Sprite;
+                            
+                            CustomKnight.CustomKnightTexture kingsoul = CustomKnight.Textures["Charm_" + charmNum + "_Full"]; 
+                            kingsoul.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value as Sprite;
+                            
+                            CustomKnight.CustomKnightTexture voidHeart = CustomKnight.Textures["Charm_" + charmNum + "_Black"]; 
+                            voidHeart.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value as Sprite;
+                            
+                            break;
+                        case 40:
+                            CustomKnight.CustomKnightTexture gcLevel1 = CustomKnight.Textures["Charm_40_1"];
+                            gcLevel1.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel1;
+
+                            CustomKnight.CustomKnightTexture gcLevel2 = CustomKnight.Textures["Charm_40_2"];
+                            gcLevel2.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel2;
+
+                            CustomKnight.CustomKnightTexture gcLevel3 = CustomKnight.Textures["Charm_40_3"];
+                            gcLevel3.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel3;
+
+                            CustomKnight.CustomKnightTexture gcLevel4 = CustomKnight.Textures["Charm_40_4"];
+                            gcLevel4.defaultCharmSprite= CharmIconList.Instance.grimmchildLevel4;
+
+                            CustomKnight.CustomKnightTexture melody = CustomKnight.Textures["Charm_40_5"];
+                            melody.defaultCharmSprite = CharmIconList.Instance.nymmCharm;
+
+                            break;
+                        default:
+                            charmName = "Charm_" + charmNum;
+                            texture = CustomKnight.Textures[charmName];
+                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+
+                            break;
+                    }
+                }
             }
         }
 
@@ -515,308 +617,222 @@ namespace CustomKnight
                 }
             }
 
+            Log("Getting DN");
+            GameObject dreamNail = GameManager.instance.inventoryFSM.gameObject.FindGameObjectInChildren("Dream Nail");
+            Log("Getting SR");
+            var sr = dreamNail.GetComponent<SpriteRenderer>();
+            Log("Getting Inventory");
             CustomKnight.CustomKnightTexture invTexture = CustomKnight.Textures["Inventory"];
+            Log("Getting InvTex: " + (invTexture == null));
             Texture2D invTex = invTexture.missing ? invTexture.defaultTex : invTexture.tex;
-            PlayMakerFSM updateSprite = GameManager.instance.inventoryFSM.gameObject.FindGameObjectInChildren("Detail Sprite").LocateMyFSM("Update Sprite");
+            Log("Getting Texturek_BackingField: " + (invTex == null));
+            FieldInfo texInfo = typeof(Sprite).GetField("<texture>k__BackingField",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            
+            ReflectionHelper.
+
+        Log("Setting InvTex: " + (texInfo == null));
+            texInfo.SetValue(sr.sprite, invTex);
+            Log("Finale");
+
+            string charmName;
+            CustomKnight.CustomKnightTexture texture;
+
+            PlayMakerFSM charmShowIfCollected;
 
             for (int charmNum = 1; charmNum <= 40; charmNum++)
             {
-                IEnumerable<Vector2> charmCoords;
-                float charmX, charmY;
-                Sprite charmSprite;
-                Sprite newCharmSprite;
-                
-                float offsetX = 0.0f;
-                float offsetY = 0.0f;
-                float shrinkX = 2.0f;
-                float shrinkY = 2.0f;
-
-                PlayMakerFSM charmShowIfCollected;
-
                 switch (charmNum)
                 {
                     case 23:
-                        // Fixed Fragile Heart
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.spriteList[charmNum];
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.spriteList[charmNum] = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Fragile";
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D heartTex = texture.tex;
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(heartTex, new Rect(0, 0, heartTex.width, heartTex.height), new Vector2(0.5f, 0.5f));
 
-                        // Broken Fragile Heart
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
                         charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Broken";
+                        texture = CustomKnight.Textures[charmName];
+                        if (texture.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value = texture.defaultCharmSprite;    
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value = sprite;
+                        }
 
-                        // Unbreakable Heart
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.unbreakableHeart;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.unbreakableHeart = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Unbreakable";
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D ubhTex = texture.tex;
+                        CharmIconList.Instance.unbreakableHeart = texture.missing ? texture.defaultCharmSprite : Sprite.Create(ubhTex, new Rect(0, 0, ubhTex.width, ubhTex.height), new Vector2(0.5f, 0.5f));
 
                         break;
                     case 24:
-                        // Fixed Fragile Greed
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.spriteList[charmNum];
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.spriteList[charmNum] = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Fragile";
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D greedTex = texture.tex;
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(greedTex, new Rect(0, 0, greedTex.width, greedTex.height), new Vector2(0.5f, 0.5f));
                         
-                        // Broken Fragile Greed
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
                         charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value = newCharmSprite;
-
-                        // Unbreakable Greed
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.unbreakableGreed;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.unbreakableGreed = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Broken";
+                        texture = CustomKnight.Textures[charmName];
+                        if (texture.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value = texture.defaultCharmSprite;    
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value = sprite;
+                        }
+                        
+                        charmName = "Charm_" + charmNum + "_Unbreakable";
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D ubgTex = texture.tex;
+                        CharmIconList.Instance.unbreakableGreed = texture.missing ? texture.defaultCharmSprite : Sprite.Create(ubgTex, new Rect(0, 0, ubgTex.width, ubgTex.height), new Vector2(0.5f, 0.5f));
                         
                         break;
                     case 25:
-                        // Fixed Fragile Strength
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.spriteList[charmNum];
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.spriteList[charmNum] = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Fragile";
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D strTex = texture.tex;
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(strTex, new Rect(0, 0, strTex.width, strTex.height), new Vector2(0.5f, 0.5f));
                         
-                        // Broken Fragile Strength
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
                         charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value = newCharmSprite;
-
-                        // Unbreakable Strength
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.unbreakableStrength;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.unbreakableStrength = newCharmSprite;
+                        charmName = "Charm_" + charmNum + "_Broken";
+                        texture = CustomKnight.Textures[charmName];
+                        if (texture.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value = texture.defaultCharmSprite;    
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value = sprite;
+                        }
+                        
+                        charmName = "Charm_" + charmNum + "_Unbreakable";
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D ubsTex = texture.tex;
+                        CharmIconList.Instance.unbreakableStrength = texture.missing ? texture.defaultCharmSprite : Sprite.Create(ubsTex, new Rect(0, 0, ubsTex.width, ubsTex.height), new Vector2(0.5f, 0.5f));
 
                         break;
                     case 36:
                         charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
-                        updateSprite = GameManager.instance.inventoryFSM.gameObject.FindGameObjectInChildren("Detail Sprite").LocateMyFSM("Update Sprite");
 
-                        offsetX = 7;
-                        offsetY = 0;
-                        shrinkX = 54;
-                        shrinkY = 0;
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = newCharmSprite;
-                        
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = newCharmSprite;
-                        
-                        offsetX = 0;
-                        offsetY = -3;
-                        shrinkX = 0;
-                        shrinkY = 8;
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = newCharmSprite;
-                        
-                        offsetX = 0;
-                        offsetY = -5;
-                        shrinkX = 0;
-                        shrinkY = 12;
-                        charmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value as Sprite;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = newCharmSprite;
-                        updateSprite.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = newCharmSprite;
+                        CustomKnight.CustomKnightTexture kingsoulLeft = CustomKnight.Textures["Charm_" + charmNum + "_Left"];
+                        if (kingsoulLeft.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = kingsoulLeft.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = kingsoulLeft.tex;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
+
+                        CustomKnight.CustomKnightTexture kingsoulRight = CustomKnight.Textures["Charm_" + charmNum + "_Right"];
+                        if (kingsoulRight.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = kingsoulRight.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = kingsoulRight.tex;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
+                            
+                        CustomKnight.CustomKnightTexture kingsoul= CustomKnight.Textures["Charm_" + charmNum + "_Full"];
+                        if (kingsoul.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = kingsoul.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = kingsoul.tex;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
+                            
+                        CustomKnight.CustomKnightTexture voidHeart = CustomKnight.Textures["Charm_" + charmNum + "_Black"];
+                        if (voidHeart.missing)
+                        {
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = voidHeart.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = voidHeart.tex;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
                         
                         break;
                     case 40:
-                        offsetX = -12;
-                        offsetY = 0;
-                        shrinkX = 20;
-                        shrinkY = 10;
-                        charmSprite = CharmIconList.Instance.grimmchildLevel1;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.grimmchildLevel1 = newCharmSprite;
+                        texture = CustomKnight.Textures["Charm_" + charmNum + "_1"];
+                        if (texture.missing)
+                        {
+                            CharmIconList.Instance.grimmchildLevel1 = texture.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            CharmIconList.Instance.grimmchildLevel1 = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
                         
-                        offsetX = -6;
-                        offsetY = 4;
-                        shrinkX = 28;
-                        shrinkY = 16;
-                        charmSprite = CharmIconList.Instance.grimmchildLevel2;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.grimmchildLevel2 = newCharmSprite;
+                        texture = CustomKnight.Textures["Charm_" + charmNum + "_2"];
+                        if (texture.missing)
+                        {
+                            CharmIconList.Instance.grimmchildLevel2 = texture.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            CharmIconList.Instance.grimmchildLevel2 = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
                         
-                        offsetX = -14;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.grimmchildLevel3;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.grimmchildLevel3 = newCharmSprite;
+                        texture = CustomKnight.Textures["Charm_" + charmNum + "_3"];
+                        if (texture.missing)
+                        {
+                            CharmIconList.Instance.grimmchildLevel3 = texture.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            CharmIconList.Instance.grimmchildLevel3 = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
                         
-                        offsetX = -18;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.grimmchildLevel4;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.grimmchildLevel4 = newCharmSprite;
-                        
-                        offsetX = 0;
-                        offsetY = 0;
-                        shrinkX = 0;
-                        shrinkY = 0;
-                        charmSprite = CharmIconList.Instance.nymmCharm;
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex, new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX, charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.nymmCharm = newCharmSprite;
+                        texture = CustomKnight.Textures["Charm_" + charmNum + "_4"];
+                        if (texture.missing)
+                        {
+                            CharmIconList.Instance.grimmchildLevel4 = texture.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            CharmIconList.Instance.grimmchildLevel4 = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
+
+                        texture = CustomKnight.Textures["Charm_" + charmNum + "_5"];
+                        if (texture.missing)
+                        {
+                            CharmIconList.Instance.nymmCharm = texture.defaultCharmSprite;
+                        }
+                        else
+                        {
+                            Texture2D tex = texture.tex;
+                            CharmIconList.Instance.nymmCharm = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
 
                         break;
                     default:
-                        // Fringe cases where charm rect positions and sizes are incorrect
-                        switch (charmNum)
-                        {
-                            // Fury of the Fallen
-                            case 6:
-                                offsetY = -5;
-                                shrinkY = 10;
-                                break;
-                            // Defender's Crest
-                            case 10:
-                                offsetX = -2;
-                                offsetY = 0;
-                                shrinkX = 20;
-                                shrinkY = 10;
-                                break;
-                            // Shape of Unn
-                            case 28:
-                                offsetX = -8;
-                                offsetY = -4;
-                                shrinkX = 40;
-                                shrinkY = 10;
-                                break;
-                            // Dashmaster
-                            case 31:
-                                offsetX = 0;
-                                offsetY = 0;
-                                shrinkX = 10;
-                                shrinkY = 6;
-                                break;
-                            // Quick Slash
-                            case 32:
-                                offsetX = 2;
-                                offsetY = 2;
-                                shrinkY = 2;
-                                break;
-                            // Deep Focus
-                            case 34:
-                                shrinkY = 6;
-                                break;
-                        }
-
-                        charmSprite = CharmIconList.Instance.spriteList[charmNum];
-                        charmCoords = charmSprite.uv.Select(uv => ConvertUVToPixelCoordinates(uv, charmSprite.texture.width, charmSprite.texture.height));
-                        charmX = charmCoords.Min(uv => uv.x);
-                        charmY = charmCoords.Min(uv => uv.y);
-                        newCharmSprite = Sprite.Create(invTex,
-                            new Rect(charmX + offsetX, charmY + offsetY, charmSprite.rect.width - shrinkX,
-                                charmSprite.rect.height - shrinkY), new Vector2(0.5f, 0.5f));
-                        CharmIconList.Instance.spriteList[charmNum] = newCharmSprite;
-
+                        charmName = "Charm_" + charmNum;
+                        texture = CustomKnight.Textures[charmName];
+                        Texture2D charmTex = texture.tex;
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(charmTex, new Rect(0, 0, charmTex.width, charmTex.height), new Vector2(0.5f, 0.5f));
+                        
                         break;
                 }
             }
@@ -824,11 +840,6 @@ namespace CustomKnight
             texRoutineRunning = false;
         }
 
-        private static Vector2 ConvertUVToPixelCoordinates(Vector2 uv, int width, int height)
-        {
-            return new Vector2(uv.x * width, uv.y * height);   
-        }
-        
         private static void Log(object message) => Modding.Logger.Log("[Sprite Loader] " + message);
     }
 }

@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using CustomKnight.Canvas;
 using HutongGames.PlayMaker.Actions;
 using ModCommon;
-using ModCommon.Util;
 using Modding;
+using On.TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Object = System.Object;
+using Random = UnityEngine.Random;
 
 namespace CustomKnight
 {
@@ -21,29 +27,19 @@ namespace CustomKnight
             public Texture2D defaultTex;
             public Texture2D tex;
 
-            public CustomKnightTexture()
-            {
-                fileName = null;
-                missing = false;
-                defaultTex = null;
-                tex = null;
-                defaultCharmSprite = null;
-            }
-            
-            public CustomKnightTexture(string fileName, bool missing, Texture2D defaultTex, Texture2D tex, Sprite defaultCharmSprite)
+            public CustomKnightTexture(string fileName, bool missing, Texture2D defaultTex, Texture2D tex)
             {
                 this.fileName = fileName;
                 this.missing = missing;
                 this.defaultTex = defaultTex;
                 this.tex = tex;
-                this.defaultCharmSprite = defaultCharmSprite;
             }
         }
 
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 
-        internal static GlobalSettings settings;
-
+        public static bool Preloads;
+        
         private static List<string> _texNames = new List<string>
         {
             "Knight",
@@ -72,7 +68,61 @@ namespace CustomKnight
             "Shield",
             "Weaver",
             "Hatchling",
-            "Inventory",
+            "Charm_0",
+            "Charm_1",
+            "Charm_2",
+            "Charm_3",
+            "Charm_4",
+            "Charm_5",
+            "Charm_6",
+            "Charm_7",
+            "Charm_8",
+            "Charm_9",
+            "Charm_10",
+            "Charm_11",
+            "Charm_12",
+            "Charm_13",
+            "Charm_14",
+            "Charm_15",
+            "Charm_16",
+            "Charm_17",
+            "Charm_18",
+            "Charm_19",
+            "Charm_20",
+            "Charm_21",
+            "Charm_22",
+            "Charm_23_Broken",
+            "Charm_23_Fragile",
+            "Charm_23_Unbreakable",
+            "Charm_24_Broken",
+            "Charm_24_Fragile",
+            "Charm_24_Unbreakable",
+            "Charm_25_Broken",
+            "Charm_25_Fragile",
+            "Charm_25_Unbreakable",
+            "Charm_26",
+            "Charm_27",
+            "Charm_28",
+            "Charm_29",
+            "Charm_30",
+            "Charm_31",
+            "Charm_32",
+            "Charm_33",
+            "Charm_34",
+            "Charm_35",
+            "Charm_36_Black",
+            "Charm_36_Full",
+            "Charm_36_Left",
+            "Charm_36_Right",
+            "Charm_37",
+            "Charm_38",
+            "Charm_39",
+            "Charm_40_1",
+            "Charm_40_2",
+            "Charm_40_3",
+            "Charm_40_4",
+            "Charm_40_5",
+            "Charms",
         };
         
         public const string SKINS_FOLDER = "CustomKnight";
@@ -118,11 +168,9 @@ namespace CustomKnight
                     DATA_DIR = Path.GetFullPath(Application.dataPath + "/Managed/Mods/" + SKINS_FOLDER);
                     break;
             }
-
-            settings = GlobalSettings;
-
+            
             // Initial load
-            if (preloadedObjects != null && settings.Preloads)
+            if (preloadedObjects != null)
             {
                 GameObjects.Add("Cloak", preloadedObjects["Abyss_10"]["higher_being/Dish Plat/Knight Dummy"]);
                 GameObjects.Add("Shriek", preloadedObjects["Abyss_12"]["Scream 2 Get/Cutscene Knight"]);
@@ -133,20 +181,17 @@ namespace CustomKnight
                 GameObjects.Add("Birthplace", preloadedObjects["Dream_Abyss"]["End Cutscene/Dummy"]);
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
-            }
-
-            foreach (string texName in _texNames)
-            {
-                if (Textures.ContainsKey(texName))
-                {
-                    break;
-                }
                 
-                CustomKnightTexture texture = new CustomKnightTexture(texName + ".png", false, null, null, null);
-                Textures.Add(texName, texture);
+                foreach (string texName in _texNames)
+                {
+                    CustomKnightTexture texture = new CustomKnightTexture(texName + ".png", false, null, null);
+                    Textures.Add(texName, texture);
+                }
             }
 
             Instance = this;
+
+            Preloads = GlobalSettings.Preloads;
 
             if (!Directory.Exists(DATA_DIR))
             {
@@ -161,10 +206,9 @@ namespace CustomKnight
 
             if (SKIN_FOLDER == null)
             {
-                SKIN_FOLDER = settings.DefaultSkin;
+                Log("Skin folder null: setting to default");
+                SKIN_FOLDER = GlobalSettings.DefaultSkin;
             }
-
-            SaveGlobalSettings();
 
             ResetTextures();
 
@@ -177,24 +221,13 @@ namespace CustomKnight
             ModHooks.Instance.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
         }
 
-        private bool _gotGeoTex;
-        private void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl geo)
+        private void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
         {
-            if (SpriteLoader.ChangedSkin)
+            if (Textures["Geo"].tex != null)
             {
-                SpriteLoader.ChangedSkin = false;
-                CustomKnightTexture geoTex = Textures["Geo"];
-            
-                if (!_gotGeoTex)
-                {
-                    _gotGeoTex = true;
-                    geoTex.defaultTex = geo.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture as Texture2D;
-                }
-                
-                geo.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = geoTex.missing ? geoTex.defaultTex : geoTex.tex;
+                self.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = Textures["Geo"].tex;
             }
-
-            orig(geo);
+            orig(self);
         }
 
         public override string GetVersion() => "1.2.2";
@@ -204,14 +237,19 @@ namespace CustomKnight
             foreach (KeyValuePair<string, CustomKnightTexture> pair in Textures)
             {
                 CustomKnightTexture texture = pair.Value;
-                Object.Destroy(texture.tex);
+                UnityEngine.Object.Destroy(texture.tex);
                 texture.tex = null;
                 texture.missing = false;
                 if (!File.Exists((DATA_DIR + "/" + SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/")))
                 {
-                    //Log($"Missing file {texture.fileName} from folder {SKIN_FOLDER}.");
+                    Log($"Missing file {texture.fileName} from folder {SKIN_FOLDER}.");
                     texture.missing = true;
                 }
+            }
+
+            foreach (KeyValuePair<string, CustomKnightTexture> pair in Textures)
+            {
+                Log("Missing: " + pair.Value.fileName + " " + pair.Value.missing);
             }
         }
         
@@ -221,7 +259,7 @@ namespace CustomKnight
             ModHooks.Instance.AfterSavegameLoadHook -= SpriteLoader.ModifyHeroTextures;
             On.GeoControl.Start -= GeoControl_Start;
             SpriteLoader.UnloadAll();
-            Object.Destroy(GameObject.Find("Custom Knight Canvas"));
+            UnityEngine.Object.Destroy(GameObject.Find("Custom Knight Canvas"));
         }
     }
 }
