@@ -47,7 +47,7 @@ namespace CustomKnight.Canvas
                     _instance = FindObjectOfType<GUIController>();
                     if (_instance == null)
                     {
-                        Modding.Logger.LogWarn("[Multiplayer] Couldn't find GUIController");
+                        Modding.Logger.LogWarn("[Custom Knight] Couldn't find GUIController");
 
                         GameObject GUIController = new GameObject("GUI Controller");
                         _instance = GUIController.AddComponent<GUIController>();
