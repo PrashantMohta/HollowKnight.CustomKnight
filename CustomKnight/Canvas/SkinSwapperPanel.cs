@@ -21,28 +21,29 @@ namespace CustomKnight.Canvas
         public static void BuildMenu(GameObject canvas)
         {
             Log("Building Skin Swapper Panel");
-            float currentElementPosY = CustomKnight.Instance.Settings.PanelStartPos;
+            float currentElementPosY = CustomKnight.Instance.Settings.PanelY;
+            int PanelWidth = CustomKnight.Instance.Settings.PanelWidth;
+            int PanelHeight = CustomKnight.Instance.Settings.PanelHeight;
+
             int NameLength = CustomKnight.Instance.Settings.NameLength;
             int OptionSize = CustomKnight.Instance.Settings.OptionSize;
+            int fontSize = (int)(OptionSize * 0.6f);
+            int headingSize = (int)(OptionSize * 1.1f);
+            int headingFontSize = (int)(headingSize * 0.85f);
 
-            int imageWidth = 300;
-            int panelHeight = 1080;
-            int imageHeight = OptionSize;
-            int fontSize = OptionSize - 15;
-
-            Texture2D texture2D = new Texture2D(imageWidth, panelHeight);
-            for (int i = 0; i < imageWidth; i++)
+            Texture2D texture2D = new Texture2D(PanelWidth, PanelHeight);
+            for (int i = 0; i < PanelWidth; i++)
             {
-                for (int j = 0; j < panelHeight; j++)
+                for (int j = 0; j < PanelHeight; j++)
                 {
                     texture2D.SetPixel(i, j, Color.clear);
                 }
             }
             texture2D.Apply();
-            Texture2D texture2D2 = new Texture2D(imageWidth, imageHeight);
-            for (int k = 0; k < imageWidth; k++)
+            Texture2D texture2D2 = new Texture2D(PanelWidth, OptionSize);
+            for (int k = 0; k < PanelWidth; k++)
             {
-                for (int l = 0; l < imageHeight; l++)
+                for (int l = 0; l < OptionSize; l++)
                 {
                     texture2D2.SetPixel(k, l, Color.clear);
                 }
@@ -53,21 +54,20 @@ namespace CustomKnight.Canvas
                 texture2D,
                 new Vector2(0, currentElementPosY), 
                 Vector2.zero,
-                new Rect(0, 0, imageWidth, 60)
+                new Rect(0, 0, PanelWidth, 60)
             );
 
-            float textHeight = 40;
             Panel.AddText(
                 "Change Skin Text",
                 "Change Skin",
                 new Vector2(0, currentElementPosY),
-                new Vector2(imageWidth, textHeight), 
+                new Vector2(PanelWidth, headingSize), 
                 GUIController.Instance.trajanNormal,
-                24,
+                headingFontSize,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter
             );
-            currentElementPosY += textHeight;
+            currentElementPosY += headingSize;
 
             GC.Collect();
 
@@ -82,19 +82,19 @@ namespace CustomKnight.Canvas
                     new Vector2(0, currentElementPosY),
                     Vector2.zero,
                     ChangeSkin,
-                    new Rect(0, currentElementPosY, imageWidth, imageHeight),
+                    new Rect(0, currentElementPosY, PanelWidth, OptionSize),
                     GUIController.Instance.trajanNormal,
                     buttonText,
                     fontSize
                 );
-                currentElementPosY += imageHeight;
+                currentElementPosY += OptionSize;
                 
                 GC.Collect();
             }
 
             Panel.SetActive(false, true);
             
-            Vector2 newPanelSize = new Vector2(imageWidth, currentElementPosY);
+            Vector2 newPanelSize = new Vector2(PanelWidth, currentElementPosY);
             Panel.ResizeBG(newPanelSize);
             
             On.HeroController.Pause += OnPause;
