@@ -274,6 +274,7 @@ namespace CustomKnight
             }
         }
 
+        public static Material _geoMat;
         private static Material _knightMat;
 
         private static Material _shadeMat;
@@ -452,7 +453,13 @@ namespace CustomKnight
             yield return new WaitWhile(() => !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
             
             PullDefaultTextures();
- 
+
+            var geoTexture = CustomKnight.Textures["Geo"].missing ? CustomKnight.Textures["Geo"].defaultTex : CustomKnight.Textures["Geo"].tex;
+            if (geoTexture != null && _geoMat != null)
+            {
+               _geoMat.mainTexture = geoTexture;
+            }
+
             _knightMat.mainTexture = CustomKnight.Textures["Knight"].missing ? CustomKnight.Textures["Knight"].defaultTex : CustomKnight.Textures["Knight"].tex;
             _sprintMat.mainTexture = CustomKnight.Textures["Sprint"].missing ? CustomKnight.Textures["Sprint"].defaultTex : CustomKnight.Textures["Sprint"].tex;
             _unnMat.mainTexture = CustomKnight.Textures["Unn"].missing ? CustomKnight.Textures["Unn"].defaultTex : CustomKnight.Textures["Unn"].tex;

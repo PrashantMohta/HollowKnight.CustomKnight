@@ -231,10 +231,18 @@ namespace CustomKnight
 
         private void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
         {
-            if (Textures["Geo"].tex != null)
-            {
-                self.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = Textures["Geo"].tex;
+            SpriteLoader._geoMat = self.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            
+            //save default texture because we dont have a copy
+            if(Textures["Geo"].defaultTex == null){
+                Textures["Geo"].defaultTex  = (Texture2D)SpriteLoader._geoMat.mainTexture;
             }
+            var geoTexture = Textures["Geo"].missing ? Textures["Geo"].defaultTex : Textures["Geo"].tex;
+            if (geoTexture != null  && SpriteLoader._geoMat != null)
+            {
+               SpriteLoader._geoMat.mainTexture = geoTexture;
+            }
+            On.GeoControl.Start -= GeoControl_Start;
             orig(self);
         }
 
