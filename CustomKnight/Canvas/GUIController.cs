@@ -108,7 +108,7 @@ namespace CustomKnight.Canvas
                         imageStream.Read(buffer, 0, buffer.Length);
 
                         Texture2D tex = new Texture2D(1, 1);
-                        tex.LoadImage(buffer.ToArray(), true);
+                        tex.LoadImage(buffer.ToArray());
 
                         string[] split = res.Split('.');
                         string internalName = split[split.Length - 2];
