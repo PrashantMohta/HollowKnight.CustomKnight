@@ -238,7 +238,7 @@ namespace CustomKnight
             orig(self);
         }
 
-        public override string GetVersion() => "1.2.4";
+        public override string GetVersion() => "1.2.4b";
 
         private void ResetTextures()
         {
