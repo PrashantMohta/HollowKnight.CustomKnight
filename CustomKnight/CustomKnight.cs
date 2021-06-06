@@ -17,8 +17,15 @@ using Random = UnityEngine.Random;
 
 namespace CustomKnight
 {
-    public class CustomKnight : Mod<SaveSettings, GlobalSettings>, ITogglableMod
+    public class CustomKnight : Mod, ITogglableMod
     {
+        public GlobalModSettings Settings = new GlobalModSettings();
+        public override ModSettings GlobalSettings
+        {
+            get => Settings;
+            set => Settings = (GlobalModSettings) value;
+        }
+
         public class CustomKnightTexture
         {
             public bool missing;
@@ -132,9 +139,10 @@ namespace CustomKnight
 
         public static CustomKnight Instance { get; private set; }
 
+
         public override List<(string, string)> GetPreloadNames()
         {
-            if (GlobalSettings.Preloads)
+            if (Settings.Preloads)
             {
                 return new List<(string, string)>
                 {
@@ -191,7 +199,7 @@ namespace CustomKnight
 
             Instance = this;
 
-            Preloads = GlobalSettings.Preloads;
+            Preloads = Settings.Preloads;
 
             if (!Directory.Exists(DATA_DIR))
             {
@@ -207,7 +215,7 @@ namespace CustomKnight
             if (SKIN_FOLDER == null)
             {
                 Log("Skin folder null: setting to default");
-                SKIN_FOLDER = GlobalSettings.DefaultSkin;
+                SKIN_FOLDER = Settings.DefaultSkin;
             }
 
             ResetTextures();
@@ -230,7 +238,7 @@ namespace CustomKnight
             orig(self);
         }
 
-        public override string GetVersion() => "1.2.4";
+        public override string GetVersion() => "1.2.4b";
 
         private void ResetTextures()
         {
