@@ -101,9 +101,5 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SpriteLoader.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Images\Panel_BG.png" />
-  </ItemGroup>
- 
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

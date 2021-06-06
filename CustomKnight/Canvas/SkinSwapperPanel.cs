@@ -18,15 +18,18 @@ namespace CustomKnight.Canvas
     {
         public static CanvasPanel Panel;
 
-        private static float y;
-
         public static void BuildMenu(GameObject canvas)
         {
             Log("Building Skin Swapper Panel");
-            y = 30.0f;
+            float currentElementPosY = CustomKnight.Instance.Settings.PanelStartPos;
+            int NameLength = CustomKnight.Instance.Settings.NameLength;
+            int OptionSize = CustomKnight.Instance.Settings.OptionSize;
+
             int imageWidth = 300;
             int panelHeight = 1080;
-            int imageHeight = 60;
+            int imageHeight = OptionSize;
+            int fontSize = OptionSize - 15;
+
             Texture2D texture2D = new Texture2D(imageWidth, panelHeight);
             for (int i = 0; i < imageWidth; i++)
             {
@@ -48,50 +51,50 @@ namespace CustomKnight.Canvas
             Panel = new CanvasPanel(
                 canvas,
                 texture2D,
-                new Vector2(0, y), 
+                new Vector2(0, currentElementPosY), 
                 Vector2.zero,
                 new Rect(0, 0, imageWidth, 60)
             );
 
-            float textHeight = 90;
+            float textHeight = 40;
             Panel.AddText(
                 "Change Skin Text",
                 "Change Skin",
-                new Vector2(0, y),
+                new Vector2(0, currentElementPosY),
                 new Vector2(imageWidth, textHeight), 
                 GUIController.Instance.trajanNormal,
                 24,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter
             );
-            y += textHeight;
+            currentElementPosY += textHeight;
 
             GC.Collect();
 
             foreach (string path in Directory.GetDirectories(CustomKnight.DATA_DIR))
             {
                 string directoryName = new DirectoryInfo(path).Name;
-                
+                string buttonText = directoryName.Length <= NameLength ? directoryName : directoryName.Substring(0,NameLength - 3) + "...";
                 
                 Panel.AddButton(
                     directoryName,
                     texture2D2,
-                    new Vector2(0, y),
+                    new Vector2(0, currentElementPosY),
                     Vector2.zero,
                     ChangeSkin,
-                    new Rect(0, y, imageWidth, imageHeight),
+                    new Rect(0, currentElementPosY, imageWidth, imageHeight),
                     GUIController.Instance.trajanNormal,
-                    directoryName,
-                    24
+                    buttonText,
+                    fontSize
                 );
-                y += imageHeight;
+                currentElementPosY += imageHeight;
                 
                 GC.Collect();
             }
 
             Panel.SetActive(false, true);
             
-            Vector2 newPanelSize = new Vector2(imageWidth, y);
+            Vector2 newPanelSize = new Vector2(imageWidth, currentElementPosY);
             Panel.ResizeBG(newPanelSize);
             
             On.HeroController.Pause += OnPause;
@@ -102,6 +105,7 @@ namespace CustomKnight.Canvas
         private static void ChangeSkin(string buttonName)
         {
             CustomKnight.SKIN_FOLDER = buttonName;
+            CustomKnight.Instance.Settings.DefaultSkin = buttonName;
             GameManager.instance.StartCoroutine(ChangeSkinRoutine());
         }
 
