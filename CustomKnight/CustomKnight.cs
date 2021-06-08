@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using CustomKnight.Canvas;
 using HutongGames.PlayMaker.Actions;
-using ModCommon;
 using Modding;
 using On.TMPro;
 using UnityEngine;
@@ -17,35 +16,19 @@ using Random = UnityEngine.Random;
 
 namespace CustomKnight
 {
-    public class CustomKnight : Mod, ITogglableMod
+    public class CustomKnight : Mod, ITogglableMod , IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>
     {
-        public GlobalModSettings Settings = new GlobalModSettings();
-        public override ModSettings GlobalSettings
-        {
-            get => Settings;
-            set => Settings = (GlobalModSettings) value;
-        }
-
-        public class CustomKnightTexture
-        {
-            public bool missing;
-            public string fileName;
-            public Sprite defaultCharmSprite;
-            public Texture2D defaultTex;
-            public Texture2D tex;
-
-            public CustomKnightTexture(string fileName, bool missing, Texture2D defaultTex, Texture2D tex)
-            {
-                this.fileName = fileName;
-                this.missing = missing;
-                this.defaultTex = defaultTex;
-                this.tex = tex;
-            }
-        }
-
-        public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
+        public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
+        public static SaveModSettings SaveSettings { get; set; } = new SaveModSettings();
 
         public static bool Preloads;
+
+        public static string DATA_DIR;
+        public const string SKINS_FOLDER = "CustomKnight";
+        public static string SKIN_FOLDER;
+
+        public static bool savedDefaultTextures = false;
+
         
         private static List<string> _texNames = new List<string>
         {
@@ -131,18 +114,16 @@ namespace CustomKnight
             "Charm_40_5",
             "Charms",
         };
-        
-        public const string SKINS_FOLDER = "CustomKnight";
-        public static string SKIN_FOLDER;
-
-        public static string DATA_DIR;
+        public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 
         public static CustomKnight Instance { get; private set; }
+        
+        public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
 
 
         public override List<(string, string)> GetPreloadNames()
         {
-            if (Settings.Preloads)
+            if (Preloads)
             {
                 return new List<(string, string)>
                 {
@@ -161,10 +142,22 @@ namespace CustomKnight
             
             return new List<(string, string)>();
         }
-        
-        
-        public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
 
+
+        public void LoadSkin(){
+            if (SKIN_FOLDER == null)
+            {
+                Log("Skin folder null: setting to default");
+                SKIN_FOLDER = SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            }
+
+            SpriteLoader.Load();
+
+            On.GeoControl.Start -= GeoControl_Start;
+            On.GeoControl.Start += GeoControl_Start;
+            ModHooks.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
+        }
+        
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             switch (SystemInfo.operatingSystemFamily)
@@ -199,8 +192,6 @@ namespace CustomKnight
 
             Instance = this;
 
-            Preloads = Settings.Preloads;
-
             if (!Directory.Exists(DATA_DIR))
             {
                 Directory.CreateDirectory(DATA_DIR);
@@ -212,21 +203,8 @@ namespace CustomKnight
                 return;
             }
 
-            if (SKIN_FOLDER == null)
-            {
-                Log("Skin folder null: setting to default");
-                SKIN_FOLDER = Settings.DefaultSkin;
-            }
-
-            ResetTextures();
-
             GUIController.Instance.BuildMenus();
-
-            SpriteLoader.Load();
-
-            On.GeoControl.Start -= GeoControl_Start;
-            On.GeoControl.Start += GeoControl_Start;
-            ModHooks.Instance.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
+            LoadSkin();
         }
 
         private void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
@@ -246,36 +224,41 @@ namespace CustomKnight
             orig(self);
         }
 
-        public override string GetVersion() => "1.2.4c";
-
-        private void ResetTextures()
-        {
-            foreach (KeyValuePair<string, CustomKnightTexture> pair in Textures)
-            {
-                CustomKnightTexture texture = pair.Value;
-                UnityEngine.Object.Destroy(texture.tex);
-                texture.tex = null;
-                texture.missing = false;
-                if (!File.Exists((DATA_DIR + "/" + SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/")))
-                {
-                    Log($"Missing file {texture.fileName} from folder {SKIN_FOLDER}.");
-                    texture.missing = true;
-                }
-            }
-
-            foreach (KeyValuePair<string, CustomKnightTexture> pair in Textures)
-            {
-                Log("Missing: " + pair.Value.fileName + " " + pair.Value.missing);
-            }
-        }
+        public override string GetVersion() => "1.5.0-candidate";
         
         public void Unload()
         {
             Log("Unloading");
-            ModHooks.Instance.AfterSavegameLoadHook -= SpriteLoader.ModifyHeroTextures;
+            ModHooks.AfterSavegameLoadHook -= SpriteLoader.ModifyHeroTextures;
             On.GeoControl.Start -= GeoControl_Start;
             SpriteLoader.UnloadAll();
             UnityEngine.Object.Destroy(GameObject.Find("Custom Knight Canvas"));
+        }
+
+
+        public void OnLoadGlobal(GlobalModSettings s)
+        {
+            CustomKnight.GlobalSettings = s;
+            CustomKnight.Preloads = CustomKnight.GlobalSettings.Preloads;
+        }
+
+        public GlobalModSettings OnSaveGlobal()
+        {
+            return CustomKnight.GlobalSettings;
+        }
+
+        public void OnLoadLocal(SaveModSettings s)
+        {
+            CustomKnight.SaveSettings = s;
+            SKIN_FOLDER = SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            if (null != CustomKnight.Instance){
+                CustomKnight.Instance.LoadSkin();
+            } 
+        }
+
+        public SaveModSettings OnSaveLocal()
+        {
+            return CustomKnight.SaveSettings;
         }
     }
 }

@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using HutongGames.PlayMaker.Actions;
-using ModCommon;
-using ModCommon.Util;
-
+using static CustomKnight.Utils;
 
 namespace CustomKnight
 {
@@ -17,27 +15,52 @@ namespace CustomKnight
         private static bool texRoutineRunning;
         private static Coroutine setTexRoutine;
 
-        private static bool pullDefaultTexturesReady;
-        private static bool pulledDefaultTexturesAlready;
         
         public static bool LoadComplete { get; private set; }
 
+        public static Material _geoMat;
+        private static Material _knightMat;
+
+        private static Material _shadeMat;
+        private static Material _shadeOrbReformMat;
+        private static Material _shadeOrbRetreatMat;
+        private static Material _shadeOrbChargeMat;
+        private static Material _shadeOrbDepartMat;
+        private static Material _shadeOrbQuakeMat;
+
+        private static Material _shadeOrbMat;
+
+        private static Material _sprintMat;
+        private static Material _unnMat;
+
+        private static Material _cloakMat;
+        private static Material _shriekMat;
+        private static Material _wingsMat;
+        private static Material _quirrelMat;
+        private static Material _webbedMat;
+        private static Material _dreamMat;
+        private static Material _dnMat;
+        private static Material _hornetMat;
+        private static Material _birthMat;
+        
+        private static Material _baldurMat;
+        private static Material _flukeMat;
+        private static Material _grimmMat;
+        private static Material _shieldMat;
+        private static Material _weaverMat;
+        private static Material _wombMat;
+
+        private static Material _wraithsMat;
+        private static Material _voidMat;
+        private static Material _vsMat;
+        private static Material _hudMat;
+
+
         public static void PullDefaultTextures()
         {
-            bool hcNull = HeroController.instance == null;
-            List<CustomKnight.CustomKnightTexture> textures = new List<CustomKnight.CustomKnightTexture>(CustomKnight.Textures.Values);
-            foreach (CustomKnight.CustomKnightTexture texture in textures)
-            {
-                if (texture.defaultTex == null && !hcNull)
-                {
-                    pullDefaultTexturesReady = true;
-                    break;
-                }
-            }
             
-            if (pullDefaultTexturesReady && !pulledDefaultTexturesAlready)
+            if (!CustomKnight.savedDefaultTextures)
             {
-                pulledDefaultTexturesAlready = true;
                 CustomKnight.Textures["Knight"].defaultTex = _knightMat.mainTexture as Texture2D;
                 CustomKnight.Textures["Sprint"].defaultTex = _sprintMat.mainTexture as Texture2D;
                 CustomKnight.Textures["Unn"].defaultTex = _unnMat.mainTexture as Texture2D;
@@ -119,7 +142,7 @@ namespace CustomKnight
                 for (int charmNum = 1; charmNum <= 40; charmNum++)
                 {
                     string charmName;
-                    CustomKnight.CustomKnightTexture texture;
+                    CustomKnightTexture texture;
                     
                     switch (charmNum)
                     {
@@ -156,33 +179,33 @@ namespace CustomKnight
                         case 36:
                             PlayMakerFSM charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
 
-                            CustomKnight.CustomKnightTexture kingsoulLeft = CustomKnight.Textures["Charm_" + charmNum + "_Left"]; 
+                            CustomKnightTexture kingsoulLeft = CustomKnight.Textures["Charm_" + charmNum + "_Left"]; 
                             kingsoulLeft.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value as Sprite;
 
-                            CustomKnight.CustomKnightTexture kingsoulRight = CustomKnight.Textures["Charm_" + charmNum + "_Right"]; 
+                            CustomKnightTexture kingsoulRight = CustomKnight.Textures["Charm_" + charmNum + "_Right"]; 
                             kingsoulRight.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value as Sprite;
                             
-                            CustomKnight.CustomKnightTexture kingsoul = CustomKnight.Textures["Charm_" + charmNum + "_Full"]; 
+                            CustomKnightTexture kingsoul = CustomKnight.Textures["Charm_" + charmNum + "_Full"]; 
                             kingsoul.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value as Sprite;
                             
-                            CustomKnight.CustomKnightTexture voidHeart = CustomKnight.Textures["Charm_" + charmNum + "_Black"]; 
+                            CustomKnightTexture voidHeart = CustomKnight.Textures["Charm_" + charmNum + "_Black"]; 
                             voidHeart.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value as Sprite;
                             
                             break;
                         case 40:
-                            CustomKnight.CustomKnightTexture gcLevel1 = CustomKnight.Textures["Charm_40_1"];
+                            CustomKnightTexture gcLevel1 = CustomKnight.Textures["Charm_40_1"];
                             gcLevel1.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel1;
 
-                            CustomKnight.CustomKnightTexture gcLevel2 = CustomKnight.Textures["Charm_40_2"];
+                            CustomKnightTexture gcLevel2 = CustomKnight.Textures["Charm_40_2"];
                             gcLevel2.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel2;
 
-                            CustomKnight.CustomKnightTexture gcLevel3 = CustomKnight.Textures["Charm_40_3"];
+                            CustomKnightTexture gcLevel3 = CustomKnight.Textures["Charm_40_3"];
                             gcLevel3.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel3;
 
-                            CustomKnight.CustomKnightTexture gcLevel4 = CustomKnight.Textures["Charm_40_4"];
+                            CustomKnightTexture gcLevel4 = CustomKnight.Textures["Charm_40_4"];
                             gcLevel4.defaultCharmSprite= CharmIconList.Instance.grimmchildLevel4;
 
-                            CustomKnight.CustomKnightTexture melody = CustomKnight.Textures["Charm_40_5"];
+                            CustomKnightTexture melody = CustomKnight.Textures["Charm_40_5"];
                             melody.defaultCharmSprite = CharmIconList.Instance.nymmCharm;
 
                             break;
@@ -196,6 +219,8 @@ namespace CustomKnight
                     }
                 }
             }
+        
+            CustomKnight.savedDefaultTextures = true;
         }
 
         public static void UnloadAll()
@@ -274,42 +299,6 @@ namespace CustomKnight
             }
         }
 
-        public static Material _geoMat;
-        private static Material _knightMat;
-
-        private static Material _shadeMat;
-        private static Material _shadeOrbReformMat;
-        private static Material _shadeOrbRetreatMat;
-        private static Material _shadeOrbChargeMat;
-        private static Material _shadeOrbDepartMat;
-        private static Material _shadeOrbQuakeMat;
-
-        private static Material _shadeOrbMat;
-
-        private static Material _sprintMat;
-        private static Material _unnMat;
-
-        private static Material _cloakMat;
-        private static Material _shriekMat;
-        private static Material _wingsMat;
-        private static Material _quirrelMat;
-        private static Material _webbedMat;
-        private static Material _dreamMat;
-        private static Material _dnMat;
-        private static Material _hornetMat;
-        private static Material _birthMat;
-        
-        private static Material _baldurMat;
-        private static Material _flukeMat;
-        private static Material _grimmMat;
-        private static Material _shieldMat;
-        private static Material _weaverMat;
-        private static Material _wombMat;
-
-        private static Material _wraithsMat;
-        private static Material _voidMat;
-        private static Material _vsMat;
-        private static Material _hudMat;
         public IEnumerator Start()
         {
             yield return new WaitWhile(() => HeroController.instance == null);
@@ -410,9 +399,9 @@ namespace CustomKnight
 
         private static void DestroyObjects()
         {
-            foreach (KeyValuePair<string, CustomKnight.CustomKnightTexture> pair in CustomKnight.Textures)
+            foreach (KeyValuePair<string, CustomKnightTexture> pair in CustomKnight.Textures)
             {
-                CustomKnight.CustomKnightTexture texture = pair.Value;
+                CustomKnightTexture texture = pair.Value;
                 if (texture.tex != null)
                 {
                     Destroy(texture.tex);
@@ -426,20 +415,29 @@ namespace CustomKnight
         {
             LoadComplete = false;
 
-            foreach (KeyValuePair<string, CustomKnight.CustomKnightTexture> pair in CustomKnight.Textures)
+            foreach (KeyValuePair<string, CustomKnightTexture> pair in CustomKnight.Textures)
             {
-                CustomKnight.CustomKnightTexture texture = pair.Value;
+                CustomKnightTexture texture = pair.Value;
+                string file = (CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/");
+                texture.missing = !File.Exists(file);
+                
                 if (!texture.missing)
                 {
-                    byte[] texBytes = File.ReadAllBytes((CustomKnight.DATA_DIR + "/" + CustomKnight.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/"));
+                    byte[] texBytes = File.ReadAllBytes(file);
                     if (texture.tex != null)
                     {
                         Destroy(texture.tex);
                     }
-
+                    
                     texture.tex = new Texture2D(2, 2);
                     texture.tex.LoadImage(texBytes);
-                }
+                    
+                } else {
+                    if (texture.tex != null)
+                    {
+                        Destroy(texture.tex);
+                    }
+                }    
             }
 
             ModifyHeroTextures();
@@ -454,64 +452,44 @@ namespace CustomKnight
             
             PullDefaultTextures();
 
-            var geoTexture = CustomKnight.Textures["Geo"].missing ? CustomKnight.Textures["Geo"].defaultTex : CustomKnight.Textures["Geo"].tex;
+            var geoTexture = CustomKnight.Textures["Geo"].currentTexture;
             if (geoTexture != null && _geoMat != null)
             {
                _geoMat.mainTexture = geoTexture;
             }
 
-            _knightMat.mainTexture = CustomKnight.Textures["Knight"].missing ? CustomKnight.Textures["Knight"].defaultTex : CustomKnight.Textures["Knight"].tex;
-            _sprintMat.mainTexture = CustomKnight.Textures["Sprint"].missing ? CustomKnight.Textures["Sprint"].defaultTex : CustomKnight.Textures["Sprint"].tex;
-            _unnMat.mainTexture = CustomKnight.Textures["Unn"].missing ? CustomKnight.Textures["Unn"].defaultTex : CustomKnight.Textures["Unn"].tex;
+            _knightMat.mainTexture = CustomKnight.Textures["Knight"].currentTexture;
+            _sprintMat.mainTexture = CustomKnight.Textures["Sprint"].currentTexture;
+            _unnMat.mainTexture = CustomKnight.Textures["Unn"].currentTexture;
 
-
-            _knightMat.mainTexture = CustomKnight.Textures["Knight"].missing
-                ? CustomKnight.Textures["Knight"].defaultTex
-                : CustomKnight.Textures["Knight"].tex;
-            _sprintMat.mainTexture = CustomKnight.Textures["Sprint"].missing
-                ? CustomKnight.Textures["Sprint"].defaultTex
-                : CustomKnight.Textures["Sprint"].tex;
-            _unnMat.mainTexture = CustomKnight.Textures["Unn"].missing
-                ? CustomKnight.Textures["Unn"].defaultTex
-                : CustomKnight.Textures["Unn"].tex;
-
-            _shadeMat.mainTexture = CustomKnight.Textures["Shade"].missing 
-                ? CustomKnight.Textures["Shade"].defaultTex
-                : CustomKnight.Textures["Shade"].tex;
-                
-            _shadeOrbMat.mainTexture = CustomKnight.Textures["ShadeOrb"].missing 
-                ? CustomKnight.Textures["ShadeOrb"].defaultTex
-                : CustomKnight.Textures["ShadeOrb"].tex;
+            _shadeMat.mainTexture = CustomKnight.Textures["Shade"].currentTexture;
+            _shadeOrbMat.mainTexture = CustomKnight.Textures["ShadeOrb"].currentTexture;
 
             _shadeOrbReformMat.mainTexture = _shadeOrbMat.mainTexture;
-
             _shadeOrbRetreatMat.mainTexture = _shadeOrbMat.mainTexture;
-
             _shadeOrbChargeMat.mainTexture = _shadeOrbMat.mainTexture;
-
             _shadeOrbDepartMat.mainTexture = _shadeOrbMat.mainTexture;
-
             _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
 
             if (CustomKnight.Preloads)
             {
-                _cloakMat.mainTexture = CustomKnight.Textures["Cloak"].missing ? CustomKnight.Textures["Cloak"].defaultTex : CustomKnight.Textures["Cloak"].tex;
-                _shriekMat.mainTexture = CustomKnight.Textures["Shriek"].missing ? CustomKnight.Textures["Shriek"].defaultTex : CustomKnight.Textures["Shriek"].tex;
-                _wingsMat.mainTexture = CustomKnight.Textures["Wings"].missing ? CustomKnight.Textures["Wings"].defaultTex : CustomKnight.Textures["Wings"].tex;
-                _quirrelMat.mainTexture = CustomKnight.Textures["Quirrel"].missing ? CustomKnight.Textures["Quirrel"].defaultTex : CustomKnight.Textures["Quirrel"].tex;
-                _webbedMat.mainTexture = CustomKnight.Textures["Webbed"].missing ? CustomKnight.Textures["Webbed"].defaultTex : CustomKnight.Textures["Webbed"].tex;
-                _dreamMat.mainTexture = CustomKnight.Textures["DreamArrival"].missing ? CustomKnight.Textures["DreamArrival"].defaultTex : CustomKnight.Textures["DreamArrival"].tex;
-                _dnMat.mainTexture = CustomKnight.Textures["Dreamnail"].missing ? CustomKnight.Textures["Dreamnail"].defaultTex : CustomKnight.Textures["Dreamnail"].tex;
-                _hornetMat.mainTexture = CustomKnight.Textures["Hornet"].missing ? CustomKnight.Textures["Hornet"].defaultTex : CustomKnight.Textures["Hornet"].tex;
-                _birthMat.mainTexture = CustomKnight.Textures["Birthplace"].missing ? CustomKnight.Textures["Birthplace"].defaultTex : CustomKnight.Textures["Birthplace"].tex;
+                _cloakMat.mainTexture = CustomKnight.Textures["Cloak"].currentTexture;
+                _shriekMat.mainTexture = CustomKnight.Textures["Shriek"].currentTexture;
+                _wingsMat.mainTexture = CustomKnight.Textures["Wings"].currentTexture;
+                _quirrelMat.mainTexture = CustomKnight.Textures["Quirrel"].currentTexture;
+                _webbedMat.mainTexture = CustomKnight.Textures["Webbed"].currentTexture;
+                _dreamMat.mainTexture = CustomKnight.Textures["DreamArrival"].currentTexture;
+                _dnMat.mainTexture = CustomKnight.Textures["Dreamnail"].currentTexture;
+                _hornetMat.mainTexture = CustomKnight.Textures["Hornet"].currentTexture;
+                _birthMat.mainTexture = CustomKnight.Textures["Birthplace"].currentTexture;
             }
 
-            _baldurMat.mainTexture = CustomKnight.Textures["Baldur"].missing ? CustomKnight.Textures["Baldur"].defaultTex : CustomKnight.Textures["Baldur"].tex;
-            _flukeMat.mainTexture = CustomKnight.Textures["Fluke"].missing ? CustomKnight.Textures["Fluke"].defaultTex : CustomKnight.Textures["Fluke"].tex;
-            _grimmMat.mainTexture = CustomKnight.Textures["Grimm"].missing ? CustomKnight.Textures["Grimm"].defaultTex : CustomKnight.Textures["Grimm"].tex;
-            _shieldMat.mainTexture = CustomKnight.Textures["Shield"].missing ? CustomKnight.Textures["Shield"].defaultTex : CustomKnight.Textures["Shield"].tex;
-            _weaverMat.mainTexture = CustomKnight.Textures["Weaver"].missing ? CustomKnight.Textures["Weaver"].defaultTex : CustomKnight.Textures["Weaver"].tex;
-            _wombMat.mainTexture = CustomKnight.Textures["Hatchling"].missing ? CustomKnight.Textures["Hatchling"].defaultTex : CustomKnight.Textures["Hatchling"].tex;
+            _baldurMat.mainTexture = CustomKnight.Textures["Baldur"].currentTexture;
+            _flukeMat.mainTexture = CustomKnight.Textures["Fluke"].currentTexture;
+            _grimmMat.mainTexture = CustomKnight.Textures["Grimm"].currentTexture;
+            _shieldMat.mainTexture = CustomKnight.Textures["Shield"].currentTexture;
+            _weaverMat.mainTexture = CustomKnight.Textures["Weaver"].currentTexture;
+            _wombMat.mainTexture = CustomKnight.Textures["Hatchling"].currentTexture;
             
             foreach (Transform child in HeroController.instance.gameObject.transform)
             {
@@ -521,11 +499,11 @@ namespace CustomKnight
                     {
                         if (spellsChild.name == "Scr Heads" || spellsChild.name == "Scr Base")
                         {
-                            spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["Wraiths"].missing ? CustomKnight.Textures["Wraiths"].defaultTex : CustomKnight.Textures["Wraiths"].tex;
+                            spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["Wraiths"].currentTexture;
                         }
                         else if (spellsChild.name == "Scr Heads 2" || spellsChild.name == "Scr Base 2")
                         {
-                            spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["VoidSpells"].missing ? CustomKnight.Textures["VoidSpells"].defaultTex : CustomKnight.Textures["VoidSpells"].tex;
+                            spellsChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["VoidSpells"].currentTexture;
                         }
                     }
                 }
@@ -535,7 +513,7 @@ namespace CustomKnight
                     {
                         if (focusChild.name == "Heal Anim")
                         {
-                            focusChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["VS"].missing ? CustomKnight.Textures["VS"].defaultTex : CustomKnight.Textures["VS"].tex;
+                            focusChild.gameObject.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["VS"].currentTexture;
                             break;
                         }
                     }
@@ -547,7 +525,7 @@ namespace CustomKnight
             {
                 if (i.name == "Health 1")
                 {
-                    i.GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["Hud"].missing ? CustomKnight.Textures["Hud"].defaultTex : CustomKnight.Textures["Hud"].tex;
+                    i.GetCurrentSpriteDef().material.mainTexture = CustomKnight.Textures["Hud"].currentTexture;
                     break;
                 }
             }
@@ -556,7 +534,7 @@ namespace CustomKnight
             {
                 if (i.name == "Orb Full")
                 {
-                    Texture2D tex = CustomKnight.Textures["OrbFull"].missing ? CustomKnight.Textures["OrbFull"].defaultTex : CustomKnight.Textures["OrbFull"].tex;
+                    Texture2D tex = CustomKnight.Textures["OrbFull"].currentTexture;
                     i.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                 }
                 else if (i.name == "Pulse Sprite")
@@ -569,7 +547,7 @@ namespace CustomKnight
             }
 
             string charmName;
-            CustomKnight.CustomKnightTexture texture;
+            CustomKnightTexture texture;
             
             for (int charmNum = 1; charmNum <= 40; charmNum++)
             {
@@ -620,7 +598,7 @@ namespace CustomKnight
                     case 36:
                         PlayMakerFSM charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
 
-                        CustomKnight.CustomKnightTexture kingsoulLeft = CustomKnight.Textures["Charm_" + charmNum + "_Left"];
+                        CustomKnightTexture kingsoulLeft = CustomKnight.Textures["Charm_" + charmNum + "_Left"];
                         if (kingsoulLeft.missing)
                         {
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = kingsoulLeft.defaultCharmSprite;
@@ -631,7 +609,7 @@ namespace CustomKnight
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         }
 
-                        CustomKnight.CustomKnightTexture kingsoulRight = CustomKnight.Textures["Charm_" + charmNum + "_Right"];
+                        CustomKnightTexture kingsoulRight = CustomKnight.Textures["Charm_" + charmNum + "_Right"];
                         if (kingsoulRight.missing)
                         {
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = kingsoulRight.defaultCharmSprite;
@@ -642,7 +620,7 @@ namespace CustomKnight
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         }
                             
-                        CustomKnight.CustomKnightTexture kingsoul= CustomKnight.Textures["Charm_" + charmNum + "_Full"];
+                        CustomKnightTexture kingsoul= CustomKnight.Textures["Charm_" + charmNum + "_Full"];
                         if (kingsoul.missing)
                         {
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = kingsoul.defaultCharmSprite;
@@ -653,7 +631,7 @@ namespace CustomKnight
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         }
                             
-                        CustomKnight.CustomKnightTexture voidHeart = CustomKnight.Textures["Charm_" + charmNum + "_Black"];
+                        CustomKnightTexture voidHeart = CustomKnight.Textures["Charm_" + charmNum + "_Black"];
                         if (voidHeart.missing)
                         {
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = voidHeart.defaultCharmSprite;
@@ -664,56 +642,26 @@ namespace CustomKnight
                             charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         }
                         
-                        /*charmName = "";
-                        switch (PlayerData.instance.royalCharmState)
-                        {
-                            case 1:
-                                charmName = "Charm_" + charmNum + "_Left";
-                                break;
-                            case 2:
-                                charmName = "Charm_" + charmNum + "_Right";
-                                break;
-                            case 3:
-                                charmName = "Charm_" + charmNum + "_Full";
-                                break;
-                            case 4:
-                                charmName = "Charm_" + charmNum + "_Black";
-                                break;
-                        }
-
-                        texture = CustomKnight.Textures[charmName];
-
-                        if (texture.missing)
-                        {
-                            Log("Default Charm Sprite");
-                            CharmIconList.Instance.spriteList[charmNum] = texture.defaultCharmSprite;
-                        }
-                        else
-                        {
-                            Log("New Charm Sprite");
-                            Texture2D royalTex = texture.tex;
-                            CharmIconList.Instance.spriteList[charmNum] = Sprite.Create(royalTex, new Rect(0, 0, royalTex.width, royalTex.height), new Vector2(0.5f, 0.5f));
-                        }*/
 
                         break;
                     case 40:
-                        CustomKnight.CustomKnightTexture gcLevel1 = CustomKnight.Textures["Charm_40_1"];
+                        CustomKnightTexture gcLevel1 = CustomKnight.Textures["Charm_40_1"];
                         Texture2D gc1Tex = gcLevel1.tex;
                         CharmIconList.Instance.grimmchildLevel1 = gcLevel1.missing ? gcLevel1.defaultCharmSprite : Sprite.Create(gc1Tex, new Rect(0, 0, gc1Tex.width, gc1Tex.height), new Vector2(0.5f, 0.5f));
                         
-                        CustomKnight.CustomKnightTexture gcLevel2 = CustomKnight.Textures["Charm_40_2"];
+                        CustomKnightTexture gcLevel2 = CustomKnight.Textures["Charm_40_2"];
                         Texture2D gc2Tex = gcLevel2.tex;
                         CharmIconList.Instance.grimmchildLevel2 = gcLevel2.missing ? gcLevel2.defaultCharmSprite : Sprite.Create(gc2Tex, new Rect(0, 0, gc2Tex.width, gc2Tex.height), new Vector2(0.5f, 0.5f));
                         
-                        CustomKnight.CustomKnightTexture gcLevel3 = CustomKnight.Textures["Charm_40_3"];
+                        CustomKnightTexture gcLevel3 = CustomKnight.Textures["Charm_40_3"];
                         Texture2D gc3Tex = gcLevel3.tex;
                         CharmIconList.Instance.grimmchildLevel3 = gcLevel3.missing ? gcLevel3.defaultCharmSprite : Sprite.Create(gc3Tex, new Rect(0, 0, gc3Tex.width, gc3Tex.height), new Vector2(0.5f, 0.5f));
                         
-                        CustomKnight.CustomKnightTexture gcLevel4 = CustomKnight.Textures["Charm_40_4"];
+                        CustomKnightTexture gcLevel4 = CustomKnight.Textures["Charm_40_4"];
                         Texture2D gc4Tex = gcLevel4.tex;
                         CharmIconList.Instance.grimmchildLevel4 = gcLevel4.missing ? gcLevel4.defaultCharmSprite : Sprite.Create(gc4Tex, new Rect(0, 0, gc4Tex.width, gc4Tex.height), new Vector2(0.5f, 0.5f));
 
-                        CustomKnight.CustomKnightTexture melody = CustomKnight.Textures["Charm_40_5"];
+                        CustomKnightTexture melody = CustomKnight.Textures["Charm_40_5"];
                         Texture2D melodyTex = melody.tex;
                         CharmIconList.Instance.nymmCharm = melody.missing ? melody.defaultCharmSprite : Sprite.Create(melodyTex, new Rect(0, 0, melodyTex.width, melodyTex.height), new Vector2(0.5f, 0.5f));
 

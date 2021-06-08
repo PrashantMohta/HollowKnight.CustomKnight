@@ -3,8 +3,6 @@ using System.Collections;
 using System.IO;
 using HutongGames.PlayMaker.Actions;
 using InControl;
-using ModCommon;
-using ModCommon.Util;
 using Modding;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -21,12 +19,12 @@ namespace CustomKnight.Canvas
         public static void BuildMenu(GameObject canvas)
         {
             Log("Building Skin Swapper Panel");
-            float currentElementPosY = CustomKnight.Instance.Settings.PanelY;
-            int PanelWidth = CustomKnight.Instance.Settings.PanelWidth;
-            int PanelHeight = CustomKnight.Instance.Settings.PanelHeight;
+            float currentElementPosY = CustomKnight.GlobalSettings.PanelY;
+            int PanelWidth = CustomKnight.GlobalSettings.PanelWidth;
+            int PanelHeight = CustomKnight.GlobalSettings.PanelHeight;
 
-            int NameLength = CustomKnight.Instance.Settings.NameLength;
-            int OptionSize = CustomKnight.Instance.Settings.OptionSize;
+            int NameLength = CustomKnight.GlobalSettings.NameLength;
+            int OptionSize = CustomKnight.GlobalSettings.OptionSize;
             int fontSize = (int)(OptionSize * 0.6f);
             int headingSize = (int)(OptionSize * 1.1f);
             int headingFontSize = (int)(headingSize * 0.85f);
@@ -104,8 +102,11 @@ namespace CustomKnight.Canvas
 
         private static void ChangeSkin(string buttonName)
         {
+            if(CustomKnight.SKIN_FOLDER == buttonName) { return; } 
+                
             CustomKnight.SKIN_FOLDER = buttonName;
-            CustomKnight.Instance.Settings.DefaultSkin = buttonName;
+            CustomKnight.GlobalSettings.DefaultSkin = buttonName;
+            CustomKnight.SaveSettings.DefaultSkin = buttonName;
             GameManager.instance.StartCoroutine(ChangeSkinRoutine());
         }
 
@@ -113,7 +114,7 @@ namespace CustomKnight.Canvas
         {
             HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
             Panel.SetActive(false, true);
-            CustomKnight.Instance.Initialize(null);
+            CustomKnight.Instance.LoadSkin();
 
             yield return new WaitUntil(() => SpriteLoader.LoadComplete);
             

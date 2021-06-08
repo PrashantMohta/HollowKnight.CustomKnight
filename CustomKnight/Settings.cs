@@ -2,18 +2,24 @@ using Modding;
 
 namespace CustomKnight
 {
-    public class SaveSettings : ModSettings { }
+    public class SaveModSettings  {
+        public string DefaultSkin {get; set;} = "Default";
+     }
 
-    public class GlobalModSettings : ModSettings
+    public class GlobalModSettings 
     {
-        public bool Preloads { get => GetBool(true); set => SetBool(value); }
-        public string DefaultSkin { get => GetString("Default"); set => SetString(value); }
-        public float PanelY { get => GetFloat(80.0f); set => SetFloat(value);}
-        public int PanelWidth { get => GetInt(250); set => SetInt(value); }
-        public int PanelHeight { get => GetInt(1080); set => SetInt(value); }
-        public int NameLength { get => GetInt(10); set => SetInt(value); }
-        public int OptionSize { get => GetInt(35); set => SetInt(value); }
+
+        public bool Preloads {get; set;} = true;
+        public string DefaultSkin {get; set;} = "Default";
+        public float PanelY {get; set;} = 80f;
+        public int PanelWidth {get; set;} = 250;
+        public int PanelHeight {get; set;} = 1080;
+        public int NameLength {get; set;} = 10;
+        public int OptionSize {get; set;} = 35;
 
     }
 
+    public class Settings {
+        
+    }
 }
