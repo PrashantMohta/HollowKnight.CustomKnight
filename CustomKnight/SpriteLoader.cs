@@ -287,7 +287,10 @@ namespace CustomKnight
                 loader = new GameObject("Loader");
                 loader.AddComponent<SpriteLoader>();
                 DontDestroyOnLoad(loader);
+            } else {
+                SpriteLoader.LoadSprites();
             }
+             
         }
 
         public static void ModifyHeroTextures(SaveGameData data = null)
@@ -411,7 +414,7 @@ namespace CustomKnight
             LoadComplete = false;
         }
 
-        private void LoadSprites()
+        public static void LoadSprites()
         {
             LoadComplete = false;
 
@@ -443,7 +446,6 @@ namespace CustomKnight
             ModifyHeroTextures();
 
             LoadComplete = true;
-            Destroy(gameObject);
         }
 
         private static IEnumerator SetHeroTex()

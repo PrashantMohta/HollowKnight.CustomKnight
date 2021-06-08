@@ -28,8 +28,6 @@ namespace CustomKnight
         public static string SKIN_FOLDER;
 
         public static bool savedDefaultTextures = false;
-
-        
         private static List<string> _texNames = new List<string>
         {
             "Knight",
