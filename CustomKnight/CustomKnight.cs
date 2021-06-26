@@ -16,7 +16,7 @@ using Random = UnityEngine.Random;
 using Modding.Menu;
 using Modding.Menu.Config;
 using Patch = Modding.Patches;
-
+using CustomKnight.Canvas;
 
 namespace CustomKnight
 {
@@ -91,6 +91,9 @@ namespace CustomKnight
 
 
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
+            if(GlobalSettings.showMovedText){
+                GUIController.Instance.BuildMenus();
+            }
             SkinManager.LoadSkin();
             ModHooks.AfterSavegameLoadHook += LoadSaveGame;
         }

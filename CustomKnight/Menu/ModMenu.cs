@@ -8,6 +8,7 @@ using Modding.Menu.Config;
 using Patch = Modding.Patches;
 using UnityEngine;
 using UnityEngine.UI;
+using CustomKnight.Canvas;
 
 namespace CustomKnight{
     public class ModMenu{
@@ -164,7 +165,8 @@ namespace CustomKnight{
                 CustomKnight.GlobalSettings.DefaultSkin = skinToApply;
                 CustomKnight.SaveSettings.DefaultSkin = skinToApply;
             };
-
+            
+            SkinSwapperPanel.hidePanel("");
             GoToModListMenu();
         }
 

@@ -7,7 +7,6 @@ namespace CustomKnight.Canvas
 {
     public class CanvasPanel
     {
-        private CanvasImage background;
         private GameObject canvas;
         private Vector2 position;
         private Vector2 size;
@@ -18,7 +17,7 @@ namespace CustomKnight.Canvas
 
         public bool active = true;
 
-        public CanvasPanel(GameObject parent, Texture2D tex, Vector2 pos, Vector2 sz, Rect bgSubSection)
+        public CanvasPanel(GameObject parent, Vector2 pos, Vector2 sz, Rect bgSubSection)
         {
             if (parent == null) return;
 
@@ -33,12 +32,11 @@ namespace CustomKnight.Canvas
 
             position = pos;
             canvas = parent;
-            background = new CanvasImage(parent, tex, pos, sz, bgSubSection);
         }
 
-        public CanvasButton AddButton(string name, Texture2D tex, Vector2 pos, Vector2 sz, UnityAction<string> func, Rect bgSubSection, Font font = null, string text = null, int fontSize = 13)
+        public CanvasButton AddButton(string name, Vector2 pos, Vector2 sz, UnityAction<string> func, Rect bgSubSection, Font font = null, string text = null, int fontSize = 13)
         {
-            CanvasButton button = new CanvasButton(canvas, name, tex, position + pos, size + sz, bgSubSection, font, text, fontSize);
+            CanvasButton button = new CanvasButton(canvas, name, position + pos, size + sz, bgSubSection, font, text, fontSize);
             button.AddClickEvent(func);
 
             buttons.Add(name, button);
@@ -46,9 +44,9 @@ namespace CustomKnight.Canvas
             return button;
         }
 
-        public CanvasPanel AddPanel(string name, Texture2D tex, Vector2 pos, Vector2 sz, Rect bgSubSection)
+        public CanvasPanel AddPanel(string name,  Vector2 pos, Vector2 sz, Rect bgSubSection)
         {
-            CanvasPanel panel = new CanvasPanel(canvas, tex, position + pos, sz, bgSubSection);
+            CanvasPanel panel = new CanvasPanel(canvas,  position + pos, sz, bgSubSection);
 
             panels.Add(name, panel);
 
@@ -128,26 +126,8 @@ namespace CustomKnight.Canvas
             return null;
         }
         
-        public void UpdateBackground(Texture2D tex, Rect subSection)
-        {
-            background.UpdateImage(tex, subSection);
-        }
-
-        public void ResizeBG(Vector2 sz)
-        {
-            background.SetWidth(sz.x);
-            background.SetHeight(sz.y);
-            background.SetPosition(position);
-        }
-
-        public float GetHeight()
-        {
-            return background.GetHeight();
-        }
-
         public void SetPosition(Vector2 pos)
         {
-            background.SetPosition(pos);
 
             Vector2 deltaPos = position - pos;
             position = pos;
@@ -184,7 +164,6 @@ namespace CustomKnight.Canvas
 
         public void SetActive(bool b, bool panel)
         {
-            background.SetActive(b);
 
             foreach (CanvasButton button in buttons.Values)
             {
@@ -239,12 +218,10 @@ namespace CustomKnight.Canvas
                 panel.FixRenderOrder();
             }
 
-            background.SetRenderIndex(0);
         }
 
         public void Destroy()
         {
-            background.Destroy();
 
             foreach (CanvasButton button in buttons.Values)
             {

@@ -12,14 +12,12 @@ namespace CustomKnight.Canvas
     {
         public GameObject canvas;
         private static GUIController _instance;
-
-        public Dictionary<string, Texture2D> images = new Dictionary<string, Texture2D>();
         
         public void BuildMenus()
         {
             if (!GameObject.Find("Custom Knight Canvas"))
             {
-                Log("Building Canvas");
+                Log("Building Help Text");
                 
                 LoadResources();
                 
@@ -92,37 +90,7 @@ namespace CustomKnight.Canvas
                     }
                 }
             }
-            
-            Assembly asm = Assembly.GetExecutingAssembly();
-            
-            foreach (string res in asm.GetManifestResourceNames())
-            {
-                if (!res.StartsWith("CustomKnight.Images.")) continue;
-                
-                try
-                {
-                    using (Stream imageStream = asm.GetManifestResourceStream(res))
-                    {
-
-                        byte[] buffer = new byte[imageStream.Length];
-                        imageStream.Read(buffer, 0, buffer.Length);
-
-                        Texture2D tex = new Texture2D(1, 1);
-                        tex.LoadImage(buffer.ToArray());
-
-                        string[] split = res.Split('.');
-                        string internalName = split[split.Length - 2];
-                        
-                        images.Add(internalName, tex);
-
-                        Log("Loaded image: " + internalName);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Modding.Logger.LogError("Failed to load image: " + res + "\n" + e);
-                }
-            }
+        
         }
         
         private void Log(object message) => Modding.Logger.Log("[GUI Controller] " + message);

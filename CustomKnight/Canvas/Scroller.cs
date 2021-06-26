@@ -28,7 +28,7 @@ namespace CustomKnight.Canvas
             
             _lastChild = gameObject.transform.GetChild(transform.childCount - 1).gameObject;
             _clampMin = _lastChild.transform.position.y;
-            _clampMax = _clampMin + SkinSwapperPanel.Panel.GetHeight();
+            _clampMax = _clampMin + 500;
             _scrollSpeed = _clampMax - _clampMin;
         }
 

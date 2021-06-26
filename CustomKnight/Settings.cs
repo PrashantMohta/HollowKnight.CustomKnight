@@ -13,6 +13,8 @@ namespace CustomKnight
         public string DefaultSkin {get; set;} = "Default";
         public int NameLength {get; set;} = 15;
 
+        public bool showMovedText {get; set;} = true;
+
     }
 
 }

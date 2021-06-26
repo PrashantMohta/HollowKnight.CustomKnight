@@ -14,7 +14,7 @@ namespace CustomKnight.Canvas
 
         public bool active;
 
-        public CanvasButton(GameObject parent, string name, Texture2D tex, Vector2 pos, Vector2 size, Rect bgSubSection, Font font = null, string text = null, int fontSize = 13)
+        public CanvasButton(GameObject parent, string name, Vector2 pos, Vector2 size, Rect bgSubSection, Font font = null, string text = null, int fontSize = 13)
         {
             if (size.x == 0 || size.y == 0)
             {
@@ -27,7 +27,6 @@ namespace CustomKnight.Canvas
             buttonObj.AddComponent<CanvasRenderer>();
             RectTransform buttonTransform = buttonObj.AddComponent<RectTransform>();
             buttonTransform.sizeDelta = new Vector2(bgSubSection.width, bgSubSection.height);
-            buttonObj.AddComponent<Image>().sprite = Sprite.Create(tex, new Rect(bgSubSection.x, tex.height - bgSubSection.height, bgSubSection.width, bgSubSection.height), Vector2.zero);
             button = buttonObj.AddComponent<Button>();
 
             buttonObj.transform.SetParent(parent.transform, false);
@@ -58,14 +57,6 @@ namespace CustomKnight.Canvas
             }
 
             active = true;
-        }
-
-        public void UpdateSprite(Texture2D tex, Rect bgSubSection)
-        {
-            if (buttonObj != null)
-            {
-                buttonObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(bgSubSection.x, tex.height - bgSubSection.height, bgSubSection.width, bgSubSection.height), Vector2.zero);
-            }
         }
 
         public void AddClickEvent(UnityAction<string> action)
