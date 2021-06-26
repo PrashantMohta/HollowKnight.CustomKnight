@@ -41,6 +41,9 @@
     <Reference Include="MMHOOK_Assembly-CSharp">
       <HintPath>..\..\HollowKnight.Modding\OutputFinal\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="MMHOOK_PlayMaker">
+      <HintPath>..\..\HollowKnight.Modding\OutputFinal\MMHOOK_PlayMaker.dll</HintPath>
+    </Reference>
     <Reference Include="PlayMaker">
       <HintPath>.\Vanilla\PlayMaker.dll</HintPath>
     </Reference>
@@ -93,12 +96,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Canvas\CanvasButton.cs" />
-    <Compile Include="Canvas\CanvasImage.cs" />
     <Compile Include="Canvas\CanvasPanel.cs" />
     <Compile Include="Canvas\CanvasText.cs" />
     <Compile Include="Canvas\GUIController.cs" />
-    <Compile Include="Canvas\Scroller.cs" />
     <Compile Include="Canvas\SkinSwapperPanel.cs" />
+    <Compile Include="Menu\ModMenu.cs" />
+    <Compile Include="Skin\SkinManager.cs" />
+
     <Compile Include="CustomKnight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
