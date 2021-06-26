@@ -184,7 +184,6 @@ namespace CustomKnight{
                 var i=0;
                 foreach (string curskin in SkinManager.skinsArr)
                 {
-                    CustomKnight.Instance.Log(curskin + " : " + skin);
                     if(skin == curskin){
                         selectedSkinIndex = i;
                         break;

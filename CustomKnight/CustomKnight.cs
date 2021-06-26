@@ -34,8 +34,6 @@ namespace CustomKnight
         {
             CustomKnight.GlobalSettings = s;
             SkinManager.SKIN_FOLDER = CustomKnight.GlobalSettings.DefaultSkin;
-            Log(SkinManager.SKIN_FOLDER);
-
         }
 
         public GlobalModSettings OnSaveGlobal()
