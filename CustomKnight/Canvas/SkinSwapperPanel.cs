@@ -43,7 +43,7 @@ namespace CustomKnight.Canvas
 
             Panel.AddText(
                 "Change Skin Text",
-                "Custom Knight Has Moved to the\n Mods Menu under Options",
+                "Looking for Custom Knight? \n Check the Mods Menu under Options",
                 new Vector2(0, currentElementPosY),
                 new Vector2(PanelWidth, headingSize), 
                 GUIController.Instance.trajanNormal,
@@ -101,18 +101,5 @@ namespace CustomKnight.Canvas
             }
         }
 
-        // Taken from https://stackoverflow.com/questions/56949217/how-to-resize-a-texture2d-using-height-and-width
-        private static Texture2D Resize(Texture2D texture2D ,int targetX,int targetY)
-        {
-            RenderTexture rt=new RenderTexture(targetX, targetY,24);
-            RenderTexture.active = rt;
-            Graphics.Blit(texture2D,rt);
-            Texture2D result=new Texture2D(targetX,targetY);
-            result.ReadPixels(new Rect(0,0,targetX,targetY),0,0);
-            result.Apply();
-            return result;
-        }
-        
-        private static void Log(object message) => Modding.Logger.Log("[Skin Swapper Panel] " + message);
     }
 }

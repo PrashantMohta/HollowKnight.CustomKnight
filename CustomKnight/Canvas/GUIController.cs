@@ -27,8 +27,6 @@ namespace CustomKnight.Canvas
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 scaler.referenceResolution = new Vector2(1920f, 1080f);
                 canvas.AddComponent<GraphicRaycaster>();
-
-                canvas.AddComponent<Scroller>();
                 
                 SkinSwapperPanel.BuildMenu(canvas);
 
@@ -45,8 +43,6 @@ namespace CustomKnight.Canvas
                     _instance = FindObjectOfType<GUIController>();
                     if (_instance == null)
                     {
-                        Modding.Logger.LogWarn("[Custom Knight] Couldn't find GUIController");
-
                         GameObject GUIController = new GameObject("GUI Controller");
                         _instance = GUIController.AddComponent<GUIController>();
                         DontDestroyOnLoad(GUIController);

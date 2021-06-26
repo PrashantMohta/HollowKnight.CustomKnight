@@ -100,7 +100,6 @@ namespace CustomKnight{
                         Anchor = TextAnchor.MiddleCenter
                     });
 
-            MenuButton FixSkinButton;
             area.AddMenuButton(
                         "FixSkinButton",
                         new MenuButtonConfig
@@ -111,33 +110,11 @@ namespace CustomKnight{
                             Proceed = true,
                             Style = MenuButtonStyle.VanillaStyle
                         },
-                        out FixSkinButton
-                    );              
-                
+                        out MenuButton FixSkinButton
+                    );    
+                    
         }
-        private static void AddModMenuContent(List<IMenuMod.MenuEntry> entries, ContentArea c)
-        {
-            foreach (var entry in entries)
-            {
-                c.AddHorizontalOption(
-                    entry.name,
-                    new HorizontalOptionConfig
-                    {
-                        ApplySetting = (_, i) => entry.saver(i),
-                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(entry.loader()),
-                        CancelAction = GoToModListMenu,
-                        Description = new DescriptionInfo
-                        {
-                            Text = entry.description,
-                            Style = DescriptionStyle.SingleLineVanillaStyle
-                        },
-                        Label = entry.name,
-                        Options = entry.values,
-                        Style = HorizontalOptionStyle.VanillaStyle
-                    }
-                );
-            }
-        }
+        
         public static void GoToModListMenu(object _) {
             GoToModListMenu();
             RefreshOptions();

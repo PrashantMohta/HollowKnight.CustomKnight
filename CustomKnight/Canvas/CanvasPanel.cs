@@ -12,7 +12,6 @@ namespace CustomKnight.Canvas
         private Vector2 size;
         private Dictionary<string, CanvasButton> buttons = new Dictionary<string, CanvasButton>();
         private Dictionary<string, CanvasPanel> panels = new Dictionary<string, CanvasPanel>();
-        private Dictionary<string, CanvasImage> images = new Dictionary<string, CanvasImage>();
         private Dictionary<string, CanvasText> texts = new Dictionary<string, CanvasText>();
 
         public bool active = true;
@@ -44,24 +43,6 @@ namespace CustomKnight.Canvas
             return button;
         }
 
-        public CanvasPanel AddPanel(string name,  Vector2 pos, Vector2 sz, Rect bgSubSection)
-        {
-            CanvasPanel panel = new CanvasPanel(canvas,  position + pos, sz, bgSubSection);
-
-            panels.Add(name, panel);
-
-            return panel;
-        }
-
-        public CanvasImage AddImage(string name, Texture2D tex, Vector2 pos, Vector2 size, Rect subSprite)
-        {
-            CanvasImage image = new CanvasImage(canvas, tex, position + pos, size, subSprite);
-
-            images.Add(name, image);
-
-            return image;
-        }
-
         public CanvasText AddText(string name, string text, Vector2 pos, Vector2 sz, Font font, int fontSize = 13, FontStyle style = FontStyle.Normal, TextAnchor alignment = TextAnchor.UpperLeft)
         {
             CanvasText t = new CanvasText(canvas, position + pos, sz, font, text, fontSize, style, alignment);
@@ -81,31 +62,6 @@ namespace CustomKnight.Canvas
             if (buttons.ContainsKey(buttonName))
             {
                 return buttons[buttonName];
-            }
-
-            return null;
-        }
-
-        public CanvasImage GetImage(string imageName, string panelName = null)
-        {
-            if (panelName != null && panels.ContainsKey(panelName))
-            {
-                return panels[panelName].GetImage(imageName);
-            }
-
-            if (images.ContainsKey(imageName))
-            {
-                return images[imageName];
-            }
-
-            return null;
-        }
-
-        public CanvasPanel GetPanel(string panelName)
-        {
-            if (panels.ContainsKey(panelName))
-            {
-                return panels[panelName];
             }
 
             return null;
@@ -148,19 +104,6 @@ namespace CustomKnight.Canvas
             }
         }
 
-        public void TogglePanel(string name)
-        {
-            if (active && panels.ContainsKey(name))
-            {
-                panels[name].ToggleActive();
-            }
-        }
-
-        public void ToggleActive()
-        {
-            active = !active;
-            SetActive(active, false);
-        }
 
         public void SetActive(bool b, bool panel)
         {
@@ -168,11 +111,6 @@ namespace CustomKnight.Canvas
             foreach (CanvasButton button in buttons.Values)
             {
                 button.SetActive(b);
-            }
-
-            foreach (CanvasImage image in images.Values)
-            {
-                image.SetActive(b);
             }
 
             foreach (CanvasText t in texts.Values)
@@ -208,11 +146,6 @@ namespace CustomKnight.Canvas
                 button.MoveToTop();
             }
 
-            foreach (CanvasImage image in images.Values)
-            {
-                image.SetRenderIndex(0);
-            }
-
             foreach (CanvasPanel panel in panels.Values)
             {
                 panel.FixRenderOrder();
@@ -226,11 +159,6 @@ namespace CustomKnight.Canvas
             foreach (CanvasButton button in buttons.Values)
             {
                 button.Destroy();
-            }
-
-            foreach (CanvasImage image in images.Values)
-            {
-                image.Destroy();
             }
 
             foreach (CanvasText t in texts.Values)
