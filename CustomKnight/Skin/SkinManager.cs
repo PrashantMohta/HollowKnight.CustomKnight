@@ -94,6 +94,12 @@ namespace CustomKnight{
             "Charm_40_4",
             "Charm_40_5",
             "Charms",
+            "DoubleJFeather",
+            "SDCrystalBurst",
+            "Leak",
+            "Liquid",
+            "HitPt",
+            "ShadowDashBlobs"
         };
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 

@@ -56,7 +56,18 @@ namespace CustomKnight
         private static Material _vsMat;
         private static Material _hudMat;
 
+        private static Material _featherMat;
+        private static Material _crystalGLMat;
+        private static Material _crystalGRMat;
+        private static Material _crystalWMat;
 
+        private static Material _LeakMat;
+
+        private static Material _HitPt1Mat;
+        private static Material _HitPt2Mat;
+        private static Material _LowHealthLeakMat;
+        private static Material _LiquidMat;
+        private static Material _ShadowDashBlobs;
         public static void PullDefaultTextures()
         {
             
@@ -65,6 +76,16 @@ namespace CustomKnight
                 SkinManager.Textures["Knight"].defaultTex = _knightMat.mainTexture as Texture2D;
                 SkinManager.Textures["Sprint"].defaultTex = _sprintMat.mainTexture as Texture2D;
                 SkinManager.Textures["Unn"].defaultTex = _unnMat.mainTexture as Texture2D;
+                
+                SkinManager.Textures["DoubleJFeather"].defaultTex = _featherMat.mainTexture as Texture2D;
+                SkinManager.Textures["SDCrystalBurst"].defaultTex = _crystalGLMat.mainTexture as Texture2D;
+
+                SkinManager.Textures["Leak"].defaultTex = _LeakMat.mainTexture as Texture2D;
+                SkinManager.Textures["Liquid"].defaultTex = _LiquidMat.mainTexture as Texture2D;
+
+                SkinManager.Textures["HitPt"].defaultTex = _HitPt1Mat.mainTexture as Texture2D;
+
+                SkinManager.Textures["ShadowDashBlobs"].defaultTex = _ShadowDashBlobs.mainTexture as Texture2D;
 
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
                 SkinManager.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
@@ -221,6 +242,7 @@ namespace CustomKnight
             }
         
             SkinManager.savedDefaultTextures = true;
+            dumpAll();
         }
 
         public static void UnloadAll()
@@ -302,18 +324,40 @@ namespace CustomKnight
             }
         }
 
+        
+
         public IEnumerator Start()
         {
             yield return new WaitWhile(() => HeroController.instance == null);
 
             GameObject hc = HeroController.instance.gameObject;
             SceneManager sm = GameManager.instance.GetSceneManager().GetComponent<SceneManager>();
-          
+
+            // dump textures here 
+            Utils.dumpfunction();
+
             tk2dSpriteAnimator anim = hc.GetComponent<tk2dSpriteAnimator>();
             _knightMat = anim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
             _sprintMat = anim.GetClipByName("Sprint").frames[0].spriteCollection.spriteDefinitions[0].material;
             _unnMat = anim.GetClipByName("Slug Up").frames[0].spriteCollection.spriteDefinitions[0].material;
             
+            
+            _featherMat = hc.FindGameObjectInChildren("Double J Feather").GetComponent<ParticleSystemRenderer>().material;
+
+            _crystalGLMat = hc.FindGameObjectInChildren("SD Crystal Burst GL").GetComponent<ParticleSystemRenderer>().material;
+            _crystalGRMat = hc.FindGameObjectInChildren("SD Crystal Burst GR").GetComponent<ParticleSystemRenderer>().material;
+            _crystalWMat = hc.FindGameObjectInChildren("SD Crystal Burst W").GetComponent<ParticleSystemRenderer>().material;
+            
+            _LeakMat = hc.FindGameObjectInChildren("Leak").GetComponent<ParticleSystemRenderer>().material;
+            _LowHealthLeakMat = hc.FindGameObjectInChildren("Low Health Leak").GetComponent<ParticleSystemRenderer>().material;
+
+            _HitPt1Mat = hc.FindGameObjectInChildren("Hit Pt 1").GetComponent<ParticleSystemRenderer>().material;
+            _HitPt2Mat = hc.FindGameObjectInChildren("Hit Pt 2").GetComponent<ParticleSystemRenderer>().material;
+
+            _ShadowDashBlobs = hc.FindGameObjectInChildren("Shadow Dash Blobs").GetComponent<ParticleSystemRenderer>().material;
+
+            _LiquidMat = GameCameras.instance.hudCanvas.FindGameObjectInChildren("Liquid").GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+
             tk2dSpriteAnimator shadeAnim = sm.hollowShadeObject.GetComponent<tk2dSpriteAnimator>();
             _shadeMat = shadeAnim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
             _shadeOrbMat = sm.hollowShadeObject.FindGameObjectInChildren("Shade Particles").GetComponent<ParticleSystemRenderer>().material;
@@ -465,6 +509,22 @@ namespace CustomKnight
            
             _sprintMat.mainTexture = SkinManager.Textures["Sprint"].currentTexture;
             _unnMat.mainTexture = SkinManager.Textures["Unn"].currentTexture;
+
+            _featherMat.mainTexture = SkinManager.Textures["DoubleJFeather"].currentTexture;
+
+            _crystalGLMat.mainTexture = SkinManager.Textures["SDCrystalBurst"].currentTexture;
+            _crystalGRMat.mainTexture = _crystalGLMat.mainTexture;
+            _crystalWMat.mainTexture = _crystalGLMat.mainTexture;
+
+            _LeakMat.mainTexture = SkinManager.Textures["Leak"].currentTexture;
+            _LowHealthLeakMat.mainTexture = _LeakMat.mainTexture;
+
+            _HitPt1Mat.mainTexture = SkinManager.Textures["HitPt"].currentTexture;
+            _HitPt2Mat.mainTexture = _HitPt1Mat.mainTexture;
+
+            _ShadowDashBlobs.mainTexture = SkinManager.Textures["ShadowDashBlobs"].currentTexture;
+
+            _LiquidMat.mainTexture = SkinManager.Textures["Liquid"].currentTexture;
 
             _shadeMat.mainTexture = SkinManager.Textures["Shade"].currentTexture;
             _shadeOrbMat.mainTexture = SkinManager.Textures["ShadeOrb"].currentTexture;
