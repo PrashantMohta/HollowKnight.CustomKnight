@@ -20,7 +20,7 @@ using CustomKnight.Canvas;
 
 namespace CustomKnight
 {
-    public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod //IMenuMod , ITogglableMod 
+    public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod , ITogglableMod
     {
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
         public static SaveModSettings SaveSettings { get; set; } = new SaveModSettings();
@@ -96,8 +96,9 @@ namespace CustomKnight
             ModHooks.AfterSavegameLoadHook += LoadSaveGame;
         }
 
-        public MenuScreen GetMenuScreen(MenuScreen modListMenu){
-            MenuScreen m = ModMenu.createMenuScreen(modListMenu);
+        public  bool ToggleButtonInsideMenu {get;}= true;
+        public MenuScreen GetMenuScreen(MenuScreen modListMenu,ModToggleDelegates? toggle){
+            MenuScreen m = ModMenu.createMenuScreen(modListMenu,toggle);
             ModMenu.RefreshOptions();
             return m;
         }
@@ -112,6 +113,9 @@ namespace CustomKnight
             CustomKnight.SaveSettings = s;
         }
 
+        public void Unload(){
+            Log("I AM UNLOADED OMG!");
+        }
         public SaveModSettings OnSaveLocal()
         {
             return CustomKnight.SaveSettings;

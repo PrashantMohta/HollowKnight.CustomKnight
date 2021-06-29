@@ -15,11 +15,13 @@ namespace CustomKnight{
         private static MenuScreen modsMenu;
         public static Image previewImage;
 
+        private static ModToggleDelegates stateToggle;
+
         public static string[] modes = {"Gameplay", "Gameplay + Events"};
+
 
         static int selectedSkinIndex = 0;
         static int selectedMode = 1;
-
         public static int getSkinValue(){
             return selectedSkinIndex;
         }
@@ -42,6 +44,25 @@ namespace CustomKnight{
         private static void addMenuOptions(ContentArea area){
       
             
+            area.AddHorizontalOption(
+                    "State",
+                    new HorizontalOptionConfig
+                    {
+                        Options = new string[] { "Disabled", "Enabled" },
+                        ApplySetting = (_, i) => stateToggle.SetModEnabled(i == 1),
+                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(stateToggle.GetModEnabled() ? 1 : 0),
+                               
+                        CancelAction = GoToModListMenu,
+                        Description = new DescriptionInfo
+                        {
+                            Text = "allows disabling the thing",
+                            Style = DescriptionStyle.SingleLineVanillaStyle
+                        },
+                        Label = "Custom Skins are",
+                        Style = HorizontalOptionStyle.VanillaStyle
+                    },
+                    out modeSelector
+                ); 
             area.AddTextPanel("HelpText",
                     new RelVector2(new Vector2(800f, 105f)),
                     new TextPanelConfig{
@@ -142,8 +163,9 @@ namespace CustomKnight{
                 CustomKnight.GlobalSettings.DefaultSkin = skinToApply;
                 CustomKnight.SaveSettings.DefaultSkin = skinToApply;
             };
-            
+
             SkinSwapperPanel.hidePanel("");
+            stateToggle.ApplyChange();
             GoToModListMenu();
         }
 
@@ -172,9 +194,9 @@ namespace CustomKnight{
             RefreshOptions();
         }
 
-        public static MenuScreen createMenuScreen(MenuScreen modListMenu){
+        public static MenuScreen createMenuScreen(MenuScreen modListMenu,ModToggleDelegates? toggle){
             modsMenu = modListMenu;
-
+            stateToggle = toggle.Value;
 
             string name = "Custom Knight";
             MenuButton applyButton = null;
