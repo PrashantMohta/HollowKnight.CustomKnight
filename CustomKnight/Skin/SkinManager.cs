@@ -109,6 +109,9 @@ namespace CustomKnight{
 
         public static string[] skinsArr;
         public static string[] skinNamesArr;
+
+        private static Swapster swapster = new Swapster();
+
         public static void getSkinNames(){
             if(skinsArr!= null || skinNamesArr!=null) {return;}
 
@@ -232,6 +235,7 @@ namespace CustomKnight{
             }
 
             SpriteLoader.Load();
+            swapster.Swap(Path.Combine(DATA_DIR,SKIN_FOLDER));
 
             On.GeoControl.Start -= GeoControl_Start;
             On.GeoControl.Start += GeoControl_Start;
@@ -247,7 +251,6 @@ namespace CustomKnight{
             if(SKIN_FOLDER == buttonName) { return; } 
                 
             SKIN_FOLDER = buttonName;
-
             GameManager.instance.StartCoroutine(ChangeSkinRoutine());
         }
 

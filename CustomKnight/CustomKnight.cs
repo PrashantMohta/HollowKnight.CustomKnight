@@ -92,7 +92,7 @@ namespace CustomKnight
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }
-            SkinManager.LoadSkin();
+            // SkinManager.LoadSkin();
             ModHooks.AfterSavegameLoadHook += LoadSaveGame;
         }
 

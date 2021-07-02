@@ -41,6 +41,9 @@ namespace CustomKnight{
 
         public static MenuOptionHorizontal skinSelector;
         public static MenuOptionHorizontal modeSelector;
+
+        public static MenuOptionHorizontal stateSelector;
+
         private static void addMenuOptions(ContentArea area){
       
             
@@ -56,12 +59,12 @@ namespace CustomKnight{
                         Description = new DescriptionInfo
                         {
                             Text = "allows disabling the thing",
-                            Style = DescriptionStyle.SingleLineVanillaStyle
+                            Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
                         Label = "Custom Skins are",
                         Style = HorizontalOptionStyle.VanillaStyle
                     },
-                    out modeSelector
+                    out stateSelector
                 ); 
             area.AddTextPanel("HelpText",
                     new RelVector2(new Vector2(800f, 105f)),
@@ -82,7 +85,7 @@ namespace CustomKnight{
                         Description = new DescriptionInfo
                         {
                             Text = "The skin will be used for current save and any new saves.",
-                            Style = DescriptionStyle.SingleLineVanillaStyle
+                            Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
                         Label = "Select Skin",
                         Options = SkinManager.skinNamesArr,
@@ -101,7 +104,7 @@ namespace CustomKnight{
                         Description = new DescriptionInfo
                         {
                             Text = "Will Preload objects for modifying events",
-                            Style = DescriptionStyle.SingleLineVanillaStyle
+                            Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
                         Label = "Mode",
                         Options = modes,
@@ -176,6 +179,9 @@ namespace CustomKnight{
             }
             if(modeSelector != null){
                 modeSelector.menuSetting.RefreshValueFromGameSettings();
+            }
+            if(stateSelector != null){
+                stateSelector.menuSetting.RefreshValueFromGameSettings();
             }
         }
         public static void setModMenu(string skin,bool preloads){
