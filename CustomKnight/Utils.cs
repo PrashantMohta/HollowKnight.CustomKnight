@@ -93,6 +93,7 @@ namespace CustomKnight{
             return tex;
         }
         public static void dumpAll(){
+            //used only during development
             return;
             foreach(KeyValuePair<string, CustomKnightTexture> entry in SkinManager.Textures){
                 if(entry.Value == null || (entry.Value.defaultTex == null && entry.Value.defaultCharmSprite == null)){
@@ -107,6 +108,7 @@ namespace CustomKnight{
             }
         }
         public static void dumpfunction(){
+            //used only during development
             return;
             var x2 = HeroController.instance.gameObject.transform.GetComponentsInChildren<SpriteRenderer>();
             foreach(var i in x2){

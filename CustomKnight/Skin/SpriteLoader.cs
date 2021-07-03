@@ -242,7 +242,6 @@ namespace CustomKnight
             }
         
             SkinManager.savedDefaultTextures = true;
-            //dumpAll();
         }
 
         public static void UnloadAll()
@@ -332,9 +331,6 @@ namespace CustomKnight
 
             GameObject hc = HeroController.instance.gameObject;
             SceneManager sm = GameManager.instance.GetSceneManager().GetComponent<SceneManager>();
-
-            // dump textures here 
-            //Utils.dumpfunction();
 
             tk2dSpriteAnimator anim = hc.GetComponent<tk2dSpriteAnimator>();
             _knightMat = anim.GetClipByName("Idle").frames[0].spriteCollection.spriteDefinitions[0].material;
