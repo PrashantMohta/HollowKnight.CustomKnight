@@ -51,7 +51,16 @@ namespace CustomKnight{
             return null;
         }
     
+
+        public static GameObject[] FindAllGameObjects(){
+            return UnityEngine.Object.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        }
+
+        public static tk2dSprite[] FindAllTk2dSprite(){
+            return UnityEngine.Object.FindObjectsOfType(typeof(tk2dSprite)) as tk2dSprite[];
+        }
     
+        
         public static Texture2D duplicateTexture(Texture2D source)
         {
             RenderTexture renderTex = RenderTexture.GetTemporary(

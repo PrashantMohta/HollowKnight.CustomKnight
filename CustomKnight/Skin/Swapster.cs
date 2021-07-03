@@ -23,12 +23,15 @@ namespace CustomKnight {
 
         public int nextCheck;
 
-        public Dictionary<string,List<string>> Scenes = new Dictionary<string,List<string>>();
-        public Scene currentScene;
-        public List<string> currentSkinnedSceneObjs = new List<string>();
-        public Dictionary<string,Texture2D> loadedTextures = new Dictionary<string, Texture2D>();
-        public Dictionary<string,string> Strings  = new Dictionary<string,string>();         
-        public Dictionary<string,string> ReplaceStrings  = new Dictionary<string,string>();         
+        public Dictionary<string,List<string>> Scenes;
+        public List<string> currentSkinnedSceneObjs;
+        public Dictionary<string,Texture2D> loadedTextures;
+
+        public Dictionary<string,Material> materials;
+        public Dictionary<string,Texture2D> defaultTextures;
+
+        public Dictionary<string,string> Strings;
+        public Dictionary<string,string> ReplaceStrings;
         public DateTime lastTime = DateTime.Now;
 
         public bool firstInit = true;
@@ -64,6 +67,9 @@ namespace CustomKnight {
                         if(_tk2dSprite == null){
                             this.Log("No tk2dSprite Component found in " + objectName + " in scene " + scene.name);
                         } else {
+                            
+                            materials[objectName] = _tk2dSprite.GetCurrentSpriteDef().material;
+                            defaultTextures[objectName] = (Texture2D) materials[objectName].mainTexture;
                             _tk2dSprite.GetCurrentSpriteDef().material.mainTexture = loadedTextures[objectName];
                         }
                     } else {
@@ -80,15 +86,14 @@ namespace CustomKnight {
         }
         public void SwapSkinForScene(Scene scene,LoadSceneMode mode){
             currentSkinnedSceneObjs = new List<string>();
-            currentScene = scene;
             nextCheck = INITAL_NEXT_CHECK;
             GameManager.instance.StartCoroutine(SwapSkinRoutine(scene));
         }
 
         public void checkForMissedObjects(){
             var currentTime = DateTime.Now;
-            if(currentScene != null && nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck){
-                SwapSkin(currentScene);
+            if(nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck){
+                SwapSkin(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
                 nextCheck = (int)Math.Round((float)nextCheck * BACKOFF_MULTIPLIER);
                 lastTime = currentTime;
             }
@@ -155,6 +160,13 @@ namespace CustomKnight {
         {
             DATA_DIR = Path.Combine(skinpath,SWAPSTER_FOLDER);
 
+
+            if(!firstInit){
+                foreach(KeyValuePair<string,Material> kp in materials){
+                    kp.Value.mainTexture =  defaultTextures[kp.Key];
+                }
+            }
+
             if (!Directory.Exists(DATA_DIR))
             {
                 Log("There is no Swapster folder in the Skin directory.");
@@ -173,6 +185,16 @@ namespace CustomKnight {
                 Log("Created replace.txt in Swapster directory.");
             }
 
+            Scenes = new Dictionary<string,List<string>>();
+            currentSkinnedSceneObjs = new List<string>();
+            loadedTextures = new Dictionary<string, Texture2D>();
+
+            materials = new Dictionary<string, Material>();
+            defaultTextures = new Dictionary<string, Texture2D>();
+
+            Strings  = new Dictionary<string,string>();         
+            ReplaceStrings  = new Dictionary<string,string>();   
+
             LoadSwaps();
             if(firstInit){
                 firstInit = false;
@@ -180,21 +202,111 @@ namespace CustomKnight {
                 ModHooks.HeroUpdateHook += checkForMissedObjects;
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
                 On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
-            }
 
+                if(dumpingEnabled){
+                    ModHooks.LanguageGetHook += SaveTextDump;
+                    UnityEngine.SceneManagement.SceneManager.sceneLoaded += dumpAllSprites;
+                    On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += dumpAllSprites;
+                }
+            }
+            GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
+
+        }
+
+        public void Unload(){
+            ModHooks.LanguageGetHook -= LanguageGet;
+            ModHooks.HeroUpdateHook -= checkForMissedObjects;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
+            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
+            if(materials != null){
+                foreach(KeyValuePair<string,Material> kp in materials){
+                    if(kp.Value == null) {
+                        continue;
+                    }
+                    kp.Value.mainTexture =  defaultTextures[kp.Key];
+                }      
+            }
         }
  
         public void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
             if(self.activate.Value != true) {return;}
-
             if(!SwapSkinRoutineRunning){
-                GameManager.instance.StartCoroutine(SwapSkinRoutine(currentScene));
+                GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
             }
         }
 
         public void Log(string str) {
             CustomKnight.Instance.Log("[Swapster] " +str);
+        }
+
+        public bool dumpingEnabled = false;
+
+        public Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
+        public void dumpAllSprites(){
+           if(!dumpingEnabled) {return;} 
+           tk2dSprite[] tk2ds =  Utils.FindAllTk2dSprite();
+           foreach(var sprite in tk2ds){
+                SaveTextureDump(sprite.gameObject.name, (Texture2D) sprite.GetCurrentSpriteDef().material.mainTexture);
+           }
+        }
+
+        public void dumpAllSprites(Scene scene,LoadSceneMode mode){
+            dumpAllSprites();
+        }
+        
+        public void dumpAllSprites(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
+            orig(self);
+            dumpAllSprites();
+        }
+        public void SaveTextureDump(string objectName, Texture2D texture){
+            if(!dumpingEnabled) {return;} 
+            string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Swapster_Dump");
+            Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            string tk2d = Path.Combine(DUMP_DIR,"tk2d");
+            string scenePath = Path.Combine(DUMP_DIR,scene.name);
+            if (!Directory.Exists(DUMP_DIR))
+            {
+                Directory.CreateDirectory(DUMP_DIR);
+            }
+             if (!Directory.Exists(tk2d))
+            {
+                Directory.CreateDirectory(tk2d);
+            }
+            if(!Directory.Exists(scenePath)){
+                Directory.CreateDirectory(scenePath);
+            }
+            
+            string outpath = Path.Combine(tk2d,objectName+".png");
+            if(!isTextureDumped.TryGetValue(outpath,out bool path) && !File.Exists(outpath)){
+                Texture2D dupe = Utils.duplicateTexture(texture);
+                byte[] texBytes = dupe.EncodeToPNG();
+        
+                File.WriteAllBytes(outpath,texBytes);
+                isTextureDumped[outpath] = true;
+            }
+            SaveTextDump( objectName+".tk2d", "Texture:" +outpath);
+            
+        }
+        public void SaveTextDump( string key, string value){
+            if(!dumpingEnabled) {return;} 
+            string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Swapster_Dump");
+            Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            string scenePath = Path.Combine(DUMP_DIR,scene.name);
+            if (!Directory.Exists(DUMP_DIR))
+            {
+                Directory.CreateDirectory(DUMP_DIR);
+            }
+            if(!Directory.Exists(scenePath)){
+                Directory.CreateDirectory(scenePath);
+            }
+            if(!File.Exists(Path.Combine(scenePath,key+".txt"))){
+                File.WriteAllText(Path.Combine(scenePath,key+".txt"),value);
+            }
+        }
+        public string SaveTextDump( string key, string sheet , string value){
+            SaveTextDump( key, value);
+            return value;
         }
     }
 }

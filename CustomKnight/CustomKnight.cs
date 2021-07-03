@@ -104,6 +104,7 @@ namespace CustomKnight
         }
 
         public void LoadSaveGame(SaveGameData data){
+            Log("LoadSaveGame");
             SkinManager.SKIN_FOLDER = SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
             SkinManager.LoadSkin();
@@ -114,7 +115,8 @@ namespace CustomKnight
         }
 
         public void Unload(){
-            Log("I AM UNLOADED OMG!");
+            SkinManager.Unload();
+            ModHooks.AfterSavegameLoadHook -= LoadSaveGame;
         }
         public SaveModSettings OnSaveLocal()
         {

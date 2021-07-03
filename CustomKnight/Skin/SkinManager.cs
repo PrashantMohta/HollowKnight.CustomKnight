@@ -243,7 +243,11 @@ namespace CustomKnight{
         }
 
         public static void Unload(){
+            //load default skin for charms and such
+            SKIN_FOLDER = "Default";
+            LoadSkin();
             On.GeoControl.Start -= GeoControl_Start;
+            swapster.Unload();
         }
 
         public static void ChangeSkin(string buttonName)
