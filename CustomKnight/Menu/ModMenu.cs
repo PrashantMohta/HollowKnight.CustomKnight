@@ -41,9 +41,8 @@ namespace CustomKnight{
 
         public static MenuOptionHorizontal skinSelector;
         public static MenuOptionHorizontal modeSelector;
-
         public static MenuOptionHorizontal stateSelector;
-
+        public static MenuOptionHorizontal swapsterEnabled,swapsterDumpEnabled;
         private static void addMenuOptions(ContentArea area){
       
             
@@ -58,10 +57,10 @@ namespace CustomKnight{
                         CancelAction = GoToModListMenu,
                         Description = new DescriptionInfo
                         {
-                            Text = "allows disabling the thing",
+                            Text = "Allows disabling custom skins",
                             Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
-                        Label = "Custom Skins are",
+                        Label = "Custom Skins",
                         Style = HorizontalOptionStyle.VanillaStyle
                     },
                     out stateSelector
@@ -113,8 +112,6 @@ namespace CustomKnight{
                     out modeSelector
                 ); 
 
-             area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
-
              area.AddTextPanel("HelpText2",
                     new RelVector2(new Vector2(850f, 105f)),
                     new TextPanelConfig{
@@ -136,7 +133,57 @@ namespace CustomKnight{
                         },
                         out MenuButton FixSkinButton
                     );    
-                    
+
+            area.AddHorizontalOption(
+                    "Swapster",
+                    new HorizontalOptionConfig
+                    {
+                        Options = new string[] { "Disabled", "Enabled" },
+                        ApplySetting = (_, i) => {Swapster.setSwapsterEnabled(i == 1);},
+                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(Swapster.isEnabled ? 1 : 0),
+                               
+                        CancelAction = GoToModListMenu,
+                        Description = new DescriptionInfo
+                        {
+                            Text = "allows skinning any tk2dsprite, for example bosses & enemies",
+                            Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
+                        },
+                        Label = "Swapster",
+                        Style = HorizontalOptionStyle.VanillaStyle
+                    },
+                    out swapsterEnabled
+                );
+
+            area.AddHorizontalOption(
+                    "SwapsterDump",
+                    new HorizontalOptionConfig
+                    {
+                        Options = new string[] { "Disabled", "Enabled" },
+                        ApplySetting = (_, i) => {Swapster.setDumpEnabled(i == 1);},
+                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(Swapster.dumpingEnabled ? 1 : 0),
+                               
+                        CancelAction = GoToModListMenu,
+                        Description = new DescriptionInfo
+                        {
+                            Text = "Dumps the sprites that swapster supports (causes lag)",
+                            Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
+                        },
+                        Label = "Swapster Dump",
+                        Style = HorizontalOptionStyle.VanillaStyle
+                    },
+                    out swapsterDumpEnabled
+                );
+
+            area.AddTextPanel("HelpText3",
+                    new RelVector2(new Vector2(850f, 105f)),
+                    new TextPanelConfig{
+                        Text = "After Enabling swapster, a restart is Recommended & Dumping resets on restart",
+                        Size = 25,
+                        Font = TextPanelConfig.TextFont.TrajanRegular,
+                        Anchor = TextAnchor.MiddleCenter
+                    });  
+            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
+
         }
         
         public static void GoToModListMenu(object _) {
@@ -183,6 +230,13 @@ namespace CustomKnight{
             if(stateSelector != null){
                 stateSelector.menuSetting.RefreshValueFromGameSettings();
             }
+
+            if(swapsterEnabled != null){
+                swapsterEnabled.menuSetting.RefreshValueFromGameSettings();
+            }
+            if(swapsterDumpEnabled != null){
+                swapsterDumpEnabled.menuSetting.RefreshValueFromGameSettings();
+            }
         }
         public static void setModMenu(string skin,bool preloads){
             if(SkinManager.skinsArr != null){
@@ -211,7 +265,7 @@ namespace CustomKnight{
             var builder = new MenuBuilder(UIManager.instance.UICanvas.gameObject, name)
                 .CreateTitle("Custom Knight", MenuTitleStyle.vanillaStyle)
                 .CreateContentPane(RectTransformData.FromSizeAndPos(
-                    new RelVector2(new Vector2(1920f, 903f)),
+                    new RelVector2(new Vector2(1920f, 803f)),
                     new AnchoredPosition(
                         new Vector2(0.5f, 0.5f),
                         new Vector2(0.5f, 0.5f),
@@ -272,8 +326,8 @@ namespace CustomKnight{
                     Navigation = new Navigation
                     {
                         mode = Navigation.Mode.Explicit,
-                        selectOnUp = backButton,
-                        selectOnDown = applyButton
+                        //selectOnUp = backButton,
+                        //selectOnDown = applyButton
                     },
                     Position = new AnchoredPosition
                     {
@@ -282,7 +336,7 @@ namespace CustomKnight{
                         Offset = new Vector2(-310f, 0f)
                     }
                 },
-                new RelLength(105f),
+                new RelLength(1600f), 
                 RegularGridLayout.CreateVerticalLayout(105f),
                 contentArea => addMenuOptions(contentArea)
             ));

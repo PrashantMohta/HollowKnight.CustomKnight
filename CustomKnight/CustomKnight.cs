@@ -32,7 +32,13 @@ namespace CustomKnight
         public override string GetVersion() => "1.5.0-candidate";
         public void OnLoadGlobal(GlobalModSettings s)
         {
-            CustomKnight.GlobalSettings = s;
+            if(s.Version == GetVersion()){
+                CustomKnight.GlobalSettings = s;
+            } else {
+                CustomKnight.GlobalSettings = s;
+                CustomKnight.GlobalSettings.Version = GetVersion();
+                CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
+            }
             SkinManager.SKIN_FOLDER = CustomKnight.GlobalSettings.DefaultSkin;
         }
 
@@ -87,8 +93,9 @@ namespace CustomKnight
 
             }
 
-
+            Swapster.setSwapsterEnabled(CustomKnight.GlobalSettings.swapsterEnabled);
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
+            
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }

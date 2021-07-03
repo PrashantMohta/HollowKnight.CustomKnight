@@ -36,7 +36,18 @@ namespace CustomKnight {
 
         public bool firstInit = true;
 
+        public static bool isEnabled = true;
+        public static bool dumpingEnabled = false;
         public bool SwapSkinRoutineRunning = false;
+
+        public static void setDumpEnabled(bool enabled){
+            dumpingEnabled = enabled;
+        }
+
+        public static void setSwapsterEnabled(bool enabled){
+            isEnabled = enabled;
+            CustomKnight.GlobalSettings.swapsterEnabled = isEnabled;
+        }
         private void loadTexture(Scene scene,string objectName){
                 if(loadedTextures.TryGetValue(objectName, out var tex)){
                     return;
@@ -203,7 +214,7 @@ namespace CustomKnight {
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
                 On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
 
-                if(dumpingEnabled){
+                if(Swapster.dumpingEnabled){
                     ModHooks.LanguageGetHook += SaveTextDump;
                     UnityEngine.SceneManagement.SceneManager.sceneLoaded += dumpAllSprites;
                     On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += dumpAllSprites;
@@ -218,6 +229,13 @@ namespace CustomKnight {
             ModHooks.HeroUpdateHook -= checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
+
+            if(Swapster.dumpingEnabled){
+                ModHooks.LanguageGetHook -= SaveTextDump;
+                UnityEngine.SceneManagement.SceneManager.sceneLoaded -= dumpAllSprites;
+                On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= dumpAllSprites;
+            }
+
             if(materials != null){
                 foreach(KeyValuePair<string,Material> kp in materials){
                     if(kp.Value == null) {
@@ -240,11 +258,10 @@ namespace CustomKnight {
             CustomKnight.Instance.Log("[Swapster] " +str);
         }
 
-        public bool dumpingEnabled = false;
 
         public Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
         public void dumpAllSprites(){
-           if(!dumpingEnabled) {return;} 
+           if(!Swapster.dumpingEnabled) {return;} 
            tk2dSprite[] tk2ds =  Utils.FindAllTk2dSprite();
            foreach(var sprite in tk2ds){
                 SaveTextureDump(sprite.gameObject.name, (Texture2D) sprite.GetCurrentSpriteDef().material.mainTexture);
@@ -260,7 +277,7 @@ namespace CustomKnight {
             dumpAllSprites();
         }
         public void SaveTextureDump(string objectName, Texture2D texture){
-            if(!dumpingEnabled) {return;} 
+            if(!Swapster.dumpingEnabled) {return;} 
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Swapster_Dump");
             Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string tk2d = Path.Combine(DUMP_DIR,"tk2d");
@@ -289,7 +306,7 @@ namespace CustomKnight {
             
         }
         public void SaveTextDump( string key, string value){
-            if(!dumpingEnabled) {return;} 
+            if(!Swapster.dumpingEnabled) {return;} 
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Swapster_Dump");
             Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
