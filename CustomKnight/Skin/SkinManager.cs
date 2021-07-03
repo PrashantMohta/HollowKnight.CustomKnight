@@ -94,6 +94,12 @@ namespace CustomKnight{
             "Charm_40_4",
             "Charm_40_5",
             "Charms",
+            "DoubleJFeather",
+            "SDCrystalBurst",
+            "Leak",
+            "Liquid",
+            "HitPt",
+            "ShadowDashBlobs"
         };
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 
@@ -103,6 +109,9 @@ namespace CustomKnight{
 
         public static string[] skinsArr;
         public static string[] skinNamesArr;
+
+        private static Swapster swapster = new Swapster();
+
         public static void getSkinNames(){
             if(skinsArr!= null || skinNamesArr!=null) {return;}
 
@@ -226,6 +235,7 @@ namespace CustomKnight{
             }
 
             SpriteLoader.Load();
+            swapster.Swap(Path.Combine(DATA_DIR,SKIN_FOLDER));
 
             On.GeoControl.Start -= GeoControl_Start;
             On.GeoControl.Start += GeoControl_Start;
@@ -233,7 +243,11 @@ namespace CustomKnight{
         }
 
         public static void Unload(){
+            //load default skin for charms and such
+            SKIN_FOLDER = "Default";
+            LoadSkin();
             On.GeoControl.Start -= GeoControl_Start;
+            swapster.Unload();
         }
 
         public static void ChangeSkin(string buttonName)
@@ -241,7 +255,6 @@ namespace CustomKnight{
             if(SKIN_FOLDER == buttonName) { return; } 
                 
             SKIN_FOLDER = buttonName;
-
             GameManager.instance.StartCoroutine(ChangeSkinRoutine());
         }
 

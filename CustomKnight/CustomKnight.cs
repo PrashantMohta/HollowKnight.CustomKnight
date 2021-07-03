@@ -20,7 +20,7 @@ using CustomKnight.Canvas;
 
 namespace CustomKnight
 {
-    public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod //IMenuMod , ITogglableMod 
+    public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod , ITogglableMod
     {
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
         public static SaveModSettings SaveSettings { get; set; } = new SaveModSettings();
@@ -32,7 +32,13 @@ namespace CustomKnight
         public override string GetVersion() => "1.5.0-candidate";
         public void OnLoadGlobal(GlobalModSettings s)
         {
-            CustomKnight.GlobalSettings = s;
+            if(s.Version == GetVersion()){
+                CustomKnight.GlobalSettings = s;
+            } else {
+                CustomKnight.GlobalSettings = s;
+                CustomKnight.GlobalSettings.Version = GetVersion();
+                CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
+            }
             SkinManager.SKIN_FOLDER = CustomKnight.GlobalSettings.DefaultSkin;
         }
 
@@ -87,22 +93,25 @@ namespace CustomKnight
 
             }
 
-
+            Swapster.setSwapsterEnabled(CustomKnight.GlobalSettings.swapsterEnabled);
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
+            
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }
-            SkinManager.LoadSkin();
+            // SkinManager.LoadSkin();
             ModHooks.AfterSavegameLoadHook += LoadSaveGame;
         }
 
-        public MenuScreen GetMenuScreen(MenuScreen modListMenu){
-            MenuScreen m = ModMenu.createMenuScreen(modListMenu);
+        public  bool ToggleButtonInsideMenu {get;}= true;
+        public MenuScreen GetMenuScreen(MenuScreen modListMenu,ModToggleDelegates? toggle){
+            MenuScreen m = ModMenu.createMenuScreen(modListMenu,toggle);
             ModMenu.RefreshOptions();
             return m;
         }
 
         public void LoadSaveGame(SaveGameData data){
+            Log("LoadSaveGame");
             SkinManager.SKIN_FOLDER = SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
             SkinManager.LoadSkin();
@@ -112,6 +121,10 @@ namespace CustomKnight
             CustomKnight.SaveSettings = s;
         }
 
+        public void Unload(){
+            SkinManager.Unload();
+            ModHooks.AfterSavegameLoadHook -= LoadSaveGame;
+        }
         public SaveModSettings OnSaveLocal()
         {
             return CustomKnight.SaveSettings;
