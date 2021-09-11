@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Modding;
 using Modding.Menu;
@@ -9,6 +10,7 @@ using Patch = Modding.Patches;
 using UnityEngine;
 using UnityEngine.UI;
 using CustomKnight.Canvas;
+using Satchel;
 
 namespace CustomKnight{
     public class ModMenu{
@@ -65,14 +67,6 @@ namespace CustomKnight{
                     },
                     out stateSelector
                 ); 
-            area.AddTextPanel("HelpText",
-                    new RelVector2(new Vector2(800f, 105f)),
-                    new TextPanelConfig{
-                        Text = "To Add more skins, copy the skins into your Mods/CustomKnight/Skins/ folder",
-                        Size = 25,
-                        Font = TextPanelConfig.TextFont.TrajanRegular,
-                        Anchor = TextAnchor.MiddleCenter
-                    });
 
             area.AddHorizontalOption(
                     "Select Skin",
@@ -93,6 +87,23 @@ namespace CustomKnight{
                     out skinSelector
                 ); 
             
+            area.AddMenuButton(
+                        "OpenButton",
+                        new MenuButtonConfig
+                        {
+                            Label = "Open Skins Folder",
+                            CancelAction = GoToModListMenu,
+                            SubmitAction = OpenSkins,
+                            Proceed = true,
+                            Style = MenuButtonStyle.VanillaStyle,
+                            Description = new DescriptionInfo
+                            {
+                                Text = "To Add more skins, copy the skins into your Skins folder."
+                            }
+                        },
+                        out MenuButton OpenSkinsButton
+                    ); 
+            
             area.AddHorizontalOption(
                     "Mode",
                     new HorizontalOptionConfig
@@ -111,48 +122,48 @@ namespace CustomKnight{
                     },
                     out modeSelector
                 ); 
-
-             area.AddTextPanel("HelpText2",
-                    new RelVector2(new Vector2(850f, 105f)),
-                    new TextPanelConfig{
-                        Text = "In case your skins wont work, try the buttons below",
-                        Size = 25,
-                        Font = TextPanelConfig.TextFont.TrajanRegular,
-                        Anchor = TextAnchor.MiddleCenter
-                    });
+            
 
             area.AddMenuButton(
                         "FixSkinButton",
                         new MenuButtonConfig
                         {
-                            Label = "Fix my skins!",
+                            Label = "Fix skins",
                             CancelAction = GoToModListMenu,
                             SubmitAction = FixSkins,
                             Proceed = true,
-                            Style = MenuButtonStyle.VanillaStyle
+                            Style = MenuButtonStyle.VanillaStyle,
+                            Description = new DescriptionInfo
+                            {
+                                Text = "In case your skins wont work, try this button."
+                            }
                         },
                         out MenuButton FixSkinButton
                     );  
-            
             area.AddMenuButton(
                         "DiscordButton",
                         new MenuButtonConfig
                         {
-                            Label = "Discord Help me!",
+                            Label = "Need More Help? or Have Suggestions?",
                             CancelAction = GoToModListMenu,
                             SubmitAction = OpenLink,
                             Proceed = true,
-                            Style = MenuButtonStyle.VanillaStyle
+                            Style = MenuButtonStyle.VanillaStyle,
+                            Description = new DescriptionInfo
+                            {
+                                Text = "Join the Hollow Knight Modding Discord."
+                            }
                         },
                         out MenuButton DiscordButton
                     );    
 
+            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
 
              area.AddTextPanel("HelpText3",
                     new RelVector2(new Vector2(850f, 105f)),
                     new TextPanelConfig{
                         Text = "Experimental features",
-                        Size = 35,
+                        Size = 45,
                         Font = TextPanelConfig.TextFont.TrajanRegular,
                         Anchor = TextAnchor.MiddleCenter
                     });  
@@ -160,12 +171,11 @@ namespace CustomKnight{
              area.AddTextPanel("HelpText4",
                     new RelVector2(new Vector2(850f, 105f)),
                     new TextPanelConfig{
-                        Text = "Note: after enabling Swapper, a restart is Recommended & Dumping resets on restart",
+                        Text = "Note: after enabling or disabling Swapper, a restart is Recommended",
                         Size = 25,
                         Font = TextPanelConfig.TextFont.TrajanRegular,
                         Anchor = TextAnchor.MiddleCenter
                     });  
-            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
 
             area.AddHorizontalOption(
                     "Swapper",
@@ -178,7 +188,7 @@ namespace CustomKnight{
                         CancelAction = GoToModListMenu,
                         Description = new DescriptionInfo
                         {
-                            Text = "allows skinning any tk2dsprite, for example bosses & enemies",
+                            Text = "allows skinning virtually any sprite, for example bosses & enemies",
                             Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
                         Label = "Swapper",
@@ -216,21 +226,26 @@ namespace CustomKnight{
         }
         public static void GoToModListMenu() => (UIManager.instance).UIGoToDynamicMenu(modsMenu);
 
+        private static void OpenSkins(object _) => OpenSkins();
+        private static void OpenSkins(){
+            IoUtils.OpenDefault(SkinManager.SKINS_FOLDER);
+        }
+
         private static void OpenLink(object _) => OpenLink();
 
         private static void OpenLink(){ 
-            Application.OpenURL("https://discord.com/invite/rqsRHRt25h");
+            Application.OpenURL("https://discord.gg/J4SV6NFxAA");
         }
         private static void FixSkins(object _) => FixSkins();
 
         private static void FixSkins(){ 
-            SkinManager.fixSkinStructures();
+            FixSkinStructure.FixSkins();
         }
         private static void apply(object _) => apply();
 
         private static void apply(){ 
             var skinToApply = SkinManager.skinsArr[selectedSkinIndex];
-            CustomKnight.Instance.Log("Aplying Settings");
+            CustomKnight.Instance.Log("Applying Settings");
             // apply the skin
             SkinManager.ChangeSkin(skinToApply);
             CustomKnight.GlobalSettings.Preloads = selectedMode == 1;

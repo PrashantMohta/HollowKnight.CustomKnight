@@ -35,7 +35,7 @@ namespace CustomKnight {
                         hasChildren = false
                     };
                     hasChildren = true;
-                    children.Add(objectName,GOP);
+                    children[objectName] = GOP;
                 }
             }
             // check if it has directories

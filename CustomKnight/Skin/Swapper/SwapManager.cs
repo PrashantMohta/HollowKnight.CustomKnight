@@ -12,6 +12,7 @@ using Modding;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Satchel;
+using static Satchel.IoUtils;
 
 namespace CustomKnight {
     public class SwapManager
@@ -101,13 +102,13 @@ namespace CustomKnight {
         }
         
         private void applySkinsUsingProxy(GameObjectProxy gop,GameObject go){
-            CustomKnight.Instance.Log("Traversing : " + gop.getTexturePath());
+            //CustomKnight.Instance.Log("Traversing : " + gop.getTexturePath());
             if(go == null){
                 CustomKnight.Instance.Log("Null Go : " + gop.getTexturePath());
                 return;
             }
             if(gop.hasTexture){
-                CustomKnight.Instance.Log("hasTexture");
+                //CustomKnight.Instance.Log("hasTexture");
                     try{
                         loadTexture(gop);
                     } catch( Exception e){
@@ -119,7 +120,7 @@ namespace CustomKnight {
             }
             //traverse this gop
             if(gop.hasChildren){
-                CustomKnight.Instance.Log("hasChildren");
+                //CustomKnight.Instance.Log("hasChildren");
                 foreach(KeyValuePair<string,GameObjectProxy> kvp in gop.children){
                     try{
                         this.Log(kvp.Key);
@@ -134,12 +135,12 @@ namespace CustomKnight {
             if (Scenes != null && Scenes.TryGetValue(scene.name, out var CurrentSceneDict))
             {
                 var rootGos = Satchel.GameObjectUtils.GetRootGameObjects();
-                foreach(KeyValuePair<string,GameObjectProxy> kvp in CurrentSceneDict){
+                /*foreach(KeyValuePair<string,GameObjectProxy> kvp in CurrentSceneDict){
                     Log($"={kvp.Key}");
-                }
+                }*/
                 foreach(var go in rootGos){
                     if(CurrentSceneDict.TryGetValue(go.GetName(true),out var gop)){
-                        Log($"+{go.GetName(true)}");
+                        //Log($"+{go.GetName(true)}");
                         applySkinsUsingProxy(gop,go);
                     }
                 }
@@ -190,9 +191,7 @@ namespace CustomKnight {
         public void LoadSwapByPath(string pathToLoad){
             if (!File.Exists(Path.Combine(pathToLoad,"replace.txt")))
             {
-                if(!Directory.Exists(pathToLoad)){
-                    Directory.CreateDirectory(pathToLoad);
-                }
+                EnsureDirectory(pathToLoad);
                 File.Create(Path.Combine(pathToLoad,"replace.txt"));
             }
             using(StreamReader reader = File.OpenText(Path.Combine(pathToLoad,"replace.txt")))
@@ -275,17 +274,11 @@ namespace CustomKnight {
             ReplaceStrings  = new Dictionary<string,string>();   
             nextCheck = INITAL_NEXT_CHECK;
 
-            CustomKnight.Instance.Log("DATA_DIR :"+DATA_DIR);
             LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR,SWAP_FOLDER)); // global strings and skins
 
             DATA_DIR = Path.Combine(skinpath,SWAP_FOLDER);
             
-
-            if (!Directory.Exists(DATA_DIR))
-            {
-                Directory.CreateDirectory(DATA_DIR);
-                return;
-            }
+            EnsureDirectory(DATA_DIR);
 
             if (Directory.GetDirectories(DATA_DIR).Length == 0)
             {
@@ -293,10 +286,8 @@ namespace CustomKnight {
                 return;
             }
 
-
             LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
             GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
-
         }
 
         public void resetAllTextures(){

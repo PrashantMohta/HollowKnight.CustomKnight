@@ -14,6 +14,7 @@ using UnityEngine.SceneManagement;
 using Satchel;
 using static Satchel.SpriteUtils;
 using static Satchel.GameObjectUtils;
+using static Satchel.IoUtils;
 
 namespace CustomKnight {
     public class DumpManager{
@@ -77,19 +78,12 @@ namespace CustomKnight {
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Dump");
             Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
-            if (!Directory.Exists(DUMP_DIR))
-            {
-                Directory.CreateDirectory(DUMP_DIR);
-            }
-            if(!Directory.Exists(scenePath)){
-                Directory.CreateDirectory(scenePath);
-            }
+            EnsureDirectory(DUMP_DIR);
+            EnsureDirectory(scenePath);
             
             string outpath = Path.Combine(scenePath,objectName.Replace('/',Path.DirectorySeparatorChar)+".png");
             try{
-                if(!Directory.Exists(Path.GetDirectoryName(outpath))){
-                    Directory.CreateDirectory(Path.GetDirectoryName(outpath));
-                }
+                EnsureDirectory(outpath);
             } catch (IOException e){
 
             }
@@ -106,19 +100,12 @@ namespace CustomKnight {
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Dump");
             Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
-            if (!Directory.Exists(DUMP_DIR))
-            {
-                Directory.CreateDirectory(DUMP_DIR);
-            }
-            if(!Directory.Exists(scenePath)){
-                Directory.CreateDirectory(scenePath);
-            }
+            EnsureDirectory(DUMP_DIR);
+            EnsureDirectory(scenePath);
             
             string outpath = Path.Combine(scenePath,objectName.Replace('/',Path.DirectorySeparatorChar)+".png");
             try{
-                if(!Directory.Exists(Path.GetDirectoryName(outpath))){
-                    Directory.CreateDirectory(Path.GetDirectoryName(outpath));
-                }
+                EnsureDirectory(outpath);
             } catch (IOException e){
 
             }
@@ -135,17 +122,11 @@ namespace CustomKnight {
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Dump");
             Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
-            if (!Directory.Exists(DUMP_DIR))
-            {
-                Directory.CreateDirectory(DUMP_DIR);
-            }
-            if(!Directory.Exists(scenePath)){
-                Directory.CreateDirectory(scenePath);
-            }
+            EnsureDirectory(DUMP_DIR);
+            EnsureDirectory(scenePath);
+            var outpath = Path.GetDirectoryName(Path.Combine(scenePath,key));
             try{
-                if(!Directory.Exists(Path.GetDirectoryName(Path.Combine(scenePath,key)))){
-                    Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(scenePath,key)));
-                }
+                EnsureDirectory(outpath);
             } catch (IOException e){
 
             }

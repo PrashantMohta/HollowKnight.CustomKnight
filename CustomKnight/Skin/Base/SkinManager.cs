@@ -6,6 +6,7 @@ using UnityEngine;
 using Modding;
 using System.Linq;
 
+using static Satchel.IoUtils;
 
 namespace CustomKnight{
     public static class SkinManager{
@@ -127,72 +128,14 @@ namespace CustomKnight{
         }
 
         public static void checkDirectoryStructure(){
-            if (!Directory.Exists(DATA_DIR))
-            {
-                Directory.CreateDirectory(DATA_DIR);
-            }
-            if (!Directory.Exists(SKINS_FOLDER))
-            {
-                Directory.CreateDirectory(SKINS_FOLDER);
-            }
-
+            EnsureDirectory(DATA_DIR);
+            EnsureDirectory(SKINS_FOLDER);
             if (Directory.GetDirectories(SKINS_FOLDER).Length == 0)
             {
                 CustomKnight.Instance.Log("There are no Custom Knight skin folders in the Custom Knight Skins directory.");
                 return;
             }
         }
-        public static bool dirHasPng(string sourceDirectory, SearchOption op){
-           var assets = Directory.EnumerateFiles(sourceDirectory, "*.png", op);
-           return assets.Any();
-        }
-
-        public static void CopyAllFiles(string currentPath,string root){
-            string[] files = Directory.GetFiles(currentPath);
-            foreach(string file in files){
-                try{
-                    File.Copy(file, Path.Combine(root,Path.GetFileName(file)));
-                } catch (Exception e){
-                    CustomKnight.Instance.Log("A File could not be Copied : " + e.ToString());
-                }
-            }
-        }
-
-        public static void getPngsToRoot(string currentPath, string root){
-            try {
-                List<string> queue = new List<string>();
-                string[] dirs = Directory.GetDirectories(currentPath);
-                foreach (string dir in dirs){
-                    CustomKnight.Instance.Log("Looking in" + dir);
-                    if(dirHasPng(dir,SearchOption.TopDirectoryOnly)){
-                        CopyAllFiles(dir,root);
-                    } else if(dirHasPng(dir,SearchOption.AllDirectories)){
-                        queue.Add(dir);
-                    }
-                }
-                foreach(string dir in queue){
-                    getPngsToRoot(dir,root);
-                }
-            } catch (Exception e) {
-                CustomKnight.Instance.Log("The Skin could not be fixed : " + e.ToString());
-            }
-        }
-        public static void fixSkinStructures(){
-            try{
-                string[] skinDirectories = Directory.GetDirectories(SKINS_FOLDER);
-                foreach (string dir in skinDirectories)
-                {
-                    if(!dirHasPng(dir,SearchOption.TopDirectoryOnly) && dirHasPng(dir,SearchOption.AllDirectories)){
-                        CustomKnight.Instance.Log("A broken skin found! " + dir);
-                        getPngsToRoot(dir,dir);
-                    }
-                }
-            } catch (Exception e) {
-                CustomKnight.Instance.Log("Failed to fix : "+ e.ToString());
-            }
-
-        }
-
         public static void init(){      
             
             foreach (string texName in _texNames)

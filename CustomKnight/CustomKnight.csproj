@@ -107,16 +107,21 @@
     <Compile Include="Canvas\CanvasText.cs" />
     <Compile Include="Canvas\GUIController.cs" />
     <Compile Include="Canvas\SkinSwapperPanel.cs" />
+
     <Compile Include="Menu\ModMenu.cs" />
-    <Compile Include="Skin\SkinManager.cs" />
-    <Compile Include="Skin\SpriteLoader.cs" />
-    <Compile Include="Skin\SwapManager.cs" />
-    <Compile Include="Skin\DumpManager.cs" />
-    <Compile Include="Skin\GameObjectProxy.cs" />
+    <Compile Include="Menu\FixSkinStructure.cs" />
+
+    <Compile Include="Skin\Base\CustomKnightTexture.cs" />
+    <Compile Include="Skin\Base\SkinManager.cs" />
+    <Compile Include="Skin\Base\SpriteLoader.cs" />
+
+    <Compile Include="Skin\Swapper\SwapManager.cs" />
+    <Compile Include="Skin\Swapper\DumpManager.cs" />
+    <Compile Include="Skin\Swapper\GameObjectProxy.cs" />
+
     <Compile Include="CustomKnight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="CustomKnightTexture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
