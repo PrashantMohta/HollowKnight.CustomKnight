@@ -17,6 +17,7 @@ using Modding.Menu;
 using Modding.Menu.Config;
 using Patch = Modding.Patches;
 using CustomKnight.Canvas;
+using static Satchel.AssemblyUtils;
 
 namespace CustomKnight
 {
@@ -25,11 +26,13 @@ namespace CustomKnight
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
         public static SaveModSettings SaveSettings { get; set; } = new SaveModSettings();
         public static CustomKnight Instance { get; private set; }
-        
+        public static DumpManager dumpManager {get; private set;} = new DumpManager();
+        public static SwapManager swapManager {get; private set;} = new SwapManager();
+
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
         new public string GetName() => "Custom Knight";
         
-        public override string GetVersion() => "1.5.0-candidate";
+        public override string GetVersion() => $"{GetAssemblyVersionHash()}";
         public void OnLoadGlobal(GlobalModSettings s)
         {
             if(s.Version == GetVersion()){
@@ -72,8 +75,11 @@ namespace CustomKnight
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             
-            Instance = this;
-            SkinManager.checkDirectory();
+            if (Instance == null) 
+            { 
+                Instance = this;
+            }
+            SkinManager.checkDirectoryStructure();
 
             // Initial load
             if (preloadedObjects != null)
@@ -92,14 +98,16 @@ namespace CustomKnight
                 SkinManager.getSkinNames();
 
             }
+            if(CustomKnight.GlobalSettings.SwapperEnabled){
+                swapManager.enabled = true;
+                swapManager.active = true;
+            }
 
-            Swapster.setSwapsterEnabled(CustomKnight.GlobalSettings.swapsterEnabled);
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
             
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }
-            // SkinManager.LoadSkin();
             ModHooks.AfterSavegameLoadHook += LoadSaveGame;
         }
 
@@ -119,6 +127,20 @@ namespace CustomKnight
         public void OnLoadLocal(SaveModSettings s)
         {
             CustomKnight.SaveSettings = s;
+        }
+
+        public static void toggleSwap(bool enable){
+            swapManager.enabled = enable;
+            if(!enable){
+                swapManager.Unload();
+                dumpManager.enabled = false;
+            } else {
+                swapManager.Load();
+            }
+        }
+
+        public static void toggleDump(bool enable){
+            dumpManager.enabled = enable;
         }
 
         public void Unload(){

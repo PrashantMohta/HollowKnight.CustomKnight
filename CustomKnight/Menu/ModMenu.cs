@@ -42,7 +42,7 @@ namespace CustomKnight{
         public static MenuOptionHorizontal skinSelector;
         public static MenuOptionHorizontal modeSelector;
         public static MenuOptionHorizontal stateSelector;
-        public static MenuOptionHorizontal swapsterEnabled,swapsterDumpEnabled;
+        public static MenuOptionHorizontal SwapperEnabled,SwapperDumpEnabled;
         private static void addMenuOptions(ContentArea area){
       
             
@@ -68,7 +68,7 @@ namespace CustomKnight{
             area.AddTextPanel("HelpText",
                     new RelVector2(new Vector2(800f, 105f)),
                     new TextPanelConfig{
-                        Text = "To Add more skins, copy the skins into your Mods/CustomKnight/ folder",
+                        Text = "To Add more skins, copy the skins into your Mods/CustomKnight/Skins/ folder",
                         Size = 25,
                         Font = TextPanelConfig.TextFont.TrajanRegular,
                         Anchor = TextAnchor.MiddleCenter
@@ -115,7 +115,7 @@ namespace CustomKnight{
              area.AddTextPanel("HelpText2",
                     new RelVector2(new Vector2(850f, 105f)),
                     new TextPanelConfig{
-                        Text = "In case your skins wont work, try the button below",
+                        Text = "In case your skins wont work, try the buttons below",
                         Size = 25,
                         Font = TextPanelConfig.TextFont.TrajanRegular,
                         Anchor = TextAnchor.MiddleCenter
@@ -132,15 +132,48 @@ namespace CustomKnight{
                             Style = MenuButtonStyle.VanillaStyle
                         },
                         out MenuButton FixSkinButton
+                    );  
+            
+            area.AddMenuButton(
+                        "DiscordButton",
+                        new MenuButtonConfig
+                        {
+                            Label = "Discord Help me!",
+                            CancelAction = GoToModListMenu,
+                            SubmitAction = OpenLink,
+                            Proceed = true,
+                            Style = MenuButtonStyle.VanillaStyle
+                        },
+                        out MenuButton DiscordButton
                     );    
 
+
+             area.AddTextPanel("HelpText3",
+                    new RelVector2(new Vector2(850f, 105f)),
+                    new TextPanelConfig{
+                        Text = "Experimental features",
+                        Size = 35,
+                        Font = TextPanelConfig.TextFont.TrajanRegular,
+                        Anchor = TextAnchor.MiddleCenter
+                    });  
+                    
+             area.AddTextPanel("HelpText4",
+                    new RelVector2(new Vector2(850f, 105f)),
+                    new TextPanelConfig{
+                        Text = "Note: after enabling Swapper, a restart is Recommended & Dumping resets on restart",
+                        Size = 25,
+                        Font = TextPanelConfig.TextFont.TrajanRegular,
+                        Anchor = TextAnchor.MiddleCenter
+                    });  
+            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
+
             area.AddHorizontalOption(
-                    "Swapster",
+                    "Swapper",
                     new HorizontalOptionConfig
                     {
                         Options = new string[] { "Disabled", "Enabled" },
-                        ApplySetting = (_, i) => {Swapster.setSwapsterEnabled(i == 1);},
-                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(Swapster.isEnabled ? 1 : 0),
+                        ApplySetting = (_, i) => {CustomKnight.toggleSwap(i == 1);},
+                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(CustomKnight.swapManager.enabled ? 1 : 0),
                                
                         CancelAction = GoToModListMenu,
                         Description = new DescriptionInfo
@@ -148,42 +181,33 @@ namespace CustomKnight{
                             Text = "allows skinning any tk2dsprite, for example bosses & enemies",
                             Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
-                        Label = "Swapster",
+                        Label = "Swapper",
                         Style = HorizontalOptionStyle.VanillaStyle
                     },
-                    out swapsterEnabled
+                    out SwapperEnabled
                 );
 
             area.AddHorizontalOption(
-                    "SwapsterDump",
+                    "DumpTex",
                     new HorizontalOptionConfig
                     {
                         Options = new string[] { "Disabled", "Enabled" },
-                        ApplySetting = (_, i) => {Swapster.setDumpEnabled(i == 1);},
-                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(Swapster.dumpingEnabled ? 1 : 0),
+                        ApplySetting = (_, i) => {CustomKnight.toggleDump(i == 1);},
+                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(CustomKnight.dumpManager.enabled ? 1 : 0),
                                
                         CancelAction = GoToModListMenu,
                         Description = new DescriptionInfo
                         {
-                            Text = "Dumps the sprites that swapster supports (causes lag)",
+                            Text = "Dumps the sprites that Swapper supports (Massive lag)",
                             Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
-                        Label = "Swapster Dump",
+                        Label = "Dump Textures",
                         Style = HorizontalOptionStyle.VanillaStyle
                     },
-                    out swapsterDumpEnabled
+                    out SwapperDumpEnabled
                 );
 
-            area.AddTextPanel("HelpText3",
-                    new RelVector2(new Vector2(850f, 105f)),
-                    new TextPanelConfig{
-                        Text = "After Enabling swapster, a restart is Recommended & Dumping resets on restart",
-                        Size = 25,
-                        Font = TextPanelConfig.TextFont.TrajanRegular,
-                        Anchor = TextAnchor.MiddleCenter
-                    });  
-            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
-
+           
         }
         
         public static void GoToModListMenu(object _) {
@@ -192,6 +216,11 @@ namespace CustomKnight{
         }
         public static void GoToModListMenu() => (UIManager.instance).UIGoToDynamicMenu(modsMenu);
 
+        private static void OpenLink(object _) => OpenLink();
+
+        private static void OpenLink(){ 
+            Application.OpenURL("https://discord.com/invite/rqsRHRt25h");
+        }
         private static void FixSkins(object _) => FixSkins();
 
         private static void FixSkins(){ 
@@ -201,7 +230,7 @@ namespace CustomKnight{
 
         private static void apply(){ 
             var skinToApply = SkinManager.skinsArr[selectedSkinIndex];
-            
+            CustomKnight.Instance.Log("Aplying Settings");
             // apply the skin
             SkinManager.ChangeSkin(skinToApply);
             CustomKnight.GlobalSettings.Preloads = selectedMode == 1;
@@ -231,11 +260,11 @@ namespace CustomKnight{
                 stateSelector.menuSetting.RefreshValueFromGameSettings();
             }
 
-            if(swapsterEnabled != null){
-                swapsterEnabled.menuSetting.RefreshValueFromGameSettings();
+            if(SwapperEnabled != null){
+                SwapperEnabled.menuSetting.RefreshValueFromGameSettings();
             }
-            if(swapsterDumpEnabled != null){
-                swapsterDumpEnabled.menuSetting.RefreshValueFromGameSettings();
+            if(SwapperDumpEnabled != null){
+                SwapperDumpEnabled.menuSetting.RefreshValueFromGameSettings();
             }
         }
         public static void setModMenu(string skin,bool preloads){

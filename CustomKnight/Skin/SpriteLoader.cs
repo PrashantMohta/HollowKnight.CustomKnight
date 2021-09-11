@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using HutongGames.PlayMaker.Actions;
-using static CustomKnight.Utils;
+using static Satchel.FsmUtil;
 using static CustomKnight.SkinManager;
+using static Satchel.GameObjectUtils;
 
 namespace CustomKnight
 {
@@ -322,9 +323,7 @@ namespace CustomKnight
                 texRoutineRunning = true;
             }
         }
-
         
-
         public IEnumerator Start()
         {
             yield return new WaitWhile(() => HeroController.instance == null);
@@ -457,12 +456,16 @@ namespace CustomKnight
 
         public static void LoadSprites()
         {
+            if (SkinManager.SKIN_FOLDER == null)
+            {
+                SkinManager.SKIN_FOLDER = "Default";
+            }
             LoadComplete = false;
 
             foreach (KeyValuePair<string, CustomKnightTexture> pair in SkinManager.Textures)
             {
                 CustomKnightTexture texture = pair.Value;
-                string file = (SkinManager.DATA_DIR + "/" + SkinManager.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/");
+                string file = (SkinManager.SKINS_FOLDER + "/" + SkinManager.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/");
                 texture.missing = !File.Exists(file);
                 
                 if (!texture.missing)
@@ -492,8 +495,9 @@ namespace CustomKnight
         private static IEnumerator SetHeroTex()
         {
             yield return new WaitWhile(() => !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
-            
             PullDefaultTextures();
+            CustomKnight.swapManager.resetAllTextures();
+            CustomKnight.swapManager.Swap(Path.Combine(SkinManager.SKINS_FOLDER,SKIN_FOLDER));
 
             var geoTexture = SkinManager.Textures["Geo"].currentTexture;
             if (geoTexture != null && _geoMat != null)

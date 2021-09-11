@@ -103,19 +103,17 @@ namespace CustomKnight{
         };
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 
-        public static string DATA_DIR;
-        public const string SKINS_FOLDER = "CustomKnight";
+        public static string DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
+        public static string SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         public static string SKIN_FOLDER;
 
         public static string[] skinsArr;
         public static string[] skinNamesArr;
 
-        private static Swapster swapster = new Swapster();
-
         public static void getSkinNames(){
             if(skinsArr!= null || skinNamesArr!=null) {return;}
 
-            var dirs = Directory.GetDirectories(DATA_DIR);
+            var dirs = Directory.GetDirectories(SKINS_FOLDER);
             var maxLen = CustomKnight.GlobalSettings.NameLength;
             skinsArr = new string[dirs.Length];
             skinNamesArr = new string[dirs.Length];
@@ -128,28 +126,21 @@ namespace CustomKnight{
             }
         }
 
-        public static void checkDirectory(){
-            switch (SystemInfo.operatingSystemFamily)
-            {
-                case OperatingSystemFamily.MacOSX:
-                    DATA_DIR = Path.GetFullPath(Application.dataPath + "/Resources/Data/Managed/Mods/" + SKINS_FOLDER);
-                    break;
-                default:
-                    DATA_DIR = Path.GetFullPath(Application.dataPath + "/Managed/Mods/" + SKINS_FOLDER);
-                    break;
-            }
-            
+        public static void checkDirectoryStructure(){
             if (!Directory.Exists(DATA_DIR))
             {
                 Directory.CreateDirectory(DATA_DIR);
             }
-
-            if (Directory.GetDirectories(DATA_DIR).Length == 0)
+            if (!Directory.Exists(SKINS_FOLDER))
             {
-                CustomKnight.Instance.Log("There are no Custom Knight skin folders in the Custom Knight directory.");
+                Directory.CreateDirectory(SKINS_FOLDER);
+            }
+
+            if (Directory.GetDirectories(SKINS_FOLDER).Length == 0)
+            {
+                CustomKnight.Instance.Log("There are no Custom Knight skin folders in the Custom Knight Skins directory.");
                 return;
             }
-              
         }
         public static bool dirHasPng(string sourceDirectory, SearchOption op){
            var assets = Directory.EnumerateFiles(sourceDirectory, "*.png", op);
@@ -188,7 +179,7 @@ namespace CustomKnight{
         }
         public static void fixSkinStructures(){
             try{
-                string[] skinDirectories = Directory.GetDirectories(DATA_DIR);
+                string[] skinDirectories = Directory.GetDirectories(SKINS_FOLDER);
                 foreach (string dir in skinDirectories)
                 {
                     if(!dirHasPng(dir,SearchOption.TopDirectoryOnly) && dirHasPng(dir,SearchOption.AllDirectories)){
@@ -233,10 +224,7 @@ namespace CustomKnight{
             {
                 SKIN_FOLDER = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
             }
-
             SpriteLoader.Load();
-            swapster.Swap(Path.Combine(DATA_DIR,SKIN_FOLDER));
-
             On.GeoControl.Start -= GeoControl_Start;
             On.GeoControl.Start += GeoControl_Start;
             ModHooks.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
@@ -247,14 +235,15 @@ namespace CustomKnight{
             SKIN_FOLDER = "Default";
             LoadSkin();
             On.GeoControl.Start -= GeoControl_Start;
-            swapster.Unload();
+            CustomKnight.dumpManager.Unload();
+            CustomKnight.swapManager.Unload();
         }
 
-        public static void ChangeSkin(string buttonName)
+        public static void ChangeSkin(string skinName)
         {
-            if(SKIN_FOLDER == buttonName) { return; } 
-                
-            SKIN_FOLDER = buttonName;
+            CustomKnight.Instance.Log("trying to apply skin " + skinName);
+            if(SKIN_FOLDER == skinName) { return; } 
+            SKIN_FOLDER = skinName;
             GameManager.instance.StartCoroutine(ChangeSkinRoutine());
         }
 

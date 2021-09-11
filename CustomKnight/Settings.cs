@@ -15,7 +15,7 @@ namespace CustomKnight
         public int NameLength {get; set;} = 20;
 
         public bool showMovedText {get; set;} = true;
-        public bool swapsterEnabled {get; set;} = true;
+        public bool SwapperEnabled {get; set;} = true;
     }
 
 }
