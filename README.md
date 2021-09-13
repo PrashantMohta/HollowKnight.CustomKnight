@@ -19,7 +19,7 @@ Linux		~/.local/share/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Ma
 
 1. Download the skin 
 2. Place the skin's images in a directory that is the same name as the skin
-3. Copy this directory to the CustomKnight directory under the game's Mods directoy (mentioned earlier)
+3. Copy this directory to the Skins directory under the game's Mods/CustomKnight directoy (mentioned earlier)
 
 Make sure that the folder you copy opens directly to the image files themselves. That is, when you double click on the folder, it opens up to the PNGs themselves and not to another folder or zip. 
 
@@ -45,13 +45,13 @@ Note that, You do not need to have all the images that Default has in your folde
 
 Using Swapper as a skin author : 
 
- - to replace a sprite : `mods/CustomKnight/<skin>/Swap/<scene-name>/<gameobjectname>.png`
+ - to replace a sprite : `mods/CustomKnight/Skins/<skin>/Swap/<scene-name>/<gameobjectname>.png`
 (will only update once encountered in this scene, refer to the dumped png)
 
-- to replace a text using it's in-game key :  `mods/CustomKnight/<skin>/Swap/<scene-name>/<key>.txt`
+- to replace a text using it's in-game key :  `mods/CustomKnight/Skins/<skin>/Swap/<scene-name>/<key>.txt`
 (scene-name here is just for organisation, the text will update globally)
 
-- to replace a text without it's key (case insensitive find & replace) : add the text in `mods/CustomKnight/<skin>/Swap/replace.txt`
+- to replace a text without it's key (case insensitive find & replace) : add the text in `mods/CustomKnight/Skins/<skin>/Swap/replace.txt`
 
 for example :
 ```
