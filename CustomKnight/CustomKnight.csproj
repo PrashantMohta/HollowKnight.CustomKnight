@@ -98,7 +98,7 @@
       <HintPath>.\Vanilla\UnityEngine.ParticlesLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="Satchel">
-      <HintPath>..\..\SatchelPrivate\bin\Debug\Satchel.dll</HintPath>
+      <HintPath>..\..\Satchel\bin\Debug\Satchel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
