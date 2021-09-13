@@ -15,10 +15,6 @@ Linux		~/.local/share/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Ma
 3. Open the game (may take a while) and load a save.
 4. Pause the game and choose your desired skin from the scrollable menu to the left.
 
-### Customising the mod:
-
-- In the spirit of customisation, the mod let's you customise itself using `CustomKnight.GlobalSettings.json` present in your Saves directory.
-
 ### Installing Skins:
 
 1. Download the skin 
@@ -36,3 +32,35 @@ Make sure that the folder you copy opens directly to the image files themselves.
 4. To use your custom skin, follow steps 2 - 3 in the "Installing Skins" section.
 
 Note that, You do not need to have all the images that Default has in your folder, just the ones you edit will suffice.
+
+
+### Experimental Features:
+
+#### Swapper
+-- adds ability to skin bosses and any other objects that use a tk2dsprite 
+-- adds ability to skin any other non animated objects that use a sprite
+-- adds ability to "skin" text in the game 
+-- ability to dump the sprites / text to make it easier to figure out what to edit
+
+
+Using Swapper as a skin author : 
+
+ - to replace a sprite : `mods/CustomKnight/<skin>/Swap/<scene-name>/<gameobjectname>.png`
+(will only update once encountered in this scene, refer to the dumped png)
+
+- to replace a text using it's in-game key :  `mods/CustomKnight/<skin>/Swap/<scene-name>/<key>.txt`
+(scene-name here is just for organisation, the text will update globally)
+
+- to replace a text without it's key (case insensitive find & replace) : add the text in `mods/CustomKnight/<skin>/Swap/replace.txt`
+
+for example :
+```
+elDer=>Cool Dude
+geo=>Ca$hMoney
+```
+- to Dump assets (very laggy):  enable Swapper Dump in settings : enter the room you want to dump objects /text from and wait till that object or text is on screen and change scene.
+( Dump is triggered by new object creation & scene change) 
+
+Use Swapper to swap things across skins : 
+ - create a Swap folder inside CustomKnight directory : `mods/CustomKnight/Swap/`
+ - treat this as a global "skin" that applies regardless of the skin being selected.
