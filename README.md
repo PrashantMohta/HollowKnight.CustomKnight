@@ -4,16 +4,16 @@ A Hollow Knight mod to load custom texture sheets for the player
 ### Installing the Mod Manually:
 
 1. Extract the .zip file.
-2. Place the output folder under the Mods directory:
+2. Place the output folder under the Mods/CustomKnight directory:
 
 ``` 
-Windows		C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\
-Mac		~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/hollow_knight_Data/Resources/Data/Managed/Mods/
-Linux		~/.local/share/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed/Mods/
+Windows		C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\CustomKnight\
+Mac		~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/hollow_knight_Data/Resources/Data/Managed/Mods/CustomKnight/
+Linux		~/.local/share/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed/Mods/CustomKnight/
 ```
 
 3. Open the game (may take a while) and load a save.
-4. Pause the game and choose your desired skin from the scrollable menu to the left.
+4. Pause the game and go to Settings > Mods > CustomKnight & choose your desired skin.
 
 ### Installing Skins:
 
