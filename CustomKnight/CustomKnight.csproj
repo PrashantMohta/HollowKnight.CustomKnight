@@ -8,9 +8,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>CustomKnight</RootNamespace>
     <AssemblyName>CustomKnight</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <HollowKnightModsDirectory>..\..\linkedtoHKMods</HollowKnightModsDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,10 +37,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\HollowKnight.Modding\OutputFinal\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\HollowKnight.Modding\OutputFinal\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="ModCommon">
-      <HintPath>..\..\ModCommon\ModCommon\bin\Debug\ModCommon.dll</HintPath>
+    <Reference Include="MMHOOK_Assembly-CSharp">
+      <HintPath>..\..\HollowKnight.Modding\OutputFinal\MMHOOK_Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_PlayMaker">
+      <HintPath>..\..\HollowKnight.Modding\OutputFinal\MMHOOK_PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="PlayMaker">
       <HintPath>.\Vanilla\PlayMaker.dll</HintPath>
@@ -58,6 +62,12 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>.\Vanilla\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(VanillaFiles)\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>.\Vanilla\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,19 +97,34 @@
     <Reference Include="UnityEngine.ParticlesLegacyModule">
       <HintPath>.\Vanilla\UnityEngine.ParticlesLegacyModule.dll</HintPath>
     </Reference>
+    <Reference Include="Satchel">
+      <HintPath>..\..\Satchel\bin\Debug\Satchel.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Canvas\CanvasButton.cs" />
-    <Compile Include="Canvas\CanvasImage.cs" />
     <Compile Include="Canvas\CanvasPanel.cs" />
     <Compile Include="Canvas\CanvasText.cs" />
     <Compile Include="Canvas\GUIController.cs" />
-    <Compile Include="Canvas\Scroller.cs" />
     <Compile Include="Canvas\SkinSwapperPanel.cs" />
+
+    <Compile Include="Menu\ModMenu.cs" />
+    <Compile Include="Menu\FixSkinStructure.cs" />
+
+    <Compile Include="Skin\Base\CustomKnightTexture.cs" />
+    <Compile Include="Skin\Base\SkinManager.cs" />
+    <Compile Include="Skin\Base\SpriteLoader.cs" />
+
+    <Compile Include="Skin\Swapper\SwapManager.cs" />
+    <Compile Include="Skin\Swapper\DumpManager.cs" />
+    <Compile Include="Skin\Swapper\GameObjectProxy.cs" />
+
     <Compile Include="CustomKnight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SpriteLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(HollowKnightModsDirectory)/CustomKnight"/>
+    </Target>
 </Project>

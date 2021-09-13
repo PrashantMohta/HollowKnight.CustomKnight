@@ -36,6 +36,7 @@ namespace CustomKnight.Canvas
             t.fontSize = fontSize;
             t.fontStyle = style;
             t.alignment = alignment;
+            t.horizontalOverflow = HorizontalWrapMode.Wrap;
 
             Outline outline = textObj.AddComponent<Outline>();
             outline.effectColor = Color.black;
