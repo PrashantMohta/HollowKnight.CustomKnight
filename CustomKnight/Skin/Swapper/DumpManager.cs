@@ -83,7 +83,7 @@ namespace CustomKnight {
             
             string outpath = Path.Combine(scenePath,objectName.Replace('/',Path.DirectorySeparatorChar)+".png");
             try{
-                EnsureDirectory(outpath);
+                EnsureDirectory(Path.GetDirectoryName(outpath));
             } catch (IOException e){
 
             }
@@ -105,7 +105,7 @@ namespace CustomKnight {
             
             string outpath = Path.Combine(scenePath,objectName.Replace('/',Path.DirectorySeparatorChar)+".png");
             try{
-                EnsureDirectory(outpath);
+                EnsureDirectory(Path.GetDirectoryName(outpath));
             } catch (IOException e){
 
             }
@@ -124,14 +124,14 @@ namespace CustomKnight {
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
             EnsureDirectory(DUMP_DIR);
             EnsureDirectory(scenePath);
-            var outpath = Path.GetDirectoryName(Path.Combine(scenePath,key));
+            var outpath = Path.GetDirectoryName(Path.Combine(scenePath,key+".txt"));
             try{
-                EnsureDirectory(outpath);
+                EnsureDirectory(Path.GetDirectoryName(outpath));
             } catch (IOException e){
 
             }
-            if(!File.Exists(Path.Combine(scenePath,key+".txt"))){
-                File.WriteAllText(Path.Combine(scenePath,key+".txt"),value);
+            if(!File.Exists(outpath)){
+                File.WriteAllText(outpath,value);
             }
         }
         public string SaveTextDump( string key, string sheet , string value){

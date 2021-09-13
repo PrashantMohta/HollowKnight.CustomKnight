@@ -240,6 +240,13 @@ namespace CustomKnight{
 
         private static void FixSkins(){ 
             FixSkinStructure.FixSkins();
+            CustomKnight.Instance.Log("Reapplying Skin");
+            // reset skin folder so the same skin can be re-applied
+            SkinManager.SKIN_FOLDER = null;
+            var skinToApply = SkinManager.skinsArr[selectedSkinIndex];
+            // apply the skin
+            SkinManager.ChangeSkin(skinToApply);
+
         }
         private static void apply(object _) => apply();
 
