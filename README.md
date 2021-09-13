@@ -37,10 +37,10 @@ Note that, You do not need to have all the images that Default has in your folde
 ### Experimental Features:
 
 #### Swapper
--- adds ability to skin bosses and any other objects that use a tk2dsprite 
--- adds ability to skin any other non animated objects that use a sprite
--- adds ability to "skin" text in the game 
--- ability to dump the sprites / text to make it easier to figure out what to edit
+- adds ability to skin bosses and any other objects that use a tk2dsprite 
+- adds ability to skin any other non animated objects that use a sprite
+- adds ability to "skin" text in the game 
+- ability to dump the sprites / text to make it easier to figure out what to edit
 
 
 Using Swapper as a skin author : 
