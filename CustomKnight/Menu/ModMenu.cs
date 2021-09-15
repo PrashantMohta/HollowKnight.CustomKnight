@@ -81,7 +81,7 @@ namespace CustomKnight{
                             Style = DescriptionStyle.HorizOptionSingleLineVanillaStyle
                         },
                         Label = "Select Skin",
-                        Options = SkinManager.skinNamesArr,
+                        Options = SkinManager.skinNamesArr.ToArray(),
                         Style = HorizontalOptionStyle.VanillaStyle
                     },
                     out skinSelector
@@ -246,6 +246,10 @@ namespace CustomKnight{
             var skinToApply = SkinManager.skinsArr[selectedSkinIndex];
             // apply the skin
             SkinManager.ChangeSkin(skinToApply);
+            SkinManager.getSkinNames();
+            RefreshOptions();
+            skinSelector.optionList = SkinManager.skinNamesArr.ToArray();
+
 
         }
         private static void apply(object _) => apply();
