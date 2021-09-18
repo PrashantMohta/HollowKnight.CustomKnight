@@ -87,23 +87,6 @@ namespace CustomKnight{
                     out skinSelector
                 ); 
             
-            area.AddMenuButton(
-                        "OpenButton",
-                        new MenuButtonConfig
-                        {
-                            Label = "Open Skins Folder",
-                            CancelAction = GoToModListMenu,
-                            SubmitAction = OpenSkins,
-                            Proceed = true,
-                            Style = MenuButtonStyle.VanillaStyle,
-                            Description = new DescriptionInfo
-                            {
-                                Text = "To Add more skins, copy the skins into your Skins folder."
-                            }
-                        },
-                        out MenuButton OpenSkinsButton
-                    ); 
-            
             area.AddHorizontalOption(
                     "Mode",
                     new HorizontalOptionConfig
@@ -124,6 +107,23 @@ namespace CustomKnight{
                 ); 
             
 
+            area.AddMenuButton(
+                        "OpenButton",
+                        new MenuButtonConfig
+                        {
+                            Label = "Open skins",
+                            CancelAction = GoToModListMenu,
+                            SubmitAction = OpenSkins,
+                            Proceed = true,
+                            Style = MenuButtonStyle.VanillaStyle,
+                            Description = new DescriptionInfo
+                            {
+                                Text = "To Add more skins, copy the skins into your Skins folder."
+                            }
+                        },
+                        out MenuButton OpenSkinsButton
+                    ); 
+            
             area.AddMenuButton(
                         "FixSkinButton",
                         new MenuButtonConfig
@@ -157,14 +157,13 @@ namespace CustomKnight{
                         out MenuButton DiscordButton
                     );    
 
-            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
 
              area.AddTextPanel("HelpText3",
                     new RelVector2(new Vector2(850f, 105f)),
                     new TextPanelConfig{
                         Text = "Experimental features",
                         Size = 45,
-                        Font = TextPanelConfig.TextFont.TrajanRegular,
+                        Font = TextPanelConfig.TextFont.TrajanBold, //TrajanBold,
                         Anchor = TextAnchor.MiddleCenter
                     });  
                     
@@ -217,7 +216,8 @@ namespace CustomKnight{
                     out SwapperDumpEnabled
                 );
 
-           
+            area.AddStaticPanel("spacer2", new RelVector2(new Vector2(800f, 105f)),out GameObject spacer2);
+
         }
         
         public static void GoToModListMenu(object _) {

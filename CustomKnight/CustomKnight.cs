@@ -30,9 +30,20 @@ namespace CustomKnight
         public static SwapManager swapManager {get; private set;} = new SwapManager();
 
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
+        private void getVersionSafely(){
+            version = Satchel.AssemblyUtils.GetAssemblyVersionHash();
+        }
+        public string version;
         new public string GetName() => "Custom Knight";
-        
-        public override string GetVersion() => $"{GetAssemblyVersionHash()}";
+        public override string GetVersion(){
+            version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            try{
+                getVersionSafely();
+            } catch(Exception e){
+
+            }
+            return version;
+        }
         public void OnLoadGlobal(GlobalModSettings s)
         {
             if(s.Version == GetVersion()){
