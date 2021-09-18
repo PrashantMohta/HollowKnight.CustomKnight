@@ -108,22 +108,29 @@ namespace CustomKnight{
         public static string SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         public static string SKIN_FOLDER;
 
-        public static string[] skinsArr;
-        public static string[] skinNamesArr;
+        public static List<string> skinsArr;
+        public static List<string> skinNamesArr;
 
-        public static void getSkinNames(){
-            if(skinsArr!= null || skinNamesArr!=null) {return;}
-
+        public static void getSkinNames()
+        {
             var dirs = Directory.GetDirectories(SKINS_FOLDER);
             var maxLen = CustomKnight.GlobalSettings.NameLength;
-            skinsArr = new string[dirs.Length];
-            skinNamesArr = new string[dirs.Length];
+
+            if (skinsArr == null)
+            {
+                skinsArr = new List<string>();
+                skinNamesArr = new List<string>();
+            }
+
             for (int i = 0 ; i< dirs.Length ; i++)
             {
                 string directoryName = new DirectoryInfo(dirs[i]).Name;
                 string buttonText = directoryName.Length <= maxLen ? directoryName : directoryName.Substring(0,maxLen - 3) + "...";
-                skinsArr[i] = directoryName;
-                skinNamesArr[i] = buttonText; 
+                
+                if (skinsArr.Contains(directoryName)) continue;
+                
+                skinsArr.Add(directoryName);
+                skinNamesArr.Add(buttonText); 
             }
         }
 
