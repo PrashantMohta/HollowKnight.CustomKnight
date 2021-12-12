@@ -120,11 +120,14 @@ namespace CustomKnight {
             }
             //traverse this gop
             if(gop.hasChildren){
-                //CustomKnight.Instance.Log("hasChildren");
+                //CustomKnight.Instance.Log("hasChildren " + gop.children.Count());
                 foreach(KeyValuePair<string,GameObjectProxy> kvp in gop.children){
                     try{
                         this.Log(kvp.Key);
-                        applySkinsUsingProxy(kvp.Value,go.FindGameObjectInChildren(kvp.Key,true));
+                        var children = go.FindGameObjectsInChildren(kvp.Key,true);
+                        foreach(var child in children){
+                            applySkinsUsingProxy(kvp.Value,child);
+                        }
                     } catch( Exception e){
                         this.Log( kvp.Key + " " + e.ToString());
                     }
@@ -214,14 +217,14 @@ namespace CustomKnight {
             foreach (string path in Directory.GetDirectories(pathToLoad))
             {
                 string directoryName = new DirectoryInfo(path).Name;
-                Log(directoryName);
+                //Log(directoryName);
                 Dictionary<string,GameObjectProxy> objects;
                 if(!Scenes.TryGetValue(directoryName, out objects)){
                     objects = new Dictionary<string,GameObjectProxy>();
                 }
                 foreach(string file in Directory.GetFiles(path)){
                     string filename = Path.GetFileName(file);
-                    Log(filename);
+                    //Log(filename);
                     if(filename.EndsWith(".txt")){
                        try{
                            Strings[filename.Replace(".txt","")] = File.ReadAllText(file);
