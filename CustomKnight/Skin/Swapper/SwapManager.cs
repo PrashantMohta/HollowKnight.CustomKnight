@@ -85,12 +85,11 @@ namespace CustomKnight {
                     this.Log("No tk2dSprite or SpriteRenderer Component found in " + objectPath);
                 } else {
                     //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while
-                    //currently the sprite needs to be scaled by 1.6x (using 64f seems to work too?)
-                    //some sprites are still not perfectly matched with this pivot
+                    //some sprites are still not perfectly matched 
                     CustomKnight.Instance.Log($"game object : {sr.name} ");
                     var pivot = new Vector2(0.5f, 0.5f); // this needs offset sometimes
-                    sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot ,64f);
-                    Log($"pivot post application {sr.sprite.pivot/new Vector2(tex.width, tex.height)}");
+                    sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot ,sr.sprite.pixelsPerUnit);
+                    //Log($"pivot post application {sr.sprite.pivot/new Vector2(tex.width, tex.height)}");
                 }
 
             } else {
