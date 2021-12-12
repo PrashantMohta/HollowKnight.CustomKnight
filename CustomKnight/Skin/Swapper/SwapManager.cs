@@ -133,10 +133,16 @@ namespace CustomKnight {
                 }
             }
         }
+        private void SwapSkinForAllScenes(){
+           var scenes = SceneUtils.GetAllLoadedScenes();
+           foreach(var scene in scenes){ 
+                SwapSkin(scene);
+           }
+        }
         private void SwapSkin(Scene scene){
             if (Scenes != null && Scenes.TryGetValue(scene.name, out var CurrentSceneDict))
             {
-                var rootGos = Satchel.GameObjectUtils.GetRootGameObjects();
+                var rootGos = scene.GetRootGameObjects();
                 /*foreach(KeyValuePair<string,GameObjectProxy> kvp in CurrentSceneDict){
                     Log($"={kvp.Key}");
                 }*/
@@ -151,7 +157,7 @@ namespace CustomKnight {
         private IEnumerator SwapSkinRoutine(Scene scene){
             SwapSkinRoutineRunning = true;
             yield return null;
-            SwapSkin(scene);
+            SwapSkinForAllScenes();
             SwapSkinRoutineRunning = false;
         }
         public void SwapSkinForScene(Scene scene,LoadSceneMode mode){
@@ -165,7 +171,7 @@ namespace CustomKnight {
             if(!active && !enabled) {return;}
             var currentTime = DateTime.Now;
             if(nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck){
-                SwapSkin(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                SwapSkinForAllScenes();
                 nextCheck = (int)Math.Round((float)nextCheck * BACKOFF_MULTIPLIER);
                 lastTime = currentTime;
             }

@@ -31,7 +31,7 @@ namespace CustomKnight {
 
         public Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
 
-        public void dumpSpriteForGo(GameObject go){
+        public void dumpSpriteForGo(Scene scene,GameObject go){            
             var name = go.GetPath(true);
             Log("game object to be dumped -" + go.name);
             Log($"gameobject path {name}");
@@ -44,20 +44,23 @@ namespace CustomKnight {
                 return;
             }
             if(sr != null && sr.sprite != null){
-                SaveSpriteDump(name, sr.sprite);
+                SaveSpriteDump(scene,name, sr.sprite);
                 return;
             } 
             tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
             if(tk2ds != null){
-                SaveTextureDump(name, (Texture2D) tk2ds.GetCurrentSpriteDef().material.mainTexture);
+                SaveTextureDump(scene,name, (Texture2D) tk2ds.GetCurrentSpriteDef().material.mainTexture);
                 return;
             }
         }
         public void dumpAllSprites(){
            if(!enabled) {return;} 
-           var GOList = GameObjectUtils.GetAllGameObjectsInScene();
-           foreach(var go in GOList){
-               dumpSpriteForGo(go);
+           var scenes = SceneUtils.GetAllLoadedScenes();
+           foreach(var scene in scenes){ 
+                var GOList = scene.GetAllGameObjects();
+                foreach(var go in GOList){
+                    dumpSpriteForGo(scene,go);
+                }
            }
         }
 
@@ -68,17 +71,12 @@ namespace CustomKnight {
         public void dumpAllSprites(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
             if(self.gameObject.GameObject.Value != null){
-                if(!enabled) {return;} 
-                var allGoList = GameObjectUtils.GetAllGameObjectsInScene();
-                foreach(var go in allGoList){
-                    dumpSpriteForGo(go);
-                }
+                dumpAllSprites();
             }
         }
-        public void SaveSpriteDump(string objectName, Sprite sprite){
+        public void SaveSpriteDump(Scene scene,string objectName, Sprite sprite){
             if(!enabled) {return;} 
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Dump");
-            Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
             EnsureDirectory(DUMP_DIR);
             EnsureDirectory(scenePath);
@@ -97,10 +95,9 @@ namespace CustomKnight {
                 isTextureDumped[outpath] = true;
             }            
         }
-        public void SaveTextureDump(string objectName, Texture2D texture){
+        public void SaveTextureDump(Scene scene,string objectName, Texture2D texture){
             if(!enabled) {return;} 
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Dump");
-            Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
             EnsureDirectory(DUMP_DIR);
             EnsureDirectory(scenePath);
@@ -126,7 +123,8 @@ namespace CustomKnight {
             string scenePath = Path.Combine(DUMP_DIR,scene.name);
             EnsureDirectory(DUMP_DIR);
             EnsureDirectory(scenePath);
-            var outpath = Path.GetDirectoryName(Path.Combine(scenePath,key+".txt"));
+            var outpath = (Path.Combine(scenePath,key+".txt"));
+
             try{
                 EnsureDirectory(Path.GetDirectoryName(outpath));
             } catch (IOException e){
