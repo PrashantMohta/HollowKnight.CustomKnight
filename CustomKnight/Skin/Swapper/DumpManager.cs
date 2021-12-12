@@ -21,9 +21,11 @@ namespace CustomKnight {
 
         public bool enabled = false;
         public DumpManager(){
-            ModHooks.LanguageGetHook += SaveTextDump;
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += dumpAllSprites;
-            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += dumpAllSprites;
+            if(CustomKnight.isSatchelInstalled()){
+                ModHooks.LanguageGetHook += SaveTextDump;
+                UnityEngine.SceneManagement.SceneManager.sceneLoaded += dumpAllSprites;
+                On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += dumpAllSprites;
+            }
         }
 
 
