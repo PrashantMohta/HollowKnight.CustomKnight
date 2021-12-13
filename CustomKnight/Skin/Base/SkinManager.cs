@@ -100,7 +100,8 @@ namespace CustomKnight{
             "Leak",
             "Liquid",
             "HitPt",
-            "ShadowDashBlobs"
+            "ShadowDashBlobs",
+            "Beam"
         };
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 
