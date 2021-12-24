@@ -11,7 +11,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <VanillaFiles>F:\hkMOD\1.5Moddingapi\</VanillaFiles>
+    <VanillaFiles>..\..\Vanilla</VanillaFiles>
     <ModdingAPi>..\..\HollowKnight.Modding\OutputFinal</ModdingAPi>
     <HollowKnightModsDirectory>..\..\linkedtoHKMods</HollowKnightModsDirectory>
   </PropertyGroup>
@@ -39,19 +39,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(VanillaFiles)Assembly-CSharp.dll</HintPath>
+      <HintPath>$(ModdingAPi)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>$(VanillaFiles)MMHOOK_Assembly-CSharp.dll</HintPath>
+      <HintPath>$(ModdingAPi)\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_PlayMaker">
-      <HintPath>$(VanillaFiles)MMHOOK_PlayMaker.dll</HintPath>
+      <HintPath>$(ModdingAPi)\MMHOOK_PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="PlayMaker">
-      <HintPath>$(VanillaFiles)PlayMaker.dll</HintPath>
+      <HintPath>$(VanillaFiles)\PlayMaker.dll</HintPath>
     </Reference>
-    <Reference Include="Satchel">
-      <HintPath>$(VanillaFiles)Satchel.dll</HintPath>
+    <Reference Include="PlayMaker, Version=1.6.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(VanillaFiles)\PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,37 +60,47 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>$(VanillaFiles)UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>$(VanillaFiles)UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>$(VanillaFiles)\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(VanillaFiles)UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(VanillaFiles)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>$(VanillaFiles)UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(VanillaFiles)UnityEngine.IMGUIModule.dll</HintPath>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(VanillaFiles)\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(VanillaFiles)UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(VanillaFiles)\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>$(VanillaFiles)UnityEngine.ParticleSystemModule.dll</HintPath>
+    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(VanillaFiles)\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Physics2DModule">
-      <HintPath>$(VanillaFiles)UnityEngine.Physics2DModule.dll</HintPath>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(VanillaFiles)\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(VanillaFiles)UnityEngine.TextRenderingModule.dll</HintPath>
+    <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(VanillaFiles)\UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(VanillaFiles)\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(VanillaFiles)UnityEngine.UI.dll</HintPath>
+      <HintPath>$(VanillaFiles)\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>$(VanillaFiles)UnityEngine.UIModule.dll</HintPath>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(VanillaFiles)\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(VanillaFiles)\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(VanillaFiles)\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticlesLegacyModule">
+      <HintPath>$(VanillaFiles)\UnityEngine.ParticlesLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Satchel">
+      <HintPath>..\..\Satchel\bin\Debug\Satchel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -99,20 +109,24 @@
     <Compile Include="Canvas\CanvasText.cs" />
     <Compile Include="Canvas\GUIController.cs" />
     <Compile Include="Canvas\SkinSwapperPanel.cs" />
+
     <Compile Include="Menu\ModMenu.cs" />
     <Compile Include="Menu\FixSkinStructure.cs" />
+
     <Compile Include="Skin\Base\CustomKnightTexture.cs" />
     <Compile Include="Skin\Base\SkinManager.cs" />
     <Compile Include="Skin\Base\SpriteLoader.cs" />
+
     <Compile Include="Skin\Swapper\SwapManager.cs" />
     <Compile Include="Skin\Swapper\DumpManager.cs" />
     <Compile Include="Skin\Swapper\GameObjectProxy.cs" />
+
     <Compile Include="CustomKnight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(HollowKnightModsDirectory)/Custom Knight" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(HollowKnightModsDirectory)/Custom Knight"/>
   </Target>
 </Project>
