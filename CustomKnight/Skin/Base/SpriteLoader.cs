@@ -100,7 +100,6 @@ namespace CustomKnight
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
                 SkinManager.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
                 SkinManager.Textures["Beam"].defaultTex = _BeamRMat.mainTexture as Texture2D;
-
                 if (CustomKnight.GlobalSettings.Preloads)
                 {
                     SkinManager.Textures["Cloak"].defaultTex = _cloakMat.mainTexture as Texture2D;
@@ -377,14 +376,14 @@ namespace CustomKnight
 
             _ShadowDashBlobs = hc.FindGameObjectInChildren("Shadow Dash Blobs").GetComponent<ParticleSystemRenderer>().material;
 
-            _BeamDFMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabD_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamDMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabD.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamUFMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabU_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamUMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabU.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamLFMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabL_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamLMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabL.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamRFMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabR_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamRMat = hc.GetComponent<HeroController>().grubberFlyBeamPrefabR.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamDFMat = HeroController.instance.grubberFlyBeamPrefabD_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamDMat = HeroController.instance.grubberFlyBeamPrefabD.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamUFMat = HeroController.instance.grubberFlyBeamPrefabU_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamUMat = HeroController.instance.grubberFlyBeamPrefabU.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamLFMat = HeroController.instance.grubberFlyBeamPrefabL_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamLMat = HeroController.instance.grubberFlyBeamPrefabL.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamRFMat = HeroController.instance.grubberFlyBeamPrefabR_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamRMat = HeroController.instance.grubberFlyBeamPrefabR.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
             _LiquidMat = GameCameras.instance.hudCanvas.FindGameObjectInChildren("Liquid").GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
