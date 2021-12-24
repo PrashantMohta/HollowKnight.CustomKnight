@@ -134,7 +134,7 @@ namespace CustomKnight {
             }
         }
         private void SwapSkinForAllScenes(){
-           var scenes = SceneUtils.GetAllLoadedScenes();
+           var scenes = SceneUtils.GetAllLoadedScenes(true);
            foreach(var scene in scenes){ 
                 SwapSkin(scene);
            }
@@ -154,10 +154,16 @@ namespace CustomKnight {
                 }
             } 
         }
-        private IEnumerator SwapSkinRoutine(Scene scene){
+         private IEnumerator SwapSkinRoutine(){
             SwapSkinRoutineRunning = true;
             yield return null;
             SwapSkinForAllScenes();
+            SwapSkinRoutineRunning = false;
+        }
+        private IEnumerator SwapSkinRoutine(Scene scene){
+            SwapSkinRoutineRunning = true;
+            yield return null;
+            SwapSkin(scene);
             SwapSkinRoutineRunning = false;
         }
         public void SwapSkinForScene(Scene scene,LoadSceneMode mode){
@@ -295,7 +301,7 @@ namespace CustomKnight {
             }
 
             LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
-            GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
+            GameManager.instance.StartCoroutine(SwapSkinRoutine());
         }
 
         public void resetAllTextures(){
@@ -327,8 +333,9 @@ namespace CustomKnight {
             orig(self);
             if(!active && !enabled) {return;}
             if(self.activate.Value != true) {return;}
-            if(!SwapSkinRoutineRunning){
-                GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
+            if(!SwapSkinRoutineRunning && self?.gameObject?.GameObject?.Value != null){
+                var currentScene = self.gameObject.GameObject.Value.scene;
+                GameManager.instance.StartCoroutine(SwapSkinRoutine(currentScene));
             }
         }
 
