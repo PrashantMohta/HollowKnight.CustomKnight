@@ -85,12 +85,11 @@ namespace CustomKnight {
                     this.Log("No tk2dSprite or SpriteRenderer Component found in " + objectPath);
                 } else {
                     //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while
-                    //currently the sprite needs to be scaled by 1.6x (using 64f seems to work too?)
-                    //some sprites are still not perfectly matched with this pivot
+                    //some sprites are still not perfectly matched 
                     CustomKnight.Instance.Log($"game object : {sr.name} ");
                     var pivot = new Vector2(0.5f, 0.5f); // this needs offset sometimes
-                    sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot ,64f);
-                    Log($"pivot post application {sr.sprite.pivot/new Vector2(tex.width, tex.height)}");
+                    sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot ,sr.sprite.pixelsPerUnit);
+                    //Log($"pivot post application {sr.sprite.pivot/new Vector2(tex.width, tex.height)}");
                 }
 
             } else {
@@ -120,21 +119,30 @@ namespace CustomKnight {
             }
             //traverse this gop
             if(gop.hasChildren){
-                //CustomKnight.Instance.Log("hasChildren");
+                //CustomKnight.Instance.Log("hasChildren " + gop.children.Count());
                 foreach(KeyValuePair<string,GameObjectProxy> kvp in gop.children){
                     try{
                         this.Log(kvp.Key);
-                        applySkinsUsingProxy(kvp.Value,go.FindGameObjectInChildren(kvp.Key,true));
+                        var children = go.FindGameObjectsInChildren(kvp.Key,true);
+                        foreach(var child in children){
+                            applySkinsUsingProxy(kvp.Value,child);
+                        }
                     } catch( Exception e){
                         this.Log( kvp.Key + " " + e.ToString());
                     }
                 }
             }
         }
+        private void SwapSkinForAllScenes(){
+           var scenes = SceneUtils.GetAllLoadedScenes();
+           foreach(var scene in scenes){ 
+                SwapSkin(scene);
+           }
+        }
         private void SwapSkin(Scene scene){
             if (Scenes != null && Scenes.TryGetValue(scene.name, out var CurrentSceneDict))
             {
-                var rootGos = Satchel.GameObjectUtils.GetRootGameObjects();
+                var rootGos = scene.GetRootGameObjects();
                 /*foreach(KeyValuePair<string,GameObjectProxy> kvp in CurrentSceneDict){
                     Log($"={kvp.Key}");
                 }*/
@@ -149,7 +157,7 @@ namespace CustomKnight {
         private IEnumerator SwapSkinRoutine(Scene scene){
             SwapSkinRoutineRunning = true;
             yield return null;
-            SwapSkin(scene);
+            SwapSkinForAllScenes();
             SwapSkinRoutineRunning = false;
         }
         public void SwapSkinForScene(Scene scene,LoadSceneMode mode){
@@ -163,7 +171,7 @@ namespace CustomKnight {
             if(!active && !enabled) {return;}
             var currentTime = DateTime.Now;
             if(nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck){
-                SwapSkin(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                SwapSkinForAllScenes();
                 nextCheck = (int)Math.Round((float)nextCheck * BACKOFF_MULTIPLIER);
                 lastTime = currentTime;
             }
@@ -214,14 +222,14 @@ namespace CustomKnight {
             foreach (string path in Directory.GetDirectories(pathToLoad))
             {
                 string directoryName = new DirectoryInfo(path).Name;
-                Log(directoryName);
+                //Log(directoryName);
                 Dictionary<string,GameObjectProxy> objects;
                 if(!Scenes.TryGetValue(directoryName, out objects)){
                     objects = new Dictionary<string,GameObjectProxy>();
                 }
                 foreach(string file in Directory.GetFiles(path)){
                     string filename = Path.GetFileName(file);
-                    Log(filename);
+                    //Log(filename);
                     if(filename.EndsWith(".txt")){
                        try{
                            Strings[filename.Replace(".txt","")] = File.ReadAllText(file);

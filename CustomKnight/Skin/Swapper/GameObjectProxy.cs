@@ -25,7 +25,7 @@ namespace CustomKnight {
             // check if it has files
             foreach(string file in Directory.GetFiles(path)){
                 string filename = Path.GetFileName(file);
-                Log(filename);
+                //Log(filename);
                 if(filename.EndsWith(".png")){
                     string objectName = filename.Replace(".png","");
                     GameObjectProxy GOP = new GameObjectProxy(){
@@ -41,7 +41,7 @@ namespace CustomKnight {
             // check if it has directories
             foreach(string directory in Directory.GetDirectories(path)){
                 string directoryName = new DirectoryInfo(directory).Name;
-                Log(directoryName);
+                //Log(directoryName);
                 GameObjectProxy GOP;
                 if(!children.TryGetValue(directoryName,out GOP)){
                     GOP = new GameObjectProxy(){
@@ -52,6 +52,7 @@ namespace CustomKnight {
                     };
                 }
                 hasChildren = true;
+                children[directoryName] = GOP;
                 GOP.TraverseGameObjectDirectory(basePath);
             }
 

@@ -69,6 +69,15 @@ namespace CustomKnight
         private static Material _LowHealthLeakMat;
         private static Material _LiquidMat;
         private static Material _ShadowDashBlobs;
+
+        private static Material _BeamUMat;
+        private static Material _BeamDMat;
+        private static Material _BeamLMat;
+        private static Material _BeamRMat;
+        private static Material _BeamUFMat;
+        private static Material _BeamDFMat;
+        private static Material _BeamLFMat;
+        private static Material _BeamRFMat;
         public static void PullDefaultTextures()
         {
             
@@ -90,7 +99,7 @@ namespace CustomKnight
 
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
                 SkinManager.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
-
+                SkinManager.Textures["Beam"].defaultTex = _BeamRMat.mainTexture as Texture2D;
                 if (CustomKnight.GlobalSettings.Preloads)
                 {
                     SkinManager.Textures["Cloak"].defaultTex = _cloakMat.mainTexture as Texture2D;
@@ -271,7 +280,23 @@ namespace CustomKnight
                 _shadeOrbDepartMat.mainTexture = _shadeOrbMat.mainTexture;
 
                 _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
-                
+
+                _BeamRMat.mainTexture = SkinManager.Textures["Beam"].defaultTex;
+
+                _BeamLMat.mainTexture = _BeamRMat.mainTexture;
+
+                _BeamUMat.mainTexture = _BeamRMat.mainTexture;
+
+                _BeamDMat.mainTexture = _BeamRMat.mainTexture;
+
+                _BeamLFMat.mainTexture = _BeamRMat.mainTexture;
+
+                _BeamRFMat.mainTexture = _BeamRMat.mainTexture;
+
+                _BeamUFMat.mainTexture = _BeamRMat.mainTexture;
+
+                _BeamDFMat.mainTexture = _BeamRMat.mainTexture;
+
                 if (CustomKnight.GlobalSettings.Preloads)
                 {
                     _cloakMat.mainTexture = SkinManager.Textures["Cloak"].defaultTex;
@@ -350,6 +375,15 @@ namespace CustomKnight
             _HitPt2Mat = hc.FindGameObjectInChildren("Hit Pt 2").GetComponent<ParticleSystemRenderer>().material;
 
             _ShadowDashBlobs = hc.FindGameObjectInChildren("Shadow Dash Blobs").GetComponent<ParticleSystemRenderer>().material;
+
+            _BeamDFMat = HeroController.instance.grubberFlyBeamPrefabD_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamDMat = HeroController.instance.grubberFlyBeamPrefabD.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamUFMat = HeroController.instance.grubberFlyBeamPrefabU_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamUMat = HeroController.instance.grubberFlyBeamPrefabU.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamLFMat = HeroController.instance.grubberFlyBeamPrefabL_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamLMat = HeroController.instance.grubberFlyBeamPrefabL.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamRFMat = HeroController.instance.grubberFlyBeamPrefabR_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            _BeamRMat = HeroController.instance.grubberFlyBeamPrefabR.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
             _LiquidMat = GameCameras.instance.hudCanvas.FindGameObjectInChildren("Liquid").GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
@@ -529,11 +563,21 @@ namespace CustomKnight
             _shadeMat.mainTexture = SkinManager.Textures["Shade"].currentTexture;
             _shadeOrbMat.mainTexture = SkinManager.Textures["ShadeOrb"].currentTexture;
 
+            _BeamRMat.mainTexture = SkinManager.Textures["Beam"].currentTexture;
+            _BeamRFMat.mainTexture = _BeamRMat.mainTexture;
+            _BeamLFMat.mainTexture = _BeamRMat.mainTexture;
+            _BeamLMat.mainTexture = _BeamRMat.mainTexture;
+            _BeamUFMat.mainTexture = _BeamRMat.mainTexture;
+            _BeamUMat.mainTexture = _BeamRMat.mainTexture;
+            _BeamDFMat.mainTexture = _BeamRMat.mainTexture;
+            _BeamDMat.mainTexture = _BeamRMat.mainTexture;
+
             _shadeOrbReformMat.mainTexture = _shadeOrbMat.mainTexture;
             _shadeOrbRetreatMat.mainTexture = _shadeOrbMat.mainTexture;
             _shadeOrbChargeMat.mainTexture = _shadeOrbMat.mainTexture;
             _shadeOrbDepartMat.mainTexture = _shadeOrbMat.mainTexture;
             _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
+
 
             if (CustomKnight.GlobalSettings.Preloads)
             {

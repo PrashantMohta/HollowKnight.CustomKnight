@@ -100,16 +100,27 @@ namespace CustomKnight{
             "Leak",
             "Liquid",
             "HitPt",
-            "ShadowDashBlobs"
+            "ShadowDashBlobs",
+            "Beam"
         };
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
 
-        public static string DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
-        public static string SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
+        public static string DATA_DIR;
+        public static string SKINS_FOLDER;
         public static string SKIN_FOLDER;
 
         public static List<string> skinsArr;
         public static List<string> skinNamesArr;
+
+        public static void SetDataDir(){
+            DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
+            SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
+        }
+        static SkinManager(){
+            if(CustomKnight.isSatchelInstalled()){
+                SetDataDir();
+            }
+        }
 
         public static void getSkinNames()
         {

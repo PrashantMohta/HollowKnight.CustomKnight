@@ -3,7 +3,7 @@ using Modding;
 namespace CustomKnight
 {
     public class SaveModSettings  {
-        public string DefaultSkin {get; set;} = "Default";
+        public string DefaultSkin {get; set;} = null;
      }
 
     public class GlobalModSettings 

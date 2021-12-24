@@ -30,17 +30,28 @@ namespace CustomKnight
         public static SwapManager swapManager {get; private set;} = new SwapManager();
 
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
-        private void getVersionSafely(){
+        internal static void touchSatchelVersion(){
+            Satchel.AssemblyUtils.Version();
+        }
+        internal static bool isSatchelInstalled(){
+            var isInstalled = false;
+            try{
+                touchSatchelVersion();
+                isInstalled = true;
+            } catch (Exception e){
+                Modding.Logger.Log(e);
+            }
+            return isInstalled;
+        }
+        internal void getVersionSafely(){
             version = Satchel.AssemblyUtils.GetAssemblyVersionHash();
         }
         public string version;
         new public string GetName() => "Custom Knight";
         public override string GetVersion(){
-            version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            try{
+            version = "Satchel not found";
+            if(isSatchelInstalled()){
                 getVersionSafely();
-            } catch(Exception e){
-
             }
             return version;
         }
@@ -90,6 +101,9 @@ namespace CustomKnight
             { 
                 Instance = this;
             }
+            if(!isSatchelInstalled()){
+                return;
+            }
             SkinManager.checkDirectoryStructure();
 
             // Initial load
@@ -131,7 +145,8 @@ namespace CustomKnight
 
         public void LoadSaveGame(SaveGameData data){
             Log("LoadSaveGame");
-            SkinManager.SKIN_FOLDER = SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            SkinManager.SKIN_FOLDER = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            SaveSettings.DefaultSkin = SkinManager.SKIN_FOLDER;
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
             SkinManager.LoadSkin();
         }

@@ -128,7 +128,7 @@ namespace CustomKnight{
                         "FixSkinButton",
                         new MenuButtonConfig
                         {
-                            Label = "Fix skins",
+                            Label = "Fix & reload skins",
                             CancelAction = GoToModListMenu,
                             SubmitAction = FixSkins,
                             Proceed = true,
