@@ -100,15 +100,19 @@ namespace CustomKnight{
             "Leak",
             "Liquid",
             "HitPt",
-            "ShadowDashBlobs",
-            "Beam",
-            "Compass"
+            "ShadowDashBlobs"
         };
         
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
         public static Dictionary<string, Skinnable> Skinnables = new Dictionary<string, Skinnable>{
-            {"Compass",new Compass()},
-            {"Beam",new Grubberfly()}
+            {Compass.NAME,new Compass()},
+            {Grubberfly.NAME,new Grubberfly()},
+            {QOrbs.NAME,new QOrbs()},
+            {QOrbs2.NAME,new QOrbs2()},
+            {ScrOrbs.NAME,new ScrOrbs()},
+            {ScrOrbs2.NAME,new ScrOrbs2()},
+            {DungRecharge.NAME, new DungRecharge()}
+           // {"PinsScarab", new Pins()}
         };
 
         public static string DATA_DIR;
@@ -165,12 +169,14 @@ namespace CustomKnight{
             foreach (string texName in _texNames)
             {
                 CustomKnightTexture texture;
-                if(Skinnables.TryGetValue(texName,out var skinable)){
-                    texture = skinable.ckTex;
-                } else {
-                    texture = new CustomKnightTexture(texName + ".png", false, null, null);
-                }
+                texture = new CustomKnightTexture(texName + ".png", false, null, null);
                 Textures.Add(texName, texture);
+            }
+            foreach (var kvp in Skinnables)
+            {
+                CustomKnightTexture texture;
+                texture = kvp.Value.ckTex;
+                Textures.Add(kvp.Value.name, texture);
             }
         }
 

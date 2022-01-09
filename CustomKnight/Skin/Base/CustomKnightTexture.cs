@@ -5,7 +5,7 @@ namespace CustomKnight{
     {
         public bool missing;
         public string fileName;
-        public Sprite defaultCharmSprite;
+        public Sprite defaultSprite;
         public Texture2D defaultTex;
         public Texture2D tex;
         public Texture2D currentTexture{

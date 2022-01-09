@@ -184,70 +184,69 @@ namespace CustomKnight
                         case 23:
                             charmName = "Charm_" + charmNum + "_Fragile";
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+                            texture.defaultSprite = CharmIconList.Instance.spriteList[charmNum];
 
                             charmName = "Charm_" + charmNum + "_Unbreakable";
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.unbreakableHeart;
+                            texture.defaultSprite = CharmIconList.Instance.unbreakableHeart;
 
                             break;
                         case 24:
                             charmName = "Charm_" + charmNum + "_Fragile";
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+                            texture.defaultSprite = CharmIconList.Instance.spriteList[charmNum];
 
                             charmName = "Charm_" + charmNum + "_Unbreakable";
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.unbreakableGreed;
+                            texture.defaultSprite = CharmIconList.Instance.unbreakableGreed;
 
                             break;
                         case 25:
                             charmName = "Charm_" + charmNum + "_Fragile";
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+                            texture.defaultSprite = CharmIconList.Instance.spriteList[charmNum];
 
                             charmName = "Charm_" + charmNum + "_Unbreakable";
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.unbreakableStrength;
+                            texture.defaultSprite = CharmIconList.Instance.unbreakableStrength;
 
                             break;
                         case 36:
                             PlayMakerFSM charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
 
                             CustomKnightTexture kingsoulLeft = SkinManager.Textures["Charm_" + charmNum + "_Left"]; 
-                            kingsoulLeft.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value as Sprite;
-
+                            kingsoulLeft.defaultSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value as Sprite;
                             CustomKnightTexture kingsoulRight = SkinManager.Textures["Charm_" + charmNum + "_Right"]; 
-                            kingsoulRight.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value as Sprite;
+                            kingsoulRight.defaultSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value as Sprite;
                             
                             CustomKnightTexture kingsoul = SkinManager.Textures["Charm_" + charmNum + "_Full"]; 
-                            kingsoul.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value as Sprite;
+                            kingsoul.defaultSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value as Sprite;
                             
                             CustomKnightTexture voidHeart = SkinManager.Textures["Charm_" + charmNum + "_Black"]; 
-                            voidHeart.defaultCharmSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value as Sprite;
+                            voidHeart.defaultSprite = charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value as Sprite;
                             
                             break;
                         case 40:
                             CustomKnightTexture gcLevel1 = SkinManager.Textures["Charm_40_1"];
-                            gcLevel1.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel1;
+                            gcLevel1.defaultSprite = CharmIconList.Instance.grimmchildLevel1;
 
                             CustomKnightTexture gcLevel2 = SkinManager.Textures["Charm_40_2"];
-                            gcLevel2.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel2;
+                            gcLevel2.defaultSprite = CharmIconList.Instance.grimmchildLevel2;
 
                             CustomKnightTexture gcLevel3 = SkinManager.Textures["Charm_40_3"];
-                            gcLevel3.defaultCharmSprite = CharmIconList.Instance.grimmchildLevel3;
+                            gcLevel3.defaultSprite = CharmIconList.Instance.grimmchildLevel3;
 
                             CustomKnightTexture gcLevel4 = SkinManager.Textures["Charm_40_4"];
-                            gcLevel4.defaultCharmSprite= CharmIconList.Instance.grimmchildLevel4;
+                            gcLevel4.defaultSprite= CharmIconList.Instance.grimmchildLevel4;
 
                             CustomKnightTexture melody = SkinManager.Textures["Charm_40_5"];
-                            melody.defaultCharmSprite = CharmIconList.Instance.nymmCharm;
+                            melody.defaultSprite = CharmIconList.Instance.nymmCharm;
 
                             break;
                         default:
                             charmName = "Charm_" + charmNum;
                             texture = SkinManager.Textures[charmName];
-                            texture.defaultCharmSprite = CharmIconList.Instance.spriteList[charmNum];
+                            texture.defaultSprite = CharmIconList.Instance.spriteList[charmNum];
 
                             break;
                     }
@@ -529,6 +528,12 @@ namespace CustomKnight
         private static IEnumerator SetHeroTex()
         {
             yield return new WaitWhile(() => !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
+            /*foreach(var psr in GameObject.FindObjectsOfType<ParticleSystemRenderer>())
+            {
+                psr.gameObject.LogWithChildren();
+                DumpManager.debugDumpTex((Texture2D)psr.material.mainTexture,psr.name);
+            }*/
+            
             PullDefaultTextures();
             CustomKnight.swapManager.resetAllTextures();
             CustomKnight.swapManager.Swap(Path.Combine(SkinManager.SKINS_FOLDER,SKIN_FOLDER));
@@ -659,36 +664,36 @@ namespace CustomKnight
                         charmName = "Charm_" + charmNum + "_Fragile";
                         texture = SkinManager.Textures[charmName];
                         Texture2D heartTex = texture.tex;
-                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(heartTex, new Rect(0, 0, heartTex.width, heartTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultSprite : Sprite.Create(heartTex, new Rect(0, 0, heartTex.width, heartTex.height), new Vector2(0.5f, 0.5f));
                         
                         charmName = "Charm_" + charmNum + "_Unbreakable";
                         texture = SkinManager.Textures[charmName];
                         Texture2D ubhTex = texture.tex;
-                        CharmIconList.Instance.unbreakableHeart = texture.missing ? texture.defaultCharmSprite : Sprite.Create(ubhTex, new Rect(0, 0, ubhTex.width, ubhTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.unbreakableHeart = texture.missing ? texture.defaultSprite : Sprite.Create(ubhTex, new Rect(0, 0, ubhTex.width, ubhTex.height), new Vector2(0.5f, 0.5f));
 
                         break;
                     case 24:
                         charmName = "Charm_" + charmNum + "_Fragile";
                         texture = SkinManager.Textures[charmName];
                         Texture2D greedTex = texture.tex;
-                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(greedTex, new Rect(0, 0, greedTex.width, greedTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultSprite : Sprite.Create(greedTex, new Rect(0, 0, greedTex.width, greedTex.height), new Vector2(0.5f, 0.5f));
                         
                         charmName = "Charm_" + charmNum + "_Unbreakable";
                         texture = SkinManager.Textures[charmName];
                         Texture2D ubgTex = texture.tex;
-                        CharmIconList.Instance.unbreakableGreed = texture.missing ? texture.defaultCharmSprite : Sprite.Create(ubgTex, new Rect(0, 0, ubgTex.width, ubgTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.unbreakableGreed = texture.missing ? texture.defaultSprite : Sprite.Create(ubgTex, new Rect(0, 0, ubgTex.width, ubgTex.height), new Vector2(0.5f, 0.5f));
                         
                         break;
                     case 25:
                         charmName = "Charm_" + charmNum + "_Fragile";
                         texture = SkinManager.Textures[charmName];
                         Texture2D strTex = texture.tex;
-                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(strTex, new Rect(0, 0, strTex.width, strTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultSprite : Sprite.Create(strTex, new Rect(0, 0, strTex.width, strTex.height), new Vector2(0.5f, 0.5f));
                         
                         charmName = "Charm_" + charmNum + "_Unbreakable";
                         texture = SkinManager.Textures[charmName];
                         Texture2D ubsTex = texture.tex;
-                        CharmIconList.Instance.unbreakableStrength = texture.missing ? texture.defaultCharmSprite : Sprite.Create(ubsTex, new Rect(0, 0, ubsTex.width, ubsTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.unbreakableStrength = texture.missing ? texture.defaultSprite : Sprite.Create(ubsTex, new Rect(0, 0, ubsTex.width, ubsTex.height), new Vector2(0.5f, 0.5f));
 
                         break;
                     case 36:
@@ -697,7 +702,7 @@ namespace CustomKnight
                         CustomKnightTexture kingsoulLeft = SkinManager.Textures["Charm_" + charmNum + "_Left"];
                         if (kingsoulLeft.missing)
                         {
-                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = kingsoulLeft.defaultCharmSprite;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = kingsoulLeft.defaultSprite;
                         }
                         else
                         {
@@ -708,7 +713,7 @@ namespace CustomKnight
                         CustomKnightTexture kingsoulRight = SkinManager.Textures["Charm_" + charmNum + "_Right"];
                         if (kingsoulRight.missing)
                         {
-                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = kingsoulRight.defaultCharmSprite;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = kingsoulRight.defaultSprite;
                         }
                         else
                         {
@@ -719,7 +724,7 @@ namespace CustomKnight
                         CustomKnightTexture kingsoul= SkinManager.Textures["Charm_" + charmNum + "_Full"];
                         if (kingsoul.missing)
                         {
-                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = kingsoul.defaultCharmSprite;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = kingsoul.defaultSprite;
                         }
                         else
                         {
@@ -730,7 +735,7 @@ namespace CustomKnight
                         CustomKnightTexture voidHeart = SkinManager.Textures["Charm_" + charmNum + "_Black"];
                         if (voidHeart.missing)
                         {
-                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = voidHeart.defaultCharmSprite;
+                            charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = voidHeart.defaultSprite;
                         }
                         else
                         {
@@ -743,30 +748,30 @@ namespace CustomKnight
                     case 40:
                         CustomKnightTexture gcLevel1 = SkinManager.Textures["Charm_40_1"];
                         Texture2D gc1Tex = gcLevel1.tex;
-                        CharmIconList.Instance.grimmchildLevel1 = gcLevel1.missing ? gcLevel1.defaultCharmSprite : Sprite.Create(gc1Tex, new Rect(0, 0, gc1Tex.width, gc1Tex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.grimmchildLevel1 = gcLevel1.missing ? gcLevel1.defaultSprite : Sprite.Create(gc1Tex, new Rect(0, 0, gc1Tex.width, gc1Tex.height), new Vector2(0.5f, 0.5f));
                         
                         CustomKnightTexture gcLevel2 = SkinManager.Textures["Charm_40_2"];
                         Texture2D gc2Tex = gcLevel2.tex;
-                        CharmIconList.Instance.grimmchildLevel2 = gcLevel2.missing ? gcLevel2.defaultCharmSprite : Sprite.Create(gc2Tex, new Rect(0, 0, gc2Tex.width, gc2Tex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.grimmchildLevel2 = gcLevel2.missing ? gcLevel2.defaultSprite : Sprite.Create(gc2Tex, new Rect(0, 0, gc2Tex.width, gc2Tex.height), new Vector2(0.5f, 0.5f));
                         
                         CustomKnightTexture gcLevel3 = SkinManager.Textures["Charm_40_3"];
                         Texture2D gc3Tex = gcLevel3.tex;
-                        CharmIconList.Instance.grimmchildLevel3 = gcLevel3.missing ? gcLevel3.defaultCharmSprite : Sprite.Create(gc3Tex, new Rect(0, 0, gc3Tex.width, gc3Tex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.grimmchildLevel3 = gcLevel3.missing ? gcLevel3.defaultSprite : Sprite.Create(gc3Tex, new Rect(0, 0, gc3Tex.width, gc3Tex.height), new Vector2(0.5f, 0.5f));
                         
                         CustomKnightTexture gcLevel4 = SkinManager.Textures["Charm_40_4"];
                         Texture2D gc4Tex = gcLevel4.tex;
-                        CharmIconList.Instance.grimmchildLevel4 = gcLevel4.missing ? gcLevel4.defaultCharmSprite : Sprite.Create(gc4Tex, new Rect(0, 0, gc4Tex.width, gc4Tex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.grimmchildLevel4 = gcLevel4.missing ? gcLevel4.defaultSprite : Sprite.Create(gc4Tex, new Rect(0, 0, gc4Tex.width, gc4Tex.height), new Vector2(0.5f, 0.5f));
 
                         CustomKnightTexture melody = SkinManager.Textures["Charm_40_5"];
                         Texture2D melodyTex = melody.tex;
-                        CharmIconList.Instance.nymmCharm = melody.missing ? melody.defaultCharmSprite : Sprite.Create(melodyTex, new Rect(0, 0, melodyTex.width, melodyTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.nymmCharm = melody.missing ? melody.defaultSprite : Sprite.Create(melodyTex, new Rect(0, 0, melodyTex.width, melodyTex.height), new Vector2(0.5f, 0.5f));
 
                         break;
                     default:
                         charmName = "Charm_" + charmNum;
                         texture = SkinManager.Textures[charmName];
                         Texture2D charmTex = texture.tex;
-                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultCharmSprite : Sprite.Create(charmTex, new Rect(0, 0, charmTex.width, charmTex.height), new Vector2(0.5f, 0.5f));
+                        CharmIconList.Instance.spriteList[charmNum] = texture.missing ? texture.defaultSprite : Sprite.Create(charmTex, new Rect(0, 0, charmTex.width, charmTex.height), new Vector2(0.5f, 0.5f));
                         
                         break;
                 }

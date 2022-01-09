@@ -147,5 +147,12 @@ namespace CustomKnight {
         public void Log(string str) {
             CustomKnight.Instance.Log("[DumpManager] " +str);
         }
+        public static void debugDumpSprite(Sprite sprite){
+            Texture2D dupe = (Texture2D) Satchel.SpriteUtils.ExtractTextureFromSprite(sprite);
+            Satchel.TextureUtils.WriteTextureToFile(dupe,$"{Satchel.AssemblyUtils.getCurrentDirectory()}/{sprite.name}.png");
+        }
+        public static void debugDumpTex(Texture2D tex,string name){
+            Satchel.TextureUtils.WriteTextureToFile(tex,$"{Satchel.AssemblyUtils.getCurrentDirectory()}/{name}.png");
+        }
     }
 }
