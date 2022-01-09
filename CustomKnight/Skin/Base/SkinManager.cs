@@ -104,7 +104,7 @@ namespace CustomKnight{
         };
         
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
-        public static Dictionary<string, Skinnable> Skinnables = new Dictionary<string, Skinnable>{
+        public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Compass.NAME,new Compass()},
             {Grubberfly.NAME,new Grubberfly()},
             {QOrbs.NAME,new QOrbs()},
@@ -168,14 +168,12 @@ namespace CustomKnight{
             
             foreach (string texName in _texNames)
             {
-                CustomKnightTexture texture;
-                texture = new CustomKnightTexture(texName + ".png", false, null, null);
+                CustomKnightTexture texture = new CustomKnightTexture(texName + ".png", false, null, null);
                 Textures.Add(texName, texture);
             }
-            foreach (var kvp in Skinnables)
+            foreach (var kvp in Skinables)
             {
-                CustomKnightTexture texture;
-                texture = kvp.Value.ckTex;
+                CustomKnightTexture texture = kvp.Value.ckTex;
                 Textures.Add(kvp.Value.name, texture);
             }
         }

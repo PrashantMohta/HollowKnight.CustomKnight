@@ -9,7 +9,7 @@ using HutongGames.PlayMaker.Actions;
 
 namespace CustomKnight
 {
-    public class DungRecharge : Skinnable_Multiple
+    public class DungRecharge : Skinable_Multiple
     {
         public static string NAME = "DungRecharge";
         public DungRecharge() : base(DungRecharge.NAME){}
@@ -25,7 +25,7 @@ namespace CustomKnight
             if(materials != null && materials[0].mainTexture != null){
                 ckTex.defaultTex = materials[0].mainTexture as Texture2D;
             } else {
-                Modding.Logger.Log($"skinnable {name} : material is null");
+                Modding.Logger.Log($"skinable {name} : material is null");
             }
         }
 

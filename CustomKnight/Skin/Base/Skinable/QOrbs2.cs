@@ -7,7 +7,7 @@ using static Satchel.GameObjectUtils;
 
 namespace CustomKnight
 {
-    public class QOrbs2 : Skinnable_Tk2d
+    public class QOrbs2 : Skinable_Tk2d
     {
         public static string NAME = "QOrbs2";
         public QOrbs2() : base(QOrbs2.NAME){}

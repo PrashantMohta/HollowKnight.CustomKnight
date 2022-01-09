@@ -98,8 +98,8 @@ namespace CustomKnight
 
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
                 SkinManager.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
-                if(SkinManager.Skinnables != null){
-                    foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
+                if(SkinManager.Skinables != null){
+                    foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                         kvp.Value?.SaveTexture();
                     }
                 }
@@ -283,7 +283,7 @@ namespace CustomKnight
 
                 _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
 
-                foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
+                foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                     kvp.Value.Reset();
                 }
 
@@ -495,8 +495,8 @@ namespace CustomKnight
             {
 
                 CustomKnightTexture texture = pair.Value;
-                if(SkinManager.Skinnables.TryGetValue(pair.Key, out var skinnable)){
-                    texture = skinnable.ckTex;
+                if(SkinManager.Skinables.TryGetValue(pair.Key, out var skinable)){
+                    texture = skinable.ckTex;
                     Modding.Logger.Log($"{pair.Key} found");
                 }
                 string file = (SkinManager.SKINS_FOLDER + "/" + SkinManager.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/");
@@ -568,7 +568,7 @@ namespace CustomKnight
             _shadeMat.mainTexture = SkinManager.Textures["Shade"].currentTexture;
             _shadeOrbMat.mainTexture = SkinManager.Textures["ShadeOrb"].currentTexture;
 
-            foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
+            foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                 kvp.Value.Apply();
             }
             _shadeOrbReformMat.mainTexture = _shadeOrbMat.mainTexture;

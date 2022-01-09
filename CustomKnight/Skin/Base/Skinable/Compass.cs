@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CustomKnight
 {
-    public class Compass : Skinnable_Single
+    public class Compass : Skinable_Single
     {
         public static string NAME = "Compass";
         public Compass() : base(Compass.NAME){}
@@ -17,7 +17,7 @@ namespace CustomKnight
             if(material != null && material.mainTexture != null){
                 ckTex.defaultTex = material.mainTexture as Texture2D;
             } else {
-                Modding.Logger.Log($"skinnable {name} : material is null");
+                Modding.Logger.Log($"skinable {name} : material is null");
             }
         }
         public override void ApplyTexture(Texture2D tex){

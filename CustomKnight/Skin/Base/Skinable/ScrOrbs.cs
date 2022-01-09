@@ -6,7 +6,7 @@ using static Satchel.GameObjectUtils;
 
 namespace CustomKnight
 {
-    public class ScrOrbs : Skinnable_Tk2d
+    public class ScrOrbs : Skinable_Tk2d
     {
         public static string NAME = "ScrOrbs";
         public ScrOrbs() : base(ScrOrbs.NAME){}
