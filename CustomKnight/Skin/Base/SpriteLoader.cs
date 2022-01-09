@@ -80,7 +80,6 @@ namespace CustomKnight
         private static Material _BeamRFMat;
         public static void PullDefaultTextures()
         {
-            
             if (!SkinManager.savedDefaultTextures)
             {
                 SkinManager.Textures["Knight"].defaultTex = _knightMat.mainTexture as Texture2D;
@@ -100,6 +99,11 @@ namespace CustomKnight
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
                 SkinManager.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
                 SkinManager.Textures["Beam"].defaultTex = _BeamRMat.mainTexture as Texture2D;
+                if(SkinManager.Skinnables != null){
+                    foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
+                        kvp.Value?.SaveTexture();
+                    }
+                }
                 if (CustomKnight.GlobalSettings.Preloads)
                 {
                     SkinManager.Textures["Cloak"].defaultTex = _cloakMat.mainTexture as Texture2D;
@@ -297,6 +301,10 @@ namespace CustomKnight
 
                 _BeamDFMat.mainTexture = _BeamRMat.mainTexture;
 
+                foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
+                    kvp.Value.Reset();
+                }
+
                 if (CustomKnight.GlobalSettings.Preloads)
                 {
                     _cloakMat.mainTexture = SkinManager.Textures["Cloak"].defaultTex;
@@ -351,8 +359,9 @@ namespace CustomKnight
         
         public IEnumerator Start()
         {
-            yield return new WaitWhile(() => HeroController.instance == null);
-
+            yield return new WaitWhile(
+                () => HeroController.instance == null || GameManager.instance == null || GameManager.instance.gameMap == null
+            );
             GameObject hc = HeroController.instance.gameObject;
             SceneManager sm = GameManager.instance.GetSceneManager().GetComponent<SceneManager>();
 
@@ -488,6 +497,10 @@ namespace CustomKnight
             LoadComplete = false;
         }
 
+        public static void SetSkin(Dictionary<string, CustomKnightTexture> SkinMap){
+            SkinManager.Textures = SkinMap;
+            ModifyHeroTextures();
+        }
         public static void LoadSprites()
         {
             if (SkinManager.SKIN_FOLDER == null)
@@ -498,7 +511,12 @@ namespace CustomKnight
 
             foreach (KeyValuePair<string, CustomKnightTexture> pair in SkinManager.Textures)
             {
+
                 CustomKnightTexture texture = pair.Value;
+                if(SkinManager.Skinnables.TryGetValue(pair.Key, out var skinnable)){
+                    texture = skinnable.ckTex;
+                    Modding.Logger.Log($"{pair.Key} found");
+                }
                 string file = (SkinManager.SKINS_FOLDER + "/" + SkinManager.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/");
                 texture.missing = !File.Exists(file);
                 
@@ -521,8 +539,7 @@ namespace CustomKnight
                 }    
             }
 
-            ModifyHeroTextures();
-
+            SetSkin(SkinManager.Textures);
             LoadComplete = true;
         }
 
@@ -572,6 +589,9 @@ namespace CustomKnight
             _BeamDFMat.mainTexture = _BeamRMat.mainTexture;
             _BeamDMat.mainTexture = _BeamRMat.mainTexture;
 
+            foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
+                kvp.Value.Apply();
+            }
             _shadeOrbReformMat.mainTexture = _shadeOrbMat.mainTexture;
             _shadeOrbRetreatMat.mainTexture = _shadeOrbMat.mainTexture;
             _shadeOrbChargeMat.mainTexture = _shadeOrbMat.mainTexture;

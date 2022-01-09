@@ -113,6 +113,7 @@
     <Compile Include="Menu\ModMenu.cs" />
     <Compile Include="Menu\FixSkinStructure.cs" />
 
+    <Compile Include="Skin\Base\Skinnable\**\*.cs" />
     <Compile Include="Skin\Base\CustomKnightTexture.cs" />
     <Compile Include="Skin\Base\SkinManager.cs" />
     <Compile Include="Skin\Base\SpriteLoader.cs" />

@@ -101,9 +101,12 @@ namespace CustomKnight{
             "Liquid",
             "HitPt",
             "ShadowDashBlobs",
-            "Beam"
+            "Beam",
+            "Compass"
         };
+        
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
+        public static Dictionary<string, Skinnable> Skinnables = new Dictionary<string, Skinnable>();
 
         public static string DATA_DIR;
         public static string SKINS_FOLDER;
@@ -117,9 +120,13 @@ namespace CustomKnight{
             SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         }
         static SkinManager(){
+            if(Skinnables != null){
+                Skinnables.Add("Compass",new Compass());
+            }
             if(CustomKnight.isSatchelInstalled()){
                 SetDataDir();
             }
+            
         }
 
         public static void getSkinNames()
@@ -158,7 +165,12 @@ namespace CustomKnight{
             
             foreach (string texName in _texNames)
             {
-                CustomKnightTexture texture = new CustomKnightTexture(texName + ".png", false, null, null);
+                CustomKnightTexture texture;
+                if(Skinnables.TryGetValue(texName,out var skinable)){
+                    texture = skinable.ckTex;
+                } else {
+                    texture = new CustomKnightTexture(texName + ".png", false, null, null);
+                }
                 Textures.Add(texName, texture);
             }
         }
