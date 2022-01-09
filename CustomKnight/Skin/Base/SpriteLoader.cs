@@ -98,7 +98,6 @@ namespace CustomKnight
 
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
                 SkinManager.Textures["ShadeOrb"].defaultTex = _shadeOrbMat.mainTexture as Texture2D;
-                SkinManager.Textures["Beam"].defaultTex = _BeamRMat.mainTexture as Texture2D;
                 if(SkinManager.Skinnables != null){
                     foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
                         kvp.Value?.SaveTexture();
@@ -284,22 +283,6 @@ namespace CustomKnight
                 _shadeOrbDepartMat.mainTexture = _shadeOrbMat.mainTexture;
 
                 _shadeOrbQuakeMat.mainTexture = _shadeOrbMat.mainTexture;
-
-                _BeamRMat.mainTexture = SkinManager.Textures["Beam"].defaultTex;
-
-                _BeamLMat.mainTexture = _BeamRMat.mainTexture;
-
-                _BeamUMat.mainTexture = _BeamRMat.mainTexture;
-
-                _BeamDMat.mainTexture = _BeamRMat.mainTexture;
-
-                _BeamLFMat.mainTexture = _BeamRMat.mainTexture;
-
-                _BeamRFMat.mainTexture = _BeamRMat.mainTexture;
-
-                _BeamUFMat.mainTexture = _BeamRMat.mainTexture;
-
-                _BeamDFMat.mainTexture = _BeamRMat.mainTexture;
 
                 foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
                     kvp.Value.Reset();
@@ -579,15 +562,6 @@ namespace CustomKnight
 
             _shadeMat.mainTexture = SkinManager.Textures["Shade"].currentTexture;
             _shadeOrbMat.mainTexture = SkinManager.Textures["ShadeOrb"].currentTexture;
-
-            _BeamRMat.mainTexture = SkinManager.Textures["Beam"].currentTexture;
-            _BeamRFMat.mainTexture = _BeamRMat.mainTexture;
-            _BeamLFMat.mainTexture = _BeamRMat.mainTexture;
-            _BeamLMat.mainTexture = _BeamRMat.mainTexture;
-            _BeamUFMat.mainTexture = _BeamRMat.mainTexture;
-            _BeamUMat.mainTexture = _BeamRMat.mainTexture;
-            _BeamDFMat.mainTexture = _BeamRMat.mainTexture;
-            _BeamDMat.mainTexture = _BeamRMat.mainTexture;
 
             foreach(KeyValuePair<string,Skinnable> kvp in SkinManager.Skinnables){
                 kvp.Value.Apply();

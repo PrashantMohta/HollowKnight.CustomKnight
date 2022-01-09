@@ -106,7 +106,10 @@ namespace CustomKnight{
         };
         
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
-        public static Dictionary<string, Skinnable> Skinnables = new Dictionary<string, Skinnable>();
+        public static Dictionary<string, Skinnable> Skinnables = new Dictionary<string, Skinnable>{
+            {"Compass",new Compass()},
+            {"Beam",new Grubberfly()}
+        };
 
         public static string DATA_DIR;
         public static string SKINS_FOLDER;
@@ -120,13 +123,9 @@ namespace CustomKnight{
             SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         }
         static SkinManager(){
-            if(Skinnables != null){
-                Skinnables.Add("Compass",new Compass());
-            }
             if(CustomKnight.isSatchelInstalled()){
                 SetDataDir();
             }
-            
         }
 
         public static void getSkinNames()
