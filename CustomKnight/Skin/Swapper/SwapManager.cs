@@ -178,7 +178,7 @@ namespace CustomKnight {
         }
 
         public string LanguageGet( string key, string sheet , string orig ){
-            if(!enabled && !active){ 
+            if((!enabled && !active) || orig.All(char.IsDigit)){ 
                 return orig;
             }
             string overrideText;
