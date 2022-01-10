@@ -96,9 +96,6 @@
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(VanillaFiles)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ParticlesLegacyModule">
-      <HintPath>$(VanillaFiles)\UnityEngine.ParticlesLegacyModule.dll</HintPath>
-    </Reference>
     <Reference Include="Satchel">
       <HintPath>..\..\Satchel\bin\Debug\Satchel.dll</HintPath>
     </Reference>

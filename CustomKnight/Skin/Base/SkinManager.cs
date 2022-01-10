@@ -10,8 +10,8 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight{
     public static class SkinManager{
-        public static bool savedDefaultTextures = false;
-        private static List<string> _texNames = new List<string>
+        internal static bool savedDefaultTextures = false;
+        internal static List<string> _texNames = new List<string>
         {
             "Icon",
             "Knight",
@@ -115,14 +115,14 @@ namespace CustomKnight{
            // {"PinsScarab", new Pins()}
         };
 
-        public static string DATA_DIR;
-        public static string SKINS_FOLDER;
-        public static string SKIN_FOLDER;
+        internal static string DATA_DIR;
+        internal static string SKINS_FOLDER;
+        internal static string SKIN_FOLDER;
 
         public static List<string> skinsArr;
         public static List<string> skinNamesArr;
 
-        public static void SetDataDir(){
+        internal static void SetDataDir(){
             DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
             SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         }
@@ -132,7 +132,7 @@ namespace CustomKnight{
             }
         }
 
-        public static void getSkinNames()
+        internal static void getSkinNames()
         {
             var dirs = Directory.GetDirectories(SKINS_FOLDER);
             var maxLen = CustomKnight.GlobalSettings.NameLength;
@@ -155,7 +155,7 @@ namespace CustomKnight{
             }
         }
 
-        public static void checkDirectoryStructure(){
+        internal static void checkDirectoryStructure(){
             EnsureDirectory(DATA_DIR);
             EnsureDirectory(SKINS_FOLDER);
             if (Directory.GetDirectories(SKINS_FOLDER).Length == 0)
@@ -164,7 +164,7 @@ namespace CustomKnight{
                 return;
             }
         }
-        public static void init(){      
+        internal static void init(){      
             
             foreach (string texName in _texNames)
             {
@@ -195,7 +195,7 @@ namespace CustomKnight{
             orig(self);
         }
 
-        public static void LoadSkin(){
+        internal static void LoadSkin(){
             if (SKIN_FOLDER == null)
             {
                 SKIN_FOLDER = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
@@ -206,7 +206,7 @@ namespace CustomKnight{
             ModHooks.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
         }
 
-        public static void Unload(){
+        internal static void Unload(){
             //load default skin for charms and such
             SKIN_FOLDER = "Default";
             LoadSkin();
@@ -215,7 +215,7 @@ namespace CustomKnight{
             CustomKnight.swapManager.Unload();
         }
 
-        public static void ChangeSkin(string skinName)
+        internal static void ChangeSkin(string skinName)
         {
             CustomKnight.Instance.Log("trying to apply skin " + skinName);
             if(SKIN_FOLDER == skinName) { return; } 

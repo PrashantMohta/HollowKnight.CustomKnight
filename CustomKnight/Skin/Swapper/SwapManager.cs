@@ -18,30 +18,30 @@ namespace CustomKnight {
     public class SwapManager
     {
         private string DATA_DIR;
-        public string SWAP_FOLDER = "Swap";
+        internal string SWAP_FOLDER = "Swap";
         private string SEPARATOR = "=>";
-        public float BACKOFF_MULTIPLIER = 1.3f;
-        public int INITAL_NEXT_CHECK = 1000;
+        internal float BACKOFF_MULTIPLIER = 1.3f;
+        internal int INITAL_NEXT_CHECK = 1000;
 
-        public int nextCheck;
-        public Dictionary<string,Dictionary<string,GameObjectProxy>> Scenes;
-        public List<string> currentSkinnedSceneObjs;
-        public Dictionary<string,Texture2D> loadedTextures;
+        internal int nextCheck;
+        internal Dictionary<string,Dictionary<string,GameObjectProxy>> Scenes;
+        internal List<string> currentSkinnedSceneObjs;
+        internal Dictionary<string,Texture2D> loadedTextures;
 
-        public Dictionary<string,Material> materials;
-        public Dictionary<string,Texture2D> defaultTextures;
+        internal Dictionary<string,Material> materials;
+        internal Dictionary<string,Texture2D> defaultTextures;
 
-        public Dictionary<string,string> Strings;
-        public Dictionary<string,string> ReplaceStrings;
-        public DateTime lastTime = DateTime.Now;
+        internal Dictionary<string,string> Strings;
+        internal Dictionary<string,string> ReplaceStrings;
+        internal DateTime lastTime = DateTime.Now;
 
-        public bool active = false;
-        public bool enabled = false;
+        internal bool active = false;
+        internal bool enabled = false;
         public SwapManager(){
                 Load();
         }
        
-        public bool SwapSkinRoutineRunning = false;
+        internal bool SwapSkinRoutineRunning = false;
 
         private void loadTexture(GameObjectProxy gop){
                 string objectPath = gop.getTexturePath();
@@ -160,14 +160,14 @@ namespace CustomKnight {
             SwapSkinForAllScenes();
             SwapSkinRoutineRunning = false;
         }
-        public void SwapSkinForScene(Scene scene,LoadSceneMode mode){
+        internal void SwapSkinForScene(Scene scene,LoadSceneMode mode){
             if(!active && !enabled) {return;}
             currentSkinnedSceneObjs = new List<string>();
             nextCheck = INITAL_NEXT_CHECK;
             GameManager.instance.StartCoroutine(SwapSkinRoutine(scene));
         }
 
-        public void checkForMissedObjects(){
+        internal void checkForMissedObjects(){
             if(!active && !enabled) {return;}
             var currentTime = DateTime.Now;
             if(nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck){
@@ -177,7 +177,7 @@ namespace CustomKnight {
             }
         }
 
-        public string LanguageGet( string key, string sheet , string orig ){
+        internal string LanguageGet( string key, string sheet , string orig ){
             if(!enabled && !active){ 
                 return orig;
             }
@@ -196,7 +196,7 @@ namespace CustomKnight {
             return textValue;
         }
 
-        public void LoadSwapByPath(string pathToLoad){
+        internal void LoadSwapByPath(string pathToLoad){
             if (!File.Exists(Path.Combine(pathToLoad,"replace.txt")))
             {
                 EnsureDirectory(pathToLoad);
@@ -268,7 +268,7 @@ namespace CustomKnight {
             }
         }
         
-        public void Swap(string skinpath)
+        internal void Swap(string skinpath)
         {
 
             Scenes = new Dictionary<string,Dictionary<string,GameObjectProxy>>();
@@ -298,7 +298,7 @@ namespace CustomKnight {
             GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
         }
 
-        public void resetAllTextures(){
+        internal void resetAllTextures(){
             if(materials != null){
                 foreach(KeyValuePair<string,Material> kp in materials){
                     if(kp.Value == null) {
@@ -308,14 +308,14 @@ namespace CustomKnight {
                 }      
             }
         }
-        public void Load(){
+        internal void Load(){
             ModHooks.LanguageGetHook += LanguageGet;
             ModHooks.HeroUpdateHook += checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
         }
 
-        public void Unload(){
+        internal void Unload(){
             ModHooks.LanguageGetHook -= LanguageGet;
             ModHooks.HeroUpdateHook -= checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
@@ -323,7 +323,7 @@ namespace CustomKnight {
             resetAllTextures();
         }
  
-        public void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
+        internal void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
             if(!active && !enabled) {return;}
             if(self.activate.Value != true) {return;}
@@ -332,7 +332,7 @@ namespace CustomKnight {
             }
         }
 
-        public void Log(string str) {
+        internal void Log(string str) {
             CustomKnight.Instance.Log("[SwapManager] " +str);
         }
 

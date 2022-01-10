@@ -18,67 +18,49 @@ namespace CustomKnight
         private static Coroutine setTexRoutine;
 
         
-        public static bool LoadComplete { get; private set; }
+        internal static bool LoadComplete { get; private set; }
 
-        public static Material _geoMat;
-        private static Material _knightMat;
-
-        private static Material _shadeMat;
-        private static Material _shadeOrbReformMat;
-        private static Material _shadeOrbRetreatMat;
-        private static Material _shadeOrbChargeMat;
-        private static Material _shadeOrbDepartMat;
-        private static Material _shadeOrbQuakeMat;
-
-        private static Material _shadeOrbMat;
-
-        private static Material _sprintMat;
-        private static Material _unnMat;
-
-        private static Material _cloakMat;
-        private static Material _shriekMat;
-        private static Material _wingsMat;
-        private static Material _quirrelMat;
-        private static Material _webbedMat;
-        private static Material _dreamMat;
-        private static Material _dnMat;
-        private static Material _hornetMat;
-        private static Material _birthMat;
-        
-        private static Material _baldurMat;
-        private static Material _flukeMat;
-        private static Material _grimmMat;
-        private static Material _shieldMat;
-        private static Material _weaverMat;
-        private static Material _wombMat;
-
-        private static Material _wraithsMat;
-        private static Material _voidMat;
-        private static Material _vsMat;
-        private static Material _hudMat;
-
-        private static Material _featherMat;
-        private static Material _crystalGLMat;
-        private static Material _crystalGRMat;
-        private static Material _crystalWMat;
-
-        private static Material _LeakMat;
-
-        private static Material _HitPt1Mat;
-        private static Material _HitPt2Mat;
-        private static Material _LowHealthLeakMat;
-        private static Material _LiquidMat;
-        private static Material _ShadowDashBlobs;
-
-        private static Material _BeamUMat;
-        private static Material _BeamDMat;
-        private static Material _BeamLMat;
-        private static Material _BeamRMat;
-        private static Material _BeamUFMat;
-        private static Material _BeamDFMat;
-        private static Material _BeamLFMat;
-        private static Material _BeamRFMat;
-        public static void PullDefaultTextures()
+        internal static Material _geoMat;
+        internal static Material _knightMat;
+        internal static Material _shadeMat;
+        internal static Material _shadeOrbReformMat;
+        internal static Material _shadeOrbRetreatMat;
+        internal static Material _shadeOrbChargeMat;
+        internal static Material _shadeOrbDepartMat;
+        internal static Material _shadeOrbQuakeMat;
+        internal static Material _shadeOrbMat;
+        internal static Material _sprintMat;
+        internal static Material _unnMat;
+        internal static Material _cloakMat;
+        internal static Material _shriekMat;
+        internal static Material _wingsMat;
+        internal static Material _quirrelMat;
+        internal static Material _webbedMat;
+        internal static Material _dreamMat;
+        internal static Material _dnMat;
+        internal static Material _hornetMat;
+        internal static Material _birthMat;
+        internal static Material _baldurMat;
+        internal static Material _flukeMat;
+        internal static Material _grimmMat;
+        internal static Material _shieldMat;
+        internal static Material _weaverMat;
+        internal static Material _wombMat;
+        internal static Material _wraithsMat;
+        internal static Material _voidMat;
+        internal static Material _vsMat;
+        internal static Material _hudMat;
+        internal static Material _featherMat;
+        internal static Material _crystalGLMat;
+        internal static Material _crystalGRMat;
+        internal static Material _crystalWMat;
+        internal static Material _LeakMat;
+        internal static Material _HitPt1Mat;
+        internal static Material _HitPt2Mat;
+        internal static Material _LowHealthLeakMat;
+        internal static Material _LiquidMat;
+        internal static Material _ShadowDashBlobs;
+        internal static void PullDefaultTextures()
         {
             if (!SkinManager.savedDefaultTextures)
             {
@@ -255,8 +237,7 @@ namespace CustomKnight
         
             SkinManager.savedDefaultTextures = true;
         }
-
-        public static void UnloadAll()
+        internal static void UnloadAll()
         {    
             if (loader != null)
             {
@@ -316,8 +297,7 @@ namespace CustomKnight
 
             DestroyObjects();
         }
-
-        public static void Load()
+        internal static void Load()
         {
             if (loader == null)
             {
@@ -329,8 +309,7 @@ namespace CustomKnight
             }
              
         }
-
-        public static void ModifyHeroTextures(SaveGameData data = null)
+        internal static void ModifyHeroTextures(SaveGameData data = null)
         {
             if (!texRoutineRunning)
             {
@@ -339,7 +318,7 @@ namespace CustomKnight
             }
         }
         
-        public IEnumerator Start()
+        internal IEnumerator Start()
         {
             yield return new WaitWhile(
                 () => HeroController.instance == null || GameManager.instance == null || GameManager.instance.gameMap == null
@@ -366,15 +345,6 @@ namespace CustomKnight
             _HitPt2Mat = hc.FindGameObjectInChildren("Hit Pt 2").GetComponent<ParticleSystemRenderer>().material;
 
             _ShadowDashBlobs = hc.FindGameObjectInChildren("Shadow Dash Blobs").GetComponent<ParticleSystemRenderer>().material;
-
-            _BeamDFMat = HeroController.instance.grubberFlyBeamPrefabD_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamDMat = HeroController.instance.grubberFlyBeamPrefabD.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamUFMat = HeroController.instance.grubberFlyBeamPrefabU_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamUMat = HeroController.instance.grubberFlyBeamPrefabU.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamLFMat = HeroController.instance.grubberFlyBeamPrefabL_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamLMat = HeroController.instance.grubberFlyBeamPrefabL.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamRFMat = HeroController.instance.grubberFlyBeamPrefabR_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            _BeamRMat = HeroController.instance.grubberFlyBeamPrefabR.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
             _LiquidMat = GameCameras.instance.hudCanvas.FindGameObjectInChildren("Liquid").GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
@@ -479,11 +449,11 @@ namespace CustomKnight
             LoadComplete = false;
         }
 
-        public static void SetSkin(Dictionary<string, CustomKnightTexture> SkinMap){
+        internal static void SetSkin(Dictionary<string, CustomKnightTexture> SkinMap){
             SkinManager.Textures = SkinMap;
             ModifyHeroTextures();
         }
-        public static void LoadSprites()
+        internal static void LoadSprites()
         {
             if (SkinManager.SKIN_FOLDER == null)
             {

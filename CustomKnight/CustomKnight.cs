@@ -155,7 +155,7 @@ namespace CustomKnight
             CustomKnight.SaveSettings = s;
         }
 
-        public static void toggleSwap(bool enable){
+        internal static void toggleSwap(bool enable){
             swapManager.enabled = enable;
             if(!enable){
                 swapManager.Unload();
@@ -165,7 +165,7 @@ namespace CustomKnight
             }
         }
 
-        public static void toggleDump(bool enable){
+        internal static void toggleDump(bool enable){
             dumpManager.enabled = enable;
         }
 
