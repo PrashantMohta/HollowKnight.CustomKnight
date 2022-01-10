@@ -135,7 +135,7 @@ namespace CustomKnight {
             }
         }
         internal string SaveTextDump( string key, string sheet , string value){
-            SaveTextDump( key, value);
+            SaveTextDump(sheet+key, value);
             return value;
         }
 

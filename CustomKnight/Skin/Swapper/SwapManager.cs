@@ -33,6 +33,8 @@ namespace CustomKnight {
 
         internal Dictionary<string,string> Strings;
         internal Dictionary<string,string> ReplaceStrings;
+        internal Dictionary<string,List<string>> ReplaceCache;
+
         internal DateTime lastTime = DateTime.Now;
 
         internal bool active = false;
@@ -182,8 +184,13 @@ namespace CustomKnight {
                 return orig;
             }
             string overrideText;
-            if(Strings != null && Strings.TryGetValue(key, out overrideText)){
+            if(Strings != null && Strings.TryGetValue(sheet+key, out overrideText)){
                 return overrideText;
+            }
+            if(ReplaceCache != null && ReplaceCache.TryGetValue(sheet+key, out var cachedText)){
+                if(cachedText[0] == orig){ // only consider it valid cache if orig matches first element of list
+                    return cachedText[1];
+                }
             }
             string textValue = orig;
             if(ReplaceStrings !=null) {
@@ -191,7 +198,7 @@ namespace CustomKnight {
                     textValue = Regex.Replace(textValue, Regex.Escape(kp.Key), kp.Value.Replace("$","$$"), RegexOptions.IgnoreCase);
                 }
                 //cache for next time
-                Strings[key]=textValue;
+                ReplaceCache[sheet+key]=new List<string>{orig,textValue};
             }
             return textValue;
         }
@@ -279,7 +286,8 @@ namespace CustomKnight {
             defaultTextures = new Dictionary<string, Texture2D>();
 
             Strings  = new Dictionary<string,string>();         
-            ReplaceStrings  = new Dictionary<string,string>();   
+            ReplaceStrings  = new Dictionary<string,string>();
+            ReplaceCache = new Dictionary<string, List<string>>();   
             nextCheck = INITAL_NEXT_CHECK;
 
             LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR,SWAP_FOLDER)); // global strings and skins
@@ -288,13 +296,13 @@ namespace CustomKnight {
             
             EnsureDirectory(DATA_DIR);
 
+            LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
+            
             if (Directory.GetDirectories(DATA_DIR).Length == 0)
             {
-                Log("There are no folders in the Swap directory. Nothing to Swap.");
+                Log("There are no folders in the Swap directory. No textures to Swap.");
                 return;
             }
-
-            LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
             GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
         }
 
