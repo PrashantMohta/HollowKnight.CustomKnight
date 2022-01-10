@@ -28,8 +28,6 @@ namespace CustomKnight
                     GameObject.Destroy(anim);
                 }
                 pin.GetComponent<SpriteRenderer>().sprite = sprite;
-
-                pin.LogWithChildren();
             }
         }
 

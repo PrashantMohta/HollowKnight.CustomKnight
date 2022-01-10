@@ -45,7 +45,6 @@ namespace CustomKnight
             var action2 = HC.LocateMyFSM("Spell Control").GetAction<SpawnObjectFromGlobalPool>("Dung Cloud",0);
             var prefab2 = GameObject.Instantiate(action2.gameObject.Value);
             prefab2.SetActive(false);
-            prefab2.LogWithChildren();
             prefab2.FindGameObjectInChildren("Pt Deep").GetComponent<ParticleSystemRenderer>().material.mainTexture = tex;
             prefab2.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystemRenderer>().material.mainTexture = tex;
             action2.gameObject.Value = prefab2;
