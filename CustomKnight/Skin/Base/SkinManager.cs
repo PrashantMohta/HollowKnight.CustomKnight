@@ -220,7 +220,9 @@ namespace CustomKnight{
             CustomKnight.Instance.Log("trying to apply skin " + skinName);
             if(SKIN_FOLDER == skinName) { return; } 
             SKIN_FOLDER = skinName;
-            GameManager.instance.StartCoroutine(ChangeSkinRoutine());
+            if(HeroController.instance != null){
+                GameManager.instance.StartCoroutine(ChangeSkinRoutine());
+            }
         }
 
         private static IEnumerator ChangeSkinRoutine()

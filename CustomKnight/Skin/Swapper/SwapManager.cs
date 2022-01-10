@@ -207,7 +207,9 @@ namespace CustomKnight {
             if (!File.Exists(Path.Combine(pathToLoad,"replace.txt")))
             {
                 EnsureDirectory(pathToLoad);
-                File.Create(Path.Combine(pathToLoad,"replace.txt"));
+                using (FileStream fs = File.Create(Path.Combine(pathToLoad,"replace.txt"))){
+                    //create and close the stream
+                };
             }
             using(StreamReader reader = File.OpenText(Path.Combine(pathToLoad,"replace.txt")))
             {
@@ -297,7 +299,7 @@ namespace CustomKnight {
             EnsureDirectory(DATA_DIR);
 
             LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
-            
+
             if (Directory.GetDirectories(DATA_DIR).Length == 0)
             {
                 Log("There are no folders in the Swap directory. No textures to Swap.");

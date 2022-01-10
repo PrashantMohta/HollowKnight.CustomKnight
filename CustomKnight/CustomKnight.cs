@@ -133,7 +133,7 @@ namespace CustomKnight
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }
-            ModHooks.AfterSavegameLoadHook += LoadSaveGame;
+            On.HeroController.Start += HeroControllerStart;
         }
 
         public  bool ToggleButtonInsideMenu {get;}= true;
@@ -143,8 +143,9 @@ namespace CustomKnight
             return m;
         }
 
-        public void LoadSaveGame(SaveGameData data){
-            Log("LoadSaveGame");
+        public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
+            orig(self);
+            Log("HeroControllerStart");
             SkinManager.SKIN_FOLDER = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             SaveSettings.DefaultSkin = SkinManager.SKIN_FOLDER;
             ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
@@ -171,7 +172,7 @@ namespace CustomKnight
 
         public void Unload(){
             SkinManager.Unload();
-            ModHooks.AfterSavegameLoadHook -= LoadSaveGame;
+            On.HeroController.Start -= HeroControllerStart;
         }
         public SaveModSettings OnSaveLocal()
         {
