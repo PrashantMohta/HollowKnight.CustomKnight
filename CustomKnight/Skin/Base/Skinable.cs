@@ -27,6 +27,7 @@ namespace CustomKnight
 
         public abstract void SaveDefaultTexture();
         public abstract void ApplyTexture(Texture2D tex);
+        public virtual void prepare(){}
 
         public void SaveTexture(){
             Modding.Logger.Log($"SaveTexture skinable {name}");
@@ -49,7 +50,7 @@ namespace CustomKnight
     public abstract class Skinable_Single : Skinable
     {
         public Skinable_Single(string name) : base(name){}
-        public Material _material;
+        private Material _material;
         public Material material {
             get{ 
                 if(_material == null){
@@ -67,13 +68,19 @@ namespace CustomKnight
         }
 
         public abstract Material GetMaterial();
+        public override void prepare(){
+            var m = GetMaterial();
+            if(m != null){
+                material = m;
+            }
+        }
 
     }
     public abstract class Skinable_Multiple : Skinable
     {
 
         public Skinable_Multiple(string name) : base(name){}
-        public List<Material> _materials;
+        private List<Material> _materials;
         public List<Material> materials {
             get{ 
                 if(_materials == null){
@@ -91,6 +98,13 @@ namespace CustomKnight
         }
 
         public abstract List<Material> GetMaterials();
+        public override void prepare(){
+            var m = GetMaterials();
+            if(m != null && !(m.Exists(i => i == null))){
+                materials = m;
+            }
+        }
+
     }
     public abstract class Skinable_Sprite : Skinable
     {
