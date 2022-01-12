@@ -137,6 +137,7 @@ namespace CustomKnight
             }
         }
         public override void ApplyTexture(Texture2D tex){
+            if(material == null) { return; }
             if(ckTex.defaultTex == null){
                 //incase we do not have the default texture save it.
                 ckTex.defaultTex = material.mainTexture as Texture2D;
@@ -161,6 +162,31 @@ namespace CustomKnight
                 mat.mainTexture = tex;
             }
         }
+    }
+
+    public abstract class Skinable_noCache : Skinable
+    {
+        public Skinable_noCache(string name) : base(name){}
+
+        public abstract Material GetMaterial();
+
+        public override void SaveDefaultTexture(){
+            var material = GetMaterial();
+            if(material != null && material.mainTexture != null){
+                ckTex.defaultTex = material.mainTexture as Texture2D;
+            } else {
+                Modding.Logger.Log($"skinable {name} : material is null");
+            }
+        }
+        public override void ApplyTexture(Texture2D tex){
+            var material = GetMaterial();
+            if(ckTex.defaultTex == null){
+                //incase we do not have the default texture save it.
+                ckTex.defaultTex = material.mainTexture as Texture2D;
+            }
+            material.mainTexture = tex;
+        }
+
     }
 
 }

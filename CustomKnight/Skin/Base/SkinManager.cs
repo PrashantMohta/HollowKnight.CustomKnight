@@ -11,52 +11,54 @@ using static Satchel.IoUtils;
 namespace CustomKnight{
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
-        internal static List<string> _texNames = new List<string>
-        {
-            "Icon",
-            "Knight",
-            "Sprint",
-            "Shade",
-            "Wraiths",
-            "VoidSpells",
-            "VS",
-            "Hud",
-            "OrbFull",
-            "Geo",
-            "Dreamnail",
-            "DreamArrival",
-            "Unn",
-            "Wings",
-            "Quirrel",
-            "Webbed",
-            "Cloak",
-            "Shriek",
-            "Hornet",
-            "Birthplace",
-            "Baldur",
-            "Fluke",
-            "Grimm",
-            "Shield",
-            "Weaver",
-            "Hatchling",
-            "Liquid",
-        };
         
         public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
         public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
-            {Compass.NAME,new Compass()},
-            {Grubberfly.NAME,new Grubberfly()},
+            {Knight.NAME,new Knight()},
+            {Sprint.NAME,new Sprint()},
+            {Unn.NAME,new Unn()},
+            {Shade.NAME,new Shade()},
+            {ShadeOrb.NAME,new ShadeOrb()},
+
+            {Wraiths.NAME,new Wraiths()},
+            {VoidSpells.NAME,new VoidSpells()},
+            {VS.NAME,new VS()},
+
+            {Geo.NAME,new Geo()},
+            {Hud.NAME,new Hud()},
+            {OrbFull.NAME,new OrbFull()},
+            {Liquid.NAME,new Liquid()},
+            
             {QOrbs.NAME,new QOrbs()},
             {QOrbs2.NAME,new QOrbs2()},
             {ScrOrbs.NAME,new ScrOrbs()},
             {ScrOrbs2.NAME,new ScrOrbs2()},
             {DungRecharge.NAME, new DungRecharge()},
-            {ShadeOrb.NAME,new ShadeOrb()},
             {SDCrystalBurst.NAME,new SDCrystalBurst()},
             {DoubleJFeather.NAME,new DoubleJFeather()},
             {Leak.NAME,new Leak()},
             {HitPt.NAME,new HitPt()},
             {ShadowDashBlobs.NAME,new ShadowDashBlobs()},
+
+            {Baldur.NAME,new Baldur()},
+            {Fluke.NAME,new Fluke()},
+            {Grimm.NAME,new Grimm()},
+            {Shield.NAME,new Shield()},
+            {Weaver.NAME,new Weaver()},
+            {Hatchling.NAME,new Hatchling()},
+            {Compass.NAME,new Compass()},
+            {Grubberfly.NAME,new Grubberfly()},
+
+            {"Cloak",new Preload("Cloak",() => CustomKnight.GameObjects["Cloak"])},
+            {"Shriek",new Preload("Shriek",() => CustomKnight.GameObjects["Shriek"])},
+            {"Wings",new Preload("Wings",() => CustomKnight.GameObjects["Wings"])},
+            {"Quirrel",new Preload("Quirrel",() => CustomKnight.GameObjects["Quirrel"])},
+            {"Webbed",new Preload("Webbed",() => CustomKnight.GameObjects["Webbed"])},
+            {"DreamArrival",new Preload("DreamArrival",() => CustomKnight.GameObjects["DreamArrival"])},
+            {"Dreamnail",new Preload("Dreamnail",() => CustomKnight.GameObjects["Dreamnail"])},
+            {"Hornet",new Preload("Hornet",() => CustomKnight.GameObjects["Hornet"])},
+            {"Birthplace",new Preload("Birthplace",() => CustomKnight.GameObjects["Birthplace"])},
+
             {"Charm_0",new Charm("Charm_0",0)},
             {"Charm_1",new Charm("Charm_1",1)},
             {"Charm_2",new Charm("Charm_2",2)},
@@ -164,12 +166,6 @@ namespace CustomKnight{
             }
         }
         internal static void init(){      
-            
-            foreach (string texName in _texNames)
-            {
-                CustomKnightTexture texture = new CustomKnightTexture(texName + ".png", false, null, null);
-                Textures.Add(texName, texture);
-            }
             foreach (var kvp in Skinables)
             {
                 CustomKnightTexture texture = kvp.Value.ckTex;
@@ -177,31 +173,15 @@ namespace CustomKnight{
             }
         }
 
-        private static void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
-        {
-            SpriteLoader._geoMat = self.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
-            
-            //save default texture because we dont have a copy
-            if(SkinManager.Textures["Geo"].defaultTex == null){
-                SkinManager.Textures["Geo"].defaultTex  = (Texture2D)SpriteLoader._geoMat.mainTexture;
-            }
-            var geoTexture = SkinManager.Textures["Geo"].missing ? SkinManager.Textures["Geo"].defaultTex : SkinManager.Textures["Geo"].tex;
-            if (geoTexture != null  && SpriteLoader._geoMat != null)
-            {
-               SpriteLoader._geoMat.mainTexture = geoTexture;
-            }
-            On.GeoControl.Start -= GeoControl_Start;
-            orig(self);
-        }
-
+        
         internal static void LoadSkin(){
             if (SKIN_FOLDER == null)
             {
                 SKIN_FOLDER = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
             }
             SpriteLoader.Load();
-            On.GeoControl.Start -= GeoControl_Start;
-            On.GeoControl.Start += GeoControl_Start;
+            On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
+            On.GeoControl.Start += ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
             ModHooks.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
         }
 
@@ -209,7 +189,7 @@ namespace CustomKnight{
             //load default skin for charms and such
             SKIN_FOLDER = "Default";
             LoadSkin();
-            On.GeoControl.Start -= GeoControl_Start;
+            On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
             CustomKnight.dumpManager.Unload();
             CustomKnight.swapManager.Unload();
         }
