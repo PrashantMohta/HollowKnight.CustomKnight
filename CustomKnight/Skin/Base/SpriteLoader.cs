@@ -54,10 +54,8 @@ namespace CustomKnight
                 SkinManager.Textures["Unn"].defaultTex = _unnMat.mainTexture as Texture2D;
                 
                 SkinManager.Textures["Liquid"].defaultTex = _LiquidMat.mainTexture as Texture2D;
-
-
-
                 SkinManager.Textures["Shade"].defaultTex = _shadeMat.mainTexture as Texture2D;
+                
                 if(SkinManager.Skinables != null){
                     foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                         kvp.Value?.SaveTexture();
