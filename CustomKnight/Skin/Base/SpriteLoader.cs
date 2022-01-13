@@ -20,13 +20,10 @@ namespace CustomKnight
         {
             if (!SkinManager.savedDefaultTextures)
             {                
-                if(SkinManager.Skinables != null){
-                    foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
-                        kvp.Value?.SaveTexture();
-                    }
+                foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
+                    kvp.Value?.SaveTexture();
                 }
             }
-        
             SkinManager.savedDefaultTextures = true;
         }
         internal static void UnloadAll()
@@ -83,9 +80,9 @@ namespace CustomKnight
 
         private static void DestroyObjects()
         {
-            foreach (KeyValuePair<string, CustomKnightTexture> pair in SkinManager.Textures)
+            foreach (KeyValuePair<string, Skinable> pair in SkinManager.Skinables)
             {
-                CustomKnightTexture texture = pair.Value;
+                CustomKnightTexture texture = pair.Value.ckTex;
                 if (texture.tex != null)
                 {
                     Destroy(texture.tex);
@@ -95,30 +92,22 @@ namespace CustomKnight
             LoadComplete = false;
         }
 
-        internal static void SetSkin(Dictionary<string, CustomKnightTexture> SkinMap){
-            SkinManager.Textures = SkinMap;
+        internal static void SetSkin(Dictionary<string, Skinable> SkinableMap){
+            SkinManager.Skinables = SkinableMap;
             ModifyHeroTextures();
         }
         internal static void LoadSprites()
         {
-            foreach (KeyValuePair<string,Skinable> kvp in SkinManager.Skinables)
-            {
-                kvp.Value.prepare();
-            }
+            LoadComplete = false;
             if (SkinManager.SKIN_FOLDER == null)
             {
                 SkinManager.SKIN_FOLDER = "Default";
             }
-            LoadComplete = false;
-
-            foreach (KeyValuePair<string, CustomKnightTexture> pair in SkinManager.Textures)
+            foreach (KeyValuePair<string,Skinable> kvp in SkinManager.Skinables)
             {
+                kvp.Value.prepare();
+                CustomKnightTexture texture = kvp.Value.ckTex;
 
-                CustomKnightTexture texture = pair.Value;
-                if(SkinManager.Skinables.TryGetValue(pair.Key, out var skinable)){
-                    texture = skinable.ckTex;
-                    Modding.Logger.Log($"{pair.Key} found");
-                }
                 string file = (SkinManager.SKINS_FOLDER + "/" + SkinManager.SKIN_FOLDER + "/" + texture.fileName).Replace("\\", "/");
                 texture.missing = !File.Exists(file);
                 
@@ -141,7 +130,7 @@ namespace CustomKnight
                 }    
             }
 
-            SetSkin(SkinManager.Textures);
+            SetSkin(SkinManager.Skinables);
             LoadComplete = true;
         }
 

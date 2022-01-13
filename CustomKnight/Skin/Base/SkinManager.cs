@@ -11,8 +11,6 @@ using static Satchel.IoUtils;
 namespace CustomKnight{
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
-        
-        public static Dictionary<string, CustomKnightTexture> Textures = new Dictionary<string, CustomKnightTexture>();
         public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
@@ -165,12 +163,8 @@ namespace CustomKnight{
                 return;
             }
         }
-        internal static void init(){      
-            foreach (var kvp in Skinables)
-            {
-                CustomKnightTexture texture = kvp.Value.ckTex;
-                Textures.Add(kvp.Value.name, texture);
-            }
+        internal static void init(){
+            CustomKnight.Instance.Log("Init.");
         }
 
         

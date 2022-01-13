@@ -11,9 +11,12 @@ namespace CustomKnight
         public static string NAME = "Geo";
         public Geo() : base(Geo.NAME){}
 
+        public tk2dSpriteDefinition  spriteDefinition;
+
         public void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
         {
-            material = self.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
+            spriteDefinition = self.GetComponent<tk2dSprite>().GetCurrentSpriteDef();
+            material = spriteDefinition.material;
             
             //save default texture because we dont have a copy
             if(ckTex.defaultTex == null){
@@ -29,7 +32,7 @@ namespace CustomKnight
         }
 
         public override Material GetMaterial(){
-            return material;
+            return spriteDefinition?.material;
         }
 
     }
