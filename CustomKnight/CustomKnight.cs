@@ -128,8 +128,8 @@ namespace CustomKnight
                 swapManager.active = true;
             }
 
-            ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
-            
+            BetterMenu.SelectedSkin(SkinManager.SKIN_FOLDER);
+
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }
@@ -138,9 +138,7 @@ namespace CustomKnight
 
         public  bool ToggleButtonInsideMenu {get;}= true;
         public MenuScreen GetMenuScreen(MenuScreen modListMenu,ModToggleDelegates? toggle){
-            MenuScreen m = ModMenu.createMenuScreen(modListMenu,toggle);
-            ModMenu.RefreshOptions();
-            return m;
+            return BetterMenu.GetMenu(modListMenu,toggle);
         }
 
         public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
@@ -148,7 +146,8 @@ namespace CustomKnight
             Log("HeroControllerStart");
             SkinManager.SKIN_FOLDER = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             SaveSettings.DefaultSkin = SkinManager.SKIN_FOLDER;
-            ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
+            BetterMenu.SelectedSkin(SkinManager.SKIN_FOLDER);
+
             SkinManager.LoadSkin();
         }
         public void OnLoadLocal(SaveModSettings s)

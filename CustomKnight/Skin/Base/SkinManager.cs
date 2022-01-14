@@ -113,7 +113,6 @@ namespace CustomKnight{
             {"Charm_40_5",new Charm("Charm_40_5",40)}
            // {"PinsScarab", new Pins()}
         };
-
         internal static string DATA_DIR;
         internal static string SKINS_FOLDER;
         internal static string SKIN_FOLDER;
