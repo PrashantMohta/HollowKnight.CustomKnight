@@ -109,7 +109,6 @@
 
     <Compile Include="Menu\BetterMenu.cs" />
     <Compile Include="Menu\SkinsList.cs" />
-    <Compile Include="Menu\ModMenu.cs" />
     <Compile Include="Menu\FixSkinStructure.cs" />
 
     <Compile Include="Skin\Base\Skinable\**\*.cs" />

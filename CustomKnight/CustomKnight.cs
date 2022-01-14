@@ -119,9 +119,7 @@ namespace CustomKnight
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
 
-                SkinManager.init();
                 SkinManager.getSkinNames();
-
             }
             if(CustomKnight.GlobalSettings.SwapperEnabled){
                 swapManager.enabled = true;

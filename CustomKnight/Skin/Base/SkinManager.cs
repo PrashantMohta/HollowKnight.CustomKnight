@@ -162,10 +162,6 @@ namespace CustomKnight{
                 return;
             }
         }
-        internal static void init(){
-            CustomKnight.Instance.Log("Init.");
-        }
-
         
         internal static void LoadSkin(){
             if (SKIN_FOLDER == null)

@@ -13,10 +13,10 @@ namespace CustomKnight
 {
     public static class BetterMenu
     {
-        public static int selectedSkin = 0;
-        public static Menu MenuRef;
+        internal static int selectedSkin = 0;
+        internal static Menu MenuRef;
 
-        public static void ApplySkin(){
+        internal static void ApplySkin(){
             var skinToApply = SkinManager.skinsArr[selectedSkin];
             Modding.Logger.Log(skinToApply);
             SkinManager.ChangeSkin(skinToApply);
@@ -30,24 +30,24 @@ namespace CustomKnight
             SkinSwapperPanel.hidePanel("");
         }
 
-        public static void SelectedSkin(string skinName){
+        internal static void SelectedSkin(string skinName){
             selectedSkin = SkinManager.skinsArr.FindIndex( skin => skin == skinName);
         }
-        public static void SetPreloadButton(){
+        internal static void SetPreloadButton(){
             var btn = MenuRef.Find("PreloadButton");
             btn.Name = CustomKnight.GlobalSettings.Preloads ? "Gameplay + Events" : "Gameplay only";
             btn.Update();
         }
-        public static void TogglePreloads(){
+        internal static void TogglePreloads(){
             CustomKnight.GlobalSettings.Preloads = !CustomKnight.GlobalSettings.Preloads;
             SetPreloadButton();
         }
-        public static void SetDumpButton(){
+        internal static void SetDumpButton(){
             var btn = (MenuRef?.Find("AdditonalButtonGroup") as IShadowElement)?.GetElements()?.FirstOrDefault<Element>( e => e.Id == "DumpButton");
             btn.Name = CustomKnight.dumpManager.enabled ? "Dumping sprites" : "Dump sprites";
             btn.Update();
         }
-        public static void ToggleDumping(){
+        internal static void ToggleDumping(){
             CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
             SetDumpButton();
         }
@@ -70,7 +70,7 @@ namespace CustomKnight
                 ((HorizontalOption)element).Values = SkinManager.skinNamesArr.ToArray();
             });
         }
-        public static Menu PrepareMenu(ModToggleDelegates toggleDelegates){
+        internal static Menu PrepareMenu(ModToggleDelegates toggleDelegates){
             return new Menu("Custom Knight",new Element[]{
                 Blueprints.CreateToggle(toggleDelegates,"Custom Skins", "", "Enabled","Disabled"),
                 new HorizontalOption(
@@ -113,7 +113,7 @@ namespace CustomKnight
                 
             });
         }
-        public static MenuScreen GetMenu(MenuScreen lastMenu, ModToggleDelegates? toggleDelegates){
+        internal static MenuScreen GetMenu(MenuScreen lastMenu, ModToggleDelegates? toggleDelegates){
             if(MenuRef == null){
                 MenuRef = PrepareMenu((ModToggleDelegates)toggleDelegates);
             }

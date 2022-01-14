@@ -12,8 +12,8 @@ namespace CustomKnight
 {
     public static class SkinsList
     {
-        public static Menu MenuRef;
-        public static MenuScreen lastMenu;
+        internal static Menu MenuRef;
+        internal static MenuScreen lastMenu;
 
         private static bool applying = false;
 
@@ -23,7 +23,7 @@ namespace CustomKnight
             UIManager.instance.UIGoToDynamicMenu(lastMenu);
         }
 
-        public static MenuButton ApplySkinButton(int index){
+        internal static MenuButton ApplySkinButton(int index){
             return new MenuButton(SkinManager.skinNamesArr[index],"",(mb) => {
                     if(!applying){
                         applying = true;
@@ -35,7 +35,7 @@ namespace CustomKnight
                     }
                 });
         }
-        public static Menu PrepareMenu(){
+        internal static Menu PrepareMenu(){
             var menu = new Menu("Select a skin",new Element[]{});
             menu.AddElement(
                 new TextPanel("Select the Skin to Apply")
@@ -45,7 +45,7 @@ namespace CustomKnight
             }
             return menu;
         }
-        public static MenuScreen GetMenu(MenuScreen lastMenu){
+        internal static MenuScreen GetMenu(MenuScreen lastMenu){
             if(MenuRef == null){
                 MenuRef = PrepareMenu();
             }
