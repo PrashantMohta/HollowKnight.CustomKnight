@@ -123,6 +123,7 @@
     <Compile Include="Skin\Swapper\GameObjectProxy.cs" />
 
     <Compile Include="CustomKnight.cs" />
+    <Compile Include="DebugLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>

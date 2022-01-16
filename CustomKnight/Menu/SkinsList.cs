@@ -14,13 +14,37 @@ namespace CustomKnight
     {
         internal static Menu MenuRef;
         internal static MenuScreen lastMenu;
-
         private static bool applying = false;
 
-        private static IEnumerator goBack()
+        private static void setSkinButtonVisibility(bool isVisible){
+           for(var i = 0; i < SkinManager.skinNamesArr.Count ; i++){
+                var btn = MenuRef?.Find($"skinbutton{i}");
+                if(btn != null){
+                    btn.isVisible = isVisible;
+                }
+            }
+            MenuRef.Update();
+        }
+
+        private static IEnumerator applyAndGoBack()
         {
-            yield return new WaitForSeconds(0.2f);
-            UIManager.instance.UIGoToDynamicMenu(lastMenu);
+            //update menu ui
+            MenuRef.Find("helptext").isVisible = false;
+            MenuRef.Find("applying").isVisible = true;
+            setSkinButtonVisibility(false);
+            yield return new WaitForSecondsRealtime(0.2f);
+
+            BetterMenu.ApplySkin();
+            BetterMenu.MenuRef?.Find("SelectSkinOption")?.gameObject?.GetComponent<MenuOptionHorizontal>()?.menuSetting?.RefreshValueFromGameSettings();
+            yield return new WaitForSecondsRealtime(0.2f);
+
+            UIManager.instance.UIGoToDynamicMenu(lastMenu);  
+            yield return new WaitForSecondsRealtime(0.2f);
+
+            //menu ui initial state
+            MenuRef.Find("helptext").isVisible = true;
+            MenuRef.Find("applying").isVisible = false;
+            setSkinButtonVisibility(true);          
         }
 
         internal static MenuButton ApplySkinButton(int index){
@@ -29,17 +53,15 @@ namespace CustomKnight
                         applying = true;
                         // apply the skin
                         BetterMenu.selectedSkin = index;
-                        BetterMenu.ApplySkin();
-                        BetterMenu.MenuRef?.Find("SelectSkinOption")?.gameObject?.GetComponent<MenuOptionHorizontal>()?.menuSetting?.RefreshValueFromGameSettings();
-                        GameManager.instance.StartCoroutine(goBack());
+                        GameManager.instance.StartCoroutine(applyAndGoBack());
                     }
-                });
+                },Id:$"skinbutton{index}");
         }
         internal static Menu PrepareMenu(){
-            var menu = new Menu("Select a skin",new Element[]{});
-            menu.AddElement(
-                new TextPanel("Select the Skin to Apply")
-            );
+            var menu = new Menu("Select a skin",new Element[]{
+                new TextPanel("Select the Skin to Apply",Id:"helptext"),
+                new TextPanel("Applying skin...",Id:"applying"){isVisible=false}
+            });
             for(var i = 0; i < SkinManager.skinNamesArr.Count ; i++){
                 menu.AddElement(ApplySkinButton(i));
             }
@@ -49,6 +71,7 @@ namespace CustomKnight
             if(MenuRef == null){
                 MenuRef = PrepareMenu();
             }
+            
             applying = false;
             SkinsList.lastMenu = lastMenu;
             return MenuRef.GetMenuScreen(lastMenu);

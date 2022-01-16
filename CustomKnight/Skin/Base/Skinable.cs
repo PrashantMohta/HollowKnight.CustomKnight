@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace CustomKnight
 {   
+
     public abstract class Skinable
     {
         public string name;
@@ -30,17 +31,17 @@ namespace CustomKnight
         public virtual void prepare(){}
 
         public void SaveTexture(){
-            Modding.Logger.Log($"SaveTexture skinable {name}");
+            DebugLogger.Log($"SaveTexture skinable {name}");
             SaveDefaultTexture();
         }
 
         public void Apply(){
-            Modding.Logger.Log($"Apply skinable {name}");
+            DebugLogger.Log($"Apply skinable {name}");
             ApplyTexture(ckTex.currentTexture);
         }
 
         public virtual void Reset(){
-            Modding.Logger.Log($"Reset skinable {name}");
+            DebugLogger.Log($"Reset skinable {name}");
             ApplyTexture(ckTex.defaultTex);
         }
         
@@ -114,13 +115,13 @@ namespace CustomKnight
             if(!ckTex.missing){
                 ApplySprite(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
             } else {
-                Modding.Logger.Log($"Missing Sprite for skinable {name}");
+                CustomKnight.Instance.Log($"Missing Sprite for skinable {name}");
                 Reset();
             }
         }
         public abstract void ApplySprite(Sprite sprite);
         public override void Reset(){
-            Modding.Logger.Log($"Reset skinable {name}");
+            DebugLogger.Log($"Reset skinable {name}");
             ApplySprite(ckTex.defaultSprite);
         }
     }
@@ -133,7 +134,7 @@ namespace CustomKnight
             if(material != null && material.mainTexture != null){
                 ckTex.defaultTex = material.mainTexture as Texture2D;
             } else {
-                Modding.Logger.Log($"skinable {name} : material is null");
+                CustomKnight.Instance.Log($"skinable {name} : material is null");
             }
         }
         public override void ApplyTexture(Texture2D tex){
@@ -154,7 +155,7 @@ namespace CustomKnight
             if(materials != null && materials[0].mainTexture != null){
                 ckTex.defaultTex = materials[0].mainTexture as Texture2D;
             } else {
-                Modding.Logger.Log($"skinable {name} : material is null");
+                CustomKnight.Instance.Log($"skinable {name} : material is null");
             }
         }
         public override void ApplyTexture(Texture2D tex){
@@ -175,7 +176,7 @@ namespace CustomKnight
             if(material != null && material.mainTexture != null){
                 ckTex.defaultTex = material.mainTexture as Texture2D;
             } else {
-                Modding.Logger.Log($"skinable {name} : material is null");
+                CustomKnight.Instance.Log($"skinable {name} : material is null");
             }
         }
         public override void ApplyTexture(Texture2D tex){

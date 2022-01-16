@@ -16,12 +16,11 @@ namespace CustomKnight
                 GameMap Map = GameManager.instance.gameMap?.GetComponent<GameMap>();
                 ckTex.defaultSprite = Map.mapMarkersBlue[0].GetComponent<SpriteRenderer>().sprite;
             } catch(Exception e){
-                Modding.Logger.Log($"skinable {name} : {e}");
+                CustomKnight.Instance.Log($"skinable {name} : {e}");
             }
         }
         public override void ApplySprite(Sprite sprite){
             GameMap Map = GameManager.instance.gameMap?.GetComponent<GameMap>();
-            Modding.Logger.Log($"count of markers {Map.mapMarkersBlue.Length}");
             foreach(var pin in Map.mapMarkersBlue){
                 var anim = pin.GetComponent<Animator>();
                 if(anim != null){

@@ -27,7 +27,7 @@ namespace CustomKnight
             if(materials != null && materials[0].mainTexture != null){
                 ckTex.defaultTex = materials[0].mainTexture as Texture2D;
             } else {
-                Modding.Logger.Log($"skinable {name} : material is null");
+                CustomKnight.Instance.Log($"skinable {name} : material is null");
             }
         }
         public override void ApplyTexture(Texture2D tex){

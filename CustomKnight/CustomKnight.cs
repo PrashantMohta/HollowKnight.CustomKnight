@@ -96,7 +96,7 @@ namespace CustomKnight
 
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
-            
+            Log($"Initializing CustomKnight {version}");
             if (Instance == null) 
             { 
                 Instance = this;

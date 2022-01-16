@@ -18,7 +18,6 @@ namespace CustomKnight
 
         internal static void ApplySkin(){
             var skinToApply = SkinManager.skinsArr[selectedSkin];
-            Modding.Logger.Log(skinToApply);
             SkinManager.ChangeSkin(skinToApply);
             // use this when saving so you save to the right settings
             if(GameManager.instance.IsNonGameplayScene()){

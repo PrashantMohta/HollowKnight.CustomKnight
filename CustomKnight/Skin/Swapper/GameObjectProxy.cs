@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Modding.Logger;
+
 namespace CustomKnight {
     public class GameObjectProxy
     {

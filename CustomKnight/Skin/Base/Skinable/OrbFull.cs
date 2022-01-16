@@ -21,7 +21,7 @@ namespace CustomKnight
                     }
                 }
             } catch(Exception e){
-                Modding.Logger.Log($"skinable {name} : {e}");
+                CustomKnight.Instance.Log($"skinable {name} : {e}");
             }
         }
         public override void ApplySprite(Sprite sprite){
