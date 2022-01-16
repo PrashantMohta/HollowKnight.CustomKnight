@@ -42,7 +42,8 @@ namespace CustomKnight
             SetPreloadButton();
         }
         internal static void SetDumpButton(){
-            var btn = (MenuRef?.Find("AdditonalButtonGroup") as IShadowElement)?.GetElements()?.FirstOrDefault<Element>( e => e.Id == "DumpButton");
+            //var btn = (MenuRef?.Find("AdditonalButtonGroup") as IShadowElement)?.GetElements()?.FirstOrDefault<Element>( e => e.Id == "DumpButton");
+            var btn = (MenuRef?.Find("AdditonalButtonGroup") as MenuRow)?.Find("DumpButton");
             btn.Name = CustomKnight.dumpManager.enabled ? "Dumping sprites" : "Dump sprites";
             btn.Update();
         }
