@@ -9,9 +9,10 @@ using System.Linq;
 using static Satchel.IoUtils;
 
 namespace CustomKnight{
+    
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
-        public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
+        internal static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
             {Unn.NAME,new Unn()},
@@ -116,9 +117,8 @@ namespace CustomKnight{
         internal static string DATA_DIR;
         internal static string SKINS_FOLDER;
         internal static string SKIN_FOLDER;
-
-        public static List<string> skinsArr;
-        public static List<string> skinNamesArr;
+        internal static List<string> skinsArr;
+        internal static List<string> skinNamesArr;
 
         internal static void SetDataDir(){
             DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();

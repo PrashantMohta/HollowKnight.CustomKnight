@@ -10,7 +10,7 @@ using MenuOptionHorizontal = UnityEngine.UI.MenuOptionHorizontal;
 
 namespace CustomKnight 
 {
-    public static class SkinsList
+    internal static class SkinsList
     {
         internal static Menu MenuRef;
         internal static MenuScreen lastMenu;
@@ -33,7 +33,7 @@ namespace CustomKnight
             MenuRef.Find("applying").isVisible = true;
             setSkinButtonVisibility(false);
             yield return new WaitForSecondsRealtime(0.2f);
-            BetterMenu.MenuRef?.Find("SelectSkinOption")?.UpdateAfter(_ => BetterMenu.ApplySkin());
+            BetterMenu.MenuRef?.Find("SelectSkinOption")?.updateAfter(_ => BetterMenu.ApplySkin());
             yield return new WaitForSecondsRealtime(0.2f);
 
             UIManager.instance.UIGoToDynamicMenu(lastMenu);  

@@ -19,8 +19,7 @@ using Patch = Modding.Patches;
 using CustomKnight.Canvas;
 using static Satchel.AssemblyUtils;
 
-namespace CustomKnight
-{
+namespace CustomKnight {
     public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod , ITogglableMod
     {
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();

@@ -8,18 +8,13 @@ using static Satchel.FsmUtil;
 using static CustomKnight.SkinManager;
 using static Satchel.GameObjectUtils;
 
-namespace CustomKnight
-{
-    internal class SpriteLoader : MonoBehaviour
-    {
-        private static GameObject loader;
+namespace CustomKnight{
+    internal class SpriteLoader : MonoBehaviour {
         private static bool texRoutineRunning;
         private static Coroutine setTexRoutine;
         internal static bool LoadComplete { get; private set; }
-        internal static void PullDefaultTextures()
-        {
-            if (!SkinManager.savedDefaultTextures)
-            {                
+        internal static void PullDefaultTextures() {
+            if (!SkinManager.savedDefaultTextures) {                
                 foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                     kvp.Value?.SaveTexture();
                 }
@@ -50,16 +45,8 @@ namespace CustomKnight
         }
         internal static void Load()
         {
-            if (loader == null)
-            {
-                loader = new GameObject("Loader");
-                loader.AddComponent<SpriteLoader>();
-                DontDestroyOnLoad(loader);
-            } else {
                 SpriteLoader.LoadSprites();
             }
-             
-        }
         internal static void ModifyHeroTextures(SaveGameData data = null)
         {
             if (!texRoutineRunning)

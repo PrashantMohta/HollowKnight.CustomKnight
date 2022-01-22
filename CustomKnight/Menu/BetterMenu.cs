@@ -11,7 +11,7 @@ using CustomKnight.Canvas;
 
 namespace CustomKnight 
 {
-    public static class BetterMenu
+    internal static class BetterMenu
     {
         internal static int selectedSkin = 0;
         internal static Menu MenuRef;

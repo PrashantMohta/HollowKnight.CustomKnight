@@ -8,7 +8,7 @@ using System.Linq;
 using Satchel;
 using static Modding.Logger;
 namespace CustomKnight {
-    public static class FixSkinStructure
+    internal static class FixSkinStructure
     {
 
         internal static bool dirHasPng(string sourceDirectory, SearchOption op){

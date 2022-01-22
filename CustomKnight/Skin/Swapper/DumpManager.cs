@@ -28,7 +28,6 @@ namespace CustomKnight {
             }
         }
 
-
         internal Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
 
         internal void dumpSpriteForGo(Scene scene,GameObject go){            

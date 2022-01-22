@@ -115,7 +115,7 @@ namespace CustomKnight
             if(!ckTex.missing){
                 ApplySprite(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
             } else {
-                CustomKnight.Instance.Log($"Missing Sprite for skinable {name}");
+                DebugLogger.Log($"Missing Sprite for skinable {name}");
                 Reset();
             }
         }
