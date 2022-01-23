@@ -63,7 +63,7 @@ namespace CustomKnight {
                 CustomKnight.GlobalSettings.Version = GetVersion();
                 CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
             }
-            SkinManager.SKIN_FOLDER = CustomKnight.GlobalSettings.DefaultSkin;
+            SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
         }
 
         public GlobalModSettings OnSaveGlobal()
@@ -125,7 +125,6 @@ namespace CustomKnight {
                 swapManager.active = true;
             }
 
-            BetterMenu.SelectedSkin(SkinManager.SKIN_FOLDER);
 
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
@@ -141,10 +140,10 @@ namespace CustomKnight {
         public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
             orig(self);
             Log("HeroControllerStart");
-            SkinManager.SKIN_FOLDER = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
-            SaveSettings.DefaultSkin = SkinManager.SKIN_FOLDER;
-            BetterMenu.SelectedSkin(SkinManager.SKIN_FOLDER);
-
+            var currentSkinId = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            SkinManager.CurrentSkin = SkinManager.GetSkinById(currentSkinId);
+            SaveSettings.DefaultSkin = SkinManager.CurrentSkin.GetId();
+            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
             SkinManager.LoadSkin();
         }
         public void OnLoadLocal(SaveModSettings s)

@@ -277,8 +277,7 @@ namespace CustomKnight {
             }
         }
         
-        internal void Swap(string skinpath)
-        {
+        internal void resetAndLoadGlobalSwaps(){
 
             Scenes = new Dictionary<string,Dictionary<string,GameObjectProxy>>();
             currentSkinnedSceneObjs = new List<string>();
@@ -293,6 +292,10 @@ namespace CustomKnight {
             nextCheck = INITAL_NEXT_CHECK;
 
             LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR,SWAP_FOLDER)); // global strings and skins
+        }
+        internal void Swap(string skinpath)
+        {
+
 
             DATA_DIR = Path.Combine(skinpath,SWAP_FOLDER);
             

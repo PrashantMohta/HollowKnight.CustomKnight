@@ -14,6 +14,7 @@
     <VanillaFiles>..\..\Vanilla</VanillaFiles>
     <ModdingAPi>..\..\HollowKnight.Modding\OutputFinal</ModdingAPi>
     <HollowKnightModsDirectory>..\..\linkedtoHKMods</HollowKnightModsDirectory>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -117,6 +118,8 @@
     <Compile Include="Skin\Base\CustomKnightTexture.cs" />
     <Compile Include="Skin\Base\SkinManager.cs" />
     <Compile Include="Skin\Base\SpriteLoader.cs" />
+    <Compile Include="Skin\Base\TextureCache.cs" />
+    <Compile Include="Skin\Base\SelectableSkin.cs" />
 
     <Compile Include="Skin\Swapper\SwapManager.cs" />
     <Compile Include="Skin\Swapper\DumpManager.cs" />

@@ -12,7 +12,8 @@ namespace CustomKnight
         public string Version {get; set;} = "";
         public bool Preloads {get; set;} = true;
         public string DefaultSkin {get; set;} = "Default";
-        public int NameLength {get; set;} = 20;
+        public int NameLength {get; set;} = 20; 
+        public int MaxSkinCache {get; set;} = 10; // it can be 10 because in most cases people will use 1-2 skins in one session anyway.
 
         public bool showMovedText {get; set;} = true;
         public bool SwapperEnabled {get; set;} = true;

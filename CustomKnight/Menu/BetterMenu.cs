@@ -17,20 +17,13 @@ namespace CustomKnight
         internal static Menu MenuRef;
 
         internal static void ApplySkin(){
-            var skinToApply = SkinManager.skinsArr[selectedSkin];
-            SkinManager.ChangeSkin(skinToApply);
-            // use this when saving so you save to the right settings
-            if(GameManager.instance.IsNonGameplayScene()){
-                CustomKnight.GlobalSettings.DefaultSkin = skinToApply;
-            } else {
-                CustomKnight.GlobalSettings.DefaultSkin = skinToApply;
-                CustomKnight.SaveSettings.DefaultSkin = skinToApply;
-            };
+            var skinToApply = SkinManager.SkinsList[selectedSkin];
+            SkinManager.SetSkinById(skinToApply.GetId());
             SkinSwapperPanel.hidePanel("");
         }
 
-        internal static void SelectedSkin(string skinName){
-            selectedSkin = SkinManager.skinsArr.FindIndex( skin => skin == skinName);
+        internal static void SelectedSkin(string skinId){
+            selectedSkin = SkinManager.SkinsList.FindIndex( skin => skin.GetId() == skinId);
         }
         internal static void SetPreloadButton(){
             var btn = MenuRef.Find("PreloadButton");
@@ -61,14 +54,18 @@ namespace CustomKnight
         }
         private static void FixSkins(){ 
             FixSkinStructure.FixSkins();
+            TextureCache.clearAllTextureCache(); // clear texture cache
             CustomKnight.Instance.Log("Reapplying Skin");
             // reset skin folder so the same skin can be re-applied
-            SkinManager.SKIN_FOLDER = null;
+            SkinManager.CurrentSkin = null;
             ApplySkin();
             SkinManager.getSkinNames();
             MenuRef.Find("SelectSkinOption").updateAfter((element)=>{
-                ((HorizontalOption)element).Values = SkinManager.skinNamesArr.ToArray();
+                ((HorizontalOption)element).Values = getSkinNameArray();
             });
+        }
+        internal static string[] getSkinNameArray(){
+            return SkinManager.SkinsList.Select(s => SkinManager.MaxLength(s.GetName(),CustomKnight.GlobalSettings.NameLength)).ToArray();
         }
         internal static Menu PrepareMenu(ModToggleDelegates toggleDelegates){
             return new Menu("Custom Knight",new Element[]{
@@ -81,7 +78,7 @@ namespace CustomKnight
                     Id:"SwapperEnabled"),
                 new HorizontalOption(
                     "Select Skin", "The skin will be used for current save and any new saves.",
-                    SkinManager.skinNamesArr.ToArray(),
+                    getSkinNameArray(),
                     (setting) => { selectedSkin = setting; },
                     () => selectedSkin,
                     Id:"SelectSkinOption"),
@@ -120,6 +117,9 @@ namespace CustomKnight
             MenuRef.OnBuilt += (_,Element) => {
                 SetPreloadButton();
                 SetDumpButton();
+                if(SkinManager.CurrentSkin != null){
+                    BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
+                }
             };
             return MenuRef.GetMenuScreen(lastMenu);
         }

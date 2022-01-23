@@ -2,7 +2,7 @@
 namespace CustomKnight
 {   
     public static class DebugLogger{
-        private static bool enabled = true; // should be disabled in a future release
+        public static bool enabled = false; 
 
         internal static void Log(string s){
             if(enabled){

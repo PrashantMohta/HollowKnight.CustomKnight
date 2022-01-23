@@ -12,7 +12,7 @@ namespace CustomKnight{
     
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
-        internal static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
+        public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
             {Unn.NAME,new Unn()},
@@ -116,9 +116,9 @@ namespace CustomKnight{
         };
         internal static string DATA_DIR;
         internal static string SKINS_FOLDER;
-        internal static string SKIN_FOLDER;
-        internal static List<string> skinsArr;
-        internal static List<string> skinNamesArr;
+        internal static ISelectableSkin CurrentSkin,DefaultSkin;
+        internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
+        internal static List<ISelectableSkin> SkinsList {get; private set;}
 
         internal static void SetDataDir(){
             DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
@@ -130,26 +130,22 @@ namespace CustomKnight{
             }
         }
 
+        internal static string MaxLength(string skinName,int length){ 
+            return skinName.Length <= length ? skinName : skinName.Substring(0,length - 3) + "...";
+        }
         internal static void getSkinNames()
         {
             var dirs = Directory.GetDirectories(SKINS_FOLDER);
-            var maxLen = CustomKnight.GlobalSettings.NameLength;
-
-            if (skinsArr == null)
-            {
-                skinsArr = new List<string>();
-                skinNamesArr = new List<string>();
-            }
+            SkinsList = new List<ISelectableSkin>();
 
             for (int i = 0 ; i< dirs.Length ; i++)
             {
                 string directoryName = new DirectoryInfo(dirs[i]).Name;
-                string buttonText = directoryName.Length <= maxLen ? directoryName : directoryName.Substring(0,maxLen - 3) + "...";
-                
-                if (skinsArr.Contains(directoryName)) continue;
-                
-                skinsArr.Add(directoryName);
-                skinNamesArr.Add(buttonText); 
+                SkinsList.Add(new StaticSkin(directoryName));
+            }
+            for (int i = 0 ; i< ProvidedSkins.Count ; i++)
+            {
+                SkinsList.Add(ProvidedSkins[i]);
             }
         }
 
@@ -163,10 +159,12 @@ namespace CustomKnight{
             }
         }
         
+
         internal static void LoadSkin(){
-            if (SKIN_FOLDER == null)
+            if (CurrentSkin == null)
             {
-                SKIN_FOLDER = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
+                var CurrentSkinName = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
+                CurrentSkin = GetSkinById(CurrentSkinName);
             }
             SpriteLoader.Load();
             On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
@@ -176,29 +174,70 @@ namespace CustomKnight{
 
         internal static void Unload(){
             //load default skin for charms and such
-            SKIN_FOLDER = "Default";
+            CurrentSkin = GetDefaultSkin();
             LoadSkin();
             On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
             CustomKnight.dumpManager.Unload();
             CustomKnight.swapManager.Unload();
         }
 
-        internal static void ChangeSkin(string skinName)
-        {
-            CustomKnight.Instance.Log("trying to apply skin " + skinName);
-            if(SKIN_FOLDER == skinName) { return; } 
-            SKIN_FOLDER = skinName;
-            if(HeroController.instance != null){
-                GameManager.instance.StartCoroutine(ChangeSkinRoutine());
+        public static bool AddSkin(ISelectableSkin NewSkin){
+            var Exists = SkinManager.ProvidedSkins.Exists(skin => skin.GetId() == NewSkin.GetId());
+            if(!Exists){
+                SkinManager.ProvidedSkins.Add(NewSkin);
             }
+            return !Exists;
         }
 
-        private static IEnumerator ChangeSkinRoutine()
+        public static ISelectableSkin GetSkinById(string id){
+            return SkinManager.SkinsList.Find( skin => skin.GetId() == id) ?? GetDefaultSkin();
+        }
+        public static ISelectableSkin GetDefaultSkin(){
+            if(DefaultSkin == null){
+                DefaultSkin = GetSkinById("Default");
+            }
+            return DefaultSkin;
+        }
+        public static ISelectableSkin GetCurrentSkin(){
+            if(CurrentSkin == null){
+                CurrentSkin = GetSkinById("Default");
+            }
+            return CurrentSkin;
+        }
+        public static ISelectableSkin[] GetInstalledSkins(){
+            return SkinsList.ToArray();
+        }
+
+        public static void RefreshSkin(bool skipFlash){
+            if(HeroController.instance != null){
+                GameManager.instance.StartCoroutine(ChangeSkinRoutine(skipFlash));
+            }
+        }
+        public static void SetSkinById(string id)
         {
-            HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
+            var Skin = GetSkinById(id);
+            CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId());
+            if(CurrentSkin.GetId() == Skin.GetId()) { return; } 
+            CurrentSkin = Skin;
+            // use this when saving so you save to the right settings
+            if(GameManager.instance.IsNonGameplayScene()){
+                CustomKnight.GlobalSettings.DefaultSkin = Skin.GetId();
+            } else {
+                CustomKnight.GlobalSettings.DefaultSkin = Skin.GetId();
+                CustomKnight.SaveSettings.DefaultSkin = Skin.GetId();
+            };
+            RefreshSkin(false);
+        }      
+
+        private static IEnumerator ChangeSkinRoutine(bool skipFlash)
+        {
+            if(!skipFlash){
+                HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
+            }
             LoadSkin();
             yield return new WaitUntil(() => SpriteLoader.LoadComplete);
         }
+    
     }
 
 }

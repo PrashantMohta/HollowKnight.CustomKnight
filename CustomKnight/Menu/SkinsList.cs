@@ -17,8 +17,8 @@ namespace CustomKnight
         private static bool applying = false;
 
         private static void setSkinButtonVisibility(bool isVisible){
-           for(var i = 0; i < SkinManager.skinNamesArr.Count ; i++){
-                var btn = MenuRef?.Find($"skinbutton{i}");
+           for(var i = 0; i < SkinManager.SkinsList.Count ; i++){
+                var btn = MenuRef?.Find($"skinbutton{SkinManager.SkinsList[i].GetId()}");
                 if(btn != null){
                     btn.isVisible = isVisible;
                 }
@@ -46,21 +46,22 @@ namespace CustomKnight
         }
 
         internal static MenuButton ApplySkinButton(int index){
-            return new MenuButton(SkinManager.skinNamesArr[index],"",(mb) => {
+            var ButtonText = SkinManager.MaxLength(SkinManager.SkinsList[index].GetName(),CustomKnight.GlobalSettings.NameLength);
+            return new MenuButton(ButtonText,"",(mb) => {
                     if(!applying){
                         applying = true;
                         // apply the skin
                         BetterMenu.selectedSkin = index;
                         GameManager.instance.StartCoroutine(applyAndGoBack());
                     }
-                },Id:$"skinbutton{index}");
+                },Id:$"skinbutton{SkinManager.SkinsList[index].GetId()}");
         }
         internal static Menu PrepareMenu(){
             var menu = new Menu("Select a skin",new Element[]{
                 new TextPanel("Select the Skin to Apply",Id:"helptext"),
                 new TextPanel("Applying skin...",Id:"applying"){isVisible=false}
             });
-            for(var i = 0; i < SkinManager.skinNamesArr.Count ; i++){
+            for(var i = 0; i < SkinManager.SkinsList.Count ; i++){
                 menu.AddElement(ApplySkinButton(i));
             }
             return menu;
