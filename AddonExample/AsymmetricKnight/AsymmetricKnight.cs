@@ -58,7 +58,7 @@ namespace AsymmetricalKnight{
         bool lastDirWasLeft = false;
         public void UpdateSkin(){
             var skin = SkinManager.GetCurrentSkin();
-            var currDirIsLeft = HeroController.instance.transform.localScale.x < 0;
+            var currDirIsLeft = HeroController.instance.transform.localScale.x > 0;
 
             if(lastSkin != skin.GetId()){
                 Knight = new Asymmetrical(CustomKnight.Knight.NAME);
