@@ -63,7 +63,6 @@ namespace CustomKnight {
                 CustomKnight.GlobalSettings.Version = GetVersion();
                 CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
             }
-            SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
         }
 
         public GlobalModSettings OnSaveGlobal()
@@ -118,7 +117,8 @@ namespace CustomKnight {
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
 
-                SkinManager.getSkinNames();
+                SkinManager.getSkinNames();             
+                SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
             }
             if(CustomKnight.GlobalSettings.SwapperEnabled){
                 swapManager.enabled = true;
@@ -137,6 +137,8 @@ namespace CustomKnight {
             return BetterMenu.GetMenu(modListMenu,toggle);
         }
 
+        public static event EventHandler<EventArgs> OnReady;
+
         public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
             orig(self);
             Log("HeroControllerStart");
@@ -145,6 +147,7 @@ namespace CustomKnight {
             SaveSettings.DefaultSkin = SkinManager.CurrentSkin.GetId();
             BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
             SkinManager.LoadSkin();
+            OnReady?.Invoke(this,null);
         }
         public void OnLoadLocal(SaveModSettings s)
         {

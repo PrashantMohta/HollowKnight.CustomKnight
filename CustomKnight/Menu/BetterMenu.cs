@@ -59,6 +59,10 @@ namespace CustomKnight
             // reset skin folder so the same skin can be re-applied
             SkinManager.CurrentSkin = null;
             ApplySkin();
+            UpdateSkinList();
+        }
+
+        internal static void UpdateSkinList(){
             SkinManager.getSkinNames();
             MenuRef.Find("SelectSkinOption").updateAfter((element)=>{
                 ((HorizontalOption)element).Values = getSkinNameArray();

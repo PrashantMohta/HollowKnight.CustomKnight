@@ -197,6 +197,7 @@ namespace CustomKnight{
             var Exists = SkinManager.ProvidedSkins.Exists(skin => skin.GetId() == NewSkin.GetId());
             if(!Exists){
                 SkinManager.ProvidedSkins.Add(NewSkin);
+                BetterMenu.UpdateSkinList();
             }
             return !Exists;
         }
@@ -249,7 +250,8 @@ namespace CustomKnight{
                 GameManager.instance.StartCoroutine(ChangeSkinRoutine(skipFlash));
             }
         }
-        
+        public static event EventHandler<EventArgs> OnSetSkin;
+
         /// <summary>
         ///     Change the current skin, to the one whose id is provided.
         /// </summary>
@@ -268,6 +270,7 @@ namespace CustomKnight{
                 CustomKnight.SaveSettings.DefaultSkin = Skin.GetId();
             };
             RefreshSkin(false);
+            OnSetSkin?.Invoke(CustomKnight.Instance,new EventArgs());
         }      
 
    
