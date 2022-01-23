@@ -12,6 +12,12 @@ namespace CustomKnight{
     
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
+        internal static string DATA_DIR;
+        internal static string SKINS_FOLDER;
+        internal static ISelectableSkin CurrentSkin,DefaultSkin;
+        internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
+        internal static List<ISelectableSkin> SkinsList {get; private set;}
+
         public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
@@ -114,20 +120,15 @@ namespace CustomKnight{
             {"Charm_40_5",new Charm("Charm_40_5",40)}
            // {"PinsScarab", new Pins()}
         };
-        internal static string DATA_DIR;
-        internal static string SKINS_FOLDER;
-        internal static ISelectableSkin CurrentSkin,DefaultSkin;
-        internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
-        internal static List<ISelectableSkin> SkinsList {get; private set;}
-
-        internal static void SetDataDir(){
-            DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
-            SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
-        }
         static SkinManager(){
             if(CustomKnight.isSatchelInstalled()){
                 SetDataDir();
             }
+        }    
+
+        internal static void SetDataDir(){
+            DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
+            SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         }
 
         internal static string MaxLength(string skinName,int length){ 
@@ -158,8 +159,6 @@ namespace CustomKnight{
                 return;
             }
         }
-        
-
         internal static void LoadSkin(){
             if (CurrentSkin == null)
             {
@@ -180,7 +179,20 @@ namespace CustomKnight{
             CustomKnight.dumpManager.Unload();
             CustomKnight.swapManager.Unload();
         }
-
+        private static IEnumerator ChangeSkinRoutine(bool skipFlash)
+        {
+            if(!skipFlash){
+                HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
+            }
+            LoadSkin();
+            yield return new WaitUntil(() => SpriteLoader.LoadComplete);
+        }
+ 
+        /// <summary>
+        ///     Add a skin to the skin list provided by an external mod.
+        /// </summary>
+        /// <param name="NewSkin">an <c>ISelectableSkin</c> that represents the skin</param>
+        /// <returns>true if the skin is added</returns>
         public static bool AddSkin(ISelectableSkin NewSkin){
             var Exists = SkinManager.ProvidedSkins.Exists(skin => skin.GetId() == NewSkin.GetId());
             if(!Exists){
@@ -188,31 +200,60 @@ namespace CustomKnight{
             }
             return !Exists;
         }
-
+        
+        /// <summary>
+        ///     Gets a skin from the overall skin list that matches a given id.
+        /// </summary>
+        /// <param name="id">a <c>string</c> that uniquely identifies the skin</param>
+        /// <returns>an <c>ISelectableSkin</c> that represents the skin or the default skin</returns>
         public static ISelectableSkin GetSkinById(string id){
             return SkinManager.SkinsList.Find( skin => skin.GetId() == id) ?? GetDefaultSkin();
         }
+        
+        /// <summary>
+        ///     Gets the default skin.
+        /// </summary>
+        /// <returns>an <c>ISelectableSkin</c> that represents the default skin</returns>
         public static ISelectableSkin GetDefaultSkin(){
             if(DefaultSkin == null){
                 DefaultSkin = GetSkinById("Default");
             }
             return DefaultSkin;
         }
+        
+        /// <summary>
+        ///     Gets the current skin.
+        /// </summary>
+        /// <returns>an <c>ISelectableSkin</c> that represents the current skin</returns>
         public static ISelectableSkin GetCurrentSkin(){
             if(CurrentSkin == null){
                 CurrentSkin = GetSkinById("Default");
             }
             return CurrentSkin;
         }
+        
+        /// <summary>
+        ///     Gets all the installed skins (includes mod provided skins).
+        /// </summary>
+        /// <returns>an <c>ISelectableSkin[]</c> that represents all the installed skins</returns>
         public static ISelectableSkin[] GetInstalledSkins(){
             return SkinsList.ToArray();
         }
 
+        /// <summary>
+        ///     Refreshes the current skin, useful when the provided skin needs to change.
+        /// </summary>
+        /// <param name="skipFlash">a <c>bool</c> that determines if the knight should flash white</param>
         public static void RefreshSkin(bool skipFlash){
             if(HeroController.instance != null){
                 GameManager.instance.StartCoroutine(ChangeSkinRoutine(skipFlash));
             }
         }
+        
+        /// <summary>
+        ///     Change the current skin, to the one whose id is provided.
+        /// </summary>
+        /// <param name="id">a <c>string</c> that uniquely identifies the skin</param>
         public static void SetSkinById(string id)
         {
             var Skin = GetSkinById(id);
@@ -229,15 +270,7 @@ namespace CustomKnight{
             RefreshSkin(false);
         }      
 
-        private static IEnumerator ChangeSkinRoutine(bool skipFlash)
-        {
-            if(!skipFlash){
-                HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
-            }
-            LoadSkin();
-            yield return new WaitUntil(() => SpriteLoader.LoadComplete);
-        }
-    
+   
     }
 
 }

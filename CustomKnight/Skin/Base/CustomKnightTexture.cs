@@ -1,6 +1,10 @@
 using UnityEngine;
 
 namespace CustomKnight{
+        
+    /// <summary>
+    ///     The Class that represents the state of a <c>Skinable's</c> texture.
+    /// </summary>
     public class CustomKnightTexture
     {
         public bool missing;

@@ -5,15 +5,26 @@ using UnityEngine;
 
 namespace CustomKnight
 {   
-
+    
+    /// <summary>
+    ///     The abstract Class that represents a single Skinable resource in the game.
+    ///     These can be used to add support for custom objects to be skinned as if they were defined within Custom Knight
+    /// </summary>
     public abstract class Skinable
     {
+        /// <summary>
+        ///     The name of the Skinable resource, is used as an identifier and the file expected is name.png.
+        /// </summary>
         public string name;
 
         public Skinable(string name){
             this.name = name;
         }
         public CustomKnightTexture _ckTex;
+        
+        /// <summary>
+        ///     A CustomKnightTexture that holds the state of the skin for this skinable.
+        /// </summary>
         public CustomKnightTexture ckTex {
              get{ 
                 if(_ckTex == null){
@@ -26,20 +37,44 @@ namespace CustomKnight
             }
         }
 
+        
+        /// <summary>
+        ///     A Method that is called to create a backup of the default texture of the skinable, used when unloading or as a fallback.
+        ///     this must save the defaultTexture in ckTex for seamless integration.
+        /// </summary>
         public abstract void SaveDefaultTexture();
+        
+        /// <summary>
+        ///     A Method that is called to Apply a Texture to the current Skinable.
+        /// </summary>
+        /// <param name="tex">A <c>Texture2D</c> that is to be applied</param>
         public abstract void ApplyTexture(Texture2D tex);
+        
+        /// <summary>
+        ///     A Method that is called to so that any preparations for the Skinable can be done. for example, saving the material that will be used.
+        /// </summary>
         public virtual void prepare(){}
 
+        
+        /// <summary>
+        ///     Wrapper Method for SaveDefaultTexture, used for logging.
+        /// </summary>
         public void SaveTexture(){
             DebugLogger.Log($"SaveTexture skinable {name}");
             SaveDefaultTexture();
         }
 
+        /// <summary>
+        ///     Wrapper Method for ApplyTexture, used for logging.
+        /// </summary>
         public void Apply(){
             DebugLogger.Log($"Apply skinable {name}");
             ApplyTexture(ckTex.currentTexture);
         }
 
+        /// <summary>
+        ///     Wrapper Method for ApplyTexture, used for Resetting the skin to default texture.
+        /// </summary>
         public virtual void Reset(){
             DebugLogger.Log($"Reset skinable {name}");
             ApplyTexture(ckTex.defaultTex);
@@ -48,6 +83,9 @@ namespace CustomKnight
 
     }
     
+    /// <summary>
+    ///     The abstract Class that represents a <c>Skinable</c> that uses a single Material
+    /// </summary>
     public abstract class Skinable_Single : Skinable
     {
         public Skinable_Single(string name) : base(name){}
@@ -67,7 +105,10 @@ namespace CustomKnight
                 _material = value;
             }
         }
-
+        
+        /// <summary>
+        ///     An abstract Method that returns the Material for this <c>Skinable</c>
+        /// </summary>
         public abstract Material GetMaterial();
         public override void prepare(){
             var m = GetMaterial();
@@ -77,6 +118,10 @@ namespace CustomKnight
         }
 
     }
+    
+    /// <summary>
+    ///     The abstract Class that represents a <c>Skinable</c> that uses a multiple Materials
+    /// </summary>
     public abstract class Skinable_Multiple : Skinable
     {
 
@@ -98,6 +143,9 @@ namespace CustomKnight
             }
         }
 
+        /// <summary>
+        ///     An abstract Method that returns the List{Material} for this <c>Skinable</c>
+        /// </summary>
         public abstract List<Material> GetMaterials();
         public override void prepare(){
             var m = GetMaterials();
@@ -107,6 +155,10 @@ namespace CustomKnight
         }
 
     }
+    
+    /// <summary>
+    ///     The abstract Class that represents a <c>Skinable</c> that uses a Sprite
+    /// </summary>
     public abstract class Skinable_Sprite : Skinable
     {
         public Skinable_Sprite(string name) : base(name){}
@@ -119,6 +171,10 @@ namespace CustomKnight
                 Reset();
             }
         }
+        
+        /// <summary>
+        ///     An abstract Method that Applies a Sprite to this <c>Skinable</c>
+        /// </summary>
         public abstract void ApplySprite(Sprite sprite);
         public override void Reset(){
             DebugLogger.Log($"Reset skinable {name}");

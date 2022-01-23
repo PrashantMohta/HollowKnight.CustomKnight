@@ -82,6 +82,6 @@
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-  	<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightModsDirectory)\Mods\$(TargetName)" SkipUnchangedFiles="true" />
+  	<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightModsDirectory)\Custom Knight" SkipUnchangedFiles="true" />
   </Target>
 </Project>
