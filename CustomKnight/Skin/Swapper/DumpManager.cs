@@ -30,13 +30,14 @@ namespace CustomKnight {
 
         internal Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
 
-        internal void dumpSpriteForGo(Scene scene,GameObject go){            
+        internal void dumpSpriteForGo(Scene scene,GameObject go){  
+            if(go == null) {return;}          
             var name = go.GetPath(true);
             Log("game object to be dumped -" + go.name);
             Log($"gameobject path {name}");
             Animator anim = go.GetComponent<Animator>();
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-            if(anim != null && sr != null){
+            if(anim != null && sr != null && false){ //since custom animation frames dont work anyway lets disable them for now
                 var caf = go.GetAddComponent<CustomAnimationFrames>();
                 caf.dumpPath = Path.Combine(SkinManager.DATA_DIR,"Dump");
                 caf.dump = true;
@@ -52,15 +53,34 @@ namespace CustomKnight {
                 return;
             }
         }
+
+        internal Coroutine dumpAllSpritesCoroutineRef;
+        internal bool pending = false;
+        internal IEnumerator dumpAllSpritesCoroutine(){
+           do{
+            pending = false;
+            yield return null;
+            var scenes = SceneUtils.GetAllLoadedScenes();
+            foreach(var scene in scenes){ 
+                    var GOList = scene.GetAllGameObjects();
+                    foreach(var go in GOList){
+                        try{
+                            dumpSpriteForGo(scene,go);
+                        } catch(Exception e){
+                            Log(e.ToString());
+                        }
+                        yield return null;
+                    }
+            }
+           } while(pending); // handle the case where a new go is spawned while the coro is still dumping
+           dumpAllSpritesCoroutineRef = null;
+        }
         internal void dumpAllSprites(){
-           if(!enabled) {return;} 
-           var scenes = SceneUtils.GetAllLoadedScenes();
-           foreach(var scene in scenes){ 
-                var GOList = scene.GetAllGameObjects();
-                foreach(var go in GOList){
-                    dumpSpriteForGo(scene,go);
-                }
-           }
+            if(!enabled) {return;} 
+            pending = true;
+            if(dumpAllSpritesCoroutineRef == null){
+                dumpAllSpritesCoroutineRef = GameManager.instance.StartCoroutine(dumpAllSpritesCoroutine());
+            }
         }
 
         internal void dumpAllSprites(Scene scene,LoadSceneMode mode){
@@ -89,8 +109,11 @@ namespace CustomKnight {
             if(!isTextureDumped.TryGetValue(outpath,out bool path) && !File.Exists(outpath)){
                 Texture2D dupe = (Texture2D) SpriteUtils.ExtractTextureFromSprite(sprite);
                 byte[] texBytes = dupe.EncodeToPNG();
-        
-                File.WriteAllBytes(outpath,texBytes);
+                try{
+                    File.WriteAllBytes(outpath,texBytes);
+                } catch (IOException e){
+                    Log(e.ToString());
+                }
                 isTextureDumped[outpath] = true;
             }            
         }
@@ -110,8 +133,11 @@ namespace CustomKnight {
             if(!isTextureDumped.TryGetValue(outpath,out bool path) && !File.Exists(outpath)){
                 Texture2D dupe = TextureUtils.duplicateTexture(texture);
                 byte[] texBytes = dupe.EncodeToPNG();
-        
-                File.WriteAllBytes(outpath,texBytes);
+                try{
+                    File.WriteAllBytes(outpath,texBytes);
+                } catch (IOException e){
+                    Log(e.ToString());
+                }
                 isTextureDumped[outpath] = true;
             }            
         }
