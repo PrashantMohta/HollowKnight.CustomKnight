@@ -32,17 +32,8 @@ namespace AsymmetricalKnight{
     public class AsymmetricalKnight : Mod {
         new public string GetName() => "Asymmetrical Knight";
         public override string GetVersion() => "v1";
-        public void touchCustomKnightName(){ // will throw if no ck installed
-                CustomKnight.CustomKnight.Instance.GetName();
-        }
         public bool isCustomKnightInstalled(){
-            var installed = true;
-            try{
-                touchCustomKnightName();
-            } catch(Exception e){
-                installed = false;
-            }
-            return installed;
+            return ModHooks.GetMod("CustomKnight") is Mod;
         }
         public void AddCustomKnightHandlers(){
                 SkinManager.OnSetSkin += (_,e) => {
@@ -66,7 +57,7 @@ namespace AsymmetricalKnight{
                 ModHooks.HeroUpdateHook +=  UpdateSkin;
                 AddCustomKnightHandlers();
             } else {
-                Log("Error : Custom Knight not found");
+                Log("Custom Knight not found, doing nothing!");
             }
         }
 
