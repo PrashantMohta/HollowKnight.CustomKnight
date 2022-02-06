@@ -19,8 +19,7 @@ using Patch = Modding.Patches;
 using CustomKnight.Canvas;
 using static Satchel.AssemblyUtils;
 
-namespace CustomKnight
-{
+namespace CustomKnight {
     public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod , ITogglableMod
     {
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
@@ -64,7 +63,6 @@ namespace CustomKnight
                 CustomKnight.GlobalSettings.Version = GetVersion();
                 CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
             }
-            SkinManager.SKIN_FOLDER = CustomKnight.GlobalSettings.DefaultSkin;
         }
 
         public GlobalModSettings OnSaveGlobal()
@@ -96,7 +94,7 @@ namespace CustomKnight
 
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
-            
+            Log($"Initializing CustomKnight {version}");
             if (Instance == null) 
             { 
                 Instance = this;
@@ -119,43 +117,44 @@ namespace CustomKnight
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
 
-                SkinManager.init();
-                SkinManager.getSkinNames();
-
+                SkinManager.getSkinNames();             
+                SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
             }
             if(CustomKnight.GlobalSettings.SwapperEnabled){
                 swapManager.enabled = true;
                 swapManager.active = true;
             }
 
-            ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
-            
+
             if(GlobalSettings.showMovedText){
                 GUIController.Instance.BuildMenus();
             }
-            ModHooks.AfterSavegameLoadHook += LoadSaveGame;
+            On.HeroController.Start += HeroControllerStart;
         }
 
         public  bool ToggleButtonInsideMenu {get;}= true;
         public MenuScreen GetMenuScreen(MenuScreen modListMenu,ModToggleDelegates? toggle){
-            MenuScreen m = ModMenu.createMenuScreen(modListMenu,toggle);
-            ModMenu.RefreshOptions();
-            return m;
+            return BetterMenu.GetMenu(modListMenu,toggle);
         }
 
-        public void LoadSaveGame(SaveGameData data){
-            Log("LoadSaveGame");
-            SkinManager.SKIN_FOLDER = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
-            SaveSettings.DefaultSkin = SkinManager.SKIN_FOLDER;
-            ModMenu.setModMenu(SkinManager.SKIN_FOLDER,CustomKnight.GlobalSettings.Preloads);
+        public static event EventHandler<EventArgs> OnReady;
+
+        public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
+            orig(self);
+            Log("HeroControllerStart");
+            var currentSkinId = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            SkinManager.CurrentSkin = SkinManager.GetSkinById(currentSkinId);
+            SaveSettings.DefaultSkin = SkinManager.CurrentSkin.GetId();
+            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
             SkinManager.LoadSkin();
+            OnReady?.Invoke(this,null);
         }
         public void OnLoadLocal(SaveModSettings s)
         {
             CustomKnight.SaveSettings = s;
         }
 
-        public static void toggleSwap(bool enable){
+        internal static void toggleSwap(bool enable){
             swapManager.enabled = enable;
             if(!enable){
                 swapManager.Unload();
@@ -165,13 +164,13 @@ namespace CustomKnight
             }
         }
 
-        public static void toggleDump(bool enable){
+        internal static void toggleDump(bool enable){
             dumpManager.enabled = enable;
         }
 
         public void Unload(){
             SkinManager.Unload();
-            ModHooks.AfterSavegameLoadHook -= LoadSaveGame;
+            On.HeroController.Start -= HeroControllerStart;
         }
         public SaveModSettings OnSaveLocal()
         {

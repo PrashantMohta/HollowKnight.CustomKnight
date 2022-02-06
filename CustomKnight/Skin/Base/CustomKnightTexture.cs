@@ -1,11 +1,15 @@
 using UnityEngine;
 
 namespace CustomKnight{
+        
+    /// <summary>
+    ///     The Class that represents the state of a <c>Skinable's</c> texture.
+    /// </summary>
     public class CustomKnightTexture
     {
         public bool missing;
         public string fileName;
-        public Sprite defaultCharmSprite;
+        public Sprite defaultSprite;
         public Texture2D defaultTex;
         public Texture2D tex;
         public Texture2D currentTexture{

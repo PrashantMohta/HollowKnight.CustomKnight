@@ -18,30 +18,32 @@ namespace CustomKnight {
     public class SwapManager
     {
         private string DATA_DIR;
-        public string SWAP_FOLDER = "Swap";
+        internal string SWAP_FOLDER = "Swap";
         private string SEPARATOR = "=>";
-        public float BACKOFF_MULTIPLIER = 1.3f;
-        public int INITAL_NEXT_CHECK = 1000;
+        internal float BACKOFF_MULTIPLIER = 1.3f;
+        internal int INITAL_NEXT_CHECK = 1000;
 
-        public int nextCheck;
-        public Dictionary<string,Dictionary<string,GameObjectProxy>> Scenes;
-        public List<string> currentSkinnedSceneObjs;
-        public Dictionary<string,Texture2D> loadedTextures;
+        internal int nextCheck;
+        internal Dictionary<string,Dictionary<string,GameObjectProxy>> Scenes;
+        internal List<string> currentSkinnedSceneObjs;
+        internal Dictionary<string,Texture2D> loadedTextures;
 
-        public Dictionary<string,Material> materials;
-        public Dictionary<string,Texture2D> defaultTextures;
+        internal Dictionary<string,Material> materials;
+        internal Dictionary<string,Texture2D> defaultTextures;
 
-        public Dictionary<string,string> Strings;
-        public Dictionary<string,string> ReplaceStrings;
-        public DateTime lastTime = DateTime.Now;
+        internal Dictionary<string,string> Strings;
+        internal Dictionary<string,string> ReplaceStrings;
+        internal Dictionary<string,List<string>> ReplaceCache;
 
-        public bool active = false;
-        public bool enabled = false;
+        internal DateTime lastTime = DateTime.Now;
+
+        internal bool active = false;
+        internal bool enabled = false;
         public SwapManager(){
                 Load();
         }
        
-        public bool SwapSkinRoutineRunning = false;
+        internal bool SwapSkinRoutineRunning = false;
 
         private void loadTexture(GameObjectProxy gop){
                 string objectPath = gop.getTexturePath();
@@ -160,14 +162,14 @@ namespace CustomKnight {
             SwapSkinForAllScenes();
             SwapSkinRoutineRunning = false;
         }
-        public void SwapSkinForScene(Scene scene,LoadSceneMode mode){
+        internal void SwapSkinForScene(Scene scene,LoadSceneMode mode){
             if(!active && !enabled) {return;}
             currentSkinnedSceneObjs = new List<string>();
             nextCheck = INITAL_NEXT_CHECK;
             GameManager.instance.StartCoroutine(SwapSkinRoutine(scene));
         }
 
-        public void checkForMissedObjects(){
+        internal void checkForMissedObjects(){
             if(!active && !enabled) {return;}
             var currentTime = DateTime.Now;
             if(nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck){
@@ -177,13 +179,18 @@ namespace CustomKnight {
             }
         }
 
-        public string LanguageGet( string key, string sheet , string orig ){
+        internal string LanguageGet( string key, string sheet , string orig ){
             if(!enabled && !active){ 
                 return orig;
             }
             string overrideText;
-            if(Strings != null && Strings.TryGetValue(key, out overrideText)){
+            if(Strings != null && Strings.TryGetValue(sheet+key, out overrideText)){
                 return overrideText;
+            }
+            if(ReplaceCache != null && ReplaceCache.TryGetValue(sheet+key, out var cachedText)){
+                if(cachedText[0] == orig){ // only consider it valid cache if orig matches first element of list
+                    return cachedText[1];
+                }
             }
             string textValue = orig;
             if(ReplaceStrings !=null) {
@@ -191,16 +198,18 @@ namespace CustomKnight {
                     textValue = Regex.Replace(textValue, Regex.Escape(kp.Key), kp.Value.Replace("$","$$"), RegexOptions.IgnoreCase);
                 }
                 //cache for next time
-                Strings[key]=textValue;
+                ReplaceCache[sheet+key]=new List<string>{orig,textValue};
             }
             return textValue;
         }
 
-        public void LoadSwapByPath(string pathToLoad){
+        internal void LoadSwapByPath(string pathToLoad){
             if (!File.Exists(Path.Combine(pathToLoad,"replace.txt")))
             {
                 EnsureDirectory(pathToLoad);
-                File.Create(Path.Combine(pathToLoad,"replace.txt"));
+                using (FileStream fs = File.Create(Path.Combine(pathToLoad,"replace.txt"))){
+                    //create and close the stream
+                };
             }
             using(StreamReader reader = File.OpenText(Path.Combine(pathToLoad,"replace.txt")))
             {
@@ -268,8 +277,7 @@ namespace CustomKnight {
             }
         }
         
-        public void Swap(string skinpath)
-        {
+        internal void resetAndLoadGlobalSwaps(){
 
             Scenes = new Dictionary<string,Dictionary<string,GameObjectProxy>>();
             currentSkinnedSceneObjs = new List<string>();
@@ -279,26 +287,31 @@ namespace CustomKnight {
             defaultTextures = new Dictionary<string, Texture2D>();
 
             Strings  = new Dictionary<string,string>();         
-            ReplaceStrings  = new Dictionary<string,string>();   
+            ReplaceStrings  = new Dictionary<string,string>();
+            ReplaceCache = new Dictionary<string, List<string>>();   
             nextCheck = INITAL_NEXT_CHECK;
 
             LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR,SWAP_FOLDER)); // global strings and skins
+        }
+        internal void Swap(string skinpath)
+        {
+
 
             DATA_DIR = Path.Combine(skinpath,SWAP_FOLDER);
             
             EnsureDirectory(DATA_DIR);
 
+            LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
+
             if (Directory.GetDirectories(DATA_DIR).Length == 0)
             {
-                Log("There are no folders in the Swap directory. Nothing to Swap.");
+                Log("There are no folders in the Swap directory. No textures to Swap.");
                 return;
             }
-
-            LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
             GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
         }
 
-        public void resetAllTextures(){
+        internal void resetAllTextures(){
             if(materials != null){
                 foreach(KeyValuePair<string,Material> kp in materials){
                     if(kp.Value == null) {
@@ -308,14 +321,14 @@ namespace CustomKnight {
                 }      
             }
         }
-        public void Load(){
+        internal void Load(){
             ModHooks.LanguageGetHook += LanguageGet;
             ModHooks.HeroUpdateHook += checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
         }
 
-        public void Unload(){
+        internal void Unload(){
             ModHooks.LanguageGetHook -= LanguageGet;
             ModHooks.HeroUpdateHook -= checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
@@ -323,7 +336,7 @@ namespace CustomKnight {
             resetAllTextures();
         }
  
-        public void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
+        internal void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
             if(!active && !enabled) {return;}
             if(self.activate.Value != true) {return;}
@@ -332,7 +345,7 @@ namespace CustomKnight {
             }
         }
 
-        public void Log(string str) {
+        internal void Log(string str) {
             CustomKnight.Instance.Log("[SwapManager] " +str);
         }
 

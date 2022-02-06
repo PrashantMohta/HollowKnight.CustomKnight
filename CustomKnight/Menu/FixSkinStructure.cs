@@ -8,14 +8,14 @@ using System.Linq;
 using Satchel;
 using static Modding.Logger;
 namespace CustomKnight {
-    public static class FixSkinStructure
+    internal static class FixSkinStructure
     {
 
-        public static bool dirHasPng(string sourceDirectory, SearchOption op){
+        internal static bool dirHasPng(string sourceDirectory, SearchOption op){
            return IoUtils.DirectoryHas(sourceDirectory, "*.png", op);
         }
 
-        public static void getPngsToRoot(string currentPath, string root){
+        internal static void getPngsToRoot(string currentPath, string root){
             try {
                 List<string> queue = new List<string>();
                 string[] dirs = Directory.GetDirectories(currentPath);
@@ -35,7 +35,7 @@ namespace CustomKnight {
             }
         }
         
-        public static void FixSkins(){
+        internal static void FixSkins(){
             try{
                 string[] skinDirectories = Directory.GetDirectories(SkinManager.SKINS_FOLDER);
                 foreach (string dir in skinDirectories)

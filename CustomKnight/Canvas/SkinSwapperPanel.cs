@@ -26,7 +26,6 @@ namespace CustomKnight.Canvas
         {
             float currentElementPosY = 100f;
             int PanelWidth = 500;
-            int PanelHeight = 500;
 
             int OptionSize = 25;
             int fontSize = (int)(OptionSize * 0.85f);

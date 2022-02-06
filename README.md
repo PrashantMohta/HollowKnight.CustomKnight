@@ -34,7 +34,16 @@ Make sure that the folder you copy opens directly to the image files themselves.
 Note that, You do not need to have all the images that Default has in your folder, just the ones you edit will suffice.
 
 
-### Experimental Features:
+### Other Features:
+
+#### CustomKnight API
+
+- adds ability to add more items that can be skinned (even custom items)
+- adds ability to extend or modify existing skins at runtime 
+- adds ability to provide a skin directly at runtime ( allows taking control of the skin without breaking compatibility)
+- adds ability to set the current skin
+
+See example mods under `AddonExample` directory in this repo for more, xml docs are added as they felt needed.
 
 #### Swapper
 - adds ability to skin bosses and any other objects that use a tk2dsprite 
@@ -64,3 +73,5 @@ geo=>Ca$hMoney
 Use Swapper to swap things across skins : 
  - create a Swap folder inside CustomKnight directory : `mods/CustomKnight/Swap/`
  - treat this as a global "skin" that applies regardless of the skin being selected.
+
+

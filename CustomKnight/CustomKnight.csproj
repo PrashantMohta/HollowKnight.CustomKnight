@@ -1,42 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25604A4B-5A96-40BE-A3B1-724924298B1F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>CustomKnight</RootNamespace>
     <AssemblyName>CustomKnight</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <TargetFramework>net472</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <VanillaFiles>..\..\Vanilla</VanillaFiles>
     <ModdingAPi>..\..\HollowKnight.Modding\OutputFinal</ModdingAPi>
     <HollowKnightModsDirectory>..\..\linkedtoHKMods</HollowKnightModsDirectory>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ModdingAPi)\Assembly-CSharp.dll</HintPath>
@@ -96,37 +77,11 @@
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(VanillaFiles)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ParticlesLegacyModule">
-      <HintPath>$(VanillaFiles)\UnityEngine.ParticlesLegacyModule.dll</HintPath>
-    </Reference>
     <Reference Include="Satchel">
       <HintPath>..\..\Satchel\bin\Debug\Satchel.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Canvas\CanvasButton.cs" />
-    <Compile Include="Canvas\CanvasPanel.cs" />
-    <Compile Include="Canvas\CanvasText.cs" />
-    <Compile Include="Canvas\GUIController.cs" />
-    <Compile Include="Canvas\SkinSwapperPanel.cs" />
-
-    <Compile Include="Menu\ModMenu.cs" />
-    <Compile Include="Menu\FixSkinStructure.cs" />
-
-    <Compile Include="Skin\Base\CustomKnightTexture.cs" />
-    <Compile Include="Skin\Base\SkinManager.cs" />
-    <Compile Include="Skin\Base\SpriteLoader.cs" />
-
-    <Compile Include="Skin\Swapper\SwapManager.cs" />
-    <Compile Include="Skin\Swapper\DumpManager.cs" />
-    <Compile Include="Skin\Swapper\GameObjectProxy.cs" />
-
-    <Compile Include="CustomKnight.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(HollowKnightModsDirectory)/Custom Knight"/>
+  	<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightModsDirectory)\Custom Knight" SkipUnchangedFiles="true" />
   </Target>
 </Project>
