@@ -43,8 +43,8 @@ namespace CustomKnight{
         /// <summary>
         ///  Exists
         /// </summary>
-        /// <param name="FileName">A <c>string</c> that identifies the texture file</param>
-        /// <returns>A <c>bool</c> representing if the texture exists in this skin.</returns>
+        /// <param name="FileName">A <c>string</c> that identifies the file</param>
+        /// <returns>A <c>bool</c> representing if the file exists in this skin.</returns>
         public bool Exists(string FileName);
         
         /// <summary>
@@ -53,6 +53,14 @@ namespace CustomKnight{
         /// <param name="FileName">A <c>string</c> that identifies the texture file</param>
         /// <returns>A <c>Texture2D</c>, the texture for that filename.</returns>
         public Texture2D GetTexture(string FileName);
+
+                
+        /// <summary>
+        ///  GetFile reads an arbitrary file from the skin
+        /// </summary>
+        /// <param name="FileName">A <c>string</c> that identifies the file</param>
+        /// <returns>A <c>byte[]</c>, the contents of that filename.</returns>
+        public byte[] GetFile(string FileName);
 
     }
 
@@ -86,6 +94,16 @@ namespace CustomKnight{
                 CustomKnight.Instance.Log(e.ToString());
             }
             return texture;
+        } 
+        public byte[] GetFile(string FileName){
+            byte[] data = null;
+            try{
+                string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{FileName}").Replace("\\", "/");
+                data = File.ReadAllBytes(file);
+            } catch(Exception e){
+                CustomKnight.Instance.Log(e.ToString());
+            }
+            return data;
         } 
     }
     
