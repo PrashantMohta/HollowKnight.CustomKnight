@@ -104,6 +104,9 @@ namespace CustomKnight {
             }
             SkinManager.checkDirectoryStructure();
 
+            SkinManager.getSkinNames();             
+            SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
+
             // Initial load
             if (preloadedObjects != null)
             {
@@ -116,9 +119,6 @@ namespace CustomKnight {
                 GameObjects.Add("Birthplace", preloadedObjects["Dream_Abyss"]["End Cutscene/Dummy"]);
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
-
-                SkinManager.getSkinNames();             
-                SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
             }
             if(CustomKnight.GlobalSettings.SwapperEnabled){
                 swapManager.enabled = true;
