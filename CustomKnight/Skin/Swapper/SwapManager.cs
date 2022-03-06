@@ -74,6 +74,7 @@ namespace CustomKnight {
                 var sr = GO.GetComponent<SpriteRenderer>();
                 if(false && anim != null && sr != null){
                     //maybe animates
+                    CustomKnight.Instance.Log($"Animation  : {anim.name}");
                     var caf = GO.GetAddComponent<CustomAnimationFrames>();
                     var filename = Path.GetFileName(objectPath);
                     var splitName = filename.Split('.');
@@ -110,21 +111,21 @@ namespace CustomKnight {
             }
             if(gop.hasTexture){
                 //CustomKnight.Instance.Log("hasTexture");
-                    try{
-                        loadTexture(gop);
-                    } catch( Exception e){
-                        this.Log( gop.name + " " + e.ToString());
-                    }
+                try{
+                    loadTexture(gop);
+                } catch( Exception e){
+                    this.Log( gop.name + " " + e.ToString());
+                }
                 if(!currentSkinnedSceneObjs.Contains(gop.getTexturePath())){
                     SwapSkinForGo(gop.getTexturePath(),go);
                 }
             }
             //traverse this gop
-            if(gop.hasChildren){
-                //CustomKnight.Instance.Log("hasChildren " + gop.children.Count());
+            if(gop.hasChildren && go.transform.childCount > 0){
+                //CustomKnight.Instance.Log("hasChildren " + gop.children.Count() + " c " + go.transform.childCount);
                 foreach(KeyValuePair<string,GameObjectProxy> kvp in gop.children){
                     try{
-                        this.Log(kvp.Key);
+                        this.Log("Trying children with name : " + kvp.Key);
                         var children = go.FindGameObjectsInChildren(kvp.Key,true);
                         foreach(var child in children){
                             applySkinsUsingProxy(kvp.Value,child);
@@ -335,16 +336,61 @@ namespace CustomKnight {
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
             resetAllTextures();
         }
- 
+        internal GameObjectProxy getGop(GameObject go){
+            if(go == null){
+                return null;
+            }
+            Transform rootGoT = go.transform;
+            List<string> path = new();
+            path.Add(rootGoT.gameObject.GetName(true));
+            while(rootGoT.parent != null){
+                rootGoT = rootGoT.parent;
+                path.Add(rootGoT.gameObject.GetName(true));
+                //this.Log("parent : " + rootGoT.gameObject.GetName(true));
+            }
+            path.Reverse();
+            GameObjectProxy Gop = null;
+            if (Scenes != null && Scenes.TryGetValue(go.scene.name, out var CurrentSceneDict))
+            {
+                if(CurrentSceneDict.TryGetValue(rootGoT.gameObject.GetName(true),out var gop)){
+                    Gop = gop;
+                }
+            }
+            var i = 0;
+            if(Gop != null){
+                while(Gop.hasChildren){
+                    if(!Gop.children.TryGetValue(path[i],out var _Gop)){
+                        break;
+                    }
+                    Gop = _Gop;
+                    //this.Log(Gop.name);
+                    i++;
+                }
+            }
+            return Gop;
+        }
         internal void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
             if(!active && !enabled) {return;}
             if(self.activate.Value != true) {return;}
-            if(!SwapSkinRoutineRunning){
-                GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
+            var go = self.gameObject.GameObject.Value;
+            var Gop = getGop(go);
+            if(Gop != null){
+                applySkinsUsingProxy(Gop,go);
             }
+            /*if(!SwapSkinRoutineRunning){
+                GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
+            }*/
         }
 
+
+        internal void SkinChangeSwap(ISelectableSkin currSkin){
+            resetAllTextures();
+            resetAndLoadGlobalSwaps();
+            if(currSkin.hasSwapper()){
+                Swap(currSkin.getSwapperPath());
+            }
+        }
         internal void Log(string str) {
             CustomKnight.Instance.Log("[SwapManager] " +str);
         }

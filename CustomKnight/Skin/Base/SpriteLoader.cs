@@ -46,11 +46,6 @@ namespace CustomKnight {
         {
             if (!texRoutineRunning)
             {
-                CustomKnight.swapManager.resetAllTextures();
-                CustomKnight.swapManager.resetAndLoadGlobalSwaps();
-                if(CurrentSkin.hasSwapper()){
-                    CustomKnight.swapManager.Swap(CurrentSkin.getSwapperPath());
-                }
                 setTexRoutine = GameManager.instance.StartCoroutine(SetHeroTex());
                 texRoutineRunning = true;
             }
@@ -58,10 +53,10 @@ namespace CustomKnight {
         
         internal static IEnumerator Start()
         {
+            CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
             yield return new WaitWhile(
                 () => HeroController.instance == null || GameManager.instance == null || GameManager.instance.gameMap == null
             );
-
             LoadSprites();
         }
 
@@ -128,6 +123,7 @@ namespace CustomKnight {
             }*/
             
             PullDefaultTextures();
+            CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
             foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                 kvp.Value.Apply();
             }

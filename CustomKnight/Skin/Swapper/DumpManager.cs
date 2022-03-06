@@ -62,7 +62,7 @@ namespace CustomKnight {
             yield return null;
             var scenes = SceneUtils.GetAllLoadedScenes();
             foreach(var scene in scenes){ 
-                    if(scene == null || !scene.isValid()){continue;}
+                    if(scene == null || !scene.IsValid()){continue;}
                     var GOList = scene.GetAllGameObjects();
                     foreach(var go in GOList){
                         try{
