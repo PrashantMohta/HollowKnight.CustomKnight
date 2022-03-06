@@ -46,6 +46,11 @@ namespace CustomKnight {
         {
             if (!texRoutineRunning)
             {
+                CustomKnight.swapManager.resetAllTextures();
+                CustomKnight.swapManager.resetAndLoadGlobalSwaps();
+                if(CurrentSkin.hasSwapper()){
+                    CustomKnight.swapManager.Swap(CurrentSkin.getSwapperPath());
+                }
                 setTexRoutine = GameManager.instance.StartCoroutine(SetHeroTex());
                 texRoutineRunning = true;
             }
@@ -123,11 +128,6 @@ namespace CustomKnight {
             }*/
             
             PullDefaultTextures();
-            CustomKnight.swapManager.resetAllTextures();
-            CustomKnight.swapManager.resetAndLoadGlobalSwaps();
-            if(CurrentSkin.hasSwapper()){
-                CustomKnight.swapManager.Swap(CurrentSkin.getSwapperPath());
-            }
             foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                 kvp.Value.Apply();
             }

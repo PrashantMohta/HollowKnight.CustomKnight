@@ -181,7 +181,7 @@ namespace CustomKnight{
         }
         private static IEnumerator ChangeSkinRoutine(bool skipFlash)
         {
-            if(!skipFlash){
+            if(!skipFlash && HeroController.instance != null){
                 HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
             }
             LoadSkin();
