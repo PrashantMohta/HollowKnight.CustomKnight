@@ -143,6 +143,10 @@ namespace CustomKnight {
            }
         }
         private void SwapSkin(Scene scene){
+            var allGos = scene.GetAllGameObjects();
+            foreach(var go in allGos){
+                applyGlobalEntityForGo(go);
+            }
             if (Scenes != null && Scenes.TryGetValue(scene.name, out var CurrentSceneDict))
             {
                 var rootGos = scene.GetRootGameObjects();
@@ -336,7 +340,7 @@ namespace CustomKnight {
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
             resetAllTextures();
         }
-        internal GameObjectProxy getGop(GameObject go){
+        internal GameObjectProxy getGop(string sceneName,GameObject go){
             if(go == null){
                 return null;
             }
@@ -346,7 +350,6 @@ namespace CustomKnight {
             while(rootGoT.parent != null){
                 rootGoT = rootGoT.parent;
                 path.Add(rootGoT.gameObject.GetName(true));
-                //this.Log("parent : " + rootGoT.gameObject.GetName(true));
             }
             path.Reverse();
             GameObjectProxy Gop = null;
@@ -363,24 +366,56 @@ namespace CustomKnight {
                         break;
                     }
                     Gop = _Gop;
-                    //this.Log(Gop.name);
                     i++;
                 }
             }
             return Gop;
+        }
+        internal GameObjectProxy getGopGlobal(string sceneName,string hash){
+            GameObjectProxy Gop = null;
+            if (Scenes != null && Scenes.TryGetValue(sceneName, out var CurrentSceneDict))
+            {
+                if(CurrentSceneDict.TryGetValue(hash,out var gop)){
+                    Gop = gop;
+                }
+            }
+            return Gop;
+        }
+        
+        internal Dictionary<int,string> MaterialProcessed = new();
+        
+        internal void applyGlobalEntityForGo(GameObject go){
+            var tks = go.GetComponentsInChildren<tk2dSprite>();
+            if(tks != null){
+                foreach(var tk in tks){
+                    var mat = tk.GetCurrentSpriteDef().material;
+                    var crc = mat.ComputeCRC();
+                    if(!MaterialProcessed.TryGetValue(crc,out var hash )){
+                        var currentHash = TextureUtils.duplicateTexture((Texture2D)mat.mainTexture).getHash();
+                        var Gop = getGopGlobal("Global",currentHash);
+                        MaterialProcessed[crc] = currentHash;
+                        if(Gop != null){
+                            applySkinsUsingProxy(Gop,tk.gameObject);
+                        } 
+                    } else {
+                        var Gop = getGopGlobal("Global",hash);
+                        if(Gop != null){
+                            applySkinsUsingProxy(Gop,tk.gameObject);
+                        } 
+                    }
+                }
+            }
         }
         internal void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
             if(!active && !enabled) {return;}
             if(self.activate.Value != true) {return;}
             var go = self.gameObject.GameObject.Value;
-            var Gop = getGop(go);
+            applyGlobalEntityForGo(go);
+            var Gop = getGop(go.scene.name,go);
             if(Gop != null){
                 applySkinsUsingProxy(Gop,go);
             }
-            /*if(!SwapSkinRoutineRunning){
-                GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
-            }*/
         }
 
 

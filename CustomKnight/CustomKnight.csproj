@@ -28,6 +28,9 @@
     <Reference Include="MMHOOK_PlayMaker">
       <HintPath>$(ModdingAPi)\MMHOOK_PlayMaker.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(ModdingAPI)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PlayMaker">
       <HintPath>$(VanillaFiles)\PlayMaker.dll</HintPath>
     </Reference>

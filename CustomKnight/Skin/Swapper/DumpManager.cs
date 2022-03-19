@@ -17,6 +17,8 @@ using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
 
 namespace CustomKnight {
+
+    public class coroutineHelper : MonoBehaviour{}
     public class DumpManager{
 
         internal bool enabled = false;
@@ -49,7 +51,14 @@ namespace CustomKnight {
             } 
             tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
             if(tk2ds != null){
-                SaveTextureDump(scene,name, (Texture2D) tk2ds.GetCurrentSpriteDef().material.mainTexture);
+                //dump as texture hash 
+
+                var sdef = tk2ds.GetCurrentSpriteDef();
+                var tex = (Texture2D) sdef.material.mainTexture;
+                var hash = TextureUtils.duplicateTexture(tex).getHash();
+                SaveTextureByPath("Global",hash,tex);
+
+                SaveTextureDump(scene,name, tex);
                 return;
             }
         }
@@ -58,7 +67,6 @@ namespace CustomKnight {
         internal bool pending = false;
         internal IEnumerator dumpAllSpritesCoroutine(){
            do{
-            pending = false;
             yield return null;
             var scenes = SceneUtils.GetAllLoadedScenes();
             foreach(var scene in scenes){ 
@@ -73,14 +81,45 @@ namespace CustomKnight {
                         yield return null;
                     }
             }
+            pending = false;
            } while(pending); // handle the case where a new go is spawned while the coro is still dumping
            dumpAllSpritesCoroutineRef = null;
         }
+        internal IEnumerator walkScenes(){
+            yield return null;
+            var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
+            var i = 0;
+            while(true){
+                if(dumpAllSpritesCoroutineRef == null || !pending || i == 3){
+                    //load next scene    
+                    if( i < sceneCount){
+                        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i);
+                        // Wait until the asynchronous scene fully loads
+                        while (!asyncLoad.isDone)
+                        {
+                            yield return null;
+                        }
+                        i++;
+                    }
+                }
+                yield return new WaitForSeconds(1);
+            }
+        } 
+        internal void walk(){
+            var g = new GameObject();
+            GameObject.DontDestroyOnLoad(g);
+            g.AddComponent<coroutineHelper>().StartCoroutine(walkScenes());
+        }
+        private GameObject coroHelperObj;
         internal void dumpAllSprites(){
             if(!enabled) {return;} 
             pending = true;
+            if(coroHelperObj == null){
+                coroHelperObj = new GameObject();
+                GameObject.DontDestroyOnLoad(coroHelperObj);
+            }
             if(dumpAllSpritesCoroutineRef == null){
-                dumpAllSpritesCoroutineRef = GameManager.instance.StartCoroutine(dumpAllSpritesCoroutine());
+                dumpAllSpritesCoroutineRef = coroHelperObj.GetAddComponent<coroutineHelper>().StartCoroutine(dumpAllSpritesCoroutine());
             }
         }
 
@@ -118,10 +157,11 @@ namespace CustomKnight {
                 isTextureDumped[outpath] = true;
             }            
         }
-        internal void SaveTextureDump(Scene scene,string objectName, Texture2D texture){
-            if(!enabled) {return;} 
+
+        internal void SaveTextureByPath(string sceneName,string objectName, Texture2D texture){
             string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR,"Dump");
-            string scenePath = Path.Combine(DUMP_DIR,scene.name);
+            string scenePath = Path.Combine(DUMP_DIR,sceneName);
+
             EnsureDirectory(DUMP_DIR);
             EnsureDirectory(scenePath);
             
@@ -132,7 +172,7 @@ namespace CustomKnight {
                 Log(e.ToString());
             }
             if(!isTextureDumped.TryGetValue(outpath,out bool path) && !File.Exists(outpath)){
-                Texture2D dupe = TextureUtils.duplicateTexture(texture);
+                Texture2D dupe = texture.isReadable ? texture : TextureUtils.duplicateTexture(texture);
                 byte[] texBytes = dupe.EncodeToPNG();
                 try{
                     File.WriteAllBytes(outpath,texBytes);
@@ -141,6 +181,10 @@ namespace CustomKnight {
                 }
                 isTextureDumped[outpath] = true;
             }            
+        }
+        internal void SaveTextureDump(Scene scene,string objectName, Texture2D texture){
+            if(!enabled) {return;} 
+            SaveTextureByPath(scene.name,objectName,texture);
         }
         internal void SaveTextDump( string key, string value){
             if(!enabled) {return;} 
