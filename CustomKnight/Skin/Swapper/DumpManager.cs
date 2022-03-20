@@ -31,6 +31,7 @@ namespace CustomKnight {
         }
 
         internal Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
+        internal Dictionary<int,string> MaterialProcessed = new();
 
         internal void dumpSpriteForGo(Scene scene,GameObject go){  
             if(go == null) {return;}          
@@ -39,6 +40,12 @@ namespace CustomKnight {
             Log($"gameobject path {name}");
             Animator anim = go.GetComponent<Animator>();
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+            tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
+
+            var mat = sr != null ? sr.material :  (tk2ds != null ? tk2ds.GetCurrentSpriteDef()?.material : null);
+            if(mat != null && MaterialProcessed.TryGetValue(mat.ComputeCRC(),out var _hash)){
+                return;
+            }
             if(anim != null && sr != null && false){ //since custom animation frames dont work anyway lets disable them for now
                 var caf = go.GetAddComponent<CustomAnimationFrames>();
                 caf.dumpPath = Path.Combine(SkinManager.DATA_DIR,"Dump");
@@ -46,19 +53,29 @@ namespace CustomKnight {
                 return;
             }
             if(sr != null && sr.sprite != null){
-                SaveSpriteDump(scene,name, sr.sprite);
+                if(scene.name == "DontDestroyOnLoad"){
+                    return;
+                    // do not attempt to dump DontDestroyOnLoad sprites
+                    var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
+                    var hash = tex.getHash();
+                    SaveTextureByPath("Global",hash,tex);
+                    GameObject.Destroy(tex);
+                } else {
+                    SaveSpriteDump(scene,name, sr.sprite);
+                }
                 return;
             } 
-            tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
             if(tk2ds != null){
                 //dump as texture hash 
-
                 var sdef = tk2ds.GetCurrentSpriteDef();
                 var tex = (Texture2D) sdef.material.mainTexture;
-                var hash = TextureUtils.duplicateTexture(tex).getHash();
-                SaveTextureByPath("Global",hash,tex);
-
-                SaveTextureDump(scene,name, tex);
+                var dupe = TextureUtils.duplicateTexture(tex);
+                var hash = dupe.getHash();
+                SaveTextureByPath("Global",hash,dupe);
+                if(scene.name != "DontDestroyOnLoad"){
+                    SaveTextureDump(scene,name, dupe);
+                }
+                GameObject.Destroy(dupe);
                 return;
             }
         }
@@ -68,7 +85,7 @@ namespace CustomKnight {
         internal IEnumerator dumpAllSpritesCoroutine(){
            do{
             yield return null;
-            var scenes = SceneUtils.GetAllLoadedScenes();
+            var scenes = SceneUtils.GetAllLoadedScenes(true);
             foreach(var scene in scenes){ 
                     if(scene == null || !scene.IsValid()){continue;}
                     var GOList = scene.GetAllGameObjects();

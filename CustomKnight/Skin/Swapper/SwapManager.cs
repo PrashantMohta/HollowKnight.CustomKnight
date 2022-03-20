@@ -137,7 +137,7 @@ namespace CustomKnight {
             }
         }
         private void SwapSkinForAllScenes(){
-           var scenes = SceneUtils.GetAllLoadedScenes();
+           var scenes = SceneUtils.GetAllLoadedScenes(true);
            foreach(var scene in scenes){ 
                 SwapSkin(scene);
            }
@@ -260,7 +260,7 @@ namespace CustomKnight {
                             rootPath = directoryName,
                             hasChildren = false
                         };
-                        objects.Add(objectName,GOP);
+                        objects[objectName]=GOP;
                     }
                 }
                 foreach(string childDirectory in Directory.GetDirectories(path)){
@@ -388,21 +388,42 @@ namespace CustomKnight {
             var tks = go.GetComponentsInChildren<tk2dSprite>();
             if(tks != null){
                 foreach(var tk in tks){
-                    var mat = tk.GetCurrentSpriteDef().material;
+                    var mat = tk?.GetCurrentSpriteDef()?.material;
+                    if(mat == null) { continue; }
                     var crc = mat.ComputeCRC();
-                    if(!MaterialProcessed.TryGetValue(crc,out var hash )){
-                        var currentHash = TextureUtils.duplicateTexture((Texture2D)mat.mainTexture).getHash();
-                        var Gop = getGopGlobal("Global",currentHash);
-                        MaterialProcessed[crc] = currentHash;
-                        if(Gop != null){
-                            applySkinsUsingProxy(Gop,tk.gameObject);
-                        } 
-                    } else {
-                        var Gop = getGopGlobal("Global",hash);
-                        if(Gop != null){
-                            applySkinsUsingProxy(Gop,tk.gameObject);
-                        } 
+                    string hash;
+                    if(!MaterialProcessed.TryGetValue(crc,out hash )){
+                        var dupe = TextureUtils.duplicateTexture((Texture2D)mat.mainTexture);
+                        hash = dupe.getHash();
+                        GameObject.Destroy(dupe);
+                        MaterialProcessed[crc] = hash;   
                     }
+                    var Gop = getGopGlobal("Global",hash);
+                    if(Gop != null){
+                        applySkinsUsingProxy(Gop,tk.gameObject);
+                    } 
+                }
+            } 
+            if(go.scene.name == "DontDestroyOnLoad"){
+                return;
+            }
+            // do not load DontDestroyOnLoad sprites
+            var srs = go.GetComponentsInChildren<SpriteRenderer>();
+            if(srs != null){
+                foreach(var sr in srs){
+                    var mat = sr.material;
+                    var crc = mat.ComputeCRC();
+                    string hash;
+                    if(!MaterialProcessed.TryGetValue(crc,out hash )){
+                        var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
+                        hash = tex.getHash();
+                        GameObject.Destroy(tex);
+                        MaterialProcessed[crc] = hash;   
+                    }
+                    var Gop = getGopGlobal("Global",hash);
+                    if(Gop != null){
+                        applySkinsUsingProxy(Gop,sr.gameObject);
+                    } 
                 }
             }
         }
