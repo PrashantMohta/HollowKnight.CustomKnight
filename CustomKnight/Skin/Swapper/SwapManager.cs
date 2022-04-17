@@ -432,6 +432,7 @@ namespace CustomKnight {
             if(!active && !enabled) {return;}
             if(self.activate.Value != true) {return;}
             var go = self.gameObject.GameObject.Value;
+            if(go == null) { return; }
             applyGlobalEntityForGo(go);
             var Gop = getGop(go.scene.name,go);
             if(Gop != null){
