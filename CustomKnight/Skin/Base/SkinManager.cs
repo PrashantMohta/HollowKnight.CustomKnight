@@ -153,11 +153,7 @@ namespace CustomKnight{
         internal static void checkDirectoryStructure(){
             EnsureDirectory(DATA_DIR);
             EnsureDirectory(SKINS_FOLDER);
-            if (Directory.GetDirectories(SKINS_FOLDER).Length == 0)
-            {
-                CustomKnight.Instance.Log("There are no Custom Knight skin folders in the Custom Knight Skins directory.");
-                return;
-            }
+            EnsureDirectory(Path.Combine(SKINS_FOLDER, "Default"));
         }
         internal static void LoadSkin(){
             if (CurrentSkin == null)
