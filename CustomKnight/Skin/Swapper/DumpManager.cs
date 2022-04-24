@@ -36,16 +36,21 @@ namespace CustomKnight {
         internal void dumpSpriteForGo(Scene scene,GameObject go){  
             if(go == null) {return;}          
             var name = go.GetPath(true);
-            Log("game object to be dumped -" + go.name);
-            Log($"gameobject path {name}");
             Animator anim = go.GetComponent<Animator>();
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
             tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
 
             var mat = sr != null ? sr.material :  (tk2ds != null ? tk2ds.GetCurrentSpriteDef()?.material : null);
-            if(mat != null && MaterialProcessed.TryGetValue(mat.ComputeCRC(),out var _hash)){
-                return;
+            int crc = 0;
+            if(mat != null){
+                crc = mat.ComputeCRC();
+                if(MaterialProcessed.TryGetValue(crc,out var _hash)){
+                    return;
+                }
             }
+            Log($"dumping {done}/{detected}");
+            Log("game object to be dumped -" + go.name);
+            Log($"gameobject path {name}");
             if(anim != null && sr != null && false){ //since custom animation frames dont work anyway lets disable them for now
                 var caf = go.GetAddComponent<CustomAnimationFrames>();
                 caf.dumpPath = Path.Combine(SkinManager.DATA_DIR,"Dump");
@@ -58,6 +63,7 @@ namespace CustomKnight {
                     // do not attempt to dump DontDestroyOnLoad sprites
                     var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
                     var hash = tex.getHash();
+                    MaterialProcessed[crc] = hash;
                     SaveTextureByPath("Global",hash,tex);
                     GameObject.Destroy(tex);
                 } else {
@@ -71,6 +77,7 @@ namespace CustomKnight {
                 var tex = (Texture2D) sdef.material.mainTexture;
                 var dupe = TextureUtils.duplicateTexture(tex);
                 var hash = dupe.getHash();
+                MaterialProcessed[crc] = hash;
                 SaveTextureByPath("Global",hash,dupe);
                 if(scene.name != "DontDestroyOnLoad"){
                     SaveTextureDump(scene,name, dupe);
@@ -83,12 +90,12 @@ namespace CustomKnight {
         internal Coroutine dumpAllSpritesCoroutineRef;
         internal bool pending = false;
         internal int detected = 0 , done = 0;
+        internal bool DontDestroyOnLoadScene = true; 
         internal IEnumerator dumpAllSpritesCoroutine(){
            done = 0;
            detected = done;
            do{
             yield return null;
-            var DontDestroyOnLoadScene = false; // todo make true
             var scenes = SceneUtils.GetAllLoadedScenes(DontDestroyOnLoadScene);
             foreach(var scene in scenes){ 
                     if(scene == null || !scene.IsValid()){continue;}
@@ -101,7 +108,6 @@ namespace CustomKnight {
                             Log(e.ToString());
                         }
                         done += 1;
-                        Modding.Logger.Log($"dumping {done}/{detected}");
                         yield return null;
                     }
             }
@@ -118,15 +124,15 @@ namespace CustomKnight {
         internal IEnumerator walkScenes(){
             yield return null;
             var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-            var i = 14; //todo make 4 before release
+            var i = 4; 
             while(true){
                 if(dumpAllSpritesCoroutineRef == null || !pending){
-                    Modding.Logger.Log($"loading next scene : id {i}");
+                    Log($"loading next scene : id {i}");
                     //load next scenes    
                     if( i < sceneCount){                    
                         var skip = false;
                         AsyncOperation asyncLoad = loadScene(i);
-                        yield return new WaitForSeconds(5);
+                        yield return new WaitForSeconds(2);
                         // Wait until the asynchronous scene fully loads & dumps
                         while (detected > done)
                         {
@@ -138,7 +144,7 @@ namespace CustomKnight {
                         i++;
                     }
                 }
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.1f);
             }
         } 
         internal void walk(){
@@ -160,7 +166,7 @@ namespace CustomKnight {
         }
 
         internal void dumpAllSprites(Scene scene,LoadSceneMode mode){
-            Modding.Logger.Log($"Entered scene : Name {scene.name}");
+            Log($"Entered scene : Name {scene.name}");
             if(coroHelperObj != null){
                 coroHelperObj.GetAddComponent<coroutineHelper>().StopCoroutine(dumpAllSpritesCoroutineRef);
                 GameObject.Destroy(coroHelperObj);
