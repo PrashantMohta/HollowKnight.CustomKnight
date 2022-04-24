@@ -254,15 +254,14 @@ namespace CustomKnight{
         {
             var Skin = GetSkinById(id);
             CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId());
-            if(CurrentSkin.GetId() == Skin.GetId()) { return; } 
-
+            if(CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; } 
             CurrentSkin = Skin;
             // use this when saving so you save to the right settings
             if(GameManager.instance.IsNonGameplayScene()){
-                CustomKnight.GlobalSettings.DefaultSkin = Skin.GetId();
+                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
             } else {
-                CustomKnight.GlobalSettings.DefaultSkin = Skin.GetId();
-                CustomKnight.SaveSettings.DefaultSkin = Skin.GetId();
+                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
+                CustomKnight.SaveSettings.DefaultSkin = CurrentSkin.GetId();
             };
             RefreshSkin(false);
             OnSetSkin?.Invoke(CustomKnight.Instance,new EventArgs());
