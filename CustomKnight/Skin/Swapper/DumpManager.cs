@@ -82,39 +82,58 @@ namespace CustomKnight {
 
         internal Coroutine dumpAllSpritesCoroutineRef;
         internal bool pending = false;
+        internal int detected = 0 , done = 0;
         internal IEnumerator dumpAllSpritesCoroutine(){
+           done = 0;
+           detected = done;
            do{
             yield return null;
-            var scenes = SceneUtils.GetAllLoadedScenes(true);
+            var DontDestroyOnLoadScene = false; // todo make true
+            var scenes = SceneUtils.GetAllLoadedScenes(DontDestroyOnLoadScene);
             foreach(var scene in scenes){ 
                     if(scene == null || !scene.IsValid()){continue;}
                     var GOList = scene.GetAllGameObjects();
+                    detected += GOList.Count();
                     foreach(var go in GOList){
                         try{
                             dumpSpriteForGo(scene,go);
                         } catch(Exception e){
                             Log(e.ToString());
                         }
+                        done += 1;
+                        Modding.Logger.Log($"dumping {done}/{detected}");
                         yield return null;
                     }
             }
             pending = false;
            } while(pending); // handle the case where a new go is spawned while the coro is still dumping
+           
            dumpAllSpritesCoroutineRef = null;
+        }
+        internal AsyncOperation loadScene(int i){
+            AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i,LoadSceneMode.Additive);
+            asyncLoad.priority = i;
+            return asyncLoad;
         }
         internal IEnumerator walkScenes(){
             yield return null;
             var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-            var i = 0;
+            var i = 14; //todo make 4 before release
             while(true){
-                if(dumpAllSpritesCoroutineRef == null || !pending || i == 3){
-                    //load next scene    
-                    if( i < sceneCount){
-                        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i);
-                        // Wait until the asynchronous scene fully loads
-                        while (!asyncLoad.isDone)
+                if(dumpAllSpritesCoroutineRef == null || !pending){
+                    Modding.Logger.Log($"loading next scene : id {i}");
+                    //load next scenes    
+                    if( i < sceneCount){                    
+                        var skip = false;
+                        AsyncOperation asyncLoad = loadScene(i);
+                        yield return new WaitForSeconds(5);
+                        // Wait until the asynchronous scene fully loads & dumps
+                        while (detected > done)
                         {
                             yield return null;
+                        }
+                        if(i > 3){
+                            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(i);
                         }
                         i++;
                     }
@@ -141,6 +160,12 @@ namespace CustomKnight {
         }
 
         internal void dumpAllSprites(Scene scene,LoadSceneMode mode){
+            Modding.Logger.Log($"Entered scene : Name {scene.name}");
+            if(coroHelperObj != null){
+                coroHelperObj.GetAddComponent<coroutineHelper>().StopCoroutine(dumpAllSpritesCoroutineRef);
+                GameObject.Destroy(coroHelperObj);
+                dumpAllSpritesCoroutineRef = null;
+            }
             dumpAllSprites();
         }
         
