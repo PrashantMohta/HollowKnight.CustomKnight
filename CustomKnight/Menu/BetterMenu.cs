@@ -112,7 +112,7 @@ namespace CustomKnight
                 new MenuRow(
                     new List<Element>{
                         new MenuButton("Dump","Dumps the sprites that Swapper supports (Expect lag)",(_)=>ToggleDumping(),Id:"DumpButton"),
-                        new MenuButton("Dump All","Dumps Everything (Can take hours)",(_)=>DumpAll(),Id:"DumpAllButton"),
+                        //new MenuButton("Dump All","Dumps Everything (Can take hours)",(_)=>DumpAll(),Id:"DumpAllButton"),
                         //new MenuButton("Need Help?","Join the HK Modding Discord",(_)=>OpenLink("https://discord.gg/J4SV6NFxAA")),
                     },
                     Id:"AdditonalButtonGroup"

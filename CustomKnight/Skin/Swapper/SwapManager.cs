@@ -72,21 +72,17 @@ namespace CustomKnight {
             if(_tk2dSprite == null){
                 var anim = GO.GetComponent<Animator>();
                 var sr = GO.GetComponent<SpriteRenderer>();
-                if(false && anim != null && sr != null){
-                    //maybe animates
-                    CustomKnight.Instance.Log($"Animation  : {anim.name}");
-                    var caf = GO.GetAddComponent<CustomAnimationFrames>();
-                    var filename = Path.GetFileName(objectPath);
-                    var splitName = filename.Split('.');
-                    var pivot = new Vector2(0.5f, 0.5f); // this needs offset sometimes
-                    var spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot ,64f);
-                    caf.Add(splitName[0],int.Parse(splitName[1]),spr);
-                    return;
-                }
+                
                 //assume sprite
                 if(sr == null){
                     this.Log("No tk2dSprite or SpriteRenderer Component found in " + objectPath);
                 } else {
+                    if(anim != null){
+                        //maybe animated things can be replaced with a single sprite
+                        CustomKnight.Instance.Log($"Animation  : {anim.name}");                    
+                        GameObject.Destroy(anim);
+                        // destroyed the animation, possibly add satchel customAnimation later
+                    }
                     //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while
                     //some sprites are still not perfectly matched 
                     CustomKnight.Instance.Log($"game object : {sr.name} ");
@@ -164,6 +160,7 @@ namespace CustomKnight {
         private IEnumerator SwapSkinRoutine(Scene scene){
             SwapSkinRoutineRunning = true;
             yield return null;
+            SwapSkin(SceneUtils.GetDontDestorOnLoadScene());
             SwapSkinForAllScenes();
             SwapSkinRoutineRunning = false;
         }

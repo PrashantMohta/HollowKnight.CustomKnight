@@ -42,31 +42,32 @@ namespace CustomKnight {
 
             var mat = sr != null ? sr.material :  (tk2ds != null ? tk2ds.GetCurrentSpriteDef()?.material : null);
             int crc = 0;
+            var validForGlobal = true;
             if(mat != null){
                 crc = mat.ComputeCRC();
                 if(MaterialProcessed.TryGetValue(crc,out var _hash)){
-                    return;
+                    validForGlobal = false;
                 }
             }
             Log($"dumping {done}/{detected}");
             Log("game object to be dumped -" + go.name);
             Log($"gameobject path {name}");
-            if(anim != null && sr != null && false){ //since custom animation frames dont work anyway lets disable them for now
-                var caf = go.GetAddComponent<CustomAnimationFrames>();
-                caf.dumpPath = Path.Combine(SkinManager.DATA_DIR,"Dump");
-                caf.dump = true;
-                return;
-            }
+            
             if(sr != null && sr.sprite != null){
                 if(scene.name == "DontDestroyOnLoad"){
-                    return;
-                    // do not attempt to dump DontDestroyOnLoad sprites
-                    var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
-                    var hash = tex.getHash();
-                    MaterialProcessed[crc] = hash;
-                    SaveTextureByPath("Global",hash,tex);
-                    GameObject.Destroy(tex);
-                } else {
+                    return; // dont dump sprites only tk2d from DontDestroyOnLoad
+                    if(validForGlobal){
+                        var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
+                        var hash = tex.getHash();
+                        MaterialProcessed[crc] = hash;
+                        SaveTextureByPath("Global",hash,tex);
+                        GameObject.Destroy(tex);
+                    }
+                } else {    
+                    if(anim != null){ 
+                        // remove the animation component
+                        GameObject.Destroy(anim);
+                    }
                     SaveSpriteDump(scene,name, sr.sprite);
                 }
                 return;
@@ -75,14 +76,16 @@ namespace CustomKnight {
                 //dump as texture hash 
                 var sdef = tk2ds.GetCurrentSpriteDef();
                 var tex = (Texture2D) sdef.material.mainTexture;
-                var dupe = TextureUtils.duplicateTexture(tex);
-                var hash = dupe.getHash();
-                MaterialProcessed[crc] = hash;
-                SaveTextureByPath("Global",hash,dupe);
-                if(scene.name != "DontDestroyOnLoad"){
-                    SaveTextureDump(scene,name, dupe);
+                if(validForGlobal){
+                    var dupe = TextureUtils.duplicateTexture(tex);
+                    var hash = dupe.getHash();
+                    MaterialProcessed[crc] = hash;
+                    SaveTextureByPath("Global",hash,dupe);
+                    GameObject.Destroy(dupe);
                 }
-                GameObject.Destroy(dupe);
+                if(scene.name != "DontDestroyOnLoad"){
+                    SaveTextureDump(scene,name, tex);
+                }
                 return;
             }
         }
@@ -91,29 +94,47 @@ namespace CustomKnight {
         internal bool pending = false;
         internal int detected = 0 , done = 0;
         internal bool DontDestroyOnLoadScene = true; 
+
+        internal void dumpAllSpritesInScene(Scene scene){
+            if(scene == null || !scene.IsValid()){return;}
+            var GOList = scene.GetAllGameObjects();
+            detected += GOList.Count();
+            foreach(var go in GOList){
+                try{
+                    dumpSpriteForGo(scene,go);
+                } catch(Exception e){
+                    Log(e.ToString());
+                }
+                done += 1;
+            }
+        }
         internal IEnumerator dumpAllSpritesCoroutine(){
            done = 0;
            detected = done;
+           
            do{
             yield return null;
-            var scenes = SceneUtils.GetAllLoadedScenes(DontDestroyOnLoadScene);
+            var scenes = SceneUtils.GetAllLoadedScenes(false);
             foreach(var scene in scenes){ 
-                    if(scene == null || !scene.IsValid()){continue;}
-                    var GOList = scene.GetAllGameObjects();
-                    detected += GOList.Count();
-                    foreach(var go in GOList){
-                        try{
-                            dumpSpriteForGo(scene,go);
-                        } catch(Exception e){
-                            Log(e.ToString());
-                        }
-                        done += 1;
-                        yield return null;
+                if(scene == null || !scene.IsValid()){continue;}
+                var GOList = scene.GetAllGameObjects();
+                detected += GOList.Count();
+                foreach(var go in GOList){
+                    try{
+                        dumpSpriteForGo(scene,go);
+                    } catch(Exception e){
+                        Log(e.ToString());
                     }
+                    done += 1;
+                    yield return null;
+                }
             }
             pending = false;
            } while(pending); // handle the case where a new go is spawned while the coro is still dumping
-           
+           if(DontDestroyOnLoadScene){
+                dumpAllSpritesInScene(SceneUtils.GetDontDestorOnLoadScene());
+                DontDestroyOnLoadScene = false;
+           }
            dumpAllSpritesCoroutineRef = null;
         }
         internal AsyncOperation loadScene(int i){
@@ -121,6 +142,7 @@ namespace CustomKnight {
             asyncLoad.priority = i;
             return asyncLoad;
         }
+        
         internal IEnumerator walkScenes(){
             yield return null;
             var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
@@ -130,8 +152,9 @@ namespace CustomKnight {
                     Log($"loading next scene : id {i}");
                     //load next scenes    
                     if( i < sceneCount){                    
-                        var skip = false;
                         AsyncOperation asyncLoad = loadScene(i);
+                        yield return new WaitForSeconds(2);            
+                        dumpAllSprites();
                         yield return new WaitForSeconds(2);
                         // Wait until the asynchronous scene fully loads & dumps
                         while (detected > done)
@@ -166,17 +189,19 @@ namespace CustomKnight {
         }
 
         internal void dumpAllSprites(Scene scene,LoadSceneMode mode){
+            if(!enabled) {return;} 
             Log($"Entered scene : Name {scene.name}");
-            if(coroHelperObj != null){
+            /*if(coroHelperObj != null){
                 coroHelperObj.GetAddComponent<coroutineHelper>().StopCoroutine(dumpAllSpritesCoroutineRef);
                 GameObject.Destroy(coroHelperObj);
                 dumpAllSpritesCoroutineRef = null;
-            }
+            }*/
             dumpAllSprites();
         }
         
         internal void dumpAllSprites(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self){
             orig(self);
+            if(!enabled) {return;} 
             if(self.gameObject.GameObject.Value != null){
                 dumpAllSprites();
             }
@@ -222,6 +247,9 @@ namespace CustomKnight {
             if(!isTextureDumped.TryGetValue(outpath,out bool path) && !File.Exists(outpath)){
                 Texture2D dupe = texture.isReadable ? texture : TextureUtils.duplicateTexture(texture);
                 byte[] texBytes = dupe.EncodeToPNG();
+                if(dupe != texture){
+                    GameObject.Destroy(dupe);
+                }
                 try{
                     File.WriteAllBytes(outpath,texBytes);
                 } catch (IOException e){
