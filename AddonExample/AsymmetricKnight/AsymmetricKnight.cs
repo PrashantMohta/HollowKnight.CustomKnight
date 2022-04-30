@@ -38,7 +38,10 @@ namespace AsymmetricalKnight{
         public void AddCustomKnightHandlers(){
                 SkinManager.OnSetSkin += (_,e) => {
                     var skin = SkinManager.GetCurrentSkin();
-                    var currDirIsLeft = HeroController.instance.transform.localScale.x < 0;
+                    var currDirIsLeft = false;
+                    if(HeroController.instance != null && HeroController.instance.transform.localScale.x < 0){
+                        currDirIsLeft = true;
+                    }
 
                     if(lastSkin != skin.GetId()){
                         Knight = new Asymmetrical(CustomKnight.Knight.NAME);

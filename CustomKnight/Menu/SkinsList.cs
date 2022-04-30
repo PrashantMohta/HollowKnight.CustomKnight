@@ -33,9 +33,15 @@ namespace CustomKnight
             MenuRef.Find("applying").isVisible = true;
             setSkinButtonVisibility(false);
             yield return new WaitForSecondsRealtime(0.2f);
-            BetterMenu.MenuRef?.Find("SelectSkinOption")?.updateAfter(_ => BetterMenu.ApplySkin());
+            BetterMenu.MenuRef?.Find("SelectSkinOption")?.updateAfter(_ => {
+                    try {
+                        BetterMenu.ApplySkin();
+                    } catch(Exception e){
+                        CustomKnight.Instance.Log(e.ToString());
+                    }
+                }
+            );
             yield return new WaitForSecondsRealtime(0.2f);
-
             UIManager.instance.UIGoToDynamicMenu(lastMenu);  
             yield return new WaitForSecondsRealtime(0.2f);
 

@@ -106,7 +106,7 @@ namespace CustomKnight {
 
             SkinManager.getSkinNames();             
             SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
-
+            swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
             // Initial load
             if (preloadedObjects != null)
             {

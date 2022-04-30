@@ -177,7 +177,7 @@ namespace CustomKnight{
         }
         private static IEnumerator ChangeSkinRoutine(bool skipFlash)
         {
-            if(!skipFlash){
+            if(!skipFlash && HeroController.instance != null){
                 HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
             }
             LoadSkin();
@@ -242,9 +242,7 @@ namespace CustomKnight{
         /// </summary>
         /// <param name="skipFlash">a <c>bool</c> that determines if the knight should flash white</param>
         public static void RefreshSkin(bool skipFlash){
-            if(HeroController.instance != null){
-                GameManager.instance.StartCoroutine(ChangeSkinRoutine(skipFlash));
-            }
+            GameManager.instance.StartCoroutine(ChangeSkinRoutine(skipFlash));
         }
         public static event EventHandler<EventArgs> OnSetSkin;
 
@@ -256,14 +254,14 @@ namespace CustomKnight{
         {
             var Skin = GetSkinById(id);
             CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId());
-            if(CurrentSkin.GetId() == Skin.GetId()) { return; } 
+            if(CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; } 
             CurrentSkin = Skin;
             // use this when saving so you save to the right settings
             if(GameManager.instance.IsNonGameplayScene()){
-                CustomKnight.GlobalSettings.DefaultSkin = Skin.GetId();
+                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
             } else {
-                CustomKnight.GlobalSettings.DefaultSkin = Skin.GetId();
-                CustomKnight.SaveSettings.DefaultSkin = Skin.GetId();
+                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
+                CustomKnight.SaveSettings.DefaultSkin = CurrentSkin.GetId();
             };
             RefreshSkin(false);
             OnSetSkin?.Invoke(CustomKnight.Instance,new EventArgs());
