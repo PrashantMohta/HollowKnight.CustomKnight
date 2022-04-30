@@ -57,6 +57,8 @@ Using Swapper as a skin author :
  - to replace a sprite : `mods/CustomKnight/Skins/<skin>/Swap/<scene-name>/<gameobjectname>.png`
 (will only update once encountered in this scene, refer to the dumped png)
 
+-- to replace a sprite globally look for the sprite in the `Global` directory it will allow you to replace enemies / npcs / objects globally if the file exists in this folder
+
 - to replace a text using it's in-game key :  `mods/CustomKnight/Skins/<skin>/Swap/<scene-name>/<key>.txt`
 (scene-name here is just for organisation, the text will update globally)
 
