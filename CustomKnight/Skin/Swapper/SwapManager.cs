@@ -206,9 +206,9 @@ namespace CustomKnight {
         }
 
         internal void LoadSwapByPath(string pathToLoad){
+            EnsureDirectory(pathToLoad);
             if (!File.Exists(Path.Combine(pathToLoad,"replace.txt")))
             {
-                EnsureDirectory(pathToLoad);
                 using (FileStream fs = File.Create(Path.Combine(pathToLoad,"replace.txt"))){
                     //create and close the stream
                 };
