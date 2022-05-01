@@ -59,9 +59,11 @@ namespace CustomKnight {
             if(s.Version == GetVersion()){
                 CustomKnight.GlobalSettings = s;
             } else {
+                var DefaultSettings = new GlobalModSettings();
                 CustomKnight.GlobalSettings = s;
                 CustomKnight.GlobalSettings.Version = GetVersion();
-                CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
+                CustomKnight.GlobalSettings.NameLength = DefaultSettings.NameLength;
+                CustomKnight.GlobalSettings.GlobalWhiteList = DefaultSettings.GlobalWhiteList;
             }
         }
 

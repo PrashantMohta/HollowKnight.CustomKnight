@@ -74,9 +74,10 @@ namespace CustomKnight {
             } 
             if(tk2ds != null){
                 //dump as texture hash 
+                
                 var sdef = tk2ds.GetCurrentSpriteDef();
                 var tex = (Texture2D) sdef.material.mainTexture;
-                if(validForGlobal){
+                if(validForGlobal || CustomKnight.swapManager.isValidForGlobalSwap(tk2ds)){
                     var dupe = TextureUtils.duplicateTexture(tex);
                     var hash = dupe.getHash();
                     MaterialProcessed[crc] = hash;
@@ -132,7 +133,7 @@ namespace CustomKnight {
             pending = false;
            } while(pending); // handle the case where a new go is spawned while the coro is still dumping
            if(DontDestroyOnLoadScene){
-                dumpAllSpritesInScene(SceneUtils.GetDontDestorOnLoadScene());
+                dumpAllSpritesInScene(SceneUtils.GetDontDestroyOnLoadScene());
                 DontDestroyOnLoadScene = false;
            }
            dumpAllSpritesCoroutineRef = null;
