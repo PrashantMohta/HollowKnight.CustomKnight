@@ -89,7 +89,6 @@ namespace CustomKnight
         internal bool pending = false;
         internal int detected = 0 , done = 0;
         internal bool DontDestroyOnLoadScene = true; 
-        internal GameObjectProxy ProgressIndicator;
         internal void updateDumpProgressText(){
             SkinSwapperPanel.UpdateDumpProgressText(detected,done);
         }
