@@ -35,6 +35,12 @@ namespace CustomKnight
         }
         internal static void ToggleDumping(){
             CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
+            if(CustomKnight.dumpManager.enabled){
+                CustomKnight.swapManager.Unload();
+                CustomKnight.dumpManager.dumpAllSprites();
+            } else {
+                CustomKnight.swapManager.Load();
+            }
             SetDumpButton();
         }
 

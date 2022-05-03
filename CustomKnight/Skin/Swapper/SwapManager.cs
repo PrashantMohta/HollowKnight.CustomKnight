@@ -46,6 +46,7 @@ namespace CustomKnight
             if(colliders == null){
                 return false;
             }
+            /*
             if (go.GetComponent<DamageHero>() || go.LocateMyFSM("damages_hero"))
             {
                 return true;
@@ -53,7 +54,7 @@ namespace CustomKnight
             else if (go.GetComponent<HealthManager>()||go.LocateMyFSM("health_manager_enemy") || go.LocateMyFSM("health_manager"))
             {
                 return true;
-            }
+            }*/
             return false;
         }
         internal void QueueTk2d(tk2dSprite tk){
@@ -476,11 +477,11 @@ namespace CustomKnight
             if(alwaysReprocessMaterial || !MaterialProcessed.TryGetValue(crc,out hash )){
                 hash = HashWithCache.getTk2dSpriteHash(tk);
                 MaterialProcessed[crc] = hash;   
+                var Gop = getGopGlobal("Global",hash);
+                if(Gop != null){
+                    applySkinsUsingProxy(Gop,tk.gameObject);
+                } 
             }
-            var Gop = getGopGlobal("Global",hash);
-            if(Gop != null){
-                applySkinsUsingProxy(Gop,tk.gameObject);
-            } 
         }
         internal void applyGlobalEntityForGo(GameObject go){
             var tks = go.GetComponentsInChildren<tk2dSprite>();

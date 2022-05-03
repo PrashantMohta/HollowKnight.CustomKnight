@@ -109,9 +109,7 @@ namespace CustomKnight
             }
 
 
-            if(GlobalSettings.showMovedText){
-                GUIController.Instance.BuildMenus();
-            }
+            GUIController.Instance.BuildMenus();
             On.HeroController.Start += HeroControllerStart;
         }
 

@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
+using CustomKnight.Canvas;
 
 namespace CustomKnight
 {
@@ -66,7 +67,10 @@ namespace CustomKnight
                 //dump as texture hash 
                 
                 var sdef = tk2ds.GetCurrentSpriteDef();
-                var tex = (Texture2D) sdef.material.mainTexture;
+                var tex = (Texture2D) sdef?.material?.mainTexture;
+                if(tex == null){
+                    return;
+                }
                 if(validForGlobal){
                     var dupe = TextureUtils.duplicateTexture(tex);
                     var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
@@ -85,7 +89,10 @@ namespace CustomKnight
         internal bool pending = false;
         internal int detected = 0 , done = 0;
         internal bool DontDestroyOnLoadScene = true; 
-
+        internal GameObjectProxy ProgressIndicator;
+        internal void updateDumpProgressText(){
+            SkinSwapperPanel.UpdateDumpProgressText(detected,done);
+        }
         internal void dumpAllSpritesInScene(Scene scene){
             if(scene == null || !scene.IsValid()){return;}
             var GOList = scene.GetAllGameObjects();
@@ -103,10 +110,11 @@ namespace CustomKnight
         internal IEnumerator dumpAllSpritesCoroutine(){
            done = 0;
            detected = done;
-           
+           yield return new WaitForSecondsRealtime(1f);
            do{
             yield return null;
             var scenes = SceneUtils.GetAllLoadedScenes(false);
+            pending = false;
             foreach(var scene in scenes){ 
                 if(scene == null || !scene.IsValid()){continue;}
                 var GOList = scene.GetAllGameObjects();
@@ -119,9 +127,9 @@ namespace CustomKnight
                     }
                     done += 1;
                     yield return null;
+                    updateDumpProgressText();
                 }
             }
-            pending = false;
            } while(pending); // handle the case where a new go is spawned while the coro is still dumping
            if(DontDestroyOnLoadScene){
                 dumpAllSpritesInScene(SceneUtils.GetDontDestroyOnLoadScene());
@@ -172,31 +180,19 @@ namespace CustomKnight
             }
         } 
         internal void walk(){
-            var g = new GameObject();
-            GameObject.DontDestroyOnLoad(g);
-            g.AddComponent<coroutineHelper>().StartCoroutine(walkScenes());
+            CoroutineHelper.GetRunner().StartCoroutine(walkScenes());
         }
-        private GameObject coroHelperObj;
         internal void dumpAllSprites(){
             if(!enabled) {return;} 
             pending = true;
-            if(coroHelperObj == null){
-                coroHelperObj = new GameObject();
-                GameObject.DontDestroyOnLoad(coroHelperObj);
-            }
             if(dumpAllSpritesCoroutineRef == null){
-                dumpAllSpritesCoroutineRef = coroHelperObj.GetAddComponent<coroutineHelper>().StartCoroutine(dumpAllSpritesCoroutine());
+                dumpAllSpritesCoroutineRef = CoroutineHelper.GetRunner().StartCoroutine(dumpAllSpritesCoroutine());
             }
         }
 
         internal void dumpAllSprites(Scene scene,LoadSceneMode mode){
             if(!enabled) {return;} 
             Log($"Entered scene : Name {scene.name}");
-            /*if(coroHelperObj != null){
-                coroHelperObj.GetAddComponent<coroutineHelper>().StopCoroutine(dumpAllSpritesCoroutineRef);
-                GameObject.Destroy(coroHelperObj);
-                dumpAllSpritesCoroutineRef = null;
-            }*/
             dumpAllSprites();
         }
         

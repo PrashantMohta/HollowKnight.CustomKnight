@@ -21,8 +21,10 @@ namespace CustomKnight.Canvas
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 scaler.referenceResolution = new Vector2(1920f, 1080f);
                 canvas.AddComponent<GraphicRaycaster>();
-                
-                SkinSwapperPanel.BuildMenu(canvas);
+                if(CustomKnight.GlobalSettings.showMovedText){
+                    SkinSwapperPanel.BuildMenu(canvas);
+                }
+                SkinSwapperPanel.BuildDumpingUpdatePanel(canvas);
 
                 DontDestroyOnLoad(canvas);
             }
