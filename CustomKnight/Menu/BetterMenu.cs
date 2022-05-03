@@ -1,15 +1,8 @@
-using Modding;
-using System;
-using System.Collections.Generic;
+using CustomKnight.Canvas;
+using Satchel.BetterMenus;
 using System.Linq;
 
-using UnityEngine;
-using InControl;
-using Satchel;
-using Satchel.BetterMenus;
-using CustomKnight.Canvas;
-
-namespace CustomKnight 
+namespace CustomKnight
 {
     internal static class BetterMenu
     {

@@ -1,13 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using Modding;
-using System.Linq;
-using Satchel;
-using static Modding.Logger;
-namespace CustomKnight {
+namespace CustomKnight
+{
     internal static class FixSkinStructure
     {
 

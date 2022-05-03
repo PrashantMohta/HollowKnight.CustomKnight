@@ -1,14 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-using HutongGames.PlayMaker.Actions;
-using static Satchel.FsmUtil;
-using static CustomKnight.SkinManager;
-using static Satchel.GameObjectUtils;
-
-namespace CustomKnight {
+namespace CustomKnight
+{
     internal class TextureCache { // used for reducing disk reads when switching skins back and forth
         internal static Dictionary<string,Dictionary<string,CustomKnightTexture>> skinTextureCache = new Dictionary<string,Dictionary<string,CustomKnightTexture>>();
         internal static List<string> recentSkins = new List<string>();

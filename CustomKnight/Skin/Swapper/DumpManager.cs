@@ -1,22 +1,10 @@
-using System;
 using System.IO;
 using System.Linq;
-
-using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;           
-
-using GlobalEnums;
-using Modding;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Satchel;
-using static Satchel.SpriteUtils;
 using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
 
-namespace CustomKnight {
+namespace CustomKnight
+{
 
     public class coroutineHelper : MonoBehaviour{}
     public class DumpManager{

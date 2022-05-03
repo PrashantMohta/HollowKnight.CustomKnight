@@ -1,12 +1,8 @@
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Satchel;
-using UnityEngine;
 using Newtonsoft.Json;
+using System.IO;
 
-namespace CustomKnight {
+namespace CustomKnight
+{
     internal class CacheObj{
         internal Dictionary<string,string> PathToHash = new();
         public Dictionary<string,List<string>> HashToPaths = new();

@@ -1,14 +1,6 @@
-using Modding;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using InControl;
-using Satchel;
 using Satchel.BetterMenus;
-using MenuOptionHorizontal = UnityEngine.UI.MenuOptionHorizontal;
 
-namespace CustomKnight 
+namespace CustomKnight
 {
     internal static class SkinsList
     {
@@ -58,7 +50,7 @@ namespace CustomKnight
                         applying = true;
                         // apply the skin
                         BetterMenu.selectedSkin = index;
-                        GameManager.instance.StartCoroutine(applyAndGoBack());
+                        CoroutineHelper.GetRunner().StartCoroutine(applyAndGoBack());
                     }
                 },Id:$"skinbutton{SkinManager.SkinsList[index].GetId()}");
         }

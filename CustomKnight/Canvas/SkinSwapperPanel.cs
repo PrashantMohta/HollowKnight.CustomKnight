@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.IO;
-using HutongGames.PlayMaker.Actions;
-using InControl;
-using Modding;
-using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
-
-namespace CustomKnight.Canvas
+﻿namespace CustomKnight.Canvas
 {
     public class SkinSwapperPanel
     {

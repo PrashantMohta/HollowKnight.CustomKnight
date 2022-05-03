@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace CustomKnight.Canvas
-{ 
+{
     public class CanvasButton
     {
         private GameObject buttonObj;
@@ -38,7 +37,7 @@ namespace CustomKnight.Canvas
             buttonTransform.anchorMin = position;
             buttonTransform.anchorMax = position;
 
-            Object.DontDestroyOnLoad(buttonObj);
+            UnityEngine.Object.DontDestroyOnLoad(buttonObj);
 
             if (font != null && text != null)
             {
@@ -53,7 +52,7 @@ namespace CustomKnight.Canvas
                 outline.effectColor = Color.black;
                 textObj.transform.SetParent(buttonObj.transform, false);
 
-                Object.DontDestroyOnLoad(textObj);
+                UnityEngine.Object.DontDestroyOnLoad(textObj);
             }
 
             active = true;
@@ -165,8 +164,8 @@ namespace CustomKnight.Canvas
 
         public void Destroy()
         {
-            Object.Destroy(buttonObj);
-            Object.Destroy(textObj);
+            UnityEngine.Object.Destroy(buttonObj);
+            UnityEngine.Object.Destroy(textObj);
         }
     }
 }

@@ -1,5 +1,3 @@
-using Modding;
-
 namespace CustomKnight
 {
     public class SaveModSettings  {

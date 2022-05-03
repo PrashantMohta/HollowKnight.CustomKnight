@@ -1,10 +1,7 @@
-using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace CustomKnight {
+namespace CustomKnight
+{
     public class GameObjectProxy
     {
         public string name;

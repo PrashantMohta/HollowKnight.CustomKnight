@@ -1,20 +1,10 @@
-using System;
 using System.IO;
 using System.Linq;
-
-using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;           
-
-using GlobalEnums;
-using Modding;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Satchel;
+using System.Text.RegularExpressions;
 using static Satchel.IoUtils;
 
-namespace CustomKnight {
+namespace CustomKnight
+{
     public class SwapManager
     {
         private bool alwaysReprocessMaterial = false; // should be false in release
@@ -228,7 +218,7 @@ namespace CustomKnight {
             if(!active && !enabled) {return;}
             currentSkinnedSceneObjs = new List<string>();
             nextCheck = INITAL_NEXT_CHECK;
-            GameManager.instance.StartCoroutine(SwapSkinRoutine(scene));
+            CoroutineHelper.GetRunner().StartCoroutine(SwapSkinRoutine(scene));
         }
 
         internal void checkForMissedObjects(){
@@ -399,7 +389,7 @@ namespace CustomKnight {
                 Log("There are no folders in the Swap directory. No textures to Swap.");
                 return;
             }
-            GameManager.instance.StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
+            CoroutineHelper.GetRunner().StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
         }
 
         internal void resetAllTextures(){
