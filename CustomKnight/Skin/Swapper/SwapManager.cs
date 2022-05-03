@@ -17,12 +17,12 @@ using static Satchel.IoUtils;
 namespace CustomKnight {
     public class SwapManager
     {
+        private bool alwaysReprocessMaterial = false; // should be false in release
         private string DATA_DIR;
         internal string SWAP_FOLDER = "Swap";
         private string SEPARATOR = "=>";
         internal float BACKOFF_MULTIPLIER = 1.3f;
         internal int INITAL_NEXT_CHECK = 1000;
-
         internal int nextCheck;
         internal Dictionary<string,Dictionary<string,GameObjectProxy>> Scenes;
         internal List<string> currentSkinnedSceneObjs;
@@ -50,15 +50,10 @@ namespace CustomKnight {
         internal Dictionary<tk2dSprite,bool> processedGlobal = new();
         internal bool isValidForGlobalSwap(tk2dSprite tk){
             if(tk == null) {return false;}
+            if(alwaysReprocessMaterial) { return true; }
             var go = tk.gameObject;
-            var name = go.GetName(true);
-            foreach(var item in CustomKnight.GlobalSettings.GlobalWhiteList){
-                if(name.Contains(item)){
-                    return true;
-                }
-            }
-            var colliders = go.GetComponentsInChildren<Collider2D>();
-            if(colliders == null || colliders.Length <= 0){
+            var colliders = go.GetComponent<Collider2D>();
+            if(colliders == null){
                 return false;
             }
             if (go.GetComponent<DamageHero>() || go.LocateMyFSM("damages_hero"))
@@ -96,7 +91,7 @@ namespace CustomKnight {
                 yield return null;
                 if(tk2dSpriteQueue.Count > 0){
                     yield return null;
-                    Modding.Logger.Log("processing global tk2d" + tk2dSpriteQueue.Count);
+                    Log("processing global tk2ds count : " + tk2dSpriteQueue.Count);
                     while(true){
                         if(tk2dSpriteQueue.Count <= 0) {break;}
                         var tk = tk2dSpriteQueue.Dequeue();
@@ -104,6 +99,7 @@ namespace CustomKnight {
                             applyGlobalTk2d(tk);
                         }
                     }
+                    HashWithCache.saveIfUpdated();
                 }
             }
         }
@@ -132,6 +128,7 @@ namespace CustomKnight {
         }
 
         private void SwapSkinForGo(string objectPath,GameObject GO){
+            Modding.Logger.LogDebug($"op {objectPath}");
             Texture2D tex = loadedTextures[objectPath];
             var _tk2dSprite = GO.GetComponent<tk2dSprite>();
             if(_tk2dSprite == null){
@@ -145,7 +142,7 @@ namespace CustomKnight {
                     if(anim != null){
                         //maybe animated things can be replaced with a single sprite
                         CustomKnight.Instance.Log($"Animation  : {anim.name}");                    
-                        GameObject.Destroy(anim);
+                        //GameObject.Destroy(anim);
                         // destroyed the animation, possibly add satchel customAnimation later
                     }
                     //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while
@@ -197,19 +194,14 @@ namespace CustomKnight {
                 }
             }
         }
-        private void SwapSkinForAllScenes(bool checkGlobals = false){
+        private void SwapSkinForAllScenes(){
            var scenes = SceneUtils.GetAllLoadedScenes(false);
            foreach(var scene in scenes){ 
-                SwapSkin(scene,checkGlobals);
+                SwapSkin(scene);
            }
         }
-        private void SwapSkin(Scene scene,bool checkGlobals = false){
-            if(checkGlobals){
-                var allGos = scene.GetRootGameObjects();
-                foreach(var go in allGos){
-                    applyGlobalEntityForGo(go);
-                }
-            }
+        private void SwapSkin(Scene scene){
+            
             if (Scenes != null && Scenes.TryGetValue(scene.name, out var CurrentSceneDict))
             {
                 var rootGos = scene.GetRootGameObjects();
@@ -227,7 +219,7 @@ namespace CustomKnight {
         private IEnumerator SwapSkinRoutine(Scene scene){
             SwapSkinRoutineRunning = true;
             yield return null;
-            //SwapSkin(SceneUtils.GetDontDestroyOnLoadScene(),true);
+            SwapSkin(SceneUtils.GetDontDestroyOnLoadScene());
             SwapSkinForAllScenes();
             SwapSkinRoutineRunning = false;
         }
@@ -296,7 +288,8 @@ namespace CustomKnight {
                    }
                 }
             }
-            
+            List<string> hashPaths = new List<string>();
+
             foreach (string path in Directory.GetDirectories(pathToLoad))
             {
                 string directoryName = new DirectoryInfo(path).Name;
@@ -325,6 +318,11 @@ namespace CustomKnight {
                             hasChildren = false
                         };
                         objects[objectName]=GOP;
+                        if(directoryName == "Global"){
+                            var hp = HashWithCache.GetPathsFromHash(objectName);
+                            if(hp != null){
+                              hashPaths.AddRange(hp);
+                            }                       }
                     }
                 }
                 foreach(string childDirectory in Directory.GetDirectories(path)){
@@ -343,6 +341,29 @@ namespace CustomKnight {
                     GOP.TraverseGameObjectDirectory(pathToLoad);
                 }
                 Scenes[directoryName] = objects;
+            }
+            foreach(var hp in hashPaths){
+                var hpSplit = hp.Split(new Char[] {'/'},2);
+                Dictionary<string,GameObjectProxy> scene = null;
+                if(Scenes.ContainsKey(hpSplit[0])){
+                    scene = Scenes[hpSplit[0]];
+                } else {
+                    scene = new Dictionary<string, GameObjectProxy>();
+                    Scenes[hpSplit[0]] = scene;
+                }
+                var goSplit = hpSplit[1].Split(new Char[] {'/'},2);
+                if(goSplit.Length > 0){
+                    GameObjectProxy currentGop;
+                    if(!scene.TryGetValue(goSplit[0],out currentGop)){
+                        currentGop = new GameObjectProxy(){
+                            name = goSplit[0],
+                            hasTexture = false,
+                            hasChildren = true
+                        };
+                        scene.Add(goSplit[0],currentGop);
+                    }
+                    currentGop.TraverseGameObjectPath(hpSplit[1],"Global",HashWithCache.GetHashFromPath(hp));
+                }
             }
         }
         
@@ -390,15 +411,18 @@ namespace CustomKnight {
                 }      
             }
         }
+        internal void tk2dSpriteAwake(On.tk2dSprite.orig_Awake orig,tk2dSprite self){
+            orig(self);
+            if(active || enabled){
+                QueueTk2d(self);
+            }
+        }
         internal void Load(){
             ModHooks.LanguageGetHook += LanguageGet;
             ModHooks.HeroUpdateHook += checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
-            On.tk2dSprite.Awake += (orig,self)=>{
-                orig(self);
-                QueueTk2d(self);
-            };
+            On.tk2dSprite.Awake += tk2dSpriteAwake;
         }
 
         internal void Unload(){
@@ -406,6 +430,7 @@ namespace CustomKnight {
             ModHooks.HeroUpdateHook -= checkForMissedObjects;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
+            On.tk2dSprite.Awake -= tk2dSpriteAwake;
             resetAllTextures();
         }
         internal GameObjectProxy getGop(string sceneName,GameObject go){
@@ -457,13 +482,8 @@ namespace CustomKnight {
             if(mat == null) { return; }
             var crc = mat;//.ComputeCRC();
             string hash;
-            if(!MaterialProcessed.TryGetValue(crc,out hash )){
-                var tex = mat.mainTexture;
-                var dupe = tex.isReadable ? (Texture2D)tex : TextureUtils.duplicateTexture((Texture2D)mat.mainTexture);
-                hash = dupe.getHash();
-                if(!tex.isReadable){
-                    GameObject.Destroy(dupe);
-                }
+            if(alwaysReprocessMaterial || !MaterialProcessed.TryGetValue(crc,out hash )){
+                hash = HashWithCache.getTk2dSpriteHash(tk);
                 MaterialProcessed[crc] = hash;   
             }
             var Gop = getGopGlobal("Global",hash);
@@ -476,7 +496,6 @@ namespace CustomKnight {
             if(tks != null){
                 foreach(var tk in tks){
                     QueueTk2d(tk);
-                    //applyGlobalTk2d(tk);
                 }
             } 
             //do not load any kind of sprites via hash 
@@ -491,7 +510,7 @@ namespace CustomKnight {
                     var mat = sr.material;
                     var crc = mat;//.ComputeCRC();
                     string hash;
-                    if(!MaterialProcessed.TryGetValue(crc,out hash )){
+                    if(alwaysReprocessMaterial || !MaterialProcessed.TryGetValue(crc,out hash )){
                         var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
                         hash = tex.getHash();
                         GameObject.Destroy(tex);

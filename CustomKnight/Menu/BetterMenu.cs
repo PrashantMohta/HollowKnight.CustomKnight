@@ -46,7 +46,7 @@ namespace CustomKnight
         }
 
         internal static void DumpAll(){
-            CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
+            //CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
             CustomKnight.dumpManager.walk();
         }
 
@@ -112,7 +112,7 @@ namespace CustomKnight
                 new MenuRow(
                     new List<Element>{
                         new MenuButton("Dump","Dumps the sprites that Swapper supports (Expect lag)",(_)=>ToggleDumping(),Id:"DumpButton"),
-                        //new MenuButton("Dump All","Dumps Everything (Can take hours)",(_)=>DumpAll(),Id:"DumpAllButton"),
+                        //new MenuButton("Generate Cache","Generates Cache for Everything (Can take hours)",(_)=>DumpAll(),Id:"DumpAllButton"),
                         //new MenuButton("Need Help?","Join the HK Modding Discord",(_)=>OpenLink("https://discord.gg/J4SV6NFxAA")),
                     },
                     Id:"AdditonalButtonGroup"

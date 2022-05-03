@@ -66,7 +66,8 @@ namespace CustomKnight {
                 } else {    
                     if(anim != null){ 
                         // remove the animation component
-                        GameObject.Destroy(anim);
+                        //GameObject.Destroy(anim);
+                        return;
                     }
                     SaveSpriteDump(scene,name, sr.sprite);
                 }
@@ -77,9 +78,9 @@ namespace CustomKnight {
                 
                 var sdef = tk2ds.GetCurrentSpriteDef();
                 var tex = (Texture2D) sdef.material.mainTexture;
-                if(validForGlobal || CustomKnight.swapManager.isValidForGlobalSwap(tk2ds)){
+                if(validForGlobal){
                     var dupe = TextureUtils.duplicateTexture(tex);
-                    var hash = dupe.getHash();
+                    var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
                     MaterialProcessed[crc] = hash;
                     SaveTextureByPath("Global",hash,dupe);
                     GameObject.Destroy(dupe);
@@ -108,6 +109,7 @@ namespace CustomKnight {
                 }
                 done += 1;
             }
+            HashWithCache.saveIfUpdated();
         }
         internal IEnumerator dumpAllSpritesCoroutine(){
            done = 0;
@@ -136,10 +138,11 @@ namespace CustomKnight {
                 dumpAllSpritesInScene(SceneUtils.GetDontDestroyOnLoadScene());
                 DontDestroyOnLoadScene = false;
            }
+           HashWithCache.saveIfUpdated();
            dumpAllSpritesCoroutineRef = null;
         }
         internal AsyncOperation loadScene(int i){
-            AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i,LoadSceneMode.Additive);
+            AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i);
             asyncLoad.priority = i;
             return asyncLoad;
         }
@@ -147,23 +150,31 @@ namespace CustomKnight {
         internal IEnumerator walkScenes(){
             yield return null;
             var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-            var i = 4; 
+            var i = 0; 
             while(true){
                 if(dumpAllSpritesCoroutineRef == null || !pending){
                     Log($"loading next scene : id {i}");
                     //load next scenes    
                     if( i < sceneCount){                    
-                        AsyncOperation asyncLoad = loadScene(i);
-                        yield return new WaitForSeconds(2);            
-                        dumpAllSprites();
-                        yield return new WaitForSeconds(2);
-                        // Wait until the asynchronous scene fully loads & dumps
-                        while (detected > done)
-                        {
-                            yield return null;
+                        try{
+                            AsyncOperation asyncLoad = loadScene(i);
+                        } catch(Exception e){
+                            Modding.Logger.Log($"error in dumpng scene {i} with {e.ToString()}");
                         }
-                        if(i > 3){
-                            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(i);
+                            yield return new WaitForSeconds(5);            
+                            dumpAllSprites();
+                            yield return new WaitForSeconds(10);
+                            // Wait until the asynchronous scene fully loads & dumps
+                            /*while (detected > done)
+                            {
+                                yield return null;
+                            }*/
+                        try{
+                            if(i > 3){
+                                UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(i);
+                            }
+                        } catch(Exception e){
+                            Modding.Logger.Log($"error in dumpng scene {i} with {e.ToString()}");
                         }
                         i++;
                     }
