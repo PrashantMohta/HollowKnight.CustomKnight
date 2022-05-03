@@ -143,6 +143,7 @@ namespace CustomKnight {
                         //maybe animated things can be replaced with a single sprite
                         CustomKnight.Instance.Log($"Animation  : {anim.name}");                    
                         //GameObject.Destroy(anim);
+                        //go.AddComponent<Animator>();
                         // destroyed the animation, possibly add satchel customAnimation later
                     }
                     //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while

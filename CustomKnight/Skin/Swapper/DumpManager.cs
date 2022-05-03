@@ -67,6 +67,7 @@ namespace CustomKnight {
                     if(anim != null){ 
                         // remove the animation component
                         //GameObject.Destroy(anim);
+                        //go.AddComponent<Animator>();
                         return;
                     }
                     SaveSpriteDump(scene,name, sr.sprite);

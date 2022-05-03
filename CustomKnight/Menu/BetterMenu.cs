@@ -46,7 +46,7 @@ namespace CustomKnight
         }
 
         internal static void DumpAll(){
-            //CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
+            CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
             CustomKnight.dumpManager.walk();
         }
 

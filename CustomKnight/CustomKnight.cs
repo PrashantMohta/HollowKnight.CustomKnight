@@ -63,7 +63,6 @@ namespace CustomKnight {
                 CustomKnight.GlobalSettings = s;
                 CustomKnight.GlobalSettings.Version = GetVersion();
                 CustomKnight.GlobalSettings.NameLength = DefaultSettings.NameLength;
-                CustomKnight.GlobalSettings.GlobalWhiteList = DefaultSettings.GlobalWhiteList;
             }
         }
 

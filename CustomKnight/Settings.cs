@@ -17,7 +17,6 @@ namespace CustomKnight
 
         public bool showMovedText {get; set;} = true;
         public bool SwapperEnabled {get; set;} = true;
-        public string[] GlobalWhiteList = {"imprisoned knight","boss","corpse"};
     }
 
 }
