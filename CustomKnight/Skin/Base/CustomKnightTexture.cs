@@ -1,7 +1,6 @@
-using UnityEngine;
+namespace CustomKnight
+{
 
-namespace CustomKnight{
-        
     /// <summary>
     ///     The Class that represents the state of a <c>Skinable's</c> texture.
     /// </summary>

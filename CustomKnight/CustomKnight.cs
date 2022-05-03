@@ -1,25 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using HutongGames.PlayMaker.Actions;
-using Modding;
+﻿using CustomKnight.Canvas;
 
-using On.TMPro;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
-using Object = System.Object;
-using Random = UnityEngine.Random;
-
-using Modding.Menu;
-using Modding.Menu.Config;
-using Patch = Modding.Patches;
-using CustomKnight.Canvas;
-using static Satchel.AssemblyUtils;
-
-namespace CustomKnight {
+namespace CustomKnight
+{
     public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod , ITogglableMod
     {
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
@@ -59,9 +41,10 @@ namespace CustomKnight {
             if(s.Version == GetVersion()){
                 CustomKnight.GlobalSettings = s;
             } else {
+                var DefaultSettings = new GlobalModSettings();
                 CustomKnight.GlobalSettings = s;
                 CustomKnight.GlobalSettings.Version = GetVersion();
-                CustomKnight.GlobalSettings.NameLength = new GlobalModSettings().NameLength;
+                CustomKnight.GlobalSettings.NameLength = DefaultSettings.NameLength;
             }
         }
 
@@ -126,9 +109,7 @@ namespace CustomKnight {
             }
 
 
-            if(GlobalSettings.showMovedText){
-                GUIController.Instance.BuildMenus();
-            }
+            GUIController.Instance.BuildMenus();
             On.HeroController.Start += HeroControllerStart;
         }
 

@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace CustomKnight.Canvas
 {
@@ -47,7 +46,7 @@ namespace CustomKnight.Canvas
             textTransform.anchorMin = position;
             textTransform.anchorMax = position;
 
-            Object.DontDestroyOnLoad(textObj);
+            UnityEngine.Object.DontDestroyOnLoad(textObj);
 
             active = true;
         }
@@ -113,7 +112,7 @@ namespace CustomKnight.Canvas
 
         public void Destroy()
         {
-            Object.Destroy(textObj);
+            UnityEngine.Object.Destroy(textObj);
         }
     }
 }

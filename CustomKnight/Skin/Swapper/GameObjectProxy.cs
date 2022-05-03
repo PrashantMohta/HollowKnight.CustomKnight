@@ -1,10 +1,7 @@
-using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace CustomKnight {
+namespace CustomKnight
+{
     public class GameObjectProxy
     {
         public string name;
@@ -15,6 +12,41 @@ namespace CustomKnight {
 
         public string getTexturePath(){
             return Path.Combine(rootPath,name+".png");
+        }
+        public void TraverseGameObjectPath(string path,string rootPath,string name){
+            Modding.Logger.LogDebug($"{path}:{rootPath}:{name}");
+            var pathSplit = path.Split(new Char[] {'/'},3);
+            GameObjectProxy GOP = null;
+            hasChildren = false;
+            if(pathSplit.Length > 1){
+                hasChildren = true;
+                if(!children.TryGetValue(pathSplit[1],out GOP)){
+                    GOP = new GameObjectProxy(){
+                        name = pathSplit[1],
+                        hasTexture = false,
+                    };
+                }
+                children[pathSplit[1]] = GOP;
+            }
+            if(GOP != null){
+                if(pathSplit.Length > 2){
+                    GOP.TraverseGameObjectPath($"{pathSplit[1]}/{pathSplit[2]}",rootPath,name);
+                } else {
+                    if(!GOP.hasTexture){ // do not over ride existing texture
+                        GOP.hasTexture = true;
+                        GOP.rootPath = rootPath;
+                        GOP.name = name;
+                    }
+                }
+            } else {
+                if(!this.hasTexture){
+                    this.hasTexture = true;
+                    this.rootPath = rootPath;
+                    this.name = name;
+                }
+            }
+
+            Modding.Logger.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}");
         }
         public void TraverseGameObjectDirectory(string basePath){
             var path = Path.Combine(basePath,Path.Combine(rootPath,name));

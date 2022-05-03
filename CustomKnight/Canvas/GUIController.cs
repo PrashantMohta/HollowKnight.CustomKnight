@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace CustomKnight.Canvas
 {
@@ -27,8 +21,10 @@ namespace CustomKnight.Canvas
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 scaler.referenceResolution = new Vector2(1920f, 1080f);
                 canvas.AddComponent<GraphicRaycaster>();
-                
-                SkinSwapperPanel.BuildMenu(canvas);
+                if(CustomKnight.GlobalSettings.showMovedText){
+                    SkinSwapperPanel.BuildMenu(canvas);
+                }
+                SkinSwapperPanel.BuildDumpingUpdatePanel(canvas);
 
                 DontDestroyOnLoad(canvas);
             }

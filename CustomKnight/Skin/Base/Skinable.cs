@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace CustomKnight
-{   
-    
+{
+
     /// <summary>
     ///     The abstract Class that represents a single Skinable resource in the game.
     ///     These can be used to add support for custom objects to be skinned as if they were defined within Custom Knight

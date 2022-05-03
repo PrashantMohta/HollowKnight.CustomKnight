@@ -1,15 +1,8 @@
-using Modding;
-using System;
-using System.Collections.Generic;
+using CustomKnight.Canvas;
+using Satchel.BetterMenus;
 using System.Linq;
 
-using UnityEngine;
-using InControl;
-using Satchel;
-using Satchel.BetterMenus;
-using CustomKnight.Canvas;
-
-namespace CustomKnight 
+namespace CustomKnight
 {
     internal static class BetterMenu
     {
@@ -42,6 +35,12 @@ namespace CustomKnight
         }
         internal static void ToggleDumping(){
             CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
+            if(CustomKnight.dumpManager.enabled){
+                CustomKnight.swapManager.Unload();
+                CustomKnight.dumpManager.dumpAllSprites();
+            } else {
+                CustomKnight.swapManager.Load();
+            }
             SetDumpButton();
         }
 
@@ -112,7 +111,7 @@ namespace CustomKnight
                 new MenuRow(
                     new List<Element>{
                         new MenuButton("Dump","Dumps the sprites that Swapper supports (Expect lag)",(_)=>ToggleDumping(),Id:"DumpButton"),
-                        //new MenuButton("Dump All","Dumps Everything (Can take hours)",(_)=>DumpAll(),Id:"DumpAllButton"),
+                        //new MenuButton("Generate Cache","Generates Cache for Everything (Can take hours)",(_)=>DumpAll(),Id:"DumpAllButton"),
                         //new MenuButton("Need Help?","Join the HK Modding Discord",(_)=>OpenLink("https://discord.gg/J4SV6NFxAA")),
                     },
                     Id:"AdditonalButtonGroup"

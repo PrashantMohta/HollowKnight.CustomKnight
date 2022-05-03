@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Satchel;
-
 namespace CustomKnight
 {
     public class PinsScarab : Skinable_Sprite

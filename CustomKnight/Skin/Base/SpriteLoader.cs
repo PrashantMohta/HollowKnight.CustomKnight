@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-using HutongGames.PlayMaker.Actions;
-using static Satchel.FsmUtil;
-using static CustomKnight.SkinManager;
-using static Satchel.GameObjectUtils;
-
-namespace CustomKnight {
+﻿namespace CustomKnight
+{
     internal class SpriteLoader {
         private static bool texRoutineRunning;
         private static Coroutine setTexRoutine;
@@ -32,7 +23,7 @@ namespace CustomKnight {
             
             if (texRoutineRunning && GameManager.instance != null)
             {
-                GameManager.instance.StopCoroutine(setTexRoutine);
+                CoroutineHelper.GetRunner().StopCoroutine(setTexRoutine);
                 texRoutineRunning = false;
             }
 
@@ -40,13 +31,13 @@ namespace CustomKnight {
         }
         internal static void Load()
         {
-            GameManager.instance.StartCoroutine(Start());
+            CoroutineHelper.GetRunner().StartCoroutine(Start());
         }
         internal static void ModifyHeroTextures(SaveGameData data = null)
         {
             if (!texRoutineRunning)
             {
-                setTexRoutine = GameManager.instance.StartCoroutine(SetHeroTex());
+                setTexRoutine = CoroutineHelper.GetRunner().StartCoroutine(SetHeroTex());
                 texRoutineRunning = true;
             }
         }

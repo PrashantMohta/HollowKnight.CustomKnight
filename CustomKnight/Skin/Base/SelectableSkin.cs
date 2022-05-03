@@ -1,11 +1,8 @@
 using System.IO;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace CustomKnight{
-    
+namespace CustomKnight
+{
+
     /// <summary>
     ///     The Interface that a Class must implement to be treated as a skin.
     /// </summary>

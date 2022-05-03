@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.IO;
-using HutongGames.PlayMaker.Actions;
-using InControl;
-using Modding;
-using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
-
-namespace CustomKnight.Canvas
+﻿namespace CustomKnight.Canvas
 {
     public class SkinSwapperPanel
     {
         public static CanvasPanel Panel;
+        public static CanvasPanel DumpingUpdatePanel;
 
         public static void hidePanel(string bn){
             CustomKnight.GlobalSettings.showMovedText = false;
@@ -22,6 +11,50 @@ namespace CustomKnight.Canvas
                 Panel.SetActive(false, true);
             }
         }
+        public static void BuildDumpingUpdatePanel(GameObject canvas)
+        {
+            float currentElementPosY = 150f;
+            int PanelWidth = 500;
+
+            int OptionSize = 25;
+            int fontSize = (int)(OptionSize * 0.85f);
+            int headingSize = 50;
+            int headingFontSize = (int)(OptionSize * 0.85f);
+
+
+            DumpingUpdatePanel = new CanvasPanel(
+                canvas,
+                new Vector2(0, currentElementPosY), 
+                Vector2.zero,
+                new Rect(0, 0, PanelWidth, 60)
+            );
+
+            DumpingUpdatePanel.AddText(
+                "SpriteDumpText",
+                "Dumping Sprites \n 0%",
+                new Vector2(0, currentElementPosY),
+                new Vector2(PanelWidth, headingSize), 
+                GUIController.Instance.trajanNormal,
+                headingFontSize,
+                FontStyle.Bold,
+                TextAnchor.MiddleCenter
+            );
+
+            DumpingUpdatePanel.SetActive(false, true);
+        }
+
+        public static void UpdateDumpProgressText(float detected,float done){
+            if(done < detected - 1){
+                DumpingUpdatePanel.SetActive(true, true);
+            } else {
+                DumpingUpdatePanel.SetActive(false, true);
+            }
+            var text = DumpingUpdatePanel.GetText("SpriteDumpText");
+            text.UpdateText($"Dumping Sprites \n {(100f * done/detected).ToString("0.0")}%");
+        }
+
+
+
         public static void BuildMenu(GameObject canvas)
         {
             float currentElementPosY = 100f;

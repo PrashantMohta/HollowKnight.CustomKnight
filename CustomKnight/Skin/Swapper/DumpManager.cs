@@ -1,22 +1,11 @@
-using System;
 using System.IO;
 using System.Linq;
-
-using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;           
-
-using GlobalEnums;
-using Modding;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Satchel;
-using static Satchel.SpriteUtils;
 using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
+using CustomKnight.Canvas;
 
-namespace CustomKnight {
+namespace CustomKnight
+{
 
     public class coroutineHelper : MonoBehaviour{}
     public class DumpManager{
@@ -66,7 +55,9 @@ namespace CustomKnight {
                 } else {    
                     if(anim != null){ 
                         // remove the animation component
-                        GameObject.Destroy(anim);
+                        //GameObject.Destroy(anim);
+                        //go.AddComponent<Animator>();
+                        return;
                     }
                     SaveSpriteDump(scene,name, sr.sprite);
                 }
@@ -74,11 +65,15 @@ namespace CustomKnight {
             } 
             if(tk2ds != null){
                 //dump as texture hash 
+                
                 var sdef = tk2ds.GetCurrentSpriteDef();
-                var tex = (Texture2D) sdef.material.mainTexture;
+                var tex = (Texture2D) sdef?.material?.mainTexture;
+                if(tex == null){
+                    return;
+                }
                 if(validForGlobal){
                     var dupe = TextureUtils.duplicateTexture(tex);
-                    var hash = dupe.getHash();
+                    var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
                     MaterialProcessed[crc] = hash;
                     SaveTextureByPath("Global",hash,dupe);
                     GameObject.Destroy(dupe);
@@ -94,7 +89,9 @@ namespace CustomKnight {
         internal bool pending = false;
         internal int detected = 0 , done = 0;
         internal bool DontDestroyOnLoadScene = true; 
-
+        internal void updateDumpProgressText(){
+            SkinSwapperPanel.UpdateDumpProgressText(detected,done);
+        }
         internal void dumpAllSpritesInScene(Scene scene){
             if(scene == null || !scene.IsValid()){return;}
             var GOList = scene.GetAllGameObjects();
@@ -107,14 +104,16 @@ namespace CustomKnight {
                 }
                 done += 1;
             }
+            HashWithCache.saveIfUpdated();
         }
         internal IEnumerator dumpAllSpritesCoroutine(){
            done = 0;
            detected = done;
-           
+           yield return new WaitForSecondsRealtime(1f);
            do{
             yield return null;
             var scenes = SceneUtils.GetAllLoadedScenes(false);
+            pending = false;
             foreach(var scene in scenes){ 
                 if(scene == null || !scene.IsValid()){continue;}
                 var GOList = scene.GetAllGameObjects();
@@ -127,18 +126,19 @@ namespace CustomKnight {
                     }
                     done += 1;
                     yield return null;
+                    updateDumpProgressText();
                 }
             }
-            pending = false;
            } while(pending); // handle the case where a new go is spawned while the coro is still dumping
            if(DontDestroyOnLoadScene){
-                dumpAllSpritesInScene(SceneUtils.GetDontDestorOnLoadScene());
+                dumpAllSpritesInScene(SceneUtils.GetDontDestroyOnLoadScene());
                 DontDestroyOnLoadScene = false;
            }
+           HashWithCache.saveIfUpdated();
            dumpAllSpritesCoroutineRef = null;
         }
         internal AsyncOperation loadScene(int i){
-            AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i,LoadSceneMode.Additive);
+            AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i);
             asyncLoad.priority = i;
             return asyncLoad;
         }
@@ -146,23 +146,31 @@ namespace CustomKnight {
         internal IEnumerator walkScenes(){
             yield return null;
             var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-            var i = 4; 
+            var i = 0; 
             while(true){
                 if(dumpAllSpritesCoroutineRef == null || !pending){
                     Log($"loading next scene : id {i}");
                     //load next scenes    
                     if( i < sceneCount){                    
-                        AsyncOperation asyncLoad = loadScene(i);
-                        yield return new WaitForSeconds(2);            
-                        dumpAllSprites();
-                        yield return new WaitForSeconds(2);
-                        // Wait until the asynchronous scene fully loads & dumps
-                        while (detected > done)
-                        {
-                            yield return null;
+                        try{
+                            AsyncOperation asyncLoad = loadScene(i);
+                        } catch(Exception e){
+                            Modding.Logger.Log($"error in dumpng scene {i} with {e.ToString()}");
                         }
-                        if(i > 3){
-                            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(i);
+                            yield return new WaitForSeconds(5);            
+                            dumpAllSprites();
+                            yield return new WaitForSeconds(10);
+                            // Wait until the asynchronous scene fully loads & dumps
+                            /*while (detected > done)
+                            {
+                                yield return null;
+                            }*/
+                        try{
+                            if(i > 3){
+                                UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(i);
+                            }
+                        } catch(Exception e){
+                            Modding.Logger.Log($"error in dumpng scene {i} with {e.ToString()}");
                         }
                         i++;
                     }
@@ -171,31 +179,19 @@ namespace CustomKnight {
             }
         } 
         internal void walk(){
-            var g = new GameObject();
-            GameObject.DontDestroyOnLoad(g);
-            g.AddComponent<coroutineHelper>().StartCoroutine(walkScenes());
+            CoroutineHelper.GetRunner().StartCoroutine(walkScenes());
         }
-        private GameObject coroHelperObj;
         internal void dumpAllSprites(){
             if(!enabled) {return;} 
             pending = true;
-            if(coroHelperObj == null){
-                coroHelperObj = new GameObject();
-                GameObject.DontDestroyOnLoad(coroHelperObj);
-            }
             if(dumpAllSpritesCoroutineRef == null){
-                dumpAllSpritesCoroutineRef = coroHelperObj.GetAddComponent<coroutineHelper>().StartCoroutine(dumpAllSpritesCoroutine());
+                dumpAllSpritesCoroutineRef = CoroutineHelper.GetRunner().StartCoroutine(dumpAllSpritesCoroutine());
             }
         }
 
         internal void dumpAllSprites(Scene scene,LoadSceneMode mode){
             if(!enabled) {return;} 
             Log($"Entered scene : Name {scene.name}");
-            /*if(coroHelperObj != null){
-                coroHelperObj.GetAddComponent<coroutineHelper>().StopCoroutine(dumpAllSpritesCoroutineRef);
-                GameObject.Destroy(coroHelperObj);
-                dumpAllSpritesCoroutineRef = null;
-            }*/
             dumpAllSprites();
         }
         

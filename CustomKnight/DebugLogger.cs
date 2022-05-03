@@ -1,6 +1,6 @@
 
 namespace CustomKnight
-{   
+{
     public static class DebugLogger{
         public static bool enabled = false; 
 

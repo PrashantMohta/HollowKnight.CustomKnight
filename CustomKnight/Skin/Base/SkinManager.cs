@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using Modding;
-using System.Linq;
-
 using static Satchel.IoUtils;
 
-namespace CustomKnight{
-    
+namespace CustomKnight
+{
+
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
         internal static string DATA_DIR;
@@ -242,7 +236,7 @@ namespace CustomKnight{
         /// </summary>
         /// <param name="skipFlash">a <c>bool</c> that determines if the knight should flash white</param>
         public static void RefreshSkin(bool skipFlash){
-            GameManager.instance.StartCoroutine(ChangeSkinRoutine(skipFlash));
+            CoroutineHelper.GetRunner().StartCoroutine(ChangeSkinRoutine(skipFlash));
         }
         public static event EventHandler<EventArgs> OnSetSkin;
 
