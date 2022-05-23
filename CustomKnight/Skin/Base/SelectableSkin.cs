@@ -32,7 +32,7 @@ namespace CustomKnight
         public bool hasSwapper();
 
         /// <summary>
-        ///  hasSwapper
+        ///  hasInv
         /// </summary>
         /// <returns>A <c>bool</c> representing if the skin has support for inventory files.</returns>
         public bool hasInv();
@@ -50,22 +50,14 @@ namespace CustomKnight
         /// <returns>A <c>bool</c> representing if the file exists in this skin.</returns>
         public bool Exists(string FileName);
 
-        public bool InvExists(string FileName);
+ 
         
         /// <summary>
         ///  GetTexture
         /// </summary>
         /// <param name="FileName">A <c>string</c> that identifies the texture file</param>
         /// <returns>A <c>Texture2D</c>, the texture for that filename.</returns>
-        public Texture2D GetTexture(string FileName);
-
-        /// <summary>
-        ///  GetTexture
-        /// </summary>
-        /// <param name="FileName">A <c>string</c> that identifies the texture file(for inventory)</param>
-        /// <returns>A <c>Texture2D</c>, the texture for that filename.</returns>
-        public Texture2D GetInvTexture(string FileName);
-
+        public Texture2D GetTexture(string FileName);   
 
         /// <summary>
         ///  GetFile reads an arbitrary file from the skin
@@ -74,12 +66,6 @@ namespace CustomKnight
         /// <returns>A <c>byte[]</c>, the contents of that filename.</returns>
         public byte[] GetFile(string FileName);
 
-        /// <summary>
-        ///  GetFile reads an arbitrary file from the skin
-        /// </summary>
-        /// <param name="FileName">A <c>string</c> that identifies the file</param>
-        /// <returns>A <c>byte[]</c>, the contents of that filename.</returns>
-        public byte[] GetInvFile(string FileName);
 
     }
 
@@ -103,11 +89,6 @@ namespace CustomKnight
             string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{FileName}").Replace("\\", "/");
             return File.Exists(file);
         }
-        public bool InvExists(string FileName)
-        {
-            string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Inventory/{FileName}").Replace("\\", "/");
-            return File.Exists(file);
-        }
         public Texture2D GetTexture(string FileName){
             Texture2D texture = null;
             try{
@@ -116,22 +97,6 @@ namespace CustomKnight
                 texture = new Texture2D(2, 2);
                 texture.LoadImage(texBytes);
             } catch(Exception e){
-                CustomKnight.Instance.Log(e.ToString());
-            }
-            return texture;
-        }
-        public Texture2D GetInvTexture(string FileName)
-        {
-            Texture2D texture = null;
-            try
-            {
-                string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Inventory/{FileName}").Replace("\\", "/");
-                byte[] texBytes = File.ReadAllBytes(file);
-                texture = new Texture2D(2, 2);
-                texture.LoadImage(texBytes);
-            }
-            catch (Exception e)
-            {
                 CustomKnight.Instance.Log(e.ToString());
             }
             return texture;
@@ -146,20 +111,7 @@ namespace CustomKnight
             }
             return data;
         }
-        public byte[] GetInvFile(string FileName)
-        {
-            byte[] data = null;
-            try
-            {
-                string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Inventory/{FileName}").Replace("\\", "/");
-                data = File.ReadAllBytes(file);
-            }
-            catch (Exception e)
-            {
-                CustomKnight.Instance.Log(e.ToString());
-            }
-            return data;
-        }
+        
     }
     
 }

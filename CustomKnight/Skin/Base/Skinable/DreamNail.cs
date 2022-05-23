@@ -10,26 +10,26 @@
         
         public override void SaveDefaultTexture()
         {
-            GameObject dreamnail = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren("Dream Nail");
+            GameObject dreamnail = SkinManager.invitem.FindGameObjectInChildren("Dream Nail");
             if (nailname.EndsWith("0"))
             {
-                ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(dreamnail.GetComponent<InvItemDisplay>().inactiveSprite), dreamnail.GetComponent<InvItemDisplay>().inactiveSprite.pixelsPerUnit);
+                ckTex.defaultSprite = dreamnail.GetComponent<InvItemDisplay>().inactiveSprite;
             }
             if(nailname.EndsWith("1"))
             {
-                ckTex.defaultSprite= CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(dreamnail.GetComponent<InvItemDisplay>().activeSprite), dreamnail.GetComponent<InvItemDisplay>().activeSprite.pixelsPerUnit);
+                ckTex.defaultSprite = dreamnail.GetComponent<InvItemDisplay>().activeSprite;
             }
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GameObject dreamnail = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren("Dream Nail");
+            GameObject dreamnail = SkinManager.invitem.FindGameObjectInChildren("Dream Nail");
             if (nailname.EndsWith("0"))
             {
-                dreamnail.GetComponent<InvItemDisplay>().inactiveSprite=CreateSpritewithppu(sprite.texture,dreamnail.GetComponent<InvItemDisplay>().inactiveSprite.pixelsPerUnit);
+                dreamnail.GetComponent<InvItemDisplay>().inactiveSprite = sprite;
             }
             if (nailname.EndsWith("1"))
             {
-               dreamnail.GetComponent<InvItemDisplay>().activeSprite= CreateSpritewithppu(sprite.texture, dreamnail.GetComponent<InvItemDisplay>().activeSprite.pixelsPerUnit); ;
+                dreamnail.GetComponent<InvItemDisplay>().activeSprite = sprite;
             }
         }
     }

@@ -2,17 +2,17 @@
 {
     public class Lantern : Skinable_Sprite
     {
-        public static string Name = "Lantern";
+        public static string Name = "Inventory/Lantern";
         public Lantern() : base(Name) { }
         public override void SaveDefaultTexture()
         {
-            GameObject cw = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Equipment").FindGameObjectInChildren("Lantern");
-            ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(cw.GetComponent<SpriteRenderer>().sprite), cw.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit);
+            GameObject cw = SkinManager.equipment.FindGameObjectInChildren("Lantern");
+            ckTex.defaultSprite = cw.GetComponent<SpriteRenderer>().sprite;
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GameObject cw = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Equipment").FindGameObjectInChildren("Lantern");
-            cw.GetComponent<SpriteRenderer>().sprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+            GameObject cw = SkinManager.equipment.FindGameObjectInChildren("Lantern");
+            cw.GetComponent<SpriteRenderer>().sprite = sprite;
         }
     }
 }

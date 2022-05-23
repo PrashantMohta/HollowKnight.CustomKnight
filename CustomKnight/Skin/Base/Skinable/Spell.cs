@@ -15,31 +15,33 @@ namespace CustomKnight
             if(SpellLevel>0)
             {
                 
-                string basename = SpellName.Substring(0, SpellName.Length - 2);
-                GameObject spell = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren($"Spell {basename}");
+                string basename = SpellName.Substring(10, SpellName.Length - 12);
+                GameObject spell = SkinManager.invitem.FindGameObjectInChildren($"Spell {basename}");
                 PlayMakerFSM checkfsm = spell.LocateMyFSM("Check Active");
                 Sprite sprite = checkfsm.GetAction<SetSpriteRendererSprite>($"Lv {SpellLevel}", 0).sprite.Value as Sprite;
-                ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(sprite),sprite.pixelsPerUnit) ;
+                ckTex.defaultSprite = sprite ;
             }
             else
             {
-                GameObject spell = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren($"Spell {SpellName}");
-                ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(spell.GetComponent<SpriteRenderer>().sprite), spell.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit);
+                string basename = SpellName.Substring(10, SpellName.Length - 10);
+                GameObject spell = SkinManager.invitem.FindGameObjectInChildren($"Spell {basename}");
+                ckTex.defaultSprite = spell.GetComponent<SpriteRenderer>().sprite;
             }
         }
         public override void ApplySprite(Sprite sprite)
         {
            if(SpellLevel>0)
             {
-                string basename = SpellName.Substring(0, SpellName.Length - 2);
-                GameObject spell = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren($"Spell {basename}");
+                string basename = SpellName.Substring(10, SpellName.Length - 12);
+                GameObject spell = SkinManager.invitem.FindGameObjectInChildren($"Spell {basename}");
                 PlayMakerFSM checkfsm = spell.LocateMyFSM("Check Active");
-                checkfsm.GetAction<SetSpriteRendererSprite>($"Lv {SpellLevel}", 0).sprite.Value = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                checkfsm.GetAction<SetSpriteRendererSprite>($"Lv {SpellLevel}", 0).sprite.Value = sprite;
             }
             else
             {
-                GameObject spell = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren($"Spell {SpellName}");
-                spell.GetComponent<SpriteRenderer>().sprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                string basename = SpellName.Substring(10, SpellName.Length-10);
+                GameObject spell = SkinManager.invitem.FindGameObjectInChildren($"Spell {basename}");
+                spell.GetComponent<SpriteRenderer>().sprite= sprite;
             }
 
         }

@@ -10,30 +10,34 @@ namespace CustomKnight
         }
         public override void SaveDefaultTexture()
         {
-            GodfinderInvIcon invIcon= GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
+            GodfinderInvIcon invIcon= SkinManager.invitem.FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
             if (Name.EndsWith("0"))
             {
-                ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invIcon.normalSprite), invIcon.normalSprite.pixelsPerUnit);
+                ckTex.defaultSprite = invIcon.normalSprite;
             }
             if (Name.EndsWith("1"))
             {
-                ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invIcon.newBossSprite), invIcon.newBossSprite.pixelsPerUnit);
+                ckTex.defaultSprite = invIcon.newBossSprite;
             }
             if (Name.EndsWith("2"))
             {
-                ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invIcon.allBossesSprite), invIcon.allBossesSprite.pixelsPerUnit);
+                ckTex.defaultSprite = invIcon.allBossesSprite;
             }
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GodfinderInvIcon invIcon = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items").FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
+            GodfinderInvIcon invIcon = SkinManager.invitem.FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
             if (Name.EndsWith("0"))
             {
-                invIcon.normalSprite=CreateSpritewithppu(sprite.texture,invIcon.normalSprite.pixelsPerUnit);
+                invIcon.normalSprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);//Make Size correctly;SpriteUtils.CreateSpriteFromTexture() doesnt work
             }
             if (Name.EndsWith("1"))
             {
-                invIcon.newBossSprite= CreateSpritewithppu(sprite.texture, invIcon.newBossSprite.pixelsPerUnit);
+                invIcon.newBossSprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+            }
+            if (Name.EndsWith("2"))
+            {
+                invIcon.allBossesSprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
             }
 
         }

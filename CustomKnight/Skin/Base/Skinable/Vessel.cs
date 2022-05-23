@@ -12,7 +12,7 @@ namespace CustomKnight
         }
         public override void SaveDefaultTexture()
         {
-            InvVesselFragments vesselFragments = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Soul Orb").GetComponent<InvVesselFragments>();
+            InvVesselFragments vesselFragments = SkinManager.inv.FindGameObjectInChildren("Soul Orb").GetComponent<InvVesselFragments>();
             switch (Vesselamount)
             {
                 case 0:
@@ -33,7 +33,7 @@ namespace CustomKnight
         }
         public override void ApplySprite(Sprite sprite)
         {
-            InvVesselFragments vesselFragments = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Soul Orb").GetComponent<InvVesselFragments>();
+            InvVesselFragments vesselFragments = SkinManager.inv.FindGameObjectInChildren("Soul Orb").GetComponent<InvVesselFragments>();
             switch (Vesselamount)
             {
                 case 0:

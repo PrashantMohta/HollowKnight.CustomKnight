@@ -10,23 +10,22 @@ namespace CustomKnight
         }
         public override void SaveDefaultTexture()
         {
-            GameObject invitem = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items");
             switch(ItemName)
             {
-                case "DSlash":
-                    ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite), invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite.pixelsPerUnit);//so confused
+                case "Inventory/DSlash":
+                    ckTex.defaultSprite = SkinManager.invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite;//so confused
                     break;
-                case "CSlash":
-                    ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invitem.FindGameObjectInChildren("Art Cyclone").GetComponent<InvItemDisplay>().activeSprite), invitem.FindGameObjectInChildren("Art Cyclone").GetComponent<InvItemDisplay>().activeSprite.pixelsPerUnit);
+                case "Inventory/CSlash":
+                    ckTex.defaultSprite = SkinManager.invitem.FindGameObjectInChildren("Art Cyclone").GetComponent<InvItemDisplay>().activeSprite;
                     break;
-                case "GSlash":
-                    ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invitem.FindGameObjectInChildren("Art Dash").GetComponent<InvItemDisplay>().activeSprite), invitem.FindGameObjectInChildren("Art Dash").GetComponent<InvItemDisplay>().activeSprite.pixelsPerUnit);
+                case "Inventory/GSlash":
+                    ckTex.defaultSprite = SkinManager.invitem.FindGameObjectInChildren("Art Dash").GetComponent<InvItemDisplay>().activeSprite;
                     break;
-                case "DreamGate":
-                    ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invitem.FindGameObjectInChildren("Dream Gate").GetComponent<InvItemDisplay>().activeSprite), invitem.FindGameObjectInChildren("Dream Gate").GetComponent<InvItemDisplay>().activeSprite.pixelsPerUnit);
+                case "Inventory/DreamGate":
+                    ckTex.defaultSprite = SkinManager.invitem.FindGameObjectInChildren("Dream Gate").GetComponent<InvItemDisplay>().activeSprite;
                     break;
-                case "InvGeo":
-                    ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(invitem.FindGameObjectInChildren("Geo").GetComponent<SpriteRenderer>().sprite), invitem.FindGameObjectInChildren("Geo").GetComponent<SpriteRenderer>().sprite.pixelsPerUnit);
+                case "Inventory/Geo":
+                    ckTex.defaultSprite = SkinManager.invitem.FindGameObjectInChildren("Geo").GetComponent<SpriteRenderer>().sprite;
                     break;
                 default:
                     break;
@@ -34,24 +33,23 @@ namespace CustomKnight
             }
         }
         public override void ApplySprite(Sprite sprite)
-        {
-            GameObject invitem = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Inv_Items");
+        { 
             switch (ItemName)
             {
-                case "DSlash":
-                    invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite=CreateSpritewithppu(sprite.texture,ckTex.defaultSprite.pixelsPerUnit);
+                case "Inventory/DSlash":
+                    SkinManager.invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite=sprite;
                     break;
-                case "CSlash":
-                    invitem.FindGameObjectInChildren("Art Cyclone").GetComponent<InvItemDisplay>().activeSprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                case "Inventory/CSlash":
+                    SkinManager.invitem.FindGameObjectInChildren("Art Cyclone").GetComponent<InvItemDisplay>().activeSprite = sprite;
                     break;
-                case "GSlash":
-                    invitem.FindGameObjectInChildren("Art Dash").GetComponent<InvItemDisplay>().activeSprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                case "Inventory/GSlash":
+                    SkinManager.invitem.FindGameObjectInChildren("Art Dash").GetComponent<InvItemDisplay>().activeSprite = sprite;
                     break;
-                case "DreamGate":
-                    invitem.FindGameObjectInChildren("Dream Gate").GetComponent<InvItemDisplay>().activeSprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                case "Inventory/DreamGate":
+                    SkinManager.invitem.FindGameObjectInChildren("Dream Gate").GetComponent<InvItemDisplay>().activeSprite = sprite;
                     break;
-                case "InvGeo":
-                    invitem.FindGameObjectInChildren("Geo").GetComponent<SpriteRenderer>().sprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                case "Inventory/Geo":
+                    SkinManager.invitem.FindGameObjectInChildren("Geo").GetComponent<SpriteRenderer>().sprite = sprite;
                     break;
                 default:
                     break;

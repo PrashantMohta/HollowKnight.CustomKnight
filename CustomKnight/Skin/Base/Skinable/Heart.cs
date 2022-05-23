@@ -12,27 +12,23 @@ namespace CustomKnight
         }
         public override void SaveDefaultTexture()
         {
-            GameObject heart = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Heart Pieces");
-            switch(HeartPieces)
+            GameObject heart = SkinManager.inv.FindGameObjectInChildren("Heart Pieces");
+            ckTex.defaultSprite = HeartPieces switch
             {
-                case 0:
-                    ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(heart.GetComponent<SpriteRenderer>().sprite), heart.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit); ;
-                    break;
-                default:
-                    ckTex.defaultSprite=heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite;
-                    break;
-            }
+                0 => heart.GetComponent<SpriteRenderer>().sprite,
+                _ => heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite,
+            };
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GameObject heart = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Heart Pieces");
+            GameObject heart = SkinManager.inv.FindGameObjectInChildren("Heart Pieces");
             switch (HeartPieces)
             {
                 case 0:
-                    CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                    heart.GetComponent<SpriteRenderer>().sprite = sprite;
                     break;
                 default:
-                    heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite = CreateSpritewithppu(sprite.texture, heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite.pixelsPerUnit);
+                    heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
                     break;
             }
         }

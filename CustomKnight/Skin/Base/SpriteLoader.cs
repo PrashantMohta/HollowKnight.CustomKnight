@@ -10,10 +10,6 @@ namespace CustomKnight
                 foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                     kvp.Value?.SaveTexture();
                 }
-                foreach(KeyValuePair<string,Skinable> invkvp in SkinManager.InvSkinables)
-                {
-                    invkvp.Value?.SaveTexture();
-                }
             }
             SkinManager.savedDefaultTextures = true;
         }
@@ -23,10 +19,6 @@ namespace CustomKnight
             {
                 foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                     kvp.Value.Reset();
-                }
-                foreach (KeyValuePair<string, Skinable> invkvp in SkinManager.InvSkinables)
-                {
-                    invkvp.Value?.Reset();
                 }
             }
             
@@ -70,20 +62,11 @@ namespace CustomKnight
                     GameObject.Destroy(texture.tex);
                 }
             }
-            foreach (KeyValuePair<string, Skinable> pair in SkinManager.InvSkinables)
-            {
-                CustomKnightTexture texture = pair.Value.ckTex;
-                if (texture.tex != null)
-                {
-                    GameObject.Destroy(texture.tex);
-                }
-            }
             LoadComplete = false;
         }
 
-        internal static void SetSkin(Dictionary<string, Skinable> SkinableMap,Dictionary<string, Skinable> InvSkinableMap){
+        internal static void SetSkin(Dictionary<string, Skinable> SkinableMap){
             SkinManager.Skinables = SkinableMap;
-            SkinManager.InvSkinables = InvSkinableMap;
             ModifyHeroTextures();
         }
         internal static void LoadSprites()
@@ -116,34 +99,8 @@ namespace CustomKnight
                     texture.tex = null;
                 }    
             }
-            
-                foreach (KeyValuePair<string, Skinable> invkvp in SkinManager.InvSkinables)
-                {
-                    invkvp.Value.prepare();
-                    CustomKnightTexture texture = invkvp.Value.ckTex;
-                    if (TextureCache.skinTextureCache.TryGetValue(SkinManager.CurrentSkin.GetId(), out var skinCache) && skinCache.TryGetValue(texture.fileName, out var cachedTex))
-                    {
-                        texture.tex = cachedTex.tex;
-                        texture.missing = cachedTex.missing;
-                        continue;
-                    }
-                    texture.missing = !SkinManager.CurrentSkin.InvExists(texture.fileName);
-                    if (!texture.missing)
-                    {
-                        texture.tex = SkinManager.CurrentSkin.GetInvTexture(texture.fileName);
-                        if (SkinManager.CurrentSkin.shouldCache())
-                        {
-                            TextureCache.setSkinTextureCache(SkinManager.CurrentSkin.GetId(), texture.fileName, new CustomKnightTexture(texture.fileName, texture.missing, texture.defaultTex, texture.tex));
-                        }
-                    }
-                    else
-                    {
-                        texture.tex = null;
-                    }
-                }
-            
             TextureCache.trimTextureCache();
-            SetSkin(SkinManager.Skinables,SkinManager.InvSkinables);
+            SetSkin(SkinManager.Skinables);
             LoadComplete = true;
         }
 
@@ -155,17 +112,11 @@ namespace CustomKnight
                 psr.gameObject.LogWithChildren();
                 DumpManager.debugDumpTex((Texture2D)psr.material.mainTexture,psr.name);
             }*/
-            
             PullDefaultTextures();
             CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
             foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                 kvp.Value.Apply();
             }
-            
-                foreach (KeyValuePair<string, Skinable> invkvp in SkinManager.InvSkinables)
-                {
-                    invkvp.Value.Apply();
-                }
             texRoutineRunning = false;
         }
        

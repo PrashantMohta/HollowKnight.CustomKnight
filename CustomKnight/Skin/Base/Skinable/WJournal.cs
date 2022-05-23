@@ -2,17 +2,17 @@
 {
     public class WJournal : Skinable_Sprite
     {
-        public static string Name = "WJournal";
+        public static string Name = "Inventory/WJournal";
         public WJournal() : base(Name) { }
         public override void SaveDefaultTexture()
         {
-            GameObject sd = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Equipment").FindGameObjectInChildren("Trinket1");
-            ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(sd.GetComponent<SpriteRenderer>().sprite), sd.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit);
+            GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Trinket1");
+            ckTex.defaultSprite = sd.GetComponent<SpriteRenderer>().sprite;
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GameObject sd = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv").FindGameObjectInChildren("Equipment").FindGameObjectInChildren("Trinket1");
-            sd.GetComponent<SpriteRenderer>().sprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+            GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Trinket1");
+            sd.GetComponent<SpriteRenderer>().sprite = sprite;
         }
     }
 }
