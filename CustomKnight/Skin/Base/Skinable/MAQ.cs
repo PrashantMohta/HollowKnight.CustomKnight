@@ -13,15 +13,13 @@
             PlayMakerFSM eqfsm = SkinManager.equipment.LocateMyFSM("Build Equipment List");
             switch (Name)
             {
-                case "Map":
+                case "Inventory/Map":
                     ckTex.defaultSprite = eqfsm.GetAction<SetSpriteRendererSprite>("Map", 1).sprite.Value as Sprite;
                     break;
-                case "Quill":
-                    
+                case "Inventory/Quill":
                     ckTex.defaultSprite = eqfsm.GetAction<SetSpriteRendererSprite>("Quill", 1).sprite.Value as Sprite;
                     break;
-                case "MaQ":
-                    
+                case "Inventory/MaQ":
                     ckTex.defaultSprite = eqfsm.GetAction<SetSpriteRendererSprite>("Map and Quill", 1).sprite.Value as Sprite;
                     break;
                 default:
