@@ -1,4 +1,5 @@
-﻿namespace CustomKnight
+﻿using static Satchel.IoUtils;
+namespace CustomKnight
 {
     internal class SpriteLoader {
         private static bool texRoutineRunning;
@@ -61,7 +62,6 @@
                     GameObject.Destroy(texture.tex);
                 }
             }
-            
             LoadComplete = false;
         }
 
@@ -112,15 +112,15 @@
                 psr.gameObject.LogWithChildren();
                 DumpManager.debugDumpTex((Texture2D)psr.material.mainTexture,psr.name);
             }*/
-            
             PullDefaultTextures();
             CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
             foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
                 kvp.Value.Apply();
             }
-
             texRoutineRunning = false;
         }
+       
+
 
     }
 }

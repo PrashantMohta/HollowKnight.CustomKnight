@@ -166,6 +166,10 @@ namespace CustomKnight
                 Reset();
             }
         }
+        public Sprite CreateSpritewithppu(Texture2D tex,float ppu)
+        {
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), ppu);//We need ppu
+        }
         
         /// <summary>
         ///     An abstract Method that Applies a Sprite to this <c>Skinable</c>

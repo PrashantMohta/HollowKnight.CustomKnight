@@ -1,5 +1,5 @@
 using System.IO;
-
+using static Satchel.IoUtils;
 namespace CustomKnight
 {
 
@@ -30,6 +30,12 @@ namespace CustomKnight
         /// </summary>
         /// <returns>A <c>bool</c> representing if the skin has support for swapper files.</returns>
         public bool hasSwapper();
+
+        /// <summary>
+        ///  hasInv
+        /// </summary>
+        /// <returns>A <c>bool</c> representing if the skin has support for inventory files.</returns>
+        public bool hasInv();
         
         /// <summary>
         ///  getSwapperPath
@@ -43,21 +49,23 @@ namespace CustomKnight
         /// <param name="FileName">A <c>string</c> that identifies the file</param>
         /// <returns>A <c>bool</c> representing if the file exists in this skin.</returns>
         public bool Exists(string FileName);
+
+ 
         
         /// <summary>
         ///  GetTexture
         /// </summary>
         /// <param name="FileName">A <c>string</c> that identifies the texture file</param>
         /// <returns>A <c>Texture2D</c>, the texture for that filename.</returns>
-        public Texture2D GetTexture(string FileName);
+        public Texture2D GetTexture(string FileName);   
 
-                
         /// <summary>
         ///  GetFile reads an arbitrary file from the skin
         /// </summary>
         /// <param name="FileName">A <c>string</c> that identifies the file</param>
         /// <returns>A <c>byte[]</c>, the contents of that filename.</returns>
         public byte[] GetFile(string FileName);
+
 
     }
 
@@ -74,6 +82,7 @@ namespace CustomKnight
         public string GetId() => SkinDirectory;
         public string GetName() => SkinDirectory;
         public bool hasSwapper() => true;
+        public bool hasInv() => DirectoryExists($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Inventory");
         public string getSwapperPath() => Path.Combine(SkinManager.SKINS_FOLDER,SkinDirectory);
 
         public bool Exists(string FileName){
@@ -91,7 +100,7 @@ namespace CustomKnight
                 CustomKnight.Instance.Log(e.ToString());
             }
             return texture;
-        } 
+        }
         public byte[] GetFile(string FileName){
             byte[] data = null;
             try{
@@ -101,7 +110,8 @@ namespace CustomKnight
                 CustomKnight.Instance.Log(e.ToString());
             }
             return data;
-        } 
+        }
+        
     }
     
 }

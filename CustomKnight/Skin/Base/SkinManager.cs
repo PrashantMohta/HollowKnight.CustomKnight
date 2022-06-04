@@ -11,7 +11,7 @@ namespace CustomKnight
         internal static ISelectableSkin CurrentSkin,DefaultSkin;
         internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
         internal static List<ISelectableSkin> SkinsList {get; private set;}
-
+        
         public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
@@ -111,9 +111,71 @@ namespace CustomKnight
             {"Charm_40_2",new Charm("Charm_40_2",40)},
             {"Charm_40_3",new Charm("Charm_40_3",40)},
             {"Charm_40_4",new Charm("Charm_40_4",40)},
-            {"Charm_40_5",new Charm("Charm_40_5",40)}
+            {"Charm_40_5",new Charm("Charm_40_5",40)},
+            {"Nail_1",new Nail("Inventory/Nail_1") },
+            {"Nail_2",new Nail("Inventory/Nail_2") },
+            {"Nail_3",new Nail("Inventory/Nail_3") },
+            {"Nail_4",new Nail("Inventory/Nail_4") },
+            {"Nail_5",new Nail("Inventory/Nail_5") },
+            {"Heart_0",new Heart("Inventory/Heart_0",0) },
+            {"Heart_1",new Heart("Inventory/Heart_1",1) },
+            {"Heart_2",new Heart("Inventory/Heart_2",2) },
+            {"Heart_3",new Heart("Inventory/Heart_3",3) },
+            {"Heart_4",new Heart("Inventory/Heart_4",4) },
+            {"Vessel_0",new Vessel("Inventory/Vessel_0",0) },
+            {"Vessel_1",new Vessel("Inventory/Vessel_1",1) },
+            {"Vessel_2",new Vessel("Inventory/Vessel_2",2) },
+            {"Vessel_3",new Vessel("Inventory/Vessel_3",3) },
+            {"Fireball_1",new InvSpell("Inventory/Fireball_1",1) },
+            {"Fireball_2",new InvSpell("Inventory/Fireball_2",2) },
+            {"Quake_1",new InvSpell("Inventory/Quake_1",1) },
+            {"Quake_2",new InvSpell("Inventory/Quake_2",2) },
+            {"Scream_1",new InvSpell("Inventory/Scream_1",1) },
+            {"Scream_2",new InvSpell("Inventory/Scream_2",2) },
+            {"Focus",new InvSpell("Inventory/Focus",0) },
+            {NailArtBG.Name,new NailArtBG() },
+            {"DSlash",new InvNormal("Inventory/DSlash") },
+            {"GSlash",new InvNormal("Inventory/GSlash") },
+            {"CSlash",new InvNormal("Inventory/CSlash") },
+            {"DreamGate",new InvNormal("Inventory/DreamGate") },
+            {"DreamNail_0",new DreamNail("Inventory/DreamNail_0") },
+            {"DreamNail_1",new DreamNail("Inventory/DreamNail_1") },
+            {"InvGeo",new InvNormal("Inventory/Geo") },
+            {"GodFinder_0",new GodFinder("Inventory/GodFinder_0") },
+            {"GodFinder_1",new GodFinder("Inventory/GodFinder_1") },
+            {"GodFinder_2",new GodFinder("Inventory/GodFinder_2") },
+            {"Cloak_1",new InvCloak(1) },
+            {"Cloak_2",new InvCloak(2) },
+            {InvClaw.Name,new InvClaw() },
+            {InvSD.Name ,new InvSD() },
+            {Lantern.Name,new Lantern() },
+            {InvDJ.Name,new InvDJ() },
+            {Tear.Name,new Tear() },
+            {SlyKey.Name,new SlyKey() },
+            {ElegentKey.Name,new ElegentKey() },
+            {WJournal.Name,new WJournal() },
+            {HSeal.Name,new HSeal() },
+            {Idol.Name,new Idol() },
+            {BEgg.Name,new BEgg() },
+            {"Flower_0",new Flower(0) },
+            {"Flower_1",new Flower(1) },
+            {TramPass.Name,new TramPass() },
+            {Ore.Name,new Ore() },
+            {CityKey.Name,new CityKey() },
+            {LoveKey.Name,new LoveKey() },
+            {Brand.Name,new Brand() },
+            {REgg.Name,new REgg() },
+            {SimpleKey.Name,new SimpleKey() },
+            {"Map",new MAQ("Inventory/Map") },
+            {"Quill",new MAQ("Inventory/Quill") },
+            {"MaQ",new MAQ("Inventory/MaQ") },
+            {RelicBG.Name,new RelicBG() },
+            {SpellBG.Name,new SpellBG() },
            // {"PinsScarab", new Pins()}
         };
+        public static GameObject inv = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv");
+        public static GameObject equipment = inv.FindGameObjectInChildren("Equipment");
+        public static GameObject invitem = inv.FindGameObjectInChildren("Inv_Items");
         static SkinManager(){
             if(CustomKnight.isSatchelInstalled()){
                 SetDataDir();
@@ -155,6 +217,9 @@ namespace CustomKnight
                 var CurrentSkinName = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
                 CurrentSkin = GetSkinById(CurrentSkinName);
             }
+            inv= GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv"); ;
+            equipment = inv.FindGameObjectInChildren("Equipment");
+            invitem = inv.FindGameObjectInChildren("Inv_Items");
             SpriteLoader.Load();
             On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
             On.GeoControl.Start += ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
