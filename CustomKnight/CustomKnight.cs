@@ -89,7 +89,7 @@ namespace CustomKnight
 
             SkinManager.getSkinNames();             
             SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
-            swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
+            SkinManager.SetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
             // Initial load
             if (preloadedObjects != null)
             {
@@ -125,9 +125,7 @@ namespace CustomKnight
             Log("HeroControllerStart");
             var currentSkinId = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             SkinManager.CurrentSkin = SkinManager.GetSkinById(currentSkinId);
-            SaveSettings.DefaultSkin = SkinManager.CurrentSkin.GetId();
-            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
-            SkinManager.LoadSkin();
+            SkinManager.SetSkinById(currentSkinId);
             OnReady?.Invoke(this,null);
         }
         public void OnLoadLocal(SaveModSettings s)

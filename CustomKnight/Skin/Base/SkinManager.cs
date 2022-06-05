@@ -347,6 +347,7 @@ namespace CustomKnight
             CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId());
             if(CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; } 
             CurrentSkin = Skin;
+            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
             // use this when saving so you save to the right settings
             if(GameManager.instance.IsNonGameplayScene()){
                 CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
