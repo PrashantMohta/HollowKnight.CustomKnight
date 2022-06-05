@@ -314,7 +314,8 @@ namespace CustomKnight
                             var hp = HashWithCache.GetPathsFromHash(objectName);
                             if(hp != null){
                               hashPaths.AddRange(hp);
-                            }                       }
+                            }                       
+                        }
                     }
                 }
                 foreach(string childDirectory in Directory.GetDirectories(path)){
@@ -322,14 +323,12 @@ namespace CustomKnight
                     Log(childDirectoryName);
                     GameObjectProxy GOP;
                     if(!objects.TryGetValue(childDirectoryName,out GOP)){
-                        GOP = new GameObjectProxy(){
-                            name = childDirectoryName,
-                            hasTexture = false,
-                            rootPath = directoryName,
-                            hasChildren = true
-                        };
-                        objects.Add(childDirectoryName,GOP);
+                        GOP = new GameObjectProxy();
                     }
+                    GOP.name = childDirectoryName;
+                    GOP.rootPath = directoryName;
+                    GOP.hasChildren = true;
+                    objects[childDirectoryName] = GOP;
                     GOP.TraverseGameObjectDirectory(pathToLoad);
                 }
                 Scenes[directoryName] = objects;
