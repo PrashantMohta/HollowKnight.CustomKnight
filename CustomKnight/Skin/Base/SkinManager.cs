@@ -168,7 +168,7 @@ namespace CustomKnight
             {SimpleKey.Name,new SimpleKey() },
             {"Map",new MAQ("Inventory/Map") },
             {"Quill",new MAQ("Inventory/Quill") },
-            {"MaQ",new MAQ("Inventory/MaQ") },
+            {"MapQuill",new MAQ("Inventory/MapQuill") },
             {RelicBG.Name,new RelicBG() },
             {SpellBG.Name,new SpellBG() },
            // {"PinsScarab", new Pins()}

@@ -19,7 +19,7 @@
                 case "Inventory/Quill":
                     ckTex.defaultSprite = eqfsm.GetAction<SetSpriteRendererSprite>("Quill", 1).sprite.Value as Sprite;
                     break;
-                case "Inventory/MaQ":
+                case "Inventory/MapQuill":
                     ckTex.defaultSprite = eqfsm.GetAction<SetSpriteRendererSprite>("Map and Quill", 1).sprite.Value as Sprite;
                     break;
                 default:
@@ -37,7 +37,7 @@
                 case "Inventory/Quill":
                     eqfsm.GetAction<SetSpriteRendererSprite>("Quill", 1).sprite.Value = sprite;
                     break;
-                case "Inventory/MaQ":
+                case "Inventory/MapQuill":
                     eqfsm.GetAction<SetSpriteRendererSprite>("Map and Quill", 1).sprite.Value = sprite;
                     break;
                 default:

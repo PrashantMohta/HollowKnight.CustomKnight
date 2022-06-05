@@ -57,6 +57,8 @@ namespace CustomKnight
                         // remove the animation component
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();
+                        var tex = sr.sprite.texture;
+                        SaveTextureDump(scene,name, tex);
                         return;
                     }
                     SaveSpriteDump(scene,name, sr.sprite);
