@@ -119,7 +119,7 @@ namespace CustomKnight
         }
 
         private void SwapSkinForGo(string objectPath,GameObject GO){
-            Modding.Logger.LogDebug($"op {objectPath}");
+            Modding.Logger.LogDebug($"op {objectPath} {GO.name}");
             Texture2D tex = loadedTextures[objectPath];
             var _tk2dSprite = GO.GetComponent<tk2dSprite>();
             if(_tk2dSprite == null){
@@ -447,13 +447,17 @@ namespace CustomKnight
             if(Gop != null){
                 while(Gop.hasChildren){
                     if(!Gop.children.TryGetValue(path[i],out var _Gop)){
+                        Gop = null;
                         break;
                     }
                     Gop = _Gop;
                     i++;
                 }
-            }
-            return Gop;
+                if(Gop!= null && Gop.name == go.GetName(true)){
+                    return Gop;
+                }
+            } 
+            return null;
         }
         internal GameObjectProxy getGopGlobal(string sceneName,string hash){
             GameObjectProxy Gop = null;
