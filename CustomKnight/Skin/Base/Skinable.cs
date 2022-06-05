@@ -160,15 +160,11 @@ namespace CustomKnight
 
         public override void ApplyTexture(Texture2D tex){
             if(!ckTex.missing){
-                ApplySprite(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
+                ApplySprite(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), ckTex.defaultSprite.pixelsPerUnit));
             } else {
                 DebugLogger.Log($"Missing Sprite for skinable {name}");
                 Reset();
             }
-        }
-        public Sprite CreateSpritewithppu(Texture2D tex,float ppu)
-        {
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), ppu);//We need ppu
         }
         
         /// <summary>

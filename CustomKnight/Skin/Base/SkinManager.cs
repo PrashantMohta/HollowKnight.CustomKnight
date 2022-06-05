@@ -173,9 +173,44 @@ namespace CustomKnight
             {SpellBG.Name,new SpellBG() },
            // {"PinsScarab", new Pins()}
         };
-        public static GameObject inv = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv");
-        public static GameObject equipment = inv.FindGameObjectInChildren("Equipment");
-        public static GameObject invitem = inv.FindGameObjectInChildren("Inv_Items");
+
+        public static GameObject _inv;
+        public static GameObject inv
+        {
+            get
+            {
+                if(_inv == null)
+                {
+                    _inv = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv");
+                }
+                return _inv;
+            }
+        }
+        public static GameObject _equipment;
+        public static GameObject equipment
+        {
+            get
+            {
+                if(_equipment == null)
+                {
+                    _equipment = inv.FindGameObjectInChildren("Equipment");
+                }
+                return _equipment;
+            }
+        }
+        public static GameObject _invitem;
+        public static GameObject invitem
+        {
+            get
+            {
+                if(_invitem == null)
+                {
+                    _invitem = inv.FindGameObjectInChildren("Inv_Items"); 
+                }
+                return _invitem;
+            }
+        }
+
         static SkinManager(){
             if(CustomKnight.isSatchelInstalled()){
                 SetDataDir();
@@ -217,9 +252,6 @@ namespace CustomKnight
                 var CurrentSkinName = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
                 CurrentSkin = GetSkinById(CurrentSkinName);
             }
-            inv= GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv"); ;
-            equipment = inv.FindGameObjectInChildren("Equipment");
-            invitem = inv.FindGameObjectInChildren("Inv_Items");
             SpriteLoader.Load();
             On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
             On.GeoControl.Start += ((Geo)Skinables[Geo.NAME]).GeoControl_Start;

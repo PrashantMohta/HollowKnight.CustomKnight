@@ -28,7 +28,7 @@ namespace CustomKnight
                     heart.GetComponent<SpriteRenderer>().sprite = sprite;
                     break;
                 default:
-                    heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                    heart.FindGameObjectInChildren($"Pieces {HeartPieces}").GetComponent<SpriteRenderer>().sprite = sprite;
                     break;
             }
         }

@@ -7,7 +7,7 @@
         public override void SaveDefaultTexture()
         {
             GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Trinket3");
-            ckTex.defaultSprite = CreateSpritewithppu(SpriteUtils.ExtractTextureFromSpriteLegacy(sd.GetComponent<SpriteRenderer>().sprite), sd.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit); ;
+            ckTex.defaultSprite = sd.GetComponent<SpriteRenderer>().sprite;
         }
         public override void ApplySprite(Sprite sprite)
         {

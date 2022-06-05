@@ -30,12 +30,6 @@ namespace CustomKnight
         /// </summary>
         /// <returns>A <c>bool</c> representing if the skin has support for swapper files.</returns>
         public bool hasSwapper();
-
-        /// <summary>
-        ///  hasInv
-        /// </summary>
-        /// <returns>A <c>bool</c> representing if the skin has support for inventory files.</returns>
-        public bool hasInv();
         
         /// <summary>
         ///  getSwapperPath
@@ -82,7 +76,6 @@ namespace CustomKnight
         public string GetId() => SkinDirectory;
         public string GetName() => SkinDirectory;
         public bool hasSwapper() => true;
-        public bool hasInv() => DirectoryExists($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Inventory");
         public string getSwapperPath() => Path.Combine(SkinManager.SKINS_FOLDER,SkinDirectory);
 
         public bool Exists(string FileName){

@@ -29,15 +29,15 @@ namespace CustomKnight
             GodfinderInvIcon invIcon = SkinManager.invitem.FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
             if (Name.EndsWith("0"))
             {
-                invIcon.normalSprite= CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);//Make Size correctly;SpriteUtils.CreateSpriteFromTexture() doesnt work
+                invIcon.normalSprite = sprite;
             }
             if (Name.EndsWith("1"))
             {
-                invIcon.newBossSprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                invIcon.newBossSprite = sprite;
             }
             if (Name.EndsWith("2"))
             {
-                invIcon.allBossesSprite = CreateSpritewithppu(sprite.texture, ckTex.defaultSprite.pixelsPerUnit);
+                invIcon.allBossesSprite = sprite;
             }
 
         }
