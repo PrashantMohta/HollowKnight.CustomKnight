@@ -1,5 +1,4 @@
-﻿using static Satchel.IoUtils;
-namespace CustomKnight
+﻿namespace CustomKnight
 {
     internal class SpriteLoader {
         private static bool texRoutineRunning;

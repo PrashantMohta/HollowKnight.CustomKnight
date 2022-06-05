@@ -1,7 +1,7 @@
 ﻿
 namespace CustomKnight
 {
-   public class Heart:Skinable_Sprite
+    public class Heart:Skinable_Sprite
     {
         public string HeartName;
         public int HeartPieces;

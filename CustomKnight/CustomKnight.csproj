@@ -12,15 +12,14 @@
     <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <VanillaFiles>D:\HKmod\1.5Moddingapi</VanillaFiles>
-    <ModdingAPi>D:\HKmod\1.5Moddingapi</ModdingAPi>
-    <HollowKnightModsDirectory>D:\Steamself\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods</HollowKnightModsDirectory>
-  </PropertyGroup>
+    <!-- Create a LocalBuildProperties.props file which defines references directories
+  and OutputDirectory (where the post-build event sends the dll to) -->
+  <Import Project="LocalBuildProperties_example.props" Condition="Exists('LocalBuildProperties_example.props')"/>
+  <Import Project="LocalBuildProperties.props" Condition="Exists('LocalBuildProperties.props')"/>
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(ModdingAPi)\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(ModdingAPI)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
       <HintPath>$(ModdingAPi)\MMHOOK_Assembly-CSharp.dll</HintPath>
@@ -52,7 +51,7 @@
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(VanillaFiles)\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UnityEngine.ImageConversionModule">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(VanillaFiles)\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
@@ -75,7 +74,7 @@
       <HintPath>$(VanillaFiles)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="Satchel">
-      <HintPath>$(ModdingAPI)\Satchel.dll</HintPath>
+      <HintPath>$(HollowKnightModsDirectory)\Satchel\Satchel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -1,8 +1,8 @@
+using CustomKnight.Canvas;
 using System.IO;
 using System.Linq;
 using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
-using CustomKnight.Canvas;
 
 namespace CustomKnight
 {

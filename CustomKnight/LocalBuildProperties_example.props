@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <VanillaFiles>..\..\Vanilla</VanillaFiles>
+    <ModdingAPI>..\..\HollowKnight.Modding\OutputFinal</ModdingAPI>
+    <HollowKnightModsDirectory>..\..\linkedtoHKMods</HollowKnightModsDirectory>
+  </PropertyGroup>
+</Project>
