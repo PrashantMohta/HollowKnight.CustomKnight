@@ -58,7 +58,7 @@ namespace CustomKnight
             {"Hornet",new Preload("Hornet",() => CustomKnight.GameObjects["Hornet"])},
             {"Birthplace",new Preload("Birthplace",() => CustomKnight.GameObjects["Birthplace"])},
 
-            {"FireBallGet1",new BigItem("FireBallGet1","Crossroads_ShamanTemple","Knight Cutscene Animator","Check Fall","Spawn Msg",()=>CustomKnight.GameObjects["FireBallGet1"],0)},
+            /*{"FireBallGet1",new BigItem("FireBallGet1","Crossroads_ShamanTemple","Knight Cutscene Animator","Check Fall","Spawn Msg",()=>CustomKnight.GameObjects["FireBallGet1"],0)},
             {"FireBallGet2",new BigItem("FireBallGet2","Ruins1_31b","Knight Get Fireball Lv2","Get Fireball","Call UI Msg",()=>CustomKnight.GameObjects["FireBallGet2"],0)},
             {"ScreamGet1",new BigItem("ScreamGet1","Room_Fungus_Shaman","Knight Get Scream","Get Scream","Msg Up",()=>CustomKnight.GameObjects["ScreamGet1"],0)},
             {"ScreamGet2",new BigItem("ScreamGet2","Abyss_12","Scream 2 Get","Scream Get","Ui Msg",()=>CustomKnight.GameObjects["ScreamGet2"],1)},
@@ -77,7 +77,7 @@ namespace CustomKnight
             {"JournalGet",new BigItem("JournalGet","Fungus1_08","Shiny Item","Shiny Control","Journal",()=>CustomKnight.GameObjects["JournalGet"],1) },
             {"DSlashGet",new BigItem("DSlashGet","Room_nailmaster_03","NM Oro NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["DSlashGet"],5) },
             {"CSlashGet",new BigItem("CSlashGet","Room_nailmaster","NM Mato NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["CSlashGet"],5) },
-            {"GSlashGet",new BigItem("GSlashGet","Room_nailmaster_02","NM Sheo NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["GSlashGet"],5) },
+            {"GSlashGet",new BigItem("GSlashGet","Room_nailmaster_02","NM Sheo NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["GSlashGet"],5) },*/
 
 
 
