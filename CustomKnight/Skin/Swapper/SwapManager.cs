@@ -180,7 +180,7 @@ namespace CustomKnight
                 //CustomKnight.Instance.Log("hasChildren " + gop.children.Count() + " c " + go.transform.childCount);
                 foreach(KeyValuePair<string,GameObjectProxy> kvp in gop.children){
                     try{
-                        this.Log("Trying children with name : " + kvp.Key);
+                        this.LogFine("Trying children with name : " + kvp.Key);
                         var children = go.FindGameObjectsInChildren(kvp.Key,true);
                         foreach(var child in children){
                             applySkinsUsingProxy(kvp.Value,child);
