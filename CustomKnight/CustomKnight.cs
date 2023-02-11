@@ -121,25 +121,6 @@ namespace CustomKnight
                 GameObjects.Add("Birthplace", preloadedObjects["Dream_Abyss"]["End Cutscene/Dummy"]);
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
-                /*GameObjects.Add("FireBallGet1", preloadedObjects["Crossroads_ShamanTemple"]["_Props/Knight Get Fireball/Knight Cutscene Animator"]);
-                GameObjects.Add("FireBallGet2", preloadedObjects["Ruins1_31b"]["Ruins Shaman/Knight Get Fireball Lv2"]);
-                GameObjects.Add("ScreamGet1", preloadedObjects["Room_Fungus_Shaman"]["Scream Control/Knight Get Scream"]);
-                GameObjects.Add("ScreamGet2", preloadedObjects["Abyss_12"]["Scream 2 Get"]);
-                GameObjects.Add("QuakeGet1", preloadedObjects["Ruins1_24"]["Quake Real Parent/Knight Get Quake"]);
-                GameObjects.Add("QuakeGet2", preloadedObjects["Mines_35"]["Crystal Shaman"]);
-                GameObjects.Add("DashGet1", preloadedObjects["Fungus1_04"]["Cloak Corpse/Shiny Item"]);
-                GameObjects.Add("DashGet2", preloadedObjects["Abyss_10"]["higher_being/Dish Plat"]);
-                GameObjects.Add("ClawGet", preloadedObjects["Fungus2_14"]["Shiny Item Stand"]);
-                GameObjects.Add("SDashGet", preloadedObjects["Mines_31"]["Super Dash Get/Inspect Region"]);
-                GameObjects.Add("DJumpGet", preloadedObjects["Abyss_21"]["Shiny Item DJ"]);
-                GameObjects.Add("KingGet", preloadedObjects["Room_Wyrm"]["Shiny Item Stand"]);
-                GameObjects.Add("TearGet", preloadedObjects["Waterways_13"]["Shiny Item Acid"]);
-                GameObjects.Add("DNailGet1", preloadedObjects["Dream_Nailcollection"]["Witch Control/Dream Nail Get"]);
-                GameObjects.Add("Moth", preloadedObjects["RestingGrounds_07"]["Dream Moth"]);
-                GameObjects.Add("JournalGet", preloadedObjects["Fungus1_08"]["Hunter Eyes/Shiny Item"]);
-                GameObjects.Add("DSlashGet", preloadedObjects["Room_nailmaster_03"]["NM Oro NPC"]);
-                GameObjects.Add("CSlashGet", preloadedObjects["Room_nailmaster"]["NM Mato NPC"]);
-                GameObjects.Add("GSlashGet", preloadedObjects["Room_nailmaster_02"]["NM Parent/Painting/NM Sheo NPC"]);*/
             }
             if(CustomKnight.GlobalSettings.SwapperEnabled){
                 swapManager.enabled = true;

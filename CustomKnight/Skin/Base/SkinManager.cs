@@ -60,29 +60,6 @@ namespace CustomKnight
             {"Hornet",new Preload("Hornet",() => CustomKnight.GameObjects["Hornet"])},
             {"Birthplace",new Preload("Birthplace",() => CustomKnight.GameObjects["Birthplace"])},
 
-            /*{"FireBallGet1",new BigItem("FireBallGet1","Crossroads_ShamanTemple","Knight Cutscene Animator","Check Fall","Spawn Msg",()=>CustomKnight.GameObjects["FireBallGet1"],0)},
-            {"FireBallGet2",new BigItem("FireBallGet2","Ruins1_31b","Knight Get Fireball Lv2","Get Fireball","Call UI Msg",()=>CustomKnight.GameObjects["FireBallGet2"],0)},
-            {"ScreamGet1",new BigItem("ScreamGet1","Room_Fungus_Shaman","Knight Get Scream","Get Scream","Msg Up",()=>CustomKnight.GameObjects["ScreamGet1"],0)},
-            {"ScreamGet2",new BigItem("ScreamGet2","Abyss_12","Scream 2 Get","Scream Get","Ui Msg",()=>CustomKnight.GameObjects["ScreamGet2"],1)},
-            {"QuakeGet1",new BigItem("QuakeGet1","Ruins1_24","Knight Get Quake","Get Quake","Msg Up",()=>CustomKnight.GameObjects["QuakeGet1"],0) },
-            {"QuakeGet2",new BigItem("QuakeGet2","Mines_35","Crystal Shaman","Control","Call UI Msg 2",()=>CustomKnight.GameObjects["QuakeGet2"],1) },
-            {"DashGet1",new BigItem("DashGet1","Fungus1_04","Shiny Item","Shiny Control","Dash",()=>CustomKnight.GameObjects["DashGet1"],3) },
-            {"DashGet2",new BigItem("DashGet2","Abyss_10","Dish Plat","Get Shadow Dash","UI Msg",()=>CustomKnight.GameObjects["DashGet2"],0) },
-            {"ClawGet",new BigItem("ClawGet","Fungus2_14","Shiny Item Stand","Shiny Control","Walljump",()=>CustomKnight.GameObjects["ClawGet"],3)},
-            {"SDashGet",new BigItem("SDashGet","Mines_31","Inspect Region","Inspect","Prompt",()=>CustomKnight.GameObjects["SDashGet"],4)},
-            {"DJumpGet",new BigItem("DJumpGet","Abyss_21","Shiny Item DJ","DJ Control","Msg",()=>CustomKnight.GameObjects["DJumpGet"],1) },
-            {"KingGet",new BigItem("KingGet","Room_Wyrm","Shiny Item Stand","Shiny Control","King's Brand",()=>CustomKnight.GameObjects["KingGet"],1)},
-            {"TearGet",new BigItem("TearGet","Waterways_13","Shiny Item Acid","Control","UI Msg",()=>CustomKnight.GameObjects["TearGet"],1) },
-            {"DNailGet1",new BigItem("DNailGet1","Dream_Nailcollection","Dream Nail Get","Conversation Control","UI Msg",()=>CustomKnight.GameObjects["DNailGet1"],1)},
-            {"DGateGet",new BigItem("DGateGet","RestingGrounds_07","Dream Moth","Conversation Control","Msg 2",()=>CustomKnight.GameObjects["Moth"],0)},
-            {"DNailGet2",new BigItem("DNailGet2","RestingGrounds_07","Dream Moth","Conversation Control","Msg",()=>CustomKnight.GameObjects["Moth"],1)},
-            {"JournalGet",new BigItem("JournalGet","Fungus1_08","Shiny Item","Shiny Control","Journal",()=>CustomKnight.GameObjects["JournalGet"],1) },
-            {"DSlashGet",new BigItem("DSlashGet","Room_nailmaster_03","NM Oro NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["DSlashGet"],5) },
-            {"CSlashGet",new BigItem("CSlashGet","Room_nailmaster","NM Mato NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["CSlashGet"],5) },
-            {"GSlashGet",new BigItem("GSlashGet","Room_nailmaster_02","NM Sheo NPC","Conversation Control","Get Msg",()=>CustomKnight.GameObjects["GSlashGet"],5) },*/
-
-
-
 
             {"Charm_0",new Charm("Charm_0",0)},
             {"Charm_1",new Charm("Charm_1",1)},

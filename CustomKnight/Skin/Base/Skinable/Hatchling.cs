@@ -12,7 +12,7 @@ namespace CustomKnight
             GameObject charmEffects = hc.FindGameObjectInChildren("Charm Effects");
 
             PlayMakerFSM hatchlingSpawn = charmEffects.LocateMyFSM("Hatchling Spawn");
-            GameObject hatchling = hatchlingSpawn.GetFirstAction<SpawnObjectFromGlobalPool>("Hatch").gameObject.Value;
+            GameObject hatchling = hatchlingSpawn.GetFirstActionOfType<SpawnObjectFromGlobalPool>("Hatch").gameObject.Value;
             var _wombMat = hatchling.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
 
             return _wombMat;
