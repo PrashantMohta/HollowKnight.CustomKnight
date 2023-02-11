@@ -107,8 +107,16 @@ namespace CustomKnight
         public abstract Material GetMaterial();
         public override void prepare(){
             var m = GetMaterial();
-            if(m != null){
-                material = m;
+            try
+            {
+                if(m != null){
+                    material = m;
+                }
+            }
+            catch (Exception e)
+            {
+                CustomKnight.Instance.Log(e.ToString());
+                throw;
             }
         }
 
