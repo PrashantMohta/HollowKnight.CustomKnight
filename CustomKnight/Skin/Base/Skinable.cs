@@ -106,17 +106,13 @@ namespace CustomKnight
         /// </summary>
         public abstract Material GetMaterial();
         public override void prepare(){
-            var m = GetMaterial();
             try
             {
-                if(m != null){
-                    material = m;
-                }
+                material = GetMaterial();
             }
             catch (Exception e)
             {
                 CustomKnight.Instance.Log(e.ToString());
-                throw;
             }
         }
 
