@@ -69,25 +69,7 @@ namespace CustomKnight
                     ("GG_Door_5_Finale", "abyss_door_5_cutscene_sequence/main_chars"),
                     ("GG_Vengefly", "Boss Scene Controller/Dream Entry/Knight Dream Arrival"),
                     ("RestingGrounds_07", "Dream Moth/Knight Dummy"),
-                    /*("Crossroads_ShamanTemple","_Props/Knight Get Fireball/Knight Cutscene Animator"),
-                    ("Abyss_12","Scream 2 Get"),
-                    ("Ruins1_24","Quake Real Parent/Knight Get Quake"),
-                    ("Room_Fungus_Shaman","Scream Control/Knight Get Scream"),
-                    ("Ruins1_31b","Ruins Shaman/Knight Get Fireball Lv2"),
-                    ("Mines_35","Crystal Shaman"),
-                    ("Fungus1_04","Cloak Corpse/Shiny Item"),
-                    ("Abyss_10","higher_being/Dish Plat"),
-                    ("Fungus2_14","Shiny Item Stand"),
-                    ("Mines_31","Super Dash Get/Inspect Region"),
-                    ("Abyss_21","Shiny Item DJ"),
-                    ("Room_Wyrm","Shiny Item Stand"),
-                    ("Waterways_13","Shiny Item Acid"),
-                    ("Dream_Nailcollection","Witch Control/Dream Nail Get"),
-                    ("RestingGrounds_07","Dream Moth"),
-                    ("Fungus1_08","Hunter Eyes/Shiny Item"),
-                    ("Room_nailmaster_03","NM Oro NPC"),
-                    ("Room_nailmaster","NM Mato NPC"),
-                    ("Room_nailmaster_02","NM Parent/Painting/NM Sheo NPC"),*/
+                    
                 };   
             }
             
