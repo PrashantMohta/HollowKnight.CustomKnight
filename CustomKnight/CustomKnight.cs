@@ -69,6 +69,7 @@ namespace CustomKnight
                     ("GG_Door_5_Finale", "abyss_door_5_cutscene_sequence/main_chars"),
                     ("GG_Vengefly", "Boss Scene Controller/Dream Entry/Knight Dream Arrival"),
                     ("RestingGrounds_07", "Dream Moth/Knight Dummy"),
+                    
                 };   
             }
             
@@ -125,8 +126,8 @@ namespace CustomKnight
             Log("HeroControllerStart");
             var currentSkinId = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             SkinManager.CurrentSkin = SkinManager.GetSkinById(currentSkinId);
-            SkinManager.SetSkinById(currentSkinId);
-            OnReady?.Invoke(this,null);
+            SkinManager.LoadSkin();
+            OnReady?.Invoke(this, null);
         }
         public void OnLoadLocal(SaveModSettings s)
         {
