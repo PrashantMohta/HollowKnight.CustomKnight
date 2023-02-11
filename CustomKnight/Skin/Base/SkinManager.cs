@@ -38,6 +38,8 @@ namespace CustomKnight
             {Leak.NAME,new Leak()},
             {HitPt.NAME,new HitPt()},
             {ShadowDashBlobs.NAME,new ShadowDashBlobs()},
+            {Deathpt.NAME,new Deathpt()},
+            {DDeathpt.NAME,new DDeathpt()},
 
             {Baldur.NAME,new Baldur()},
             {Fluke.NAME,new Fluke()},
