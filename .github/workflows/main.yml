@@ -24,7 +24,7 @@ jobs:
       - name: Setup API files
         uses: BadMagic100/setup-hk@v1
         with:
-          apiPath: HKManaged
+          apiPath: linkedtoHKMods
           dependencyFilePath: ModDependencies.txt
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
