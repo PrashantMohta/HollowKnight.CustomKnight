@@ -1,78 +1,41 @@
-name: Build
+# This is a basic workflow to help you get started with Actions
 
-permissions:
-  contents: write
+name: CI
 
+# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:
-    inputs:
-      should_release:
-        description: "Create release?"
-        required: true
-        default: false
-        type: boolean
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
-    runs-on: windows-latest
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-      - name: Setup MAPI
+      - name: Setup API files
         uses: BadMagic100/setup-hk@v1
         with:
-          apiPath: API
+          apiPath: HKManaged
           dependencyFilePath: ModDependencies.txt
-
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-      
-      - name: Install dependencies
+        uses: actions/setup-dotnet@v1
+      - name: Setup ms-build
+        run: sudo apt-get install -y nuget mono-devel mono-xbuild
+      - name: Restore dependencies
         run: dotnet restore
-
-      - name: Build
+      - name: Build Mod
         run: dotnet build -c Release
-
-      - name: Prepare artifacts for release
-        uses: actions/upload-artifact@v3
+      - name: Upload Mod
+        uses: actions/upload-artifact@v2
         with:
-          name: Publish
-          path: CustomKnight/bin/Publish
-  release:
-    needs:
-      - build
-    runs-on: windows-latest
-    # only make a release if we manually request the build - other builds will be handled automatically with a push
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.should_release == 'true'
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: artifacts
-      - name: Get build details
-        id: details
-        # this assumes that an MSBuild task that writes the SHA256 of the zip file to SHA.txt, and the mod version (usually
-        # the same as the assembly version) to version.txt. The contents of these files are read to step outputs for use in release
-        run: |
-          $sha = Get-Content artifacts/Publish/SHA.txt
-          $ver = Get-Content artifacts/Publish/VERSION.txt
-          echo "archiveHash=$sha" >> $env:GITHUB_OUTPUT
-          echo "buildVersion=$ver" >> $env:GITHUB_OUTPUT
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: false
-          generate_release_notes: true
-          fail_on_unmatched_files: true
-          tag_name: v${{ steps.details.outputs.buildVersion }}
-          body: |
-            SHA256: ${{ steps.details.outputs.archiveHash }}
-          files: |
-            artifacts/Publish/CustomKnight.zip
+          name: CustomKnight
+          path: ./CustomKnight/bin/Release
