@@ -2,6 +2,6 @@
   <PropertyGroup>
     <VanillaFiles>..\HKManaged</VanillaFiles>
     <ModdingAPI>..\HKManaged</ModdingAPI>
-    <HollowKnightModsDirectory>..\..\linkedtoHKMods</HollowKnightModsDirectory>
+    <HollowKnightModsDirectory>..\HKManaged\Mods</HollowKnightModsDirectory>
   </PropertyGroup>
 </Project>
