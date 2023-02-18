@@ -38,6 +38,8 @@ namespace CustomKnight
             {Leak.NAME,new Leak()},
             {HitPt.NAME,new HitPt()},
             {ShadowDashBlobs.NAME,new ShadowDashBlobs()},
+            {Deathpt.NAME,new Deathpt()},
+            {DDeathpt.NAME,new DDeathpt()},
 
             {Baldur.NAME,new Baldur()},
             {Fluke.NAME,new Fluke()},
@@ -57,6 +59,7 @@ namespace CustomKnight
             {"Dreamnail",new Preload("Dreamnail",() => CustomKnight.GameObjects["Dreamnail"])},
             {"Hornet",new Preload("Hornet",() => CustomKnight.GameObjects["Hornet"])},
             {"Birthplace",new Preload("Birthplace",() => CustomKnight.GameObjects["Birthplace"])},
+
 
             {"Charm_0",new Charm("Charm_0",0)},
             {"Charm_1",new Charm("Charm_1",1)},

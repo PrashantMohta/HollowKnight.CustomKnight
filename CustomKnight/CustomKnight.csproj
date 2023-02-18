@@ -3,7 +3,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>CustomKnight</RootNamespace>
     <AssemblyName>CustomKnight</AssemblyName>
-    <AssemblyVersion>2.1.1</AssemblyVersion>
+    <AssemblyVersion>2.1.2</AssemblyVersion>
     <TargetFramework>net472</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
