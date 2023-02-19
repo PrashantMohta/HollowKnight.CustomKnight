@@ -39,7 +39,9 @@ namespace CustomKnight
             {"FinalD", new Cinematic("FinalD")},
             {"FinalE", new Cinematic("FinalE")},
             {"MrMushroom", new Cinematic("MrMushroom")},
-            {"Telescope", new Cinematic("Telescope")}
+            {"Telescope", new Cinematic("Telescope")},
+            {"Fountain", new Cinematic("Fountain")},
+            {"MaskShatter", new Cinematic("MaskShatter")}
         };
         
         private Dictionary<string,string> CinematicFileUrlCache = new();
