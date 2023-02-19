@@ -61,6 +61,20 @@ namespace CustomKnight
         public byte[] GetFile(string FileName);
 
 
+        /// <summary>
+        ///  HasCinematic returns if a given ciematic exists
+        /// </summary>
+        /// <param name="CinematicName">A <c>string</c> that identifies the Cinematic</param>
+        /// <returns>A <c>bool</c>, representing  if a given ciematic exists</returns>
+        public bool HasCinematic(string CinematicName);
+
+        /// <summary>
+        ///  GetCinematicUrl returns the Url for the given Cinematic
+        /// </summary>
+        /// <param name="CinematicName">A <c>string</c> that identifies the Cinematic</param>
+        /// <returns>A <c>string</c>, the Url for the given Cinematic (a file://  url for local files).</returns>
+        public string GetCinematicUrl(string CinematicName);
+
     }
 
     
@@ -78,6 +92,7 @@ namespace CustomKnight
         public bool hasSwapper() => true;
         public string getSwapperPath() => Path.Combine(SkinManager.SKINS_FOLDER,SkinDirectory);
 
+        private Dictionary<string,string> cinematicFileUrlCache = new();
         public bool Exists(string FileName){
             string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{FileName}").Replace("\\", "/");
             return File.Exists(file);
@@ -103,6 +118,28 @@ namespace CustomKnight
                 CustomKnight.Instance.Log(e.ToString());
             }
             return data;
+        }
+
+        public bool HasCinematic(string cinematicName){
+            if(cinematicFileUrlCache.TryGetValue(cinematicName,out var url)){
+                return url.Length > 0;
+            } else {
+                EnsureDirectory($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/");
+                string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/{cinematicName}").Replace("\\", "/");
+                cinematicFileUrlCache[cinematicName] = GetCinematicUrl(cinematicName);
+                return cinematicFileUrlCache[cinematicName].Length > 0;
+            }
+            
+        }
+
+        public string GetCinematicUrl(string cinematicName){
+            string path = "";
+            string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/{cinematicName}").Replace("\\", "/");
+            if(File.Exists(file+".webm")){
+                path = file+".webm";
+            }
+            CustomKnight.Instance.Log("[getCine]"+cinematicName+":"+path);
+            return path;
         }
         
     }

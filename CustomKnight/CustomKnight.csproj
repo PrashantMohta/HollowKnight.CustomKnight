@@ -73,8 +73,14 @@
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(VanillaFiles)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>$(VanillaFiles)\UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
     <Reference Include="Satchel">
       <HintPath>$(HollowKnightModsDirectory)\Satchel\Satchel.dll</HintPath>
+    </Reference>
+    <Reference Include="HKMirror">
+      <HintPath>$(HollowKnightModsDirectory)\HKMirror\HKMirror.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
