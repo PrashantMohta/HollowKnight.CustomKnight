@@ -6,7 +6,7 @@ namespace CustomKnight
 
     public static class SkinManager{
         internal static bool savedDefaultTextures = false;
-        internal static string DATA_DIR;
+        public static string DATA_DIR {get; internal set;}
         internal static string SKINS_FOLDER;
         internal static ISelectableSkin CurrentSkin,DefaultSkin;
         internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
