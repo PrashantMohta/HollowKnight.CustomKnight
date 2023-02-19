@@ -92,7 +92,7 @@ namespace CustomKnight
         public bool hasSwapper() => true;
         public string getSwapperPath() => Path.Combine(SkinManager.SKINS_FOLDER,SkinDirectory);
 
-        private Dictionary<string,string> cinematicFileUrlCache = new();
+        private Dictionary<string,string> CinematicFileUrlCache = new();
         public bool Exists(string FileName){
             string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{FileName}").Replace("\\", "/");
             return File.Exists(file);
@@ -120,25 +120,25 @@ namespace CustomKnight
             return data;
         }
 
-        public bool HasCinematic(string cinematicName){
-            if(cinematicFileUrlCache.TryGetValue(cinematicName,out var url)){
+        public bool HasCinematic(string CinematicName){
+            if(CinematicFileUrlCache.TryGetValue(CinematicName,out var url)){
                 return url.Length > 0;
             } else {
                 EnsureDirectory($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/");
-                string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/{cinematicName}").Replace("\\", "/");
-                cinematicFileUrlCache[cinematicName] = GetCinematicUrl(cinematicName);
-                return cinematicFileUrlCache[cinematicName].Length > 0;
+                string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/{CinematicName}").Replace("\\", "/");
+                CinematicFileUrlCache[CinematicName] = GetCinematicUrl(CinematicName);
+                return CinematicFileUrlCache[CinematicName].Length > 0;
             }
             
         }
 
-        public string GetCinematicUrl(string cinematicName){
+        public string GetCinematicUrl(string CinematicName){
             string path = "";
-            string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/{cinematicName}").Replace("\\", "/");
+            string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/Cinematics/{CinematicName}").Replace("\\", "/");
             if(File.Exists(file+".webm")){
                 path = file+".webm";
             }
-            CustomKnight.Instance.Log("[getCine]"+cinematicName+":"+path);
+            CustomKnight.Instance.Log("[getCine]"+CinematicName+":"+path);
             return path;
         }
         

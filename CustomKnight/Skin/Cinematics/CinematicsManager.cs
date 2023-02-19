@@ -25,7 +25,6 @@ video : Telescope:Assets/Cinematics/Telescope_cinematic_30fps.mov
 namespace CustomKnight
 {
     public class CinematicsManager{
-        internal VideoPlayer stagClip;
         internal Dictionary<string,Cinematic> Cinematics = new Dictionary<string,Cinematic>(){
             {"Prologue", new Cinematic("Prologue")},
             {"Intro", new Cinematic("Intro")},
@@ -43,7 +42,7 @@ namespace CustomKnight
             {"Telescope", new Cinematic("Telescope")}
         };
         
-        private Dictionary<string,string> cinematicFileUrlCache = new();
+        private Dictionary<string,string> CinematicFileUrlCache = new();
         internal CinematicsManager(){
             if(CustomKnight.isSatchelInstalled()){
                 On.CinematicSequence.Update += CinematicSequence_Update;
@@ -67,18 +66,18 @@ namespace CustomKnight
         }
 
 
-        public bool HasCinematic(string cinematicName)
+        public bool HasCinematic(string CinematicName)
         {
-            if (cinematicFileUrlCache.TryGetValue(cinematicName, out var url))
+            if (CinematicFileUrlCache.TryGetValue(CinematicName, out var url))
             {
                 return url.Length > 0;
             }
             else
             {
                 EnsureDirectory($"{SkinManager.DATA_DIR}/Cinematics/");
-                string file = ($"{SkinManager.DATA_DIR}/Cinematics/{cinematicName}").Replace("\\", "/");
-                cinematicFileUrlCache[cinematicName] = GetCinematicUrl(cinematicName);
-                return cinematicFileUrlCache[cinematicName].Length > 0;
+                string file = ($"{SkinManager.DATA_DIR}/Cinematics/{CinematicName}").Replace("\\", "/");
+                CinematicFileUrlCache[CinematicName] = GetCinematicUrl(CinematicName);
+                return CinematicFileUrlCache[CinematicName].Length > 0;
             }
 
         }
@@ -111,13 +110,13 @@ namespace CustomKnight
         }
 
 
-        public string GetCinematicUrl(string cinematicName){
+        public string GetCinematicUrl(string CinematicName){
             string path = "";
-            string file = ($"{SkinManager.DATA_DIR}/Cinematics/{cinematicName}").Replace("\\", "/");
+            string file = ($"{SkinManager.DATA_DIR}/Cinematics/{CinematicName}").Replace("\\", "/");
             if(File.Exists(file+".webm")){
                 path = file+".webm";
             }
-            CustomKnight.Instance.Log("[getCine]"+cinematicName+":"+path);
+            CustomKnight.Instance.Log("[getCine]"+CinematicName+":"+path);
             return path;
         }
 
