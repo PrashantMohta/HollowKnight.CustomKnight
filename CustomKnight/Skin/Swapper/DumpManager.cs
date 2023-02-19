@@ -53,7 +53,7 @@ namespace CustomKnight
                         GameObject.Destroy(tex);
                     }
                 } else {    
-                    if(anim != null){ 
+                    if(anim != null || SpecialCases.childSpriteAnimatedByParent(name)){ 
                         // remove the animation component
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();

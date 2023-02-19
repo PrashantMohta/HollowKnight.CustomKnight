@@ -130,9 +130,11 @@ namespace CustomKnight
                 if(sr == null){
                     this.Log("No tk2dSprite or SpriteRenderer Component found in " + objectPath);
                 } else {
-                    if(anim != null){
+                    if(anim != null  || SpecialCases.childSpriteAnimatedByParent(objectPath)){
                         //maybe animated things can be replaced with a single sprite
-                        CustomKnight.Instance.Log($"Animation  : {anim.name}");    
+                        if(anim != null){
+                            CustomKnight.Instance.Log($"Animation  : {anim.name}");   
+                        } 
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
                         MaterialPropertyBlock block = new MaterialPropertyBlock();
                         block.AddTexture("_MainTex",tex);
