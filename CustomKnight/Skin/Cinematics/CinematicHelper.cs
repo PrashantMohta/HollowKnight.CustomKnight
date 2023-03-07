@@ -3,11 +3,11 @@ using UnityEngine.Video;
 
 namespace CustomKnight.Skin.Cinematics
 {
+    // Taken from HKMirror
+    // https://github.com/TheMulhima/HKMirror
+
     internal static class CinematicHelper
     {
-        /// <summary>
-        ///     Contains necessary information to create Hooks. Does not contain any hooks
-        /// </summary>
         public static class Delegates
         {
             public delegate VideoClip get_EmbeddedVideoClip_AfterArgs(Params_get_EmbeddedVideoClip args, VideoClip ret);
