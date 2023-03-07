@@ -1,4 +1,5 @@
-namespace CustomKnight{
+namespace CustomKnight
+{
     public class SpriteRendererMaterialPropertyBlock : MonoBehaviour {
         public MaterialPropertyBlock mpb;
         public SpriteRenderer sr;

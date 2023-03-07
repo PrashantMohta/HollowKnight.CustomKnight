@@ -1,4 +1,4 @@
-  <Project Sdk="Microsoft.NET.Sdk">
+﻿  <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>CustomKnight</RootNamespace>
@@ -27,6 +27,14 @@
     <Reference Include="MMHOOK_PlayMaker">
       <HintPath>$(ModdingAPi)\MMHOOK_PlayMaker.dll</HintPath>
     </Reference>
+	<Reference Include="MonoMod.RuntimeDetour">
+		<HintPath>$(ModdingAPi)\MonoMod.RuntimeDetour.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
+	<Reference Include="MonoMod.Utils">
+		<HintPath>$(ModdingAPi)\MonoMod.Utils.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>$(ModdingAPI)\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -78,9 +86,6 @@
     </Reference>
     <Reference Include="Satchel">
       <HintPath>$(HollowKnightModsDirectory)\Satchel\Satchel.dll</HintPath>
-    </Reference>
-    <Reference Include="HKMirror">
-      <HintPath>$(HollowKnightModsDirectory)\HKMirror\HKMirror.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

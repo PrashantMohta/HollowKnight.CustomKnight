@@ -1,7 +1,8 @@
 
 using UnityEngine.Video;
 
-namespace CustomKnight{
+namespace CustomKnight
+{
     public class Cinematic {
         public string ClipName;
         internal VideoClip OriginalVideo = null;

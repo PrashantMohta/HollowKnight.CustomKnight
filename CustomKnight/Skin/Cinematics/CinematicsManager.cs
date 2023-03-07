@@ -1,10 +1,7 @@
+using CustomKnight.Skin.Cinematics;
 using System.IO;
-using System.Linq;
-using static Satchel.GameObjectUtils;
-using static Satchel.IoUtils;
-using HKMirror.Reflection;
-using HKMirror.Hooks.OnHooks;
 using UnityEngine.Video;
+using static Satchel.IoUtils;
 /*
 video : StagTunnelRun:Assets/Cinematics/Stag_tunnel_run_v03.mp4
 video : CharmSlugKiss:Assets/Cinematics/Charm_Slug_Kiss_30fps.mov
@@ -48,7 +45,7 @@ namespace CustomKnight
         internal CinematicsManager(){
             if(CustomKnight.isSatchelInstalled()){
                 On.CinematicSequence.Update += CinematicSequence_Update;
-                OnCinematicVideoReference.WithOrig.get_EmbeddedVideoClip += WithOrig_get_EmbeddedVideoClip;
+                CinematicHelper.get_EmbeddedVideoClip += WithOrig_get_EmbeddedVideoClip;
                 On.XB1CinematicVideoPlayer.ctor += XB1CinematicVideoPlayer_ctor;
             }
 
@@ -125,7 +122,7 @@ namespace CustomKnight
 
         private void CinematicSequence_Update(On.CinematicSequence.orig_Update orig, CinematicSequence self)
         {
-            var fles = self.Reflect();
+            var fles = new CinematicSequenceR(self);
             if(GetCiematicSafely(fles.videoReference.VideoFileName,out var cinematic)){
                 if(SkinManager.GetCurrentSkin().HasCinematic(cinematic.ClipName) || HasCinematic(cinematic.ClipName)){
                     if(cinematic.player != null)
