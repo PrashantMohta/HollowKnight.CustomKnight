@@ -94,6 +94,7 @@ namespace CustomKnight
                 {
                     if (cinematicKvp.Value.OriginalVideo != null && (cinematicKvp.Value.OriginalVideo.originalPath == source.clip.originalPath))
                     {
+                        cinematicKvp.Value.player = self;
                         if (SkinManager.GetCurrentSkin().HasCinematic(cinematicKvp.Value.ClipName))
                         {
                             source.clip = null;
@@ -127,7 +128,20 @@ namespace CustomKnight
             var fles = self.Reflect();
             if(GetCiematicSafely(fles.videoReference.VideoFileName,out var cinematic)){
                 if(SkinManager.GetCurrentSkin().HasCinematic(cinematic.ClipName) || HasCinematic(cinematic.ClipName)){
-                    fles.framesSinceBegan = 0;
+                    if(cinematic.player != null)
+                    {
+                        VideoPlayer source = ReflectionHelper.GetField<XB1CinematicVideoPlayer, VideoPlayer>(cinematic.player, "videoPlayer"); ;
+                        if((ulong)source.frame < source.frameCount - 1)
+                        {
+                            fles.framesSinceBegan = 0;
+                        } else
+                        {
+                            fles.framesSinceBegan = 11;
+                        }
+                    } else
+                    {
+                        fles.framesSinceBegan = 0;
+                    }
                 }
             } 
             orig(self);
