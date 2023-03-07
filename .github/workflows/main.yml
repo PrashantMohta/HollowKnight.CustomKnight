@@ -37,7 +37,7 @@ jobs:
       - name: Upload Mod
         uses: actions/upload-artifact@v2
         with:
-          name: CustomKnight
+          name: CustomKnightModlinks
           path: ./CustomKnight/bin/Release
   buildPinned:
     # The type of runner that the job will run on
@@ -64,5 +64,5 @@ jobs:
       - name: Upload Mod
         uses: actions/upload-artifact@v2
         with:
-          name: CustomKnight
+          name: CustomKnightPinned
           path: ./CustomKnight/bin/Release
