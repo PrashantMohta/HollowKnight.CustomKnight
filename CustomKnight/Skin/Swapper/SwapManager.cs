@@ -5,6 +5,10 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight
 {
+    public class SwapEvent : EventArgs {
+        public GameObjectProxy gop { get; set; }
+        public GameObject go { get; set; }
+    }
     public class SwapManager
     {
         private bool alwaysReprocessMaterial = false; // should be false in release
@@ -120,7 +124,10 @@ namespace CustomKnight
 
         private void SwapSkinForGo(string objectPath,GameObject GO){
             Modding.Logger.LogDebug($"op {objectPath} {GO.name}");
-            Texture2D tex = loadedTextures[objectPath];
+            Texture2D tex;// = loadedTextures[objectPath];
+            if(!loadedTextures.TryGetValue(objectPath,out tex)){
+                return;
+            }
             var _tk2dSprite = GO.GetComponent<tk2dSprite>();
             if(_tk2dSprite == null){
                 var anim = GO.GetComponent<Animator>();
@@ -130,9 +137,11 @@ namespace CustomKnight
                 if(sr == null){
                     this.Log("No tk2dSprite or SpriteRenderer Component found in " + objectPath);
                 } else {
-                    if(anim != null){
+                    if(anim != null  || SpecialCases.childSpriteAnimatedByParent(objectPath)){
                         //maybe animated things can be replaced with a single sprite
-                        CustomKnight.Instance.Log($"Animation  : {anim.name}");    
+                        if(anim != null){
+                            CustomKnight.Instance.Log($"Animation  : {anim.name}");   
+                        } 
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
                         MaterialPropertyBlock block = new MaterialPropertyBlock();
                         block.AddTexture("_MainTex",tex);
@@ -157,6 +166,9 @@ namespace CustomKnight
                 _tk2dSprite.GetCurrentSpriteDef().material.mainTexture = tex;
             }
         }
+
+        
+        public static event EventHandler<SwapEvent> OnApplySkinUsingProxy;
         
         private void applySkinsUsingProxy(GameObjectProxy gop,GameObject go){
             //CustomKnight.Instance.Log("Traversing : " + gop.getTexturePath());
@@ -175,6 +187,7 @@ namespace CustomKnight
                     SwapSkinForGo(gop.getTexturePath(),go);
                 }
             }
+            OnApplySkinUsingProxy?.Invoke(CustomKnight.Instance,new SwapEvent(){gop=gop,go=go});
             //traverse this gop
             if(gop.hasChildren && go.transform.childCount > 0){
                 //CustomKnight.Instance.Log("hasChildren " + gop.children.Count() + " c " + go.transform.childCount);
@@ -305,14 +318,16 @@ namespace CustomKnight
                            this.Log( filename + " " + e.ToString());
                            continue;
                        }
-                    }
-                    if(filename.EndsWith(".png")){
-                        string objectName = filename.Replace(".png","");
+                    } else {
+                        //fileType
+                        string extension = Path.GetExtension(file);
+                        string objectName = filename.Replace(extension,"");
                         GameObjectProxy GOP = new GameObjectProxy(){
                             name = objectName,
                             hasTexture = true,
                             rootPath = directoryName,
-                            hasChildren = false
+                            hasChildren = false,
+                            fileType = extension
                         };
                         objects[objectName]=GOP;
                         if(directoryName == "Global"){

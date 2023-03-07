@@ -7,6 +7,10 @@ using static Satchel.IoUtils;
 namespace CustomKnight
 {
 
+    public class DumpEvent : EventArgs {
+        public Scene scene { get; set; }
+        public GameObject go { get; set; }
+    }
     public class coroutineHelper : MonoBehaviour{}
     public class DumpManager{
 
@@ -22,6 +26,7 @@ namespace CustomKnight
         internal Dictionary<string,bool> isTextureDumped = new Dictionary<string,bool>();
         internal Dictionary<int,string> MaterialProcessed = new();
 
+        public static event EventHandler<DumpEvent> BeforeDumpingGameObject;
         internal void dumpSpriteForGo(Scene scene,GameObject go){  
             if(go == null) {return;}          
             var name = go.GetPath(true);
@@ -38,10 +43,11 @@ namespace CustomKnight
                     validForGlobal = false;
                 }
             }
+            
+            BeforeDumpingGameObject?.Invoke(CustomKnight.Instance,new DumpEvent(){ scene = scene, go = go});
             Log($"dumping {done}/{detected}");
             Log("game object to be dumped -" + go.name);
             Log($"gameobject path {name}");
-            
             if(sr != null && sr.sprite != null){
                 if(scene.name == "DontDestroyOnLoad"){
                     return; // dont dump sprites only tk2d from DontDestroyOnLoad
@@ -53,7 +59,7 @@ namespace CustomKnight
                         GameObject.Destroy(tex);
                     }
                 } else {    
-                    if(anim != null){ 
+                    if(anim != null || SpecialCases.childSpriteAnimatedByParent(name)){ 
                         // remove the animation component
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();

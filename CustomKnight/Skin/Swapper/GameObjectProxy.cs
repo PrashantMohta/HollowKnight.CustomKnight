@@ -8,8 +8,12 @@ namespace CustomKnight
         public string rootPath; //rootPath/name.png
         public bool hasTexture;
         public bool hasChildren;
+        public string fileType;
         public Dictionary<string,GameObjectProxy> children = new Dictionary<string,GameObjectProxy>();
 
+        public string getObjectPath(){
+            return Path.Combine(rootPath,name+fileType);
+        }
         public string getTexturePath(){
             return Path.Combine(rootPath,name+".png");
         }
@@ -58,13 +62,15 @@ namespace CustomKnight
             foreach(string file in Directory.GetFiles(path)){
                 string filename = Path.GetFileName(file);
                 //Log(filename);
-                if(filename.EndsWith(".png")){
-                    string objectName = filename.Replace(".png","");
+                if(!filename.EndsWith(".txt")){
+                    string extension = Path.GetExtension(file);
+                    string objectName = filename.Replace(extension,"");
                     GameObjectProxy GOP = new GameObjectProxy(){
                         name = objectName,
                         hasTexture = true,
                         rootPath = Path.Combine(rootPath,name),
-                        hasChildren = false
+                        hasChildren = false,
+                        fileType = extension
                     };
                     hasChildren = true;
                     children[objectName] = GOP;

@@ -10,6 +10,8 @@ namespace CustomKnight
         public static DumpManager dumpManager {get; private set;} = new DumpManager();
         public static SwapManager swapManager {get; private set;} = new SwapManager();
 
+        public static CinematicsManager cinematicsManager {get; private set;} = new CinematicsManager();
+
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
         internal static void touchSatchelVersion(){
             Satchel.AssemblyUtils.Version();
