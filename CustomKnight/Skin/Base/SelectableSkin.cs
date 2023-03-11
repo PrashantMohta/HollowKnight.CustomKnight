@@ -138,7 +138,7 @@ namespace CustomKnight
             if(File.Exists(file+".webm")){
                 path = file+".webm";
             }
-            CustomKnight.Instance.Log("[getCine]"+CinematicName+":"+path);
+            CustomKnight.Instance.LogFine("[GetCinematicUrl]" + CinematicName+":"+path);
             return path;
         }
         

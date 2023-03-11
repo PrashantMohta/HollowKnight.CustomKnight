@@ -140,7 +140,7 @@ namespace CustomKnight
                     if(anim != null  || SpecialCases.childSpriteAnimatedByParent(objectPath)){
                         //maybe animated things can be replaced with a single sprite
                         if(anim != null){
-                            CustomKnight.Instance.Log($"Animation  : {anim.name}");   
+                            this.LogFine($"Animation  : {anim.name}");   
                         } 
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
                         MaterialPropertyBlock block = new MaterialPropertyBlock();
@@ -152,7 +152,7 @@ namespace CustomKnight
                     } else {
                     //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while
                     //some sprites are still not perfectly matched 
-                    CustomKnight.Instance.Log($"game object : {sr.name} ");
+                    this.LogFine($"game object : {sr.name} ");
                     var pivot = new Vector2(0.5f, 0.5f); // this needs offset sometimes
                     sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot ,sr.sprite.pixelsPerUnit);
                     //Log($"pivot post application {sr.sprite.pivot/new Vector2(tex.width, tex.height)}");

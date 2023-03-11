@@ -55,7 +55,7 @@ namespace CustomKnight
         ///     Wrapper Method for SaveDefaultTexture, used for logging.
         /// </summary>
         public void SaveTexture(){
-            DebugLogger.Log($"SaveTexture skinable {name}");
+            CustomKnight.Instance.LogFine($"SaveTexture skinable {name}");
             SaveDefaultTexture();
         }
 
@@ -63,7 +63,7 @@ namespace CustomKnight
         ///     Wrapper Method for ApplyTexture, used for logging.
         /// </summary>
         public void Apply(){
-            DebugLogger.Log($"Apply skinable {name}");
+            CustomKnight.Instance.LogFine($"Apply skinable {name}");
             ApplyTexture(ckTex.currentTexture);
         }
 
@@ -71,7 +71,7 @@ namespace CustomKnight
         ///     Wrapper Method for ApplyTexture, used for Resetting the skin to default texture.
         /// </summary>
         public virtual void Reset(){
-            DebugLogger.Log($"Reset skinable {name}");
+            CustomKnight.Instance.LogFine($"Reset skinable {name}");
             ApplyTexture(ckTex.defaultTex);
         }
         
@@ -166,7 +166,7 @@ namespace CustomKnight
             if(!ckTex.missing){
                 ApplySprite(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), ckTex.defaultSprite.pixelsPerUnit));
             } else {
-                DebugLogger.Log($"Missing Sprite for skinable {name}");
+                CustomKnight.Instance.Log($"Missing Sprite for skinable {name}");
                 Reset();
             }
         }
@@ -176,7 +176,7 @@ namespace CustomKnight
         /// </summary>
         public abstract void ApplySprite(Sprite sprite);
         public override void Reset(){
-            DebugLogger.Log($"Reset skinable {name}");
+            CustomKnight.Instance.LogFine($"Reset skinable {name}");
             ApplySprite(ckTex.defaultSprite);
         }
     }

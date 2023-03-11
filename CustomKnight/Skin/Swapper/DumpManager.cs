@@ -163,7 +163,7 @@ namespace CustomKnight
                         try{
                             AsyncOperation asyncLoad = loadScene(i);
                         } catch(Exception e){
-                            Modding.Logger.Log($"error in dumpng scene {i} with {e.ToString()}");
+                            CustomKnight.Instance.Log($"Error in dumpng scene {i} with {e.ToString()}");
                         }
                             yield return new WaitForSeconds(5);            
                             dumpAllSprites();
@@ -178,7 +178,7 @@ namespace CustomKnight
                                 UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(i);
                             }
                         } catch(Exception e){
-                            Modding.Logger.Log($"error in dumpng scene {i} with {e.ToString()}");
+                            CustomKnight.Instance.Log($"error in dumpng scene {i} with {e.ToString()}");
                         }
                         i++;
                     }
