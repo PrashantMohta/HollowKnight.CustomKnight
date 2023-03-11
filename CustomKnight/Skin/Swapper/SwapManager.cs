@@ -123,7 +123,7 @@ namespace CustomKnight
         }
 
         private void SwapSkinForGo(string objectPath,GameObject GO){
-            Modding.Logger.LogDebug($"op {objectPath} {GO.name}");
+            CustomKnight.Instance.LogDebug($"op {objectPath} {GO.name}");
             Texture2D tex;// = loadedTextures[objectPath];
             if(!loadedTextures.TryGetValue(objectPath,out tex)){
                 return;

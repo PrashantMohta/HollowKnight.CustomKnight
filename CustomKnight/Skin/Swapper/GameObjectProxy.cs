@@ -18,7 +18,7 @@ namespace CustomKnight
             return Path.Combine(rootPath,name+".png");
         }
         public void TraverseGameObjectPath(string path,string rootPath,string name){
-            Modding.Logger.LogDebug($"{path}:{rootPath}:{name}");
+            CustomKnight.Instance.LogDebug($"{path}:{rootPath}:{name}");
             var pathSplit = path.Split(new Char[] {'/'},3);
             GameObjectProxy GOP = null;
             hasChildren = false;
@@ -50,7 +50,7 @@ namespace CustomKnight
                 }
             }
 
-            Modding.Logger.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}");
+            CustomKnight.Instance.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}");
         }
         public void TraverseGameObjectDirectory(string basePath){
             var path = Path.Combine(basePath,Path.Combine(rootPath,name));
