@@ -39,7 +39,7 @@ Note that, You do not need to have all the images that Default has in your folde
 - Allows replacing some video cutscenes in the game with custom ones 
 To use, add the appropriate file in `Mods/Custom Knight/Skins/<skinname>/Cinematics`  or if you want to replace them globally then `Mods/Custom Knight/Cinematics`
 
-Note: the existing Cinematics cannot be dumped but you may acquire the original videos [here](https://github.com/PrashantMohta/HollowKnight.CustomKnight/releases/)
+Note: the existing Cinematics cannot be dumped but you may acquire the original videos [here](https://github.com/PrashantMohta/HollowKnight.CustomKnight/releases/tag/v2.2.0)
 
 Currently Supported Cinematics : 
 ```
