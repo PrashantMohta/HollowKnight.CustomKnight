@@ -33,47 +33,82 @@ Make sure that the folder you copy opens directly to the image files themselves.
 
 Note that, You do not need to have all the images that Default has in your folder, just the ones you edit will suffice.
 
+### Additional Features:
 
-### Other Features:
+### Cinematics
+- Allows replacing some video cutscenes in the game with custom ones 
+To use, add the appropriate file in `Mods/Custom Knight/Skins/<skinname>/Cinematics`  or if you want to replace them globally then `Mods/Custom Knight/Cinematics`
 
-#### CustomKnight API
+Note: the existing Cinematics cannot be dumped but you may acquire the original videos [here](https://github.com/PrashantMohta/HollowKnight.CustomKnight/releases/)
 
-- adds ability to add more items that can be skinned (even custom items)
-- adds ability to extend or modify existing skins at runtime 
-- adds ability to provide a skin directly at runtime ( allows taking control of the skin without breaking compatibility)
-- adds ability to set the current skin
+Currently Supported Cinematics : 
+```
+Prologue.webm
+Intro.webm
+StagTunnelRun.webm
+CharmSlugKiss.webm
+Nailsmith.webm
+NailsmithPaint.webm
+Blacksmith.webm
+FinalA.webm
+FinalB.webm
+FinalC.webm
+FinalD.webm
+FinalE.webm
+MrMushroom.webm
+Telescope.webm
+Fountain.webm
+MaskShatter.webm
+```
+Required Format :
+```
+Video: 1080p, 30fps, VP8 encoding
+Audio: 48000hz sample rate, 2 channels, Vorbis encoding
+Container: WebM
+```
+FFMPEG command to get this Format:
 
-See example mods under `AddonExample` directory in this repo for more, xml docs are added as they felt needed.
+`ffmpeg -i <INFILE> -c:v libvpx -crf 10 -b:v 8M -c:a libvorbis -q 6 <OUTFILE>.webm`
 
 #### Swapper
-- adds ability to skin bosses and any other objects that use a tk2dsprite 
-- adds ability to skin any other non animated objects that use a sprite
-- adds ability to "skin" text in the game 
-- ability to dump the sprites / text to make it easier to figure out what to edit
-
+- Adds ability to skin bosses and any other objects that use a tk2dsprite 
+- Adds ability to skin any other non animated objects that use a sprite
+- Adds ability to "skin" text in the game 
+- Ability to dump the sprites / text to make it easier to figure out what to edit
 
 Using Swapper as a skin author : 
 
- - to replace a sprite : `mods/CustomKnight/Skins/<skin>/Swap/<scene-name>/<gameobjectname>.png`
+ - To replace a sprite : `Mods/Custom Knight/Skins/<skin>/Swap/<scene-name>/<gameobjectname>.png`
 (will only update once encountered in this scene, refer to the dumped png)
 
--- to replace a sprite globally look for the sprite in the `Global` directory it will allow you to replace enemies / npcs / objects globally if the file exists in this folder
+ - To replace a sprite globally look for the sprite in the `Global` directory it will allow you to replace enemies / npcs / objects globally if the file exists in this folder
 
-- to replace a text using it's in-game sheet name + the key :  `mods/CustomKnight/Skins/<skin>/Swap/<scene-name>/<sheet><key>.txt`
+
+ - To replace a text using it's in-game key :  `Mods/Custom Knight/Skins/<skin>/Swap/<scene-name>/<sheet><key>.txt`
 (scene-name here is just for organisation, the text will update globally)
 
-- to replace a text without it's key (case insensitive find & replace) : add the text in `mods/CustomKnight/Skins/<skin>/Swap/replace.txt`
+ - To replace a text without it's key (case insensitive find & replace) : add the text in `Mods/CustomKnight/Skins/<skin>/Swap/replace.txt`
 
-for example :
+For example :
 ```
 elDer=>Cool Dude
-geo=>Ca$hMoney
 ```
-- to Dump assets (very laggy):  enable Swapper Dump in settings : enter the room you want to dump objects /text from and wait till that object or text is on screen and change scene.
+will replace "elder","ELDER","ElDeR" with "Cool Dude"
+
+- To Dump assets (slow):  Enable Swapper Dump in settings : enter the room you want to dump objects /text from and wait till that object or text is on screen and change scene.
 ( Dump is triggered by new object creation & scene change) 
 
 Use Swapper to swap things across skins : 
- - create a Swap folder inside CustomKnight directory : `mods/CustomKnight/Swap/`
- - treat this as a global "skin" that applies regardless of the skin being selected.
+ - Create a Swap folder inside CustomKnight directory : `mods/CustomKnight/Swap/`
+ - Treat this as a global "skin" that applies regardless of the skin being selected.
+
+#### CustomKnight API
+
+- Adds ability to add more items that can be skinned (even custom items)
+- Adds ability to extend or modify existing skins at runtime (Including Swapper) 
+- Adds ability to provide a skin directly at runtime ( allows taking control of the skin without breaking compatibility)
+- Adds ability to set the current skin
+
+See example mods under `AddonExample` directory in this repo for more, xml docs are added as they felt needed.
 
 
