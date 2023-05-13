@@ -111,4 +111,10 @@ Use Swapper to swap things across skins :
 
 See example mods under `AddonExample` directory in this repo for more, xml docs are added as they felt needed.
 
+#### Compatibility Disclaimer
+
+Any compatibility with any other mods not explicitly stated in this readme is incidental and should not be considered as a feature in the scope of this project.
+
+CK may choose to add features that allow it to function better with other mods but this is not an out of the box guarantee.
+
 
