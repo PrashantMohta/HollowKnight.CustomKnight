@@ -1,4 +1,10 @@
 ﻿using CustomKnight.Canvas;
+using CustomKnight.Skin.Swapper;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
+using MonoMod.Utils;
+using System.Reflection;
+using PreloadDict = System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, UnityEngine.GameObject>>;
 
 namespace CustomKnight
 {
@@ -9,6 +15,59 @@ namespace CustomKnight
         public static CustomKnight Instance { get; private set; }
         public static DumpManager dumpManager {get; private set;} = new DumpManager();
         public static SwapManager swapManager {get; private set;} = new SwapManager();
+
+        public CustomKnight()
+        {
+            SimpleLogger log = new("CustomKnight.PreloadHook");
+            BindingFlags allFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public;
+            Type preloader = Type.GetType("Modding.ModLoader, Assembly-CSharp");
+            if (preloader == null)
+            {
+                log.LogWarn("Preloader type not found");
+                return;
+            }
+
+            MethodInfo method = preloader.GetMethod("LoadMod", allFlags);
+            if (method == null)
+            {
+                log.LogWarn("Method not found");
+                return;
+            }
+
+            ILHook hook = new(method, AddComponents);
+
+            void AddComponents(ILContext ctx)
+            {
+                ILCursor cursor = new(ctx);
+                cursor.GotoNext(i => i.MatchCallvirt(typeof(IMod), nameof(IMod.Initialize)));
+                cursor.EmitDelegate<Func<PreloadDict, PreloadDict>>(x => 
+                {
+                    if (x is null) return x;
+                    foreach ((string scene, Dictionary<string, GameObject> scenePreloads) in x)
+                    {
+                        if (scenePreloads is null) continue;
+                        foreach ((string goPath, GameObject go) in scenePreloads)
+                        {
+                            DoAddComponent(go, scene, goPath);
+                        }
+                    }
+                    return x;
+                });
+            }
+
+            void DoAddComponent(GameObject go, string scene, string goPath)
+            {
+                PreloadedObjectData data = go.AddComponent<PreloadedObjectData>();
+                data.origScene = scene;
+                data.goPath = goPath;
+
+                foreach (Transform t in go.transform)
+                {
+                    if (t.parent != go.transform) continue;
+                    DoAddComponent(t.gameObject, scene, $"{goPath}/{t.name}");
+                }
+            }
+        }
 
         public static CinematicsManager cinematicsManager {get; private set;} = new CinematicsManager();
 

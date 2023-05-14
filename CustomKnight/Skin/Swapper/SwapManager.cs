@@ -170,7 +170,7 @@ namespace CustomKnight
         
         public static event EventHandler<SwapEvent> OnApplySkinUsingProxy;
         
-        private void applySkinsUsingProxy(GameObjectProxy gop,GameObject go){
+        public void applySkinsUsingProxy(GameObjectProxy gop,GameObject go){
             //CustomKnight.Instance.Log("Traversing : " + gop.getTexturePath());
             if(go == null){
                 CustomKnight.Instance.Log("Null Go : " + gop.getTexturePath());
