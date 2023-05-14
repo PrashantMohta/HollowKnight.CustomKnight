@@ -30,9 +30,9 @@ namespace CustomKnight.Skin.Swapper
 
         private static void SwapManager_OnApplySkinUsingProxy(object sender, SwapEvent e)
         {
-            var marker = e.go.GetComponent<globalSwapMarker>();
+            var marker = e.go.GetComponent<GlobalSwapMarker>();
             var tk2d = e.go.GetComponent<tk2dSprite>();
-            if (tk2d != null && marker != null)
+            if (tk2d != null && marker != null && !marker.optOut)
             {
                 Debug.Log("Swapping by path " + marker.originalPath);
                 CustomKnight.swapManager.applyGlobalTk2dByPath(marker.originalPath, tk2d);
@@ -43,7 +43,7 @@ namespace CustomKnight.Skin.Swapper
         {
             orig(tk);
             var path = tk.gameObject.scene.name + "/" + tk.gameObject.GetPath(true);
-            var marker = tk.gameObject.GetAddComponent<globalSwapMarker>();
+            var marker = tk.gameObject.GetAddComponent<GlobalSwapMarker>();
             marker.originalPath = path;
         }
     }

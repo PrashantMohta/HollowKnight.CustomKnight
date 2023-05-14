@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CustomKnight.Skin.Swapper
-{    internal class globalSwapMarker : MonoBehaviour
+{    public class GlobalSwapMarker : MonoBehaviour
     {
         public string originalPath = "";
+        public bool optOut = false;
     }
 }
