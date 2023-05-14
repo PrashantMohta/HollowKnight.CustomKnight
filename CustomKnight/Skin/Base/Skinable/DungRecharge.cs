@@ -27,8 +27,8 @@ namespace CustomKnight
         public override void ApplyTexture(Texture2D tex){
             var HC = HeroController.instance.gameObject;
             var Dung = HC.FindGameObjectInChildren("Dung");
-            Dung.FindGameObjectInChildren("Particle 1").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFliter ? DungColor : new Color(1, 1, 1, 1);
-            HC.FindGameObjectInChildren("Dung Recharge").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFliter ? DungColor : new Color(1, 1, 1, 1);
+            Dung.FindGameObjectInChildren("Particle 1").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFilter ? DungColor : new Color(1, 1, 1, 1);
+            HC.FindGameObjectInChildren("Dung Recharge").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFilter ? DungColor : new Color(1, 1, 1, 1);
             foreach (var mat in materials){
                 mat.mainTexture = tex;
             }
@@ -37,7 +37,7 @@ namespace CustomKnight
             var prefab = GameObject.Instantiate(action.gameObject.Value);
             UnityEngine.Object.DontDestroyOnLoad(prefab);
             prefab.SetActive(false);
-            prefab.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFliter ? DungColor : new Color(1, 1, 1, 1);
+            prefab.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFilter ? DungColor : new Color(1, 1, 1, 1);
             prefab.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystemRenderer>().material.mainTexture = tex;
             action.gameObject.Value = prefab;
             
@@ -46,9 +46,9 @@ namespace CustomKnight
             var prefab2 = GameObject.Instantiate(action2.gameObject.Value);
             UnityEngine.Object.DontDestroyOnLoad(prefab2);
             prefab2.SetActive(false);
-            prefab2.FindGameObjectInChildren("Pt Deep").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFliter ? DungColor : new Color(1, 1, 1, 1);
+            prefab2.FindGameObjectInChildren("Pt Deep").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFilter ? DungColor : new Color(1, 1, 1, 1);
             prefab2.FindGameObjectInChildren("Pt Deep").GetComponent<ParticleSystemRenderer>().material.mainTexture = tex;
-            prefab2.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFliter ? DungColor : new Color(1, 1, 1, 1);
+            prefab2.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystem>().startColor = CustomKnight.GlobalSettings.DungFilter ? DungColor : new Color(1, 1, 1, 1);
             prefab2.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystemRenderer>().material.mainTexture = tex;
             action2.gameObject.Value = prefab2;
             // dung cloud for spore shroom unn
