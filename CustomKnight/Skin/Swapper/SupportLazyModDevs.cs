@@ -8,22 +8,22 @@ namespace CustomKnight.Skin.Swapper
 {
     internal class SupportLazyModDevs
     {
-        public static void Hook()
+        internal static void Hook()
         {
             On.tk2dSprite.Awake += Tk2dSprite_Awake;
         }
 
-        public static void Unhook()
+        internal static void Unhook()
         {
             On.tk2dSprite.Awake -= Tk2dSprite_Awake;
         }
 
-        public static void Enable()
+        internal static void Enable()
         {
             SwapManager.OnApplySkinUsingProxy += SwapManager_OnApplySkinUsingProxy;
         }
 
-        public static void Disable()
+        internal static void Disable()
         {
             SwapManager.OnApplySkinUsingProxy -= SwapManager_OnApplySkinUsingProxy;
         }
