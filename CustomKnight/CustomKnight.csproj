@@ -27,7 +27,7 @@
     <Reference Include="MMHOOK_PlayMaker">
       <HintPath>$(ModdingAPi)\MMHOOK_PlayMaker.dll</HintPath>
     </Reference>
-    <Reference Include="MonoMod.Utils">
+    <Reference Include="Mono.Cecil">
       <HintPath>$(ModdingAPi)\Mono.Cecil.dll</HintPath>
       <Private>false</Private>
     </Reference>
