@@ -1,4 +1,5 @@
 ﻿using CustomKnight.Canvas;
+using CustomKnight.Skin.Swapper;
 
 namespace CustomKnight
 {
@@ -55,6 +56,11 @@ namespace CustomKnight
             return CustomKnight.GlobalSettings;
         }
 
+        public CustomKnight()
+        {
+            SupportLazyModDevs.Hook();
+        }
+
         public override List<(string, string)> GetPreloadNames()
         {
             if (GlobalSettings.Preloads)
@@ -80,6 +86,8 @@ namespace CustomKnight
 
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
+            SupportLazyModDevs.Unhook();
+            SupportLazyModDevs.Enable();
             Log($"Initializing CustomKnight {version}");
             if (Instance == null) 
             { 
@@ -141,8 +149,10 @@ namespace CustomKnight
             if(!enable){
                 swapManager.Unload();
                 dumpManager.enabled = false;
+                SupportLazyModDevs.Disable();
             } else {
                 swapManager.Load();
+                SupportLazyModDevs.Enable();
             }
         }
 

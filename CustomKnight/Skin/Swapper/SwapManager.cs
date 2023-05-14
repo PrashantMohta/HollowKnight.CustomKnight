@@ -491,19 +491,48 @@ namespace CustomKnight
         }
         
         internal Dictionary<Material,string> MaterialProcessed = new();
-        
-        internal void applyGlobalTk2d(tk2dSprite tk){
+
+        internal void applyGlobalTk2dByHash(string hash, tk2dSprite tk)
+        {
+            if (hash == null || hash == "") {
+                return;
+            }
             var mat = tk?.GetCurrentSpriteDef()?.material;
-            if(mat == null) { return; }
-            var crc = mat;//.ComputeCRC();
-            string hash;
-            if(alwaysReprocessMaterial || !MaterialProcessed.TryGetValue(crc,out hash )){
-                hash = HashWithCache.getTk2dSpriteHash(tk);
-                MaterialProcessed[crc] = hash;   
-                var Gop = getGopGlobal("Global",hash);
-                if(Gop != null){
-                    applySkinsUsingProxy(Gop,tk.gameObject);
-                } 
+            if (mat == null) {
+                return; 
+            }
+            MaterialProcessed[mat] = hash;
+            var Gop = getGopGlobal("Global", hash);
+            if (Gop != null)
+            {
+                applySkinsUsingProxy(Gop, tk.gameObject);
+            }
+        }
+
+        public void applyGlobalTk2dByPath(string path, tk2dSprite tk)
+        {
+            if (shouldProcessMaterial(tk)) { 
+                var hash = HashWithCache.GetHashFromPath(path);
+                applyGlobalTk2dByHash(hash, tk);
+            }
+        }
+
+        internal bool shouldProcessMaterial(tk2dSprite tk)
+        {
+            var mat = tk?.GetCurrentSpriteDef()?.material;
+            if (mat == null) { return false; }
+            if (alwaysReprocessMaterial || !MaterialProcessed.TryGetValue(mat, out var hash))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal void applyGlobalTk2d(tk2dSprite tk){
+            if(shouldProcessMaterial(tk))
+            {
+                var hash = HashWithCache.getTk2dSpriteHash(tk);
+                applyGlobalTk2dByHash(hash, tk);
             }
         }
         internal void applyGlobalEntityForGo(GameObject go){
