@@ -91,11 +91,11 @@ namespace CustomKnight
                     () => selectedSkin,
                     Id:"SelectSkinOption"),
                  new HorizontalOption(
-                    "DungFliter", "Choose if use dung orig color",
+                    "DungFilter", "Choose if use dung orig color",
                     new string[] { "Disabled", "Enabled" },
                     (setting) => { CustomKnight.GlobalSettings.DungFilter=(setting==1); },
                     () => CustomKnight.GlobalSettings.DungFilter ? 1 : 0,
-                    Id:"DungFliter"),
+                    Id:"DungFilter"),
                 new MenuButton("PreloadButton","Will Preload objects for modifying events",(_)=>TogglePreloads(),Id:"PreloadButton"),
                 new MenuRow(
                     new List<Element>{

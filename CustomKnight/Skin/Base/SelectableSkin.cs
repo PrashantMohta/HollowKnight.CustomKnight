@@ -84,7 +84,29 @@ namespace CustomKnight
     public class StaticSkin : ISelectableSkin{
         public string SkinDirectory = "";
         public StaticSkin(string DirectoryName) {
+        private void MigrateCharms()
+        {
+            var skinFolder = Path.Combine(SkinManager.SKINS_FOLDER,SkinDirectory);
+            var charmsFolder = Path.Combine(skinFolder, "Charms");
+            EnsureDirectory(charmsFolder);
+            string[] files = Directory.GetFiles(skinFolder);
+            foreach (string file in files)
+            {
+                if (!Path.GetFileName(file).StartsWith("Charm_")) {
+                    continue;
+                }
+                try
+                {
+                    File.Move(file, Path.Combine(charmsFolder, Path.GetFileName(file)));
+                }
+                catch (Exception e)
+                {
+                    CustomKnight.Instance.LogError("A File could not be Copied : " + e.ToString());
+                }
+            }
+        }
             SkinDirectory = DirectoryName;
+            MigrateCharms();
         }
         public bool shouldCache() => true;
         public string GetId() => SkinDirectory;
