@@ -4,7 +4,7 @@ namespace CustomKnight
     {
         public int charmNum;
         public string charmName;
-        public Charm(string charmName,int charmNum) : base(charmName){
+        public Charm(string charmName,int charmNum) : base("Charms/"+charmName){
             this.charmName = charmName;
             this.charmNum = charmNum;
         }
