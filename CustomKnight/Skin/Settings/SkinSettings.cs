@@ -25,7 +25,7 @@ namespace CustomKnight
     public class SkinConfig
     {
         public bool dungFilter = true;
-        public bool wingFilter = false;
+        public bool wraithsFilter = false;
         public string flashColor = "";
         public bool detectAlts = true;
         public Dictionary<string, List<string>> alternates = new Dictionary<string, List<string>> (); 
