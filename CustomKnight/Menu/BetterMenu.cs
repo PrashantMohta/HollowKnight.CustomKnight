@@ -104,7 +104,7 @@ namespace CustomKnight
                     },
                     Id:"ApplyButtonGroup"
                 ){ XDelta = 400f},
-
+                Blueprints.NavigateToMenu("Alts","Configure Alternate sheets",() => AltMenu.GetMenu(MenuRef.menuScreen)),
                 new TextPanel("To Add more skins, copy the skins into your Skins folder."),
                 new MenuRow(
                     new List<Element>{
