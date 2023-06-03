@@ -1,5 +1,7 @@
 ﻿using CustomKnight.Canvas;
 using CustomKnight.Skin.Swapper;
+using GlobalEnums;
+using static UnityEngine.UI.SaveSlotButton;
 
 namespace CustomKnight
 {
@@ -59,6 +61,54 @@ namespace CustomKnight
         public CustomKnight()
         {
             SupportLazyModDevs.Hook();
+            //On.SaveSlotBackgrounds.GetBackground_MapZone += SaveSlotBackgrounds_GetBackground_MapZone;
+            On.UnityEngine.UI.SaveSlotButton.PresentSaveSlot += SaveSlotButton_PresentSaveSlot;
+        }
+
+        private void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
+        {
+            orig(self,saveStats);
+            self.background.sprite = GetSpriteForMapZone(self.saveSlot,!saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString()) ?? self.background.sprite;
+        }
+
+        private Sprite GetSpriteForMapZone(SaveSlot slot, string mapZone)
+        {
+            Log(slot.ToString() + "" + slot);
+            var index = 0;
+            if(slot == SaveSlot.SLOT_1)
+            {
+                index = 0;
+            } else if(slot == SaveSlot.SLOT_2)
+            {
+                index = 1;
+            } else if(slot == SaveSlot.SLOT_3)
+            {
+                index = 2;
+            } else if(slot == SaveSlot.SLOT_4)
+            {
+                index = 3;
+            }
+            var file = $"AreaBackgrounds/{mapZone}.png";
+            var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[index]);
+            if (skin.Exists(file))
+            {
+                var tex = skin.GetTexture(file);
+                var pivot = new Vector2(0.5f, 0.5f);
+                return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot); 
+            }
+            return null;
+        }
+        
+
+        private AreaBackground SaveSlotBackgrounds_GetBackground_MapZone(On.SaveSlotBackgrounds.orig_GetBackground_MapZone orig, SaveSlotBackgrounds self, GlobalEnums.MapZone mapZone)
+        {
+            /*for (int i = 0; i < self.areaBackgrounds.Length; i++)
+            {
+                var tex = SpriteUtils.ExtractTextureFromSprite(self.areaBackgrounds[i].backgroundImage);
+                dumpManager.SaveTextureByPath("AreaBackgrounds", self.areaBackgrounds[i].areaName.ToString(), tex);
+
+            }*/
+            return orig(self, mapZone);
         }
 
         public override List<(string, string)> GetPreloadNames()
