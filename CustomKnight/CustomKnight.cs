@@ -67,39 +67,69 @@ namespace CustomKnight
 
         private void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
         {
-            orig(self,saveStats);
+            /*
+            SaveSprite(self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite, "ggSoulOrb");
+            SaveSprite(self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite, "hardcoreSoulOrb");
+            SaveSprite(self.soulOrbIcon.sprite, "soulOrbIcon");
+            SaveSprite(self.healthSlots.normalHealth, "normalHealth");
+            SaveSprite(self.healthSlots.steelHealth, "steelHealth");
+            SaveSprite(self.geoIcon.sprite, "geoIcon");
+            SaveSprite(self.mpSlots.normalSoulOrb, "normalSoulOrb");
+            SaveSprite(self.mpSlots.steelSoulOrb, "steelSoulOrb"); 
+            */
+            self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/ggSoulOrb.png") ?? self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
+            self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/hardcoreSoulOrb.png") ?? self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
+            self.soulOrbIcon.sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/soulOrbIcon.png") ?? self.soulOrbIcon.sprite;
+            self.geoIcon.sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/geoIcon.png") ?? self.geoIcon.sprite;
+
+            self.mpSlots.normalSoulOrb = GetSpriteFromFile(self.saveSlot, "SaveHud/normalSoulOrb.png") ?? self.mpSlots.normalSoulOrb;
+            self.mpSlots.steelSoulOrb = GetSpriteFromFile(self.saveSlot, "SaveHud/steelSoulOrb.png") ?? self.mpSlots.steelSoulOrb;
+            self.healthSlots.normalHealth = GetSpriteFromFile(self.saveSlot, "SaveHud/normalHealth.png") ?? self.healthSlots.normalHealth;
+            self.healthSlots.steelHealth = GetSpriteFromFile(self.saveSlot, "SaveHud/steelHealth.png") ?? self.healthSlots.steelHealth;
+            orig(self, saveStats);
             self.background.sprite = GetSpriteForMapZone(self.saveSlot,!saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString()) ?? self.background.sprite;
         }
 
-        private Sprite GetSpriteForMapZone(SaveSlot slot, string mapZone)
+        private Sprite GetSpriteFromFile(SaveSlot slot,string file)
         {
             Log(slot.ToString() + "" + slot);
             var index = 0;
-            if(slot == SaveSlot.SLOT_1)
+            if (slot == SaveSlot.SLOT_1)
             {
                 index = 0;
-            } else if(slot == SaveSlot.SLOT_2)
+            }
+            else if (slot == SaveSlot.SLOT_2)
             {
                 index = 1;
-            } else if(slot == SaveSlot.SLOT_3)
+            }
+            else if (slot == SaveSlot.SLOT_3)
             {
                 index = 2;
-            } else if(slot == SaveSlot.SLOT_4)
+            }
+            else if (slot == SaveSlot.SLOT_4)
             {
                 index = 3;
             }
-            var file = $"AreaBackgrounds/{mapZone}.png";
             var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[index]);
             if (skin.Exists(file))
             {
                 var tex = skin.GetTexture(file);
                 var pivot = new Vector2(0.5f, 0.5f);
-                return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot); 
+                return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
             }
             return null;
         }
+        private Sprite GetSpriteForMapZone(SaveSlot slot, string mapZone)
+        {
+            var file = $"AreaBackgrounds/{mapZone}.png";
+            return GetSpriteFromFile(slot,file);
+        }
         
-
+        private void SaveSprite(Sprite s,string str)
+        {
+            var tex = SpriteUtils.ExtractTextureFromSprite(s);
+            dumpManager.SaveTextureByPath("Debug", str, tex);
+        }
         private AreaBackground SaveSlotBackgrounds_GetBackground_MapZone(On.SaveSlotBackgrounds.orig_GetBackground_MapZone orig, SaveSlotBackgrounds self, GlobalEnums.MapZone mapZone)
         {
             /*for (int i = 0; i < self.areaBackgrounds.Length; i++)
