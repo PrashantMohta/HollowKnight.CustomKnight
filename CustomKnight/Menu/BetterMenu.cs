@@ -66,11 +66,24 @@ namespace CustomKnight
             UpdateSkinList();
         }
 
-        internal static void UpdateSkinList(){
+        internal static void UpdateSkinList()
+        {
             SkinManager.getSkinNames();
-            MenuRef.Find("SelectSkinOption").updateAfter((element)=>{
+            MenuRef.Find("SelectSkinOption").updateAfter((element) =>
+            {
                 ((HorizontalOption)element).Values = getSkinNameArray();
             });
+        }
+
+        internal static void GenerateSaveHud() {
+            try
+            {
+                SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture);
+                SkinManager.RefreshSkin(true);
+            }
+            catch (Exception e) {
+                CustomKnight.Instance.LogError(e);
+            }
         }
         internal static string[] getSkinNameArray(){
             return SkinManager.SkinsList.Select(s => SkinManager.MaxLength(s.GetName(),CustomKnight.GlobalSettings.NameLength)).ToArray();
@@ -97,6 +110,8 @@ namespace CustomKnight
                     () => CustomKnight.GlobalSettings.DungFilter ? 1 : 0,
                     Id:"DungFilter"),
                 new MenuButton("PreloadButton","Will Preload objects for modifying events",(_)=>TogglePreloads(),Id:"PreloadButton"),
+                new MenuButton("SaveHud!","Genarate Save HUD",(_)=>GenerateSaveHud(),Id:"GenSH"),
+
                 new MenuRow(
                     new List<Element>{
                         Blueprints.NavigateToMenu( "Skin List","Opens a list of Skins",()=> SkinsList.GetMenu(MenuRef.menuScreen)),
