@@ -174,6 +174,11 @@ namespace CustomKnight
             {"MapQuill",new MAQ("Inventory/MapQuill") },
             {RelicBG.Name,new RelicBG() },
             {SpellBG.Name,new SpellBG() },
+            {DeathNail.NAME,new DeathNail() },
+            {DeathAsh.NAME,new DeathAsh() },
+            {BrummWave.NAME,new BrummWave() },
+            {BrummShield.NAME,new BrummShield() },
+            {FlowerBreak.NAME,new FlowerBreak() }
            // {"PinsScarab", new Pins()}
         };
 
@@ -347,7 +352,7 @@ namespace CustomKnight
         public static void SetSkinById(string id)
         {
             var Skin = GetSkinById(id);
-            CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId());
+            CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId() + $" on save slot {GameManager.instance.profileID}");
             if(CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; } 
             CurrentSkin = Skin;
             BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
@@ -357,6 +362,7 @@ namespace CustomKnight
             } else {
                 CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
                 CustomKnight.SaveSettings.DefaultSkin = CurrentSkin.GetId();
+                CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID-1] = CurrentSkin.GetId();
             };
             RefreshSkin(false);
             OnSetSkin?.Invoke(CustomKnight.Instance,new EventArgs());

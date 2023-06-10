@@ -66,12 +66,15 @@ namespace CustomKnight
             UpdateSkinList();
         }
 
-        internal static void UpdateSkinList(){
+        internal static void UpdateSkinList()
+        {
             SkinManager.getSkinNames();
-            MenuRef.Find("SelectSkinOption").updateAfter((element)=>{
+            MenuRef.Find("SelectSkinOption").updateAfter((element) =>
+            {
                 ((HorizontalOption)element).Values = getSkinNameArray();
             });
         }
+
         internal static string[] getSkinNameArray(){
             return SkinManager.SkinsList.Select(s => SkinManager.MaxLength(s.GetName(),CustomKnight.GlobalSettings.NameLength)).ToArray();
         }
@@ -91,11 +94,11 @@ namespace CustomKnight
                     () => selectedSkin,
                     Id:"SelectSkinOption"),
                  new HorizontalOption(
-                    "DungFliter", "Choose if use dung orig color",
+                    "DungFilter", "Choose if use dung orig color",
                     new string[] { "Disabled", "Enabled" },
                     (setting) => { CustomKnight.GlobalSettings.DungFilter=(setting==1); },
                     () => CustomKnight.GlobalSettings.DungFilter ? 1 : 0,
-                    Id:"DungFliter"),
+                    Id:"DungFilter"),
                 new MenuButton("PreloadButton","Will Preload objects for modifying events",(_)=>TogglePreloads(),Id:"PreloadButton"),
                 new MenuRow(
                     new List<Element>{
@@ -104,7 +107,7 @@ namespace CustomKnight
                     },
                     Id:"ApplyButtonGroup"
                 ){ XDelta = 400f},
-
+                Blueprints.NavigateToMenu("Alts","Configure Alternate sheets",() => AltMenu.GetMenu(MenuRef.menuScreen)),
                 new TextPanel("To Add more skins, copy the skins into your Skins folder."),
                 new MenuRow(
                     new List<Element>{
