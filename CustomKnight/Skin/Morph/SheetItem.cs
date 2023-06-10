@@ -103,7 +103,6 @@
                     newWidth = size.width;
                     newHeight = size.width / aspectRatio;
                 }
-                CustomKnight.Instance.Log($"{newWidth} -  {newHeight}");
                 texture = ScaleTexture(texture, (int)(newWidth * scale), (int)(newHeight * scale));
                 texture = GetRegion(texture, new Rect(new Vector2(0 + removePad, 0 + removePad), new Vector2(texture.width - 2 * removePad, texture.height - 2 * removePad)));
             }

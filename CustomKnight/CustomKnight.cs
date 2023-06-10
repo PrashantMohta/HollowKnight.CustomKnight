@@ -61,85 +61,9 @@ namespace CustomKnight
         public CustomKnight()
         {
             SupportLazyModDevs.Hook();
-            //On.SaveSlotBackgrounds.GetBackground_MapZone += SaveSlotBackgrounds_GetBackground_MapZone;
-            On.UnityEngine.UI.SaveSlotButton.PresentSaveSlot += SaveSlotButton_PresentSaveSlot;
         }
 
-        private void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
-        {
-            /*
-            SaveSprite(self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite, "ggSoulOrb");
-            SaveSprite(self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite, "hardcoreSoulOrb");
-            SaveSprite(self.soulOrbIcon.sprite, "soulOrbIcon");
-            SaveSprite(self.healthSlots.normalHealth, "normalHealth");
-            SaveSprite(self.healthSlots.steelHealth, "steelHealth");
-            SaveSprite(self.geoIcon.sprite, "geoIcon");
-            SaveSprite(self.mpSlots.normalSoulOrb, "normalSoulOrb");
-            SaveSprite(self.mpSlots.steelSoulOrb, "steelSoulOrb"); 
-            */
-            self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/ggSoulOrb.png") ?? self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
-            self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/hardcoreSoulOrb.png") ?? self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
-            self.soulOrbIcon.sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/soulOrbIcon.png") ?? self.soulOrbIcon.sprite;
-            self.geoIcon.sprite = GetSpriteFromFile(self.saveSlot, "SaveHud/geoIcon.png") ?? self.geoIcon.sprite;
-
-            self.mpSlots.normalSoulOrb = GetSpriteFromFile(self.saveSlot, "SaveHud/normalSoulOrb.png") ?? self.mpSlots.normalSoulOrb;
-            self.mpSlots.steelSoulOrb = GetSpriteFromFile(self.saveSlot, "SaveHud/steelSoulOrb.png") ?? self.mpSlots.steelSoulOrb;
-            self.healthSlots.normalHealth = GetSpriteFromFile(self.saveSlot, "SaveHud/normalHealth.png") ?? self.healthSlots.normalHealth;
-            self.healthSlots.steelHealth = GetSpriteFromFile(self.saveSlot, "SaveHud/steelHealth.png") ?? self.healthSlots.steelHealth;
-            orig(self, saveStats);
-            self.background.sprite = GetSpriteForMapZone(self.saveSlot,!saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString()) ?? self.background.sprite;
-        }
-
-        private Sprite GetSpriteFromFile(SaveSlot slot,string file)
-        {
-            Log(slot.ToString() + "" + slot);
-            var index = 0;
-            if (slot == SaveSlot.SLOT_1)
-            {
-                index = 0;
-            }
-            else if (slot == SaveSlot.SLOT_2)
-            {
-                index = 1;
-            }
-            else if (slot == SaveSlot.SLOT_3)
-            {
-                index = 2;
-            }
-            else if (slot == SaveSlot.SLOT_4)
-            {
-                index = 3;
-            }
-            var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[index]);
-            if (skin.Exists(file))
-            {
-                var tex = skin.GetTexture(file);
-                var pivot = new Vector2(0.5f, 0.5f);
-                return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
-            }
-            return null;
-        }
-        private Sprite GetSpriteForMapZone(SaveSlot slot, string mapZone)
-        {
-            var file = $"AreaBackgrounds/{mapZone}.png";
-            return GetSpriteFromFile(slot,file);
-        }
         
-        private void SaveSprite(Sprite s,string str)
-        {
-            var tex = SpriteUtils.ExtractTextureFromSprite(s);
-            dumpManager.SaveTextureByPath("Debug", str, tex);
-        }
-        private AreaBackground SaveSlotBackgrounds_GetBackground_MapZone(On.SaveSlotBackgrounds.orig_GetBackground_MapZone orig, SaveSlotBackgrounds self, GlobalEnums.MapZone mapZone)
-        {
-            /*for (int i = 0; i < self.areaBackgrounds.Length; i++)
-            {
-                var tex = SpriteUtils.ExtractTextureFromSprite(self.areaBackgrounds[i].backgroundImage);
-                dumpManager.SaveTextureByPath("AreaBackgrounds", self.areaBackgrounds[i].areaName.ToString(), tex);
-
-            }*/
-            return orig(self, mapZone);
-        }
 
         public override List<(string, string)> GetPreloadNames()
         {
@@ -168,6 +92,7 @@ namespace CustomKnight
         {
             SupportLazyModDevs.Unhook();
             SupportLazyModDevs.Enable();
+            SaveHud.Hook();
             Log($"Initializing CustomKnight {version}");
             if (Instance == null) 
             { 
@@ -241,6 +166,7 @@ namespace CustomKnight
         }
 
         public void Unload(){
+            SaveHud.UnHook();
             SkinManager.Unload();
             On.HeroController.Start -= HeroControllerStart;
         }
@@ -248,6 +174,12 @@ namespace CustomKnight
         {
             return CustomKnight.SaveSettings;
         }
-        
+
+
+        private void SaveSprite(Sprite s, string str)
+        {
+            var tex = SpriteUtils.ExtractTextureFromSprite(s);
+            CustomKnight.dumpManager.SaveTextureByPath("Debug", str, tex);
+        }
     }
 }
