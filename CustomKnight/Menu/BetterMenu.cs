@@ -78,7 +78,7 @@ namespace CustomKnight
         internal static void GenerateSaveHud() {
             try
             {
-                SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture);
+                SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture, SkinManager.Skinables[OrbFull.NAME].ckTex.currentTexture);
                 SkinManager.RefreshSkin(true);
             }
             catch (Exception e) {

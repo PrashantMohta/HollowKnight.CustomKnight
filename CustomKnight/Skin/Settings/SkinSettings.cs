@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CustomKnight
+﻿namespace CustomKnight
 {
     // user side
     public class SkinSettings

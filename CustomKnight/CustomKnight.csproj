@@ -3,7 +3,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>CustomKnight</RootNamespace>
     <AssemblyName>CustomKnight</AssemblyName>
-    <AssemblyVersion>2.2.0</AssemblyVersion>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
     <TargetFramework>net472</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -14,8 +14,8 @@
 
     <!-- Create a LocalBuildProperties.props file which defines references directories
   and OutputDirectory (where the post-build event sends the dll to) -->
-  <Import Project="LocalBuildProperties_example.props" Condition="Exists('LocalBuildProperties_example.props')"/>
-  <Import Project="LocalBuildProperties.props" Condition="Exists('LocalBuildProperties.props')"/>
+  <Import Project="LocalBuildProperties_example.props" Condition="Exists('LocalBuildProperties_example.props')" />
+  <Import Project="LocalBuildProperties.props" Condition="Exists('LocalBuildProperties.props')" />
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
