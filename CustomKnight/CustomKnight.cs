@@ -12,7 +12,7 @@ namespace CustomKnight
         public static CustomKnight Instance { get; private set; }
         public static DumpManager dumpManager {get; private set;} = new DumpManager();
         public static SwapManager swapManager {get; private set;} = new SwapManager();
-
+        public static SpriteFlashManager spriteFlashManager {get; private set;} = new SpriteFlashManager();
         public static CinematicsManager cinematicsManager {get; private set;} = new CinematicsManager();
 
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
@@ -90,14 +90,18 @@ namespace CustomKnight
 
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            Log($"Initializing CustomKnight {version}");
+            //Making sure skinables list exists
+            Log($"Found {SkinManager.Skinables.Count} Skinables");
             SupportLazyModDevs.Unhook();
             SupportLazyModDevs.Enable();
             SaveHud.Hook();
-            Log($"Initializing CustomKnight {version}");
-            if (Instance == null) 
-            { 
-                Instance = this;
-            }
+            OnInit?.Invoke(this, null);
+            
             if(!isSatchelInstalled()){
                 return;
             }
@@ -134,7 +138,7 @@ namespace CustomKnight
             return BetterMenu.GetMenu(modListMenu,toggle);
         }
 
-        public static event EventHandler<EventArgs> OnReady;
+        public static event EventHandler<EventArgs> OnReady,OnInit,OnUnload;
 
         public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
             orig(self);
@@ -168,6 +172,7 @@ namespace CustomKnight
         public void Unload(){
             SaveHud.UnHook();
             SkinManager.Unload();
+            OnUnload?.Invoke(this, null);
             On.HeroController.Start -= HeroControllerStart;
         }
         public SaveModSettings OnSaveLocal()
@@ -176,7 +181,7 @@ namespace CustomKnight
         }
 
 
-        private void SaveSprite(Sprite s, string str)
+        public static void SaveSprite(Sprite s, string str)
         {
             var tex = SpriteUtils.ExtractTextureFromSprite(s);
             CustomKnight.dumpManager.SaveTextureByPath("Debug", str, tex);

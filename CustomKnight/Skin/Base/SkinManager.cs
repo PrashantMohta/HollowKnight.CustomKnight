@@ -174,6 +174,11 @@ namespace CustomKnight
             {"MapQuill",new MAQ("Inventory/MapQuill") },
             {RelicBG.Name,new RelicBG() },
             {SpellBG.Name,new SpellBG() },
+            {DeathNail.NAME,new DeathNail() },
+            {DeathAsh.NAME,new DeathAsh() },
+            {BrummWave.NAME,new BrummWave() },
+            {BrummShield.NAME,new BrummShield() },
+            {FlowerBreak.NAME,new FlowerBreak() }
            // {"PinsScarab", new Pins()}
         };
 
