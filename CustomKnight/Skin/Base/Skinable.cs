@@ -154,6 +154,40 @@ namespace CustomKnight
         }
 
     }
+    /// <summary>
+    /// The abstract Class that represents a <c>Skinable</c> that uses a Sprite & requires a hook
+    /// </summary>
+    public abstract class Skinable_Hook : Skinable_Sprite
+    {
+
+        public Sprite cachedSprite;
+        public Skinable_Hook(string name) : base(name){
+            CustomKnight.OnInit += CustomKnight_OnInit;
+            CustomKnight.OnUnload += CustomKnight_OnUnload;
+        }
+
+        private void CustomKnight_OnInit(object sender, EventArgs e)
+        {
+            CustomKnight.Instance.LogDebug($"Hook {name}");
+            Hook();
+        }
+
+        private void CustomKnight_OnUnload(object sender, EventArgs e)
+        {
+
+            CustomKnight.Instance.LogDebug($"UnHook {name}");
+            UnHook();
+        }
+
+        public abstract void Hook();
+        public abstract void UnHook();
+
+        public override void ApplySprite(Sprite sprite)
+        {
+            cachedSprite = sprite;
+        }
+
+    }
     
     /// <summary>
     ///     The abstract Class that represents a <c>Skinable</c> that uses a Sprite
@@ -161,6 +195,7 @@ namespace CustomKnight
     public abstract class Skinable_Sprite : Skinable
     {
         public Skinable_Sprite(string name) : base(name){}
+
 
         public override void ApplyTexture(Texture2D tex){
             if(!ckTex.missing){
