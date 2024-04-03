@@ -178,7 +178,8 @@ namespace CustomKnight
             {DeathAsh.NAME,new DeathAsh() },
             {BrummWave.NAME,new BrummWave() },
             {BrummShield.NAME,new BrummShield() },
-            {FlowerBreak.NAME,new FlowerBreak() }
+            {FlowerBreak.NAME,new FlowerBreak() },
+            {Salubra.NAME,new Salubra() },
            // {"PinsScarab", new Pins()}
         };
 
