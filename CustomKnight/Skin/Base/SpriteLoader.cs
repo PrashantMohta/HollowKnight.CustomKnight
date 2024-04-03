@@ -99,7 +99,9 @@
                 }
             }
             TextureCache.trimTextureCache();
-            SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture, SkinManager.Skinables[OrbFull.NAME].ckTex.currentTexture);
+            if (!SkinManager.Skinables[Hud.NAME].ckTex.missing && !SkinManager.Skinables[OrbFull.NAME].ckTex.missing) { 
+                SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture, SkinManager.Skinables[OrbFull.NAME].ckTex.currentTexture);
+            }
             SetSkin(SkinManager.Skinables);
             LoadComplete = true;
         }
