@@ -91,6 +91,10 @@ namespace CustomKnight
                 }
                 hasChildren = true;
                 children[directoryName] = GOP;
+                if(GOP.rootPath == "" || GOP.rootPath == null)
+                {
+                    GOP.rootPath = Path.Combine(rootPath, name);
+                }
                 GOP.TraverseGameObjectDirectory(basePath);
             }
 
