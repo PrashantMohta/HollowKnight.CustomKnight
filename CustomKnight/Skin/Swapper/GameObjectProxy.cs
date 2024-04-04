@@ -5,6 +5,7 @@ namespace CustomKnight
     public class GameObjectProxy
     {
         public string name;
+        public string alias = "spl_ck_dndy";
         public string rootPath; //rootPath/name.png
         public bool hasTexture;
         public bool hasChildren;
@@ -14,10 +15,19 @@ namespace CustomKnight
         public string getObjectPath(){
             return Path.Combine(rootPath,name+fileType);
         }
-        public string getTexturePath(){
-            return Path.Combine(rootPath,name+".png");
+        public string getTexturePath()
+        {
+            return Path.Combine(rootPath, name + ".png");
         }
-        public void TraverseGameObjectPath(string path,string rootPath,string name){
+        public string getAliasPath()
+        {
+            if(alias != "spl_ck_dndy") { 
+                CustomKnight.Instance.Log(alias);
+            }
+            return Path.Combine(rootPath, alias + ".png");
+        }
+        public void TraverseGameObjectPath(string path,string rootPath,string name,string alias = "spl_ck_dndy")
+        {
             CustomKnight.Instance.LogDebug($"{path}:{rootPath}:{name}");
             var pathSplit = path.Split(new Char[] {'/'},3);
             GameObjectProxy GOP = null;
@@ -34,12 +44,13 @@ namespace CustomKnight
             }
             if(GOP != null){
                 if(pathSplit.Length > 2){
-                    GOP.TraverseGameObjectPath($"{pathSplit[1]}/{pathSplit[2]}",rootPath,name);
+                    GOP.TraverseGameObjectPath($"{pathSplit[1]}/{pathSplit[2]}",rootPath,name,alias);
                 } else {
                     if(!GOP.hasTexture){ // do not over ride existing texture
                         GOP.hasTexture = true;
                         GOP.rootPath = rootPath;
                         GOP.name = name;
+                        GOP.alias = alias;
                     }
                 }
             } else {
@@ -47,10 +58,11 @@ namespace CustomKnight
                     this.hasTexture = true;
                     this.rootPath = rootPath;
                     this.name = name;
+                    this.alias = alias;
                 }
             }
 
-            CustomKnight.Instance.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}");
+            CustomKnight.Instance.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}:{this.alias}:{(this.rootPath==null?"null root":"x")}");
         }
         public void TraverseGameObjectDirectory(string basePath){
             var path = Path.Combine(basePath,Path.Combine(rootPath,name));

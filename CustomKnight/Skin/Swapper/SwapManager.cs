@@ -102,7 +102,9 @@ namespace CustomKnight
         internal bool SwapSkinRoutineRunning = false;
 
         private void loadTexture(GameObjectProxy gop){
+                this.Log(gop.name + gop.getTexturePath() + gop.getAliasPath());
                 string objectPath = gop.getTexturePath();
+                string aliasPath = gop.getAliasPath();
                 if(loadedTextures.TryGetValue(objectPath, out var tex)){
                     return;
                 }
@@ -111,10 +113,19 @@ namespace CustomKnight
                 string currentDirectory = DATA_DIR;
                 if(File.Exists(Path.Combine(currentDirectory,objectPath))){
                     buffer = File.ReadAllBytes(Path.Combine(currentDirectory,objectPath));
-                } else if(File.Exists(Path.Combine(defaultDirectory,objectPath))){
+                } else if (File.Exists(Path.Combine(currentDirectory, aliasPath)))
+                {
+                    buffer = File.ReadAllBytes(Path.Combine(currentDirectory, aliasPath));
+                }
+                else if (File.Exists(Path.Combine(defaultDirectory,objectPath))){
                     buffer = File.ReadAllBytes(Path.Combine(defaultDirectory,objectPath));
-                } else {
-                    return;
+                } else if (File.Exists(Path.Combine(defaultDirectory, aliasPath)))
+                {
+                    buffer = File.ReadAllBytes(Path.Combine(defaultDirectory, aliasPath));
+                }
+                else
+                {
+                return;
                 }
                 
                 var texture = new Texture2D(2, 2);
@@ -172,19 +183,21 @@ namespace CustomKnight
         
         private void applySkinsUsingProxy(GameObjectProxy gop,GameObject go){
             //CustomKnight.Instance.Log("Traversing : " + gop.getTexturePath());
-            if(go == null){
+            if (go == null){
                 CustomKnight.Instance.Log("Null Go : " + gop.getTexturePath());
                 return;
             }
             if(gop.hasTexture){
+                var texPath = gop.getTexturePath();
                 //CustomKnight.Instance.Log("hasTexture");
-                try{
+                try
+                {
                     loadTexture(gop);
                 } catch( Exception e){
                     this.Log( gop.name + " " + e.ToString());
                 }
-                if(!currentSkinnedSceneObjs.Contains(gop.getTexturePath())){
-                    SwapSkinForGo(gop.getTexturePath(),go);
+                if(!currentSkinnedSceneObjs.Contains(texPath)){
+                    SwapSkinForGo(texPath, go);
                 }
             }
             OnApplySkinUsingProxy?.Invoke(CustomKnight.Instance,new SwapEvent(){gop=gop,go=go});
@@ -332,8 +345,10 @@ namespace CustomKnight
                         objects[objectName]=GOP;
                         if(directoryName == "Global"){
                             var hp = HashWithCache.GetPathsFromHash(objectName);
-                            if(hp != null){
-                              hashPaths.AddRange(hp);
+                            Log(filename+"|"+objectName);
+                            if (hp != null){
+                                Log(hp.Count.ToString());
+                                hashPaths.AddRange(hp);
                             }                       
                         }
                     }
@@ -373,7 +388,9 @@ namespace CustomKnight
                         };
                         scene.Add(goSplit[0],currentGop);
                     }
-                    currentGop.TraverseGameObjectPath(hpSplit[1],"Global",HashWithCache.GetHashFromPath(hp));
+                    var hash = HashWithCache.GetHashFromPath(hp);
+                    currentGop.TraverseGameObjectPath(hpSplit[1],"Global", hash, HashWithCache.GetAliasFromHash(hash));
+
                 }
             }
         }
