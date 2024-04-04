@@ -143,6 +143,7 @@ namespace CustomKnight
 
 
             GUIController.Instance.BuildMenus();
+            UIController.CreateGUI();
             On.HeroController.Start += HeroControllerStart;
         }
 
