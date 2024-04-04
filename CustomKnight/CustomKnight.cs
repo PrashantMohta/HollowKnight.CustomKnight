@@ -1,7 +1,5 @@
 ﻿using CustomKnight.Canvas;
 using CustomKnight.Skin.Swapper;
-using GlobalEnums;
-using static UnityEngine.UI.SaveSlotButton;
 
 namespace CustomKnight
 {
