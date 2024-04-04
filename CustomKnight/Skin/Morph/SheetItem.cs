@@ -1,12 +1,17 @@
-﻿namespace CustomKnight
+﻿using System.IO;
+using System.Xml.Linq;
+
+namespace CustomKnight
 {
     internal class SheetItem
     {
+        public string path;
         public Rect size;
         public Sprite sprite;
         public Texture2D texture;
         public Vector2 pivot = new Vector2(0.5f, 0.5f);
-
+        private Dictionary<string, Sprite> cache = new Dictionary<string, Sprite>();
+        private static List<SheetItem> instances = new List<SheetItem>();
         public static Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
         {
             Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, true);
@@ -71,11 +76,19 @@
             texture = rotatedTexture;
         }
 
-        public SheetItem(float width, float height)
+        public SheetItem(string path,float width, float height)
         {
+            this.path = path;
             this.size = new Rect(new Vector2(0, 0), new Vector2(width, height));
+            instances.Add(this);
         }
-
+        public static void PreloadForSkin(ISelectableSkin skin)
+        {
+            foreach(var i in instances)
+            {
+                i.GetSpriteForSkin(skin);
+            }
+        }
         public void useImage(Texture2D origTex, float x, float y, float width, float height, bool flipH = false, bool flipV = false)
         {
             var region = new Rect(new Vector2(x, y), new Vector2(width, height));
@@ -127,6 +140,38 @@
             }
             texture.Apply();
         }
+
+        public Sprite GetSpriteForSkin(ISelectableSkin skin)
+        {
+            if (cache.TryGetValue(skin.GetId(), out var sprite)) { return sprite; }
+            if (skin.Exists(path))
+            {
+                var tex = skin.GetTexture(path);
+                var pivot = new Vector2(0.5f, 0.5f);
+                cache[skin.GetId()] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
+                return cache[skin.GetId()];
+            }
+            return null;
+        }
+
+        public bool Exists(ISelectableSkin skin)
+        {
+            var result = skin.Exists(path);
+            if (!result)
+            {
+                CustomKnight.Instance.Log($"Missing {path}.png in skin {skin.GetName()}");
+            }
+            return result;
+        }
+
+        public void Save(ISelectableSkin skin)
+        {
+            var skinDir = Path.Combine(SkinManager.SKINS_FOLDER, skin.GetId());
+            var filepath = Path.Combine(skinDir, path);
+            IoUtils.EnsureDirectory(Path.GetDirectoryName(filepath));
+            TextureUtils.WriteTextureToFile(texture, filepath);
+        }
+
     }
 
 }
