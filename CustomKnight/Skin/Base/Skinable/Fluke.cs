@@ -6,8 +6,9 @@ namespace CustomKnight
     public class Fluke : Skinable_Tk2d
     {
         public static string NAME = "Fluke";
-        public Fluke() : base(Fluke.NAME){}
-        public override Material GetMaterial(){
+        public Fluke() : base(Fluke.NAME) { }
+        public override Material GetMaterial()
+        {
             GameObject hc = HeroController.instance.gameObject;
             GameObject charmEffects = hc.FindGameObjectInChildren("Charm Effects");
             PlayMakerFSM poolFlukes = charmEffects.LocateMyFSM("Pool Flukes");

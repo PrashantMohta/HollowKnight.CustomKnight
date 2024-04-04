@@ -10,10 +10,11 @@ namespace CustomKnight
         public bool hasTexture;
         public bool hasChildren;
         public string fileType;
-        public Dictionary<string,GameObjectProxy> children = new Dictionary<string,GameObjectProxy>();
+        public Dictionary<string, GameObjectProxy> children = new Dictionary<string, GameObjectProxy>();
 
-        public string getObjectPath(){
-            return Path.Combine(rootPath,name+fileType);
+        public string getObjectPath()
+        {
+            return Path.Combine(rootPath, name + fileType);
         }
         public string getTexturePath()
         {
@@ -21,40 +22,52 @@ namespace CustomKnight
         }
         public string getAliasPath()
         {
-            if(alias != "spl_ck_dndy") { 
+            if (alias != "spl_ck_dndy")
+            {
                 CustomKnight.Instance.Log(alias);
             }
             return Path.Combine(rootPath, alias + ".png");
         }
-        public void TraverseGameObjectPath(string path,string rootPath,string name,string alias = "spl_ck_dndy")
+        public void TraverseGameObjectPath(string path, string rootPath, string name, string alias = "spl_ck_dndy")
         {
             CustomKnight.Instance.LogDebug($"{path}:{rootPath}:{name}");
-            var pathSplit = path.Split(new Char[] {'/'},3);
+            var pathSplit = path.Split(new Char[] { '/' }, 3);
             GameObjectProxy GOP = null;
             hasChildren = false;
-            if(pathSplit.Length > 1){
+            if (pathSplit.Length > 1)
+            {
                 hasChildren = true;
-                if(!children.TryGetValue(pathSplit[1],out GOP)){
-                    GOP = new GameObjectProxy(){
+                if (!children.TryGetValue(pathSplit[1], out GOP))
+                {
+                    GOP = new GameObjectProxy()
+                    {
                         name = pathSplit[1],
                         hasTexture = false,
                     };
                 }
                 children[pathSplit[1]] = GOP;
             }
-            if(GOP != null){
-                if(pathSplit.Length > 2){
-                    GOP.TraverseGameObjectPath($"{pathSplit[1]}/{pathSplit[2]}",rootPath,name,alias);
-                } else {
-                    if(!GOP.hasTexture){ // do not over ride existing texture
+            if (GOP != null)
+            {
+                if (pathSplit.Length > 2)
+                {
+                    GOP.TraverseGameObjectPath($"{pathSplit[1]}/{pathSplit[2]}", rootPath, name, alias);
+                }
+                else
+                {
+                    if (!GOP.hasTexture)
+                    { // do not over ride existing texture
                         GOP.hasTexture = true;
                         GOP.rootPath = rootPath;
                         GOP.name = name;
                         GOP.alias = alias;
                     }
                 }
-            } else {
-                if(!this.hasTexture){
+            }
+            else
+            {
+                if (!this.hasTexture)
+                {
                     this.hasTexture = true;
                     this.rootPath = rootPath;
                     this.name = name;
@@ -62,25 +75,30 @@ namespace CustomKnight
                 }
             }
 
-            CustomKnight.Instance.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}:{this.alias}:{(this.rootPath==null?"null root":"x")}");
+            CustomKnight.Instance.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}:{this.alias}:{(this.rootPath == null ? "null root" : "x")}");
         }
-        public void TraverseGameObjectDirectory(string basePath){
-            var path = Path.Combine(basePath,Path.Combine(rootPath,name));
-            if(!Directory.Exists(path)){
+        public void TraverseGameObjectDirectory(string basePath)
+        {
+            var path = Path.Combine(basePath, Path.Combine(rootPath, name));
+            if (!Directory.Exists(path))
+            {
                 hasChildren = false;
                 return;
             }
             // check if it has files
-            foreach(string file in Directory.GetFiles(path)){
+            foreach (string file in Directory.GetFiles(path))
+            {
                 string filename = Path.GetFileName(file);
                 //Log(filename);
-                if(!filename.EndsWith(".txt")){
+                if (!filename.EndsWith(".txt"))
+                {
                     string extension = Path.GetExtension(file);
-                    string objectName = filename.Replace(extension,"");
-                    GameObjectProxy GOP = new GameObjectProxy(){
+                    string objectName = filename.Replace(extension, "");
+                    GameObjectProxy GOP = new GameObjectProxy()
+                    {
                         name = objectName,
                         hasTexture = true,
-                        rootPath = Path.Combine(rootPath,name),
+                        rootPath = Path.Combine(rootPath, name),
                         hasChildren = false,
                         fileType = extension
                     };
@@ -89,21 +107,24 @@ namespace CustomKnight
                 }
             }
             // check if it has directories
-            foreach(string directory in Directory.GetDirectories(path)){
+            foreach (string directory in Directory.GetDirectories(path))
+            {
                 string directoryName = new DirectoryInfo(directory).Name;
                 //Log(directoryName);
                 GameObjectProxy GOP;
-                if(!children.TryGetValue(directoryName,out GOP)){
-                    GOP = new GameObjectProxy(){
+                if (!children.TryGetValue(directoryName, out GOP))
+                {
+                    GOP = new GameObjectProxy()
+                    {
                         name = directoryName,
                         hasTexture = false,
-                        rootPath = Path.Combine(rootPath,name),
+                        rootPath = Path.Combine(rootPath, name),
                         hasChildren = true
                     };
                 }
                 hasChildren = true;
                 children[directoryName] = GOP;
-                if(GOP.rootPath == "" || GOP.rootPath == null)
+                if (GOP.rootPath == "" || GOP.rootPath == null)
                 {
                     GOP.rootPath = Path.Combine(rootPath, name);
                 }

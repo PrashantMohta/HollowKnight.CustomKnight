@@ -9,20 +9,20 @@ namespace CustomKnight
         public static SheetItem ggSoulOrb = new SheetItem("SaveHud/ggSoulOrb.png", 338f, 163f);
         public static SheetItem hardcoreSoulOrb = new SheetItem("SaveHud/hardcoreSoulOrb.png", 507f, 178f);
         public static SheetItem normalHealth = new SheetItem("SaveHud/normalHealth.png", 35f, 43f);
-        public static SheetItem normalSoulOrb = new SheetItem("SaveHud/normalSoulOrb.png",21f, 21f);
-        public static SheetItem soulOrbIcon = new SheetItem("SaveHud/soulOrbIcon.png",173f, 107f);
+        public static SheetItem normalSoulOrb = new SheetItem("SaveHud/normalSoulOrb.png", 21f, 21f);
+        public static SheetItem soulOrbIcon = new SheetItem("SaveHud/soulOrbIcon.png", 173f, 107f);
         public static SheetItem steelHealth = new SheetItem("SaveHud/steelHealth.png", 35f, 43f);
-        public static SheetItem steelSoulOrb = new SheetItem("SaveHud/steelSoulOrb.png",21f, 21f);
-        public static Dictionary<string,SheetItem> AreaBackgrounds = new Dictionary<string,SheetItem>();
+        public static SheetItem steelSoulOrb = new SheetItem("SaveHud/steelSoulOrb.png", 21f, 21f);
+        public static Dictionary<string, SheetItem> AreaBackgrounds = new Dictionary<string, SheetItem>();
         public static AreaBackground[] defaultAreaBackgrounds;
 
         public static void Hook()
         {
-            foreach(var zone in Enum.GetNames(typeof(GlobalEnums.MapZone)))
+            foreach (var zone in Enum.GetNames(typeof(GlobalEnums.MapZone)))
             {
-                AreaBackgrounds[zone] = new SheetItem($"AreaBackgrounds/{zone}.png",0,0);
+                AreaBackgrounds[zone] = new SheetItem($"AreaBackgrounds/{zone}.png", 0, 0);
             }
-            
+
             On.SaveSlotBackgrounds.GetBackground_MapZone += SaveSlotBackgrounds_GetBackground_MapZone;
             On.UnityEngine.UI.SaveSlotButton.PresentSaveSlot += SaveSlotButton_PresentSaveSlot;
         }
@@ -47,7 +47,7 @@ namespace CustomKnight
             var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[GetSlotIndex(self.saveSlot)]);
             if (!skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
             {
-                GenerateSaveHud(skin,skin.GetTexture(SkinManager.Skinables[Hud.NAME].ckTex.fileName), skin.GetTexture(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName));
+                GenerateSaveHud(skin, skin.GetTexture(SkinManager.Skinables[Hud.NAME].ckTex.fileName), skin.GetTexture(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName));
             }
             self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = ggSoulOrb.GetSpriteForSkin(skin) ?? self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
             self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = hardcoreSoulOrb.GetSpriteForSkin(skin) ?? self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
@@ -59,11 +59,13 @@ namespace CustomKnight
             self.healthSlots.normalHealth = normalHealth.GetSpriteForSkin(skin) ?? self.healthSlots.normalHealth;
             self.healthSlots.steelHealth = steelHealth.GetSpriteForSkin(skin) ?? self.healthSlots.steelHealth;
             orig(self, saveStats);
-            if(skin.GetName() == "Default") { 
+            if (skin.GetName() == "Default")
+            {
                 for (int i = 0; i < defaultAreaBackgrounds.Length; i++)
                 {
                     var areaName = defaultAreaBackgrounds[i].areaName.ToString();
-                    if (!AreaBackgrounds[areaName].Exists(skin)) { 
+                    if (!AreaBackgrounds[areaName].Exists(skin))
+                    {
                         var tex = SpriteUtils.ExtractTextureFromSprite(defaultAreaBackgrounds[i].backgroundImage);
                         AreaBackgrounds[areaName].texture = tex;
                         AreaBackgrounds[areaName].Save(skin);
@@ -73,7 +75,7 @@ namespace CustomKnight
             var currZone = !saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString();
             if (AreaBackgrounds.TryGetValue(currZone, out var mapzone))
             {
-                self.background.sprite =  mapzone.Exists(skin)? mapzone.GetSpriteForSkin(skin) :self.background.sprite;
+                self.background.sprite = mapzone.Exists(skin) ? mapzone.GetSpriteForSkin(skin) : self.background.sprite;
             }
         }
 
@@ -99,7 +101,7 @@ namespace CustomKnight
             return index;
         }
 
-        
+
 
         private static AreaBackground SaveSlotBackgrounds_GetBackground_MapZone(On.SaveSlotBackgrounds.orig_GetBackground_MapZone orig, SaveSlotBackgrounds self, GlobalEnums.MapZone mapZone)
         {
@@ -111,56 +113,64 @@ namespace CustomKnight
         {
             GenerateSaveHud(SkinManager.GetCurrentSkin(), Hudpng, OrbFull);
         }
-        public static void GenerateSaveHud(ISelectableSkin skin,Texture2D Hudpng,Texture2D OrbFull)
+        public static void GenerateSaveHud(ISelectableSkin skin, Texture2D Hudpng, Texture2D OrbFull)
         {
             var fHudpng = Hudpng.Flip(true, true);
-            if (!geoIcon.Exists(skin)) { 
-                geoIcon.useImage(fHudpng, 0f, 553f, 60f, 68f,false, false);
+            if (!geoIcon.Exists(skin))
+            {
+                geoIcon.useImage(fHudpng, 0f, 553f, 60f, 68f, false, false);
                 geoIcon.rotateTexture(false);
-                geoIcon.CorrectScale(1.1f,3);
+                geoIcon.CorrectScale(1.1f, 3);
                 geoIcon.Save(skin);
             }
-            if (!ggSoulOrb.Exists(skin)) { 
+            if (!ggSoulOrb.Exists(skin))
+            {
                 ggSoulOrb.useImage(fHudpng, 1507f, 1297f, 167f, 345f, false, false);
                 ggSoulOrb.rotateTexture(false);
                 ggSoulOrb.CorrectScale(2f);
-                ggSoulOrb.texture = ggSoulOrb.texture.GetCropped(new Rect(0,75, ggSoulOrb.size.width,ggSoulOrb.size.height));
-                ggSoulOrb.Overlay(SheetItem.ScaleTexture(OrbFull,125,125),83,58);
+                ggSoulOrb.texture = ggSoulOrb.texture.GetCropped(new Rect(0, 75, ggSoulOrb.size.width, ggSoulOrb.size.height));
+                ggSoulOrb.Overlay(SheetItem.ScaleTexture(OrbFull, 125, 125), 83, 58);
                 ggSoulOrb.Save(skin);
             }
-            if (!hardcoreSoulOrb.Exists(skin)) { 
+            if (!hardcoreSoulOrb.Exists(skin))
+            {
                 hardcoreSoulOrb.useImage(fHudpng, 0f, 1847f, 501f, 201f, false, false);
                 hardcoreSoulOrb.texture = hardcoreSoulOrb.texture.Flip(false, true);
                 hardcoreSoulOrb.CorrectScale();
                 hardcoreSoulOrb.Overlay(SheetItem.ScaleTexture(OrbFull, 109, 109), 128, 81);
                 hardcoreSoulOrb.Save(skin);
             }
-            if (!normalHealth.Exists(skin)) { 
+            if (!normalHealth.Exists(skin))
+            {
                 normalHealth.useImage(fHudpng, 275f, 813f, 65f, 59f, false, false);
                 normalHealth.rotateTexture(false);
                 normalHealth.CorrectScale();
                 normalHealth.Save(skin);
             }
-            if (!normalSoulOrb.Exists(skin)) { 
+            if (!normalSoulOrb.Exists(skin))
+            {
                 normalSoulOrb.useImage(fHudpng, 75f, 681f, 45f, 48f, false, false);
                 normalSoulOrb.rotateTexture(false);
                 normalSoulOrb.CorrectScale();
                 normalSoulOrb.Save(skin);
             }
-            if (!soulOrbIcon.Exists(skin)) { 
+            if (!soulOrbIcon.Exists(skin))
+            {
                 soulOrbIcon.useImage(fHudpng, 1360f, 1621f, 147f, 246f, false, false);
                 soulOrbIcon.rotateTexture(false);
                 soulOrbIcon.CorrectScale(1.1f, 5);
                 soulOrbIcon.Overlay(SheetItem.ScaleTexture(OrbFull, 82, 82), 52, 42);
                 soulOrbIcon.Save(skin);
             }
-            if (!steelHealth.Exists(skin)) { 
+            if (!steelHealth.Exists(skin))
+            {
                 steelHealth.useImage(fHudpng, 275f, 813f, 65f, 59f, false, false);
                 steelHealth.rotateTexture(false);
                 steelHealth.CorrectScale();
                 steelHealth.Save(skin);
             }
-            if (!steelSoulOrb.Exists(skin)) { 
+            if (!steelSoulOrb.Exists(skin))
+            {
                 steelSoulOrb.useImage(fHudpng, 75f, 681f, 45f, 48f, false, false);
                 steelSoulOrb.rotateTexture(false);
                 steelSoulOrb.CorrectScale();

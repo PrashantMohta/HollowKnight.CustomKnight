@@ -11,7 +11,7 @@
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GameObject sd= SkinManager.equipment.FindGameObjectInChildren("White Key");
+            GameObject sd = SkinManager.equipment.FindGameObjectInChildren("White Key");
             sd.GetComponent<SpriteRenderer>().sprite = sprite;
         }
     }

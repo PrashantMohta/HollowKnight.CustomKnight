@@ -3,10 +3,12 @@ namespace CustomKnight
     public class OrbFull : Skinable_Sprite
     {
         public static string NAME = "OrbFull";
-        public OrbFull() : base(OrbFull.NAME){}
+        public OrbFull() : base(OrbFull.NAME) { }
 
-        public override void SaveDefaultTexture(){
-            try{
+        public override void SaveDefaultTexture()
+        {
+            try
+            {
                 foreach (SpriteRenderer i in GameCameras.instance.hudCanvas.GetComponentsInChildren<SpriteRenderer>(true))
                 {
                     if (i.name == "Orb Full")
@@ -14,11 +16,14 @@ namespace CustomKnight
                         ckTex.defaultSprite = i.sprite;
                     }
                 }
-            } catch(Exception e){
+            }
+            catch (Exception e)
+            {
                 CustomKnight.Instance.Log($"skinable {name} : {e}");
             }
         }
-        public override void ApplySprite(Sprite sprite){
+        public override void ApplySprite(Sprite sprite)
+        {
             foreach (SpriteRenderer i in GameCameras.instance.hudCanvas.GetComponentsInChildren<SpriteRenderer>(true))
             {
                 if (i.name == "Orb Full")

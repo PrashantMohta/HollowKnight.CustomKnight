@@ -3,7 +3,7 @@
     public class BrummWave : Skinable_Sprite
     {
         public static string NAME = "BrummWave";
-        public BrummWave() : base(BrummWave.NAME) {}
+        public BrummWave() : base(BrummWave.NAME) { }
 
         public override void ApplySprite(Sprite sprite)
         {
@@ -15,7 +15,7 @@
             {
                 hd.Find("Shield_core").GetComponent<SpriteRenderer>().color = skin.skinConfig.brummColor;
             }
-            
+
         }
 
         public override void SaveDefaultTexture()

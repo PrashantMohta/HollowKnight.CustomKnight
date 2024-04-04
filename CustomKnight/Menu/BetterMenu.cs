@@ -9,54 +9,67 @@ namespace CustomKnight
         internal static int selectedSkin = 0;
         internal static Menu MenuRef;
 
-        internal static void ApplySkin(){
+        internal static void ApplySkin()
+        {
             var skinToApply = SkinManager.SkinsList[selectedSkin];
             SkinManager.SetSkinById(skinToApply.GetId());
             SkinSwapperPanel.hidePanel("");
         }
 
-        internal static void SelectedSkin(string skinId){
-            selectedSkin = SkinManager.SkinsList.FindIndex( skin => skin.GetId() == skinId);
+        internal static void SelectedSkin(string skinId)
+        {
+            selectedSkin = SkinManager.SkinsList.FindIndex(skin => skin.GetId() == skinId);
         }
-        internal static void SetPreloadButton(){
+        internal static void SetPreloadButton()
+        {
             var btn = MenuRef.Find("PreloadButton");
             btn.Name = CustomKnight.GlobalSettings.Preloads ? "Gameplay + Events" : "Gameplay only";
             btn.Update();
         }
-        internal static void TogglePreloads(){
+        internal static void TogglePreloads()
+        {
             CustomKnight.GlobalSettings.Preloads = !CustomKnight.GlobalSettings.Preloads;
             SetPreloadButton();
         }
-        internal static void SetDumpButton(){
+        internal static void SetDumpButton()
+        {
             //var btn = (MenuRef?.Find("AdditonalButtonGroup") as IShadowElement)?.GetElements()?.FirstOrDefault<Element>( e => e.Id == "DumpButton");
             var btn = (MenuRef?.Find("AdditonalButtonGroup") as MenuRow)?.Find("DumpButton");
             btn.Name = CustomKnight.dumpManager.enabled ? "Dumping sprites" : "Dump sprites";
             btn.Update();
         }
-        internal static void ToggleDumping(){
+        internal static void ToggleDumping()
+        {
             CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
-            if(CustomKnight.dumpManager.enabled){
+            if (CustomKnight.dumpManager.enabled)
+            {
                 CustomKnight.swapManager.Unload();
                 CustomKnight.dumpManager.dumpAllSprites();
-            } else {
+            }
+            else
+            {
                 CustomKnight.swapManager.Load();
             }
             SetDumpButton();
         }
 
-        internal static void DumpAll(){
+        internal static void DumpAll()
+        {
             CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
             CustomKnight.dumpManager.walk();
         }
 
-        private static void OpenSkins(){
+        private static void OpenSkins()
+        {
             IoUtils.OpenDefault(SkinManager.SKINS_FOLDER);
         }
 
-        private static void OpenLink(string link){ 
+        private static void OpenLink(string link)
+        {
             Application.OpenURL(link);
         }
-        private static void FixSkins(){ 
+        private static void FixSkins()
+        {
             FixSkinStructure.FixSkins();
             TextureCache.clearAllTextureCache(); // clear texture cache
             CustomKnight.Instance.Log("Reapplying Skin");
@@ -75,11 +88,13 @@ namespace CustomKnight
             });
         }
 
-        internal static string[] getSkinNameArray(){
-            return SkinManager.SkinsList.Select(s => SkinManager.MaxLength(s.GetName(),CustomKnight.GlobalSettings.NameLength)).ToArray();
+        internal static string[] getSkinNameArray()
+        {
+            return SkinManager.SkinsList.Select(s => SkinManager.MaxLength(s.GetName(), CustomKnight.GlobalSettings.NameLength)).ToArray();
         }
-        internal static Menu PrepareMenu(ModToggleDelegates toggleDelegates){
-            return new Menu("Custom Knight",new Element[]{
+        internal static Menu PrepareMenu(ModToggleDelegates toggleDelegates)
+        {
+            return new Menu("Custom Knight", new Element[]{
                 Blueprints.CreateToggle(toggleDelegates,"Custom Skins", "", "Enabled","Disabled"),
                 new HorizontalOption(
                     "Swapper", "Apply skin to bosses, enemies & areas",
@@ -125,17 +140,21 @@ namespace CustomKnight
                     },
                     Id:"AdditonalButtonGroup"
                 ){ XDelta = 425f},
-                
+
             });
         }
-        internal static MenuScreen GetMenu(MenuScreen lastMenu, ModToggleDelegates? toggleDelegates){
-            if(MenuRef == null){
+        internal static MenuScreen GetMenu(MenuScreen lastMenu, ModToggleDelegates? toggleDelegates)
+        {
+            if (MenuRef == null)
+            {
                 MenuRef = PrepareMenu((ModToggleDelegates)toggleDelegates);
             }
-            MenuRef.OnBuilt += (_,Element) => {
+            MenuRef.OnBuilt += (_, Element) =>
+            {
                 SetPreloadButton();
                 SetDumpButton();
-                if(SkinManager.CurrentSkin != null){
+                if (SkinManager.CurrentSkin != null)
+                {
                     BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
                 }
             };

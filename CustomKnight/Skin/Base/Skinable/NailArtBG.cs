@@ -1,7 +1,7 @@
 ﻿
 namespace CustomKnight
 {
-    public class NailArtBG:Skinable_Sprite
+    public class NailArtBG : Skinable_Sprite
     {
         public static string Name = "Inventory/ArtBG";
         public NailArtBG() : base(Name) { }

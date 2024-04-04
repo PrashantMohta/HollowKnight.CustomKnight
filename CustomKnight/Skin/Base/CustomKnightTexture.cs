@@ -11,14 +11,18 @@ namespace CustomKnight
         public Sprite defaultSprite;
         public Texture2D defaultTex;
         public Texture2D tex;
-        public Texture2D currentTexture{
-            get{
-                if(missing){
+        public Texture2D currentTexture
+        {
+            get
+            {
+                if (missing)
+                {
                     return defaultTex;
                 }
                 return tex;
             }
-            set{
+            set
+            {
                 tex = value;
             }
         }

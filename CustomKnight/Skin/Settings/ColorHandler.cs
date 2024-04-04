@@ -23,7 +23,7 @@ namespace CustomKnight
             catch (Exception ex)
             {
                 Debug.LogError($"Failed to parse color {objectType} : {ex.Message}");
-                return new Color(1,1,1,1);
+                return new Color(1, 1, 1, 1);
             }
         }
 

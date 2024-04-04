@@ -5,8 +5,9 @@ namespace CustomKnight
     public class ShadeOrb : Skinable_Tk2ds
     {
         public static string NAME = "ShadeOrb";
-        public ShadeOrb() : base(ShadeOrb.NAME){}
-        public override List<Material> GetMaterials(){
+        public ShadeOrb() : base(ShadeOrb.NAME) { }
+        public override List<Material> GetMaterials()
+        {
             SceneManager sm = GameManager.instance.GetSceneManager().GetComponent<SceneManager>();
             return new List<Material>{
                 sm.hollowShadeObject.FindGameObjectInChildren("Shade Particles").GetComponent<ParticleSystemRenderer>().material,

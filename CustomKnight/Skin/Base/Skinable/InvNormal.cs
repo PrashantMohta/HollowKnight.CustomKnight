@@ -1,7 +1,7 @@
 ﻿
 namespace CustomKnight
 {
-    public class InvNormal:Skinable_Sprite
+    public class InvNormal : Skinable_Sprite
     {
         public string ItemName;
         public InvNormal(string name) : base(name)
@@ -10,7 +10,7 @@ namespace CustomKnight
         }
         public override void SaveDefaultTexture()
         {
-            switch(ItemName)
+            switch (ItemName)
             {
                 case "Inventory/DSlash":
                     ckTex.defaultSprite = SkinManager.invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite;//so confused
@@ -33,11 +33,11 @@ namespace CustomKnight
             }
         }
         public override void ApplySprite(Sprite sprite)
-        { 
+        {
             switch (ItemName)
             {
                 case "Inventory/DSlash":
-                    SkinManager.invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite=sprite;
+                    SkinManager.invitem.FindGameObjectInChildren("Art Uppercut").GetComponent<InvItemDisplay>().activeSprite = sprite;
                     break;
                 case "Inventory/CSlash":
                     SkinManager.invitem.FindGameObjectInChildren("Art Cyclone").GetComponent<InvItemDisplay>().activeSprite = sprite;

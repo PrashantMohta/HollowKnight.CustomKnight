@@ -12,7 +12,7 @@
         public override void ApplySprite(Sprite sprite)
         {
             GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Tram Pass");
-            sd.GetComponent<SpriteRenderer>().sprite=sprite;
+            sd.GetComponent<SpriteRenderer>().sprite = sprite;
         }
     }
 }

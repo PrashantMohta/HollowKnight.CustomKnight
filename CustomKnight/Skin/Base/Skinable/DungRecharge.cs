@@ -7,8 +7,9 @@ namespace CustomKnight
     {
         private Color DungColor = new Color(0.6706f, 0.4275f, 0, 1);
         public static string NAME = "DungRecharge";
-        public DungRecharge() : base(DungRecharge.NAME){}
-        public override List<Material> GetMaterials(){
+        public DungRecharge() : base(DungRecharge.NAME) { }
+        public override List<Material> GetMaterials()
+        {
             var HC = HeroController.instance.gameObject;
             var Dung = HC.FindGameObjectInChildren("Dung");
             return new List<Material>{
@@ -16,15 +17,20 @@ namespace CustomKnight
                 HC.FindGameObjectInChildren("Dung Recharge").GetComponent<ParticleSystemRenderer>().material
             };
         }
-        public override void SaveDefaultTexture(){
-            if(materials != null && materials[0].mainTexture != null){
+        public override void SaveDefaultTexture()
+        {
+            if (materials != null && materials[0].mainTexture != null)
+            {
                 ckTex.defaultTex = materials[0].mainTexture as Texture2D;
-            } else {
+            }
+            else
+            {
                 CustomKnight.Instance.Log($"skinable {name} : material is null");
             }
         }
 
-        public override void ApplyTexture(Texture2D tex){
+        public override void ApplyTexture(Texture2D tex)
+        {
             var HC = HeroController.instance.gameObject;
             var Dung = HC.FindGameObjectInChildren("Dung");
             var enableFilter = true;
@@ -39,20 +45,21 @@ namespace CustomKnight
             }
             Dung.FindGameObjectInChildren("Particle 1").GetComponent<ParticleSystem>().startColor = enableFilter ? DungColor : new Color(1, 1, 1, 1);
             HC.FindGameObjectInChildren("Dung Recharge").GetComponent<ParticleSystem>().startColor = enableFilter ? DungColor : new Color(1, 1, 1, 1);
-            foreach (var mat in materials){
+            foreach (var mat in materials)
+            {
                 mat.mainTexture = tex;
             }
             // basic dung trail
-            var action = HC.FindGameObjectInChildren("Dung").LocateMyFSM("Control").GetAction<SpawnObjectFromGlobalPoolOverTime>("Equipped",0);
+            var action = HC.FindGameObjectInChildren("Dung").LocateMyFSM("Control").GetAction<SpawnObjectFromGlobalPoolOverTime>("Equipped", 0);
             var prefab = GameObject.Instantiate(action.gameObject.Value);
             UnityEngine.Object.DontDestroyOnLoad(prefab);
             prefab.SetActive(false);
             prefab.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystem>().startColor = enableFilter ? DungColor : new Color(1, 1, 1, 1);
             prefab.FindGameObjectInChildren("Pt Normal").GetComponent<ParticleSystemRenderer>().material.mainTexture = tex;
             action.gameObject.Value = prefab;
-            
+
             // dung cloud for spore shroom
-            var action2 = HC.LocateMyFSM("Spell Control").GetAction<SpawnObjectFromGlobalPool>("Dung Cloud",0);
+            var action2 = HC.LocateMyFSM("Spell Control").GetAction<SpawnObjectFromGlobalPool>("Dung Cloud", 0);
             var prefab2 = GameObject.Instantiate(action2.gameObject.Value);
             UnityEngine.Object.DontDestroyOnLoad(prefab2);
             prefab2.SetActive(false);

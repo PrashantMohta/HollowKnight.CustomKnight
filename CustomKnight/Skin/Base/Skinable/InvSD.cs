@@ -7,7 +7,7 @@
         public override void SaveDefaultTexture()
         {
             GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Super Dash");
-            ckTex.defaultSprite = sd.GetComponent<SpriteRenderer>().sprite; 
+            ckTex.defaultSprite = sd.GetComponent<SpriteRenderer>().sprite;
         }
         public override void ApplySprite(Sprite sprite)
         {

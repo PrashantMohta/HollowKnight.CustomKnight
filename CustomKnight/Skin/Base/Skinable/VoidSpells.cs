@@ -3,10 +3,11 @@ namespace CustomKnight
     public class VoidSpells : Skinable_noCache
     {
         public static string NAME = "VoidSpells";
-        public VoidSpells() : base(VoidSpells.NAME){}
+        public VoidSpells() : base(VoidSpells.NAME) { }
 
-        public override Material GetMaterial(){
-            Material VoidSpells = null ;
+        public override Material GetMaterial()
+        {
+            Material VoidSpells = null;
             foreach (Transform child in HeroController.instance.gameObject.transform)
             {
                 if (child.name == "Spells")

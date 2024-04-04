@@ -31,8 +31,8 @@ namespace CustomKnight
             var menu = new Menu("Skin Alternates", new Element[]{
                 new MenuButton("Update Alts", "Apply selected Alts" ,ApplyAlts),
                 new TextPanel("No Alternates detected, please update skin-config.json",Id : "helpText") { isVisible = false}
-            }) ;
-            foreach(var kvp in SkinManager.Skinables)
+            });
+            foreach (var kvp in SkinManager.Skinables)
             {
                 menu.AddElement(ChangeAltButton(kvp.Value.name + ".png"));
             }
@@ -48,14 +48,16 @@ namespace CustomKnight
         private static MenuButton ChangeAltButton(string name)
         {
             var ButtonText = name;
-            return new MenuButton(ButtonText, "", (mb) => {
+            return new MenuButton(ButtonText, "", (mb) =>
+            {
                 var skin = SkinManager.GetCurrentSkin();
-                if(skin is ISupportsOverrides SkinWithOverrides)
+                if (skin is ISupportsOverrides SkinWithOverrides)
                 {
-                    if (SkinWithOverrides.HasOverrides(name)) {
-                       var options = SkinWithOverrides.GetAllOverrides(name);
-                       var currentOverride = SkinWithOverrides.GetOverride(name);
-                       var currentOverrideIndex = Array.FindIndex(options,(i)=> i == currentOverride);
+                    if (SkinWithOverrides.HasOverrides(name))
+                    {
+                        var options = SkinWithOverrides.GetAllOverrides(name);
+                        var currentOverride = SkinWithOverrides.GetOverride(name);
+                        var currentOverrideIndex = Array.FindIndex(options, (i) => i == currentOverride);
                         currentOverrideIndex++;
                         if (currentOverrideIndex > options.Length - 1)
                         {
@@ -72,20 +74,22 @@ namespace CustomKnight
                         }
                     }
                 }
-            }, Id: name){ isVisible = false};
+            }, Id: name)
+            { isVisible = false };
         }
 
         internal static MenuScreen GetMenu(MenuScreen lastMenu)
         {
-            if(MenuScreenRef == null)
+            if (MenuScreenRef == null)
             {
                 if (MenuRef == null)
                 {
-                    MenuRef = PrepareMenu(); 
+                    MenuRef = PrepareMenu();
                 }
                 MenuScreenRef = MenuRef.GetMenuScreen(lastMenu);
 
-            } else
+            }
+            else
             {
                 MenuRef.returnScreen = lastMenu;
             }

@@ -1,22 +1,23 @@
 ﻿
 namespace CustomKnight
 {
-    public class Nail:Skinable_Sprite
+    public class Nail : Skinable_Sprite
     {
         public string NailLevel;
-        public Nail(string naillevel) : base(naillevel) {
+        public Nail(string naillevel) : base(naillevel)
+        {
             this.NailLevel = naillevel;
         }
         public override void SaveDefaultTexture()
         {
-            InvNailSprite nailsp=SkinManager.inv.FindGameObjectInChildren("Nail").GetComponent<InvNailSprite>();
+            InvNailSprite nailsp = SkinManager.inv.FindGameObjectInChildren("Nail").GetComponent<InvNailSprite>();
             switch (NailLevel)
             {
                 case "Inventory/Nail_1":
                     ckTex.defaultSprite = nailsp.level1;
                     break;
                 case "Inventory/Nail_2":
-                    ckTex.defaultSprite=nailsp.level2;
+                    ckTex.defaultSprite = nailsp.level2;
                     break;
                 case "Inventory/Nail_3":
                     ckTex.defaultSprite = nailsp.level3;

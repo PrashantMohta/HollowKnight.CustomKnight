@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using System.IO;
-using System.Security.Policy;
 
 namespace CustomKnight
 {
@@ -12,7 +11,7 @@ namespace CustomKnight
     internal class AliasObj
     {
         internal Dictionary<string, string> HashToAlias = new();
-        public Dictionary<string,string> AliasToHash = new();
+        public Dictionary<string, string> AliasToHash = new();
     }
     internal static class HashWithCache
     {
@@ -42,18 +41,23 @@ namespace CustomKnight
             }
             return null;
         }
-        internal static string GetHashFromPath(string path){
-            if(cache.PathToHash.TryGetValue(path,out var hash)){
+        internal static string GetHashFromPath(string path)
+        {
+            if (cache.PathToHash.TryGetValue(path, out var hash))
+            {
                 return hash;
             }
-            return hash;       
+            return hash;
         }
-        static HashWithCache(){
+        static HashWithCache()
+        {
             loadCacheObjFromFile();
             //saveAliasObjToFile();
             loadCacheAliasesFromFile();
-            foreach (var kvp in cache.HashToPaths){
-                foreach(var path in kvp.Value){
+            foreach (var kvp in cache.HashToPaths)
+            {
+                foreach (var path in kvp.Value)
+                {
                     cache.PathToHash[path] = kvp.Key;
                 }
             }
@@ -63,9 +67,11 @@ namespace CustomKnight
             }
         }
 
-        private static void AddHashToPath(string hash,string path){
+        private static void AddHashToPath(string hash, string path)
+        {
             List<string> pathList;
-            if(!cache.HashToPaths.TryGetValue(hash,out pathList)){
+            if (!cache.HashToPaths.TryGetValue(hash, out pathList))
+            {
                 pathList = new List<string>();
             }
             pathList.Add(path);
@@ -73,9 +79,11 @@ namespace CustomKnight
             cache.PathToHash[path] = hash;
         }
 
-        private static void loadCacheObjFromFile(){
-            var path = Path.Combine(AssemblyUtils.getCurrentDirectory(),"hashcache.json");
-            if(File.Exists(path)){
+        private static void loadCacheObjFromFile()
+        {
+            var path = Path.Combine(AssemblyUtils.getCurrentDirectory(), "hashcache.json");
+            if (File.Exists(path))
+            {
                 cache = JsonConvert.DeserializeObject<CacheObj>(File.ReadAllText(path), new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace });
             }
         }
@@ -95,35 +103,42 @@ namespace CustomKnight
             File.WriteAllText(path, json);
         }
 
-        private static void saveCacheObjToFile(){
-            var path = Path.Combine(AssemblyUtils.getCurrentDirectory(),"hashcache.json");
+        private static void saveCacheObjToFile()
+        {
+            var path = Path.Combine(AssemblyUtils.getCurrentDirectory(), "hashcache.json");
             var json = JsonConvert.SerializeObject(cache, Formatting.Indented);
-            File.WriteAllText(path,json);
+            File.WriteAllText(path, json);
         }
 
-        internal static void saveIfUpdated(){
-            if(updated){
+        internal static void saveIfUpdated()
+        {
+            if (updated)
+            {
                 saveCacheObjToFile();
             }
             updated = false;
         }
-        private static string getTk2dSpriteHashInternal(tk2dSprite tk){
+        private static string getTk2dSpriteHashInternal(tk2dSprite tk)
+        {
             var mat = tk?.GetCurrentSpriteDef()?.material;
-            if(mat == null) { return ""; }
+            if (mat == null) { return ""; }
             var tex = mat.mainTexture;
             var dupe = tex.isReadable ? (Texture2D)tex : TextureUtils.duplicateTexture((Texture2D)mat.mainTexture);
             var hash = dupe.getHash();
-            if(!tex.isReadable){
+            if (!tex.isReadable)
+            {
                 GameObject.Destroy(dupe);
             }
             return hash;
         }
-        internal static string getTk2dSpriteHash(tk2dSprite tk){
-            var path = tk.gameObject.scene.name+"/"+tk.gameObject.GetPath(true);
+        internal static string getTk2dSpriteHash(tk2dSprite tk)
+        {
+            var path = tk.gameObject.scene.name + "/" + tk.gameObject.GetPath(true);
             string hash;
-            if(!cache.PathToHash.TryGetValue(path,out hash)){
+            if (!cache.PathToHash.TryGetValue(path, out hash))
+            {
                 hash = getTk2dSpriteHashInternal(tk);
-                AddHashToPath(hash,path);
+                AddHashToPath(hash, path);
                 updated = true;
             }
             return hash;
