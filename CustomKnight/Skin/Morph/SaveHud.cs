@@ -1,6 +1,4 @@
 ﻿using GlobalEnums;
-using System.IO;
-using System.Reflection;
 using static UnityEngine.UI.SaveSlotButton;
 
 namespace CustomKnight
@@ -47,7 +45,6 @@ namespace CustomKnight
             SaveSprite(self.mpSlots.steelSoulOrb, "steelSoulOrb"); 
             */
             var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[GetSlotIndex(self.saveSlot)]);
-            Modding.Logger.Log("aaa" + skin.Exists($"SaveHud"));
             if (!skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
             {
                 GenerateSaveHud(skin,skin.GetTexture(SkinManager.Skinables[Hud.NAME].ckTex.fileName), skin.GetTexture(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName));
