@@ -1,7 +1,7 @@
 ﻿
 namespace CustomKnight
 {
-    public class GodFinder:Skinable_Sprite
+    public class GodFinder : Skinable_Sprite
     {
         public string Name;
         public GodFinder(string name) : base(name)
@@ -10,7 +10,7 @@ namespace CustomKnight
         }
         public override void SaveDefaultTexture()
         {
-            GodfinderInvIcon invIcon= SkinManager.invitem.FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
+            GodfinderInvIcon invIcon = SkinManager.invitem.FindGameObjectInChildren("Godfinder").GetComponent<GodfinderInvIcon>();
             if (Name.EndsWith("0"))
             {
                 ckTex.defaultSprite = invIcon.normalSprite;

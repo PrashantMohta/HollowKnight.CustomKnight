@@ -1,15 +1,15 @@
 ﻿namespace CustomKnight
 {
-    public class MAQ:Skinable_Sprite
+    public class MAQ : Skinable_Sprite
     {
         public string Name;
         public MAQ(string name) : base(name)
         {
-            Name = name;    
+            Name = name;
         }
         public override void SaveDefaultTexture()
         {
-           
+
             PlayMakerFSM eqfsm = SkinManager.equipment.LocateMyFSM("Build Equipment List");
             switch (Name)
             {

@@ -75,7 +75,7 @@ namespace CustomKnight
             texture = rotatedTexture;
         }
 
-        public SheetItem(string path,float width, float height)
+        public SheetItem(string path, float width, float height)
         {
             this.path = path;
             this.size = new Rect(new Vector2(0, 0), new Vector2(width, height));
@@ -83,7 +83,7 @@ namespace CustomKnight
         }
         public static void PreloadForSkin(ISelectableSkin skin)
         {
-            foreach(var i in instances)
+            foreach (var i in instances)
             {
                 i.GetSpriteForSkin(skin);
             }

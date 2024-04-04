@@ -6,26 +6,26 @@ namespace CustomKnight.Canvas
     {
         public GameObject canvas;
         private static GUIController _instance;
-        
+
         public void BuildMenus()
         {
             if (!GameObject.Find("Custom Knight Canvas"))
             {
                 Log("Building Help Text");
-                
+
                 LoadResources();
-                
+
                 canvas = new GameObject("Custom Knight Canvas");
                 canvas.AddComponent<UnityEngine.Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
                 CanvasScaler scaler = canvas.AddComponent<CanvasScaler>();
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 scaler.referenceResolution = new Vector2(1920f, 1080f);
                 canvas.AddComponent<GraphicRaycaster>();
-                if(CustomKnight.GlobalSettings.showMovedText){
+                if (CustomKnight.GlobalSettings.showMovedText)
+                {
                     SkinSwapperPanel.BuildMenu(canvas);
                 }
                 SkinSwapperPanel.BuildDumpingUpdatePanel(canvas);
-
                 DontDestroyOnLoad(canvas);
             }
         }
@@ -82,9 +82,9 @@ namespace CustomKnight.Canvas
                     }
                 }
             }
-        
+
         }
-        
+
         private void Log(object message) => Modding.Logger.Log("[GUI Controller] " + message);
     }
 }

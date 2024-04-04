@@ -48,7 +48,7 @@ namespace CustomKnight.Canvas
 
             return t;
         }
-        
+
         public CanvasButton GetButton(string buttonName, string panelName = null)
         {
             if (panelName != null && panels.ContainsKey(panelName))
@@ -78,7 +78,7 @@ namespace CustomKnight.Canvas
 
             return null;
         }
-        
+
         public void SetPosition(Vector2 pos)
         {
 

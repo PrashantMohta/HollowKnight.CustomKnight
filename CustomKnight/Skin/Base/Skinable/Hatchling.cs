@@ -6,8 +6,9 @@ namespace CustomKnight
     public class Hatchling : Skinable_Tk2d
     {
         public static string NAME = "Hatchling";
-        public Hatchling() : base(Hatchling.NAME){}
-        public override Material GetMaterial(){
+        public Hatchling() : base(Hatchling.NAME) { }
+        public override Material GetMaterial()
+        {
             GameObject hc = HeroController.instance.gameObject;
             GameObject charmEffects = hc.FindGameObjectInChildren("Charm Effects");
 

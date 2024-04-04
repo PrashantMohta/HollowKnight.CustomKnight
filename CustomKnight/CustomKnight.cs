@@ -1,49 +1,61 @@
 ﻿using CustomKnight.Canvas;
+using CustomKnight.NewUI;
 using CustomKnight.Skin.Swapper;
 
 namespace CustomKnight
 {
-    public class CustomKnight : Mod,  IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>,ICustomMenuMod , ITogglableMod
+    public class CustomKnight : Mod, IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>, ICustomMenuMod, ITogglableMod
     {
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
         public static SaveModSettings SaveSettings { get; set; } = new SaveModSettings();
         public static CustomKnight Instance { get; private set; }
-        public static DumpManager dumpManager {get; private set;} = new DumpManager();
-        public static SwapManager swapManager {get; private set;} = new SwapManager();
-        public static SpriteFlashManager spriteFlashManager {get; private set;} = new SpriteFlashManager();
-        public static CinematicsManager cinematicsManager {get; private set;} = new CinematicsManager();
+        public static DumpManager dumpManager { get; private set; } = new DumpManager();
+        public static SwapManager swapManager { get; private set; } = new SwapManager();
+        public static SpriteFlashManager spriteFlashManager { get; private set; } = new SpriteFlashManager();
+        public static CinematicsManager cinematicsManager { get; private set; } = new CinematicsManager();
 
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
-        internal static void touchSatchelVersion(){
+        internal static void touchSatchelVersion()
+        {
             Satchel.AssemblyUtils.Version();
         }
-        internal static bool isSatchelInstalled(){
+        internal static bool isSatchelInstalled()
+        {
             var isInstalled = false;
-            try{
+            try
+            {
                 touchSatchelVersion();
                 isInstalled = true;
-            } catch (Exception e){
+            }
+            catch (Exception e)
+            {
                 Modding.Logger.Log(e);
             }
             return isInstalled;
         }
-        internal void getVersionSafely(){
+        internal void getVersionSafely()
+        {
             version = Satchel.AssemblyUtils.GetAssemblyVersionHash();
         }
         public string version;
         new public string GetName() => "Custom Knight";
-        public override string GetVersion(){
+        public override string GetVersion()
+        {
             version = "Satchel not found";
-            if(isSatchelInstalled()){
+            if (isSatchelInstalled())
+            {
                 getVersionSafely();
             }
             return version;
         }
         public void OnLoadGlobal(GlobalModSettings s)
         {
-            if(s.Version == GetVersion()){
+            if (s.Version == GetVersion())
+            {
                 CustomKnight.GlobalSettings = s;
-            } else {
+            }
+            else
+            {
                 var DefaultSettings = new GlobalModSettings();
                 CustomKnight.GlobalSettings = s;
                 CustomKnight.GlobalSettings.Version = GetVersion();
@@ -61,7 +73,7 @@ namespace CustomKnight
             SupportLazyModDevs.Hook();
         }
 
-        
+
 
         public override List<(string, string)> GetPreloadNames()
         {
@@ -79,10 +91,10 @@ namespace CustomKnight
                     ("GG_Door_5_Finale", "abyss_door_5_cutscene_sequence/main_chars"),
                     ("GG_Vengefly", "Boss Scene Controller/Dream Entry/Knight Dream Arrival"),
                     ("RestingGrounds_07", "Dream Moth/Knight Dummy"),
-                    
-                };   
+
+                };
             }
-            
+
             return new List<(string, string)>();
         }
 
@@ -99,8 +111,9 @@ namespace CustomKnight
             SupportLazyModDevs.Enable();
             SaveHud.Hook();
             OnInit?.Invoke(this, null);
-            
-            if(!isSatchelInstalled()){
+
+            if (!isSatchelInstalled())
+            {
                 return;
             }
             SkinManager.checkDirectoryStructure();
@@ -122,7 +135,8 @@ namespace CustomKnight
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
             }
-            if(CustomKnight.GlobalSettings.SwapperEnabled){
+            if (CustomKnight.GlobalSettings.SwapperEnabled)
+            {
                 swapManager.enabled = true;
                 swapManager.active = true;
             }
@@ -132,17 +146,19 @@ namespace CustomKnight
             On.HeroController.Start += HeroControllerStart;
         }
 
-        public  bool ToggleButtonInsideMenu {get;}= true;
-        public MenuScreen GetMenuScreen(MenuScreen modListMenu,ModToggleDelegates? toggle){
-            return BetterMenu.GetMenu(modListMenu,toggle);
+        public bool ToggleButtonInsideMenu { get; } = true;
+        public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggle)
+        {
+            return BetterMenu.GetMenu(modListMenu, toggle);
         }
 
-        public static event EventHandler<EventArgs> OnReady,OnInit,OnUnload;
+        public static event EventHandler<EventArgs> OnReady, OnInit, OnUnload;
 
-        public void HeroControllerStart(On.HeroController.orig_Start orig,HeroController self){
+        public void HeroControllerStart(On.HeroController.orig_Start orig, HeroController self)
+        {
             orig(self);
             Log("HeroControllerStart");
-            var currentSkinId = ( SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null ) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
+            var currentSkinId = (SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             SkinManager.CurrentSkin = SkinManager.GetSkinById(currentSkinId);
             SkinManager.LoadSkin();
             OnReady?.Invoke(this, null);
@@ -152,23 +168,29 @@ namespace CustomKnight
             CustomKnight.SaveSettings = s;
         }
 
-        internal static void toggleSwap(bool enable){
+        internal static void toggleSwap(bool enable)
+        {
             swapManager.enabled = enable;
-            if(!enable){
+            if (!enable)
+            {
                 swapManager.Unload();
                 dumpManager.enabled = false;
                 SupportLazyModDevs.Disable();
-            } else {
+            }
+            else
+            {
                 swapManager.Load();
                 SupportLazyModDevs.Enable();
             }
         }
 
-        internal static void toggleDump(bool enable){
+        internal static void toggleDump(bool enable)
+        {
             dumpManager.enabled = enable;
         }
 
-        public void Unload(){
+        public void Unload()
+        {
             SaveHud.UnHook();
             SkinManager.Unload();
             OnUnload?.Invoke(this, null);

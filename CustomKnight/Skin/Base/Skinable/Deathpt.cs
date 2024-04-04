@@ -2,7 +2,7 @@
 
 namespace CustomKnight
 {
-    public class Deathpt:Skinable_Tk2d
+    public class Deathpt : Skinable_Tk2d
     {
         public static string NAME = "Deathpt";
         public Deathpt() : base(NAME) { }

@@ -1,6 +1,6 @@
 ﻿namespace CustomKnight
 {
-    internal class SpellBG:Skinable_Sprite
+    internal class SpellBG : Skinable_Sprite
     {
         public static string Name = "Inventory/SpellBG";
         public SpellBG() : base(Name) { }

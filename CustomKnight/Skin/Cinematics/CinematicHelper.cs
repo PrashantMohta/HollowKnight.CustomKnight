@@ -33,12 +33,13 @@ namespace CustomKnight.Skin.Cinematics
 
     internal class CinematicSequenceR
     {
-        internal T GetField<T>(string name) {
-            return ReflectionHelper.GetField<CinematicSequence,T>(this.orig, name);
-        }
-        internal void SetField<T>(string name,T value)
+        internal T GetField<T>(string name)
         {
-            ReflectionHelper.SetField<CinematicSequence, T>(this.orig, name,value);
+            return ReflectionHelper.GetField<CinematicSequence, T>(this.orig, name);
+        }
+        internal void SetField<T>(string name, T value)
+        {
+            ReflectionHelper.SetField<CinematicSequence, T>(this.orig, name, value);
         }
         internal CinematicSequence orig;
         internal CinematicSequenceR(CinematicSequence orig)
@@ -49,7 +50,7 @@ namespace CustomKnight.Skin.Cinematics
         public CinematicVideoReference videoReference
         {
             get => GetField<CinematicVideoReference>("videoReference");
-            set => SetField("videoReference",value);
+            set => SetField("videoReference", value);
         }
 
         public int framesSinceBegan

@@ -6,7 +6,7 @@ public class LoveKey : Skinable_Sprite
     public override void SaveDefaultTexture()
     {
         GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Love Key");
-        ckTex.defaultSprite = sd.GetComponent<SpriteRenderer>().sprite ;
+        ckTex.defaultSprite = sd.GetComponent<SpriteRenderer>().sprite;
     }
     public override void ApplySprite(Sprite sprite)
     {

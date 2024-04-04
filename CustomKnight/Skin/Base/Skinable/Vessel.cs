@@ -1,7 +1,7 @@
 ﻿
 namespace CustomKnight
 {
-    public class Vessel:Skinable_Sprite
+    public class Vessel : Skinable_Sprite
     {
         public string VesselName;
         public int Vesselamount;
@@ -37,16 +37,16 @@ namespace CustomKnight
             switch (Vesselamount)
             {
                 case 0:
-                    vesselFragments.backboardSprite= sprite;
+                    vesselFragments.backboardSprite = sprite;
                     break;
                 case 1:
-                    vesselFragments.singlePieceSprite= sprite;
+                    vesselFragments.singlePieceSprite = sprite;
                     break;
                 case 2:
-                    vesselFragments.doublePieceSprite= sprite;
+                    vesselFragments.doublePieceSprite = sprite;
                     break;
                 case 3:
-                    vesselFragments.fullSprite= sprite;
+                    vesselFragments.fullSprite = sprite;
                     break;
                 default:
                     break;

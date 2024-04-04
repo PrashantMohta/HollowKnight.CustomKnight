@@ -5,7 +5,7 @@ namespace CustomKnight
 {
     internal class SettingsLoader<T> where T : new()
     {
-        public SettingsLoader(){}
+        public SettingsLoader() { }
 
         public void Save(string filePath, T instance)
         {

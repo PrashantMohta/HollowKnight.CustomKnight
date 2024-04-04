@@ -3,8 +3,9 @@ namespace CustomKnight
     public class Grubberfly : Skinable_Multiple
     {
         public static string NAME = "Beam";
-        public Grubberfly() : base(Grubberfly.NAME){}
-        public override List<Material> GetMaterials(){
+        public Grubberfly() : base(Grubberfly.NAME) { }
+        public override List<Material> GetMaterials()
+        {
             List<Material> mats = new List<Material>{
                 // get all materials here
                 HeroController.instance.grubberFlyBeamPrefabD_fury.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material,
@@ -18,15 +19,21 @@ namespace CustomKnight
             };
             return mats;
         }
-        public override void SaveDefaultTexture(){
-            if(materials != null && materials[0].mainTexture != null){
+        public override void SaveDefaultTexture()
+        {
+            if (materials != null && materials[0].mainTexture != null)
+            {
                 ckTex.defaultTex = materials[0].mainTexture as Texture2D;
-            } else {
+            }
+            else
+            {
                 CustomKnight.Instance.Log($"skinable {name} : material is null");
             }
         }
-        public override void ApplyTexture(Texture2D tex){
-            foreach(var mat in materials){
+        public override void ApplyTexture(Texture2D tex)
+        {
+            foreach (var mat in materials)
+            {
                 mat.mainTexture = tex;
             }
         }

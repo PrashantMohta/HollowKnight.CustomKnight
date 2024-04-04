@@ -3,10 +3,11 @@ namespace CustomKnight
     public class VS : Skinable_noCache
     {
         public static string NAME = "VS";
-        public VS() : base(VS.NAME){}
+        public VS() : base(VS.NAME) { }
 
-        public override Material GetMaterial(){
-            Material VS = null ;
+        public override Material GetMaterial()
+        {
+            Material VS = null;
             foreach (Transform child in HeroController.instance.gameObject.transform)
             {
                 if (child.name == "Focus Effects")

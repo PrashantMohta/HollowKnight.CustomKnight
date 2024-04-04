@@ -1,6 +1,7 @@
 namespace CustomKnight
 {
-    public class SpriteRendererMaterialPropertyBlock : MonoBehaviour {
+    public class SpriteRendererMaterialPropertyBlock : MonoBehaviour
+    {
         public MaterialPropertyBlock mpb;
         public SpriteRenderer sr;
         public void Update()

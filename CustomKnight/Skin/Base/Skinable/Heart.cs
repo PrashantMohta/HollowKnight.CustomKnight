@@ -1,11 +1,11 @@
 ﻿
 namespace CustomKnight
 {
-    public class Heart:Skinable_Sprite
+    public class Heart : Skinable_Sprite
     {
         public string HeartName;
         public int HeartPieces;
-        public Heart(string heartname,int pieces) : base(heartname)
+        public Heart(string heartname, int pieces) : base(heartname)
         {
             HeartPieces = pieces;
             HeartName = heartname;

@@ -6,8 +6,9 @@ namespace CustomKnight
     public class Shield : Skinable_Tk2d
     {
         public static string NAME = "Shield";
-        public Shield() : base(Shield.NAME){}
-        public override Material GetMaterial(){
+        public Shield() : base(Shield.NAME) { }
+        public override Material GetMaterial()
+        {
             GameObject hc = HeroController.instance.gameObject;
             GameObject charmEffects = hc.FindGameObjectInChildren("Charm Effects");
             PlayMakerFSM spawnOrbitShield = charmEffects.LocateMyFSM("Spawn Orbit Shield");

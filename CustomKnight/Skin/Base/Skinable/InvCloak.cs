@@ -13,7 +13,7 @@ namespace CustomKnight
         {
 
             PlayMakerFSM eqfsm = SkinManager.equipment.LocateMyFSM("Build Equipment List");
-            if (level == 1 )//I hate this
+            if (level == 1)//I hate this
             {
                 ckTex.defaultSprite = SkinManager.equipment.FindGameObjectInChildren("Dash Cloak").GetComponent<SpriteRenderer>().sprite;
             }
@@ -26,7 +26,7 @@ namespace CustomKnight
         {
 
             PlayMakerFSM eqfsm = SkinManager.equipment.LocateMyFSM("Build Equipment List");
-            if (level == 1&&!PlayerData.instance.hasShadowDash)
+            if (level == 1 && !PlayerData.instance.hasShadowDash)
             {
                 SkinManager.equipment.FindGameObjectInChildren("Dash Cloak").GetComponent<SpriteRenderer>().sprite = sprite;
             }

@@ -11,7 +11,7 @@
         }
         public override void ApplySprite(Sprite sprite)
         {
-            GameObject sd =SkinManager.equipment.FindGameObjectInChildren("Trinket3");
+            GameObject sd = SkinManager.equipment.FindGameObjectInChildren("Trinket3");
             sd.GetComponent<SpriteRenderer>().sprite = sprite;
         }
     }

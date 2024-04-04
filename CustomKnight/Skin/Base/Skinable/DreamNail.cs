@@ -1,13 +1,13 @@
 ﻿namespace CustomKnight
 {
-    public class DreamNail:Skinable_Sprite
+    public class DreamNail : Skinable_Sprite
     {
         public string nailname;
         public DreamNail(string name) : base(name)
         {
             nailname = name;
         }
-        
+
         public override void SaveDefaultTexture()
         {
             GameObject dreamnail = SkinManager.invitem.FindGameObjectInChildren("Dream Nail");
@@ -15,7 +15,7 @@
             {
                 ckTex.defaultSprite = dreamnail.GetComponent<InvItemDisplay>().inactiveSprite;
             }
-            if(nailname.EndsWith("1"))
+            if (nailname.EndsWith("1"))
             {
                 ckTex.defaultSprite = dreamnail.GetComponent<InvItemDisplay>().activeSprite;
             }

@@ -5,9 +5,10 @@ namespace CustomKnight
     public class SDCrystalBurst : Skinable_Tk2ds
     {
         public static string NAME = "SDCrystalBurst";
-        public SDCrystalBurst() : base(SDCrystalBurst.NAME){}
+        public SDCrystalBurst() : base(SDCrystalBurst.NAME) { }
 
-        public override List<Material> GetMaterials(){
+        public override List<Material> GetMaterials()
+        {
             GameObject hc = HeroController.instance.gameObject;
             return new List<Material>{
                 hc.FindGameObjectInChildren("SD Crystal Burst GL").GetComponent<ParticleSystemRenderer>().material,
