@@ -107,7 +107,8 @@ namespace CustomKnight
             }
             SkinManager.checkDirectoryStructure();
 
-            SkinManager.getSkinNames();             
+            SkinManager.getSkinNames();
+            SaveHud.LoadAll();
             SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
             SkinManager.SetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
             // Initial load
