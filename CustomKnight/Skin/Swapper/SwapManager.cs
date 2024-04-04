@@ -505,6 +505,9 @@ namespace CustomKnight
 
             LoadSwapByPath(DATA_DIR); // over write global strings with local strings 
 
+            // only need to do this once local strings are loaded
+            UpdateTextMeshGameTexts();
+
             if (Directory.GetDirectories(DATA_DIR).Length == 0)
             {
                 Log("There are no folders in the Swap directory. No textures to Swap.");
@@ -542,6 +545,7 @@ namespace CustomKnight
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
             On.tk2dSprite.Awake += tk2dSpriteAwake;
+            On.SetTextMeshProGameText.Awake += SetTextMeshProGameText_Awake;
         }
 
         internal void Unload()
@@ -551,7 +555,24 @@ namespace CustomKnight
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
             On.tk2dSprite.Awake -= tk2dSpriteAwake;
+            On.SetTextMeshProGameText.Awake -= SetTextMeshProGameText_Awake;
             resetAllTextures();
+        }
+        private List<SetTextMeshProGameText> setTextMeshProGameTexts = new List<SetTextMeshProGameText>();
+        private void SetTextMeshProGameText_Awake(On.SetTextMeshProGameText.orig_Awake orig, SetTextMeshProGameText self)
+        {
+            orig(self);
+            setTextMeshProGameTexts.Add(self);
+        }
+        private void UpdateTextMeshGameTexts()
+        {
+            foreach(var tmpro in setTextMeshProGameTexts)
+            {
+                if(tmpro != null)
+                {
+                    tmpro.UpdateText();
+                }
+            }
         }
         internal GameObjectProxy getGop(string sceneName, GameObject go)
         {
