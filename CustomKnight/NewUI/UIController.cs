@@ -181,6 +181,7 @@ namespace CustomKnight.NewUI
 
         public static void showMenu()
         {
+            if (!CustomKnight.GlobalSettings.EnablePauseMenu) { return; }
             scrollRect.verticalNormalizedPosition = 1f;
             UI.SetActive(true);
         }
@@ -219,7 +220,7 @@ namespace CustomKnight.NewUI
                 var tex = skin.GetTexture(btnFileName);//.GetCropped(new Rect(500f,500f,300f,100f));
                 var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                 var skinName = skin.GetName();
-                skinName = skinName.Length > 15 ? skinName.Substring(0, 15) : skinName;
+                skinName = skinName.Length > CustomKnight.GlobalSettings.NameLength ? skinName.Substring(0, CustomKnight.GlobalSettings.NameLength) : skinName;
                 var btn = content.AddButton(skinName, sprite, (e) =>
                 {
                     SkinManager.SetSkinById(skin.GetId());
