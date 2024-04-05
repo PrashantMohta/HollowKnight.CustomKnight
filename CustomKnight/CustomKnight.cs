@@ -166,7 +166,6 @@ namespace CustomKnight
             if (CustomKnight.GlobalSettings.GenerateDefaultSkin)
             {
                 DefaultSkin.SaveSkin();
-                CustomKnight.GlobalSettings.GenerateDefaultSkin = false;
             } else
             {
                 DefaultSkin.isGeneratingDefaultSkin = false;
