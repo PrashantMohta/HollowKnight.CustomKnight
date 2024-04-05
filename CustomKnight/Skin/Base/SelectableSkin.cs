@@ -154,8 +154,6 @@ namespace CustomKnight
             EnsureDirectory(charmsFolder);
             EnsureDirectory(inventoryFolder);
 
-            var altFound = false;
-
             string[] files = Directory.GetFiles(skinFolder);
 
             // base skin

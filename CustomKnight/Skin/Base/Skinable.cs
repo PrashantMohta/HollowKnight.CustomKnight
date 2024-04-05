@@ -180,7 +180,7 @@ namespace CustomKnight
 
     }
     /// <summary>
-    /// The abstract Class that represents a <c>Skinable</c> that uses a Sprite & requires a hook
+    /// The abstract Class that represents a <c>Skinable</c> that uses a Sprite and requires a hook
     /// </summary>
     public abstract class Skinable_Hook : Skinable_Sprite
     {
