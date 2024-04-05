@@ -99,6 +99,9 @@ namespace CustomKnight
             {
                 var tex = SpriteUtils.ExtractTextureFromSprite(ckTex.defaultSprite);
                 DefaultSkin.Save(tex, $"{name}.png");
+            } else
+            {
+                CustomKnight.Instance.Log($"Failed to generate default skin for {name}");
             }
         }
 

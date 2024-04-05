@@ -1,4 +1,7 @@
-﻿namespace CustomKnight
+﻿using HutongGames.PlayMaker;
+using Satchel.Futils;
+
+namespace CustomKnight
 {
     internal class Salubra : Skinable
     {
@@ -7,9 +10,12 @@
 
         public override void ApplyTexture(Texture2D tex)
         {
-            var go = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing_Ghost");
+            var go = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing Ghost");
             if (go == null) { return; }
-            var behaviour = go.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
+            var fsm = go.LocateMyFSM("Blessing Control");
+            var finalGo = fsm.GetVariable<FsmGameObject>("Blessing_Ghost")?.Value;
+            if (finalGo == null) { return; }
+            var behaviour = finalGo.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
             if (tex != null)
             {
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
@@ -27,10 +33,13 @@
 
         public override void SaveDefaultTexture()
         {
-            var go = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing_Ghost");
+            var go = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing Ghost");
             if (go == null) { return; }
-            var sr = go.GetComponent<SpriteRenderer>();
-            if (sr != null) { return; }
+            var fsm = go.LocateMyFSM("Blessing Control");
+            var finalGo = fsm.GetVariable<FsmGameObject>("Blessing_Ghost")?.Value;
+            if (finalGo == null) { return; }
+            var sr = finalGo.GetComponent<SpriteRenderer>();
+            if (sr == null) { return; }
             ckTex.defaultTex = sr.sprite.texture;
         }
     }

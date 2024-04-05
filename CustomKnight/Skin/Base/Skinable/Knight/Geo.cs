@@ -7,9 +7,9 @@ namespace CustomKnight
 
         public tk2dSpriteDefinition spriteDefinition;
 
-        public void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
+        public void SetGeoDefaultTexture(GameObject geo)
         {
-            spriteDefinition = self.GetComponent<tk2dSprite>().GetCurrentSpriteDef();
+            spriteDefinition = geo.GetComponent<tk2dSprite>().GetCurrentSpriteDef();
             material = spriteDefinition.material;
 
             //save default texture because we dont have a copy
@@ -17,6 +17,10 @@ namespace CustomKnight
             {
                 ckTex.defaultTex = (Texture2D)material.mainTexture;
             }
+        }
+        public void GeoControl_Start(On.GeoControl.orig_Start orig, GeoControl self)
+        {
+            SetGeoDefaultTexture(self.gameObject);
             var geoTexture = ckTex.currentTexture;
             if (geoTexture != null && material != null)
             {

@@ -11,10 +11,10 @@ namespace CustomKnight
         {
             return this.preloadGet()?.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
         }
-        //
+        
         public override void SaveDefaultTexture()
         {
-            if (!CustomKnight.GlobalSettings.Preloads) { return; }
+            if (!CustomKnight.GlobalSettings.Preloads && !CustomKnight.GlobalSettings.GenerateDefaultSkin) { return; }
             if (material != null && material.mainTexture != null)
             {
                 ckTex.defaultTex = material.mainTexture as Texture2D;
