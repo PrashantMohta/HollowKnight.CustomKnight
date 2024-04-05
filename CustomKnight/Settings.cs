@@ -20,6 +20,8 @@ namespace CustomKnight
         public string[] saveSkins = new string[] { "Default", "Default", "Default", "Default" };
 
         public bool DumpOldSwaps { get; set; } = false;
+        public bool EnablePauseMenu { get; set; } = true;
+        public bool EnableSaveHuds { get; set; } = true;
     }
 
 }

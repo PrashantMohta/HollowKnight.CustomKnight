@@ -143,7 +143,10 @@ namespace CustomKnight
 
 
             GUIController.Instance.BuildMenus();
-            UIController.CreateGUI();
+            if (CustomKnight.GlobalSettings.EnablePauseMenu)
+            {
+                UIController.CreateGUI();
+            }
             On.HeroController.Start += HeroControllerStart;
         }
 
