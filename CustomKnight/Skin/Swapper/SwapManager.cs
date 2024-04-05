@@ -1,3 +1,4 @@
+using CustomKnight.Skin.Swapper;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -254,6 +255,11 @@ namespace CustomKnight
                         {
                             applySkinsUsingProxy(kvp.Value, child);
                         }
+                        var rawchildren = go.FindGameObjectsInChildren(kvp.Key);
+                        foreach (var child in rawchildren)
+                        {
+                            applySkinsUsingProxy(kvp.Value, child);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -276,15 +282,15 @@ namespace CustomKnight
             if (Scenes != null && Scenes.TryGetValue(scene.name, out var CurrentSceneDict))
             {
                 var rootGos = scene.GetRootGameObjects();
-                /*foreach(KeyValuePair<string,GameObjectProxy> kvp in CurrentSceneDict){
-                    Log($"={kvp.Key}");
-                }*/
                 foreach (var go in rootGos)
                 {
                     if (CurrentSceneDict.TryGetValue(go.GetName(true), out var gop))
                     {
-                        //Log($"+{go.GetName(true)}");
                         applySkinsUsingProxy(gop, go);
+                    }
+                    if (CurrentSceneDict.TryGetValue(go.GetName(), out var rawgop))
+                    {
+                        applySkinsUsingProxy(rawgop, go);
                     }
                 }
             }
@@ -375,11 +381,11 @@ namespace CustomKnight
                 }
             }
             List<string> hashPaths = new List<string>();
-
+            Dictionary<string,bool> filenames = new Dictionary<string,bool>();
             foreach (string path in Directory.GetDirectories(pathToLoad))
             {
                 string directoryName = new DirectoryInfo(path).Name;
-                //Log(directoryName);
+                ObjectNameResolver.LoadNameDb(Path.Combine(path, "names.json"), directoryName);
                 Dictionary<string, GameObjectProxy> objects;
                 if (!Scenes.TryGetValue(directoryName, out objects))
                 {
@@ -387,8 +393,9 @@ namespace CustomKnight
                 }
                 foreach (string file in Directory.GetFiles(path))
                 {
-                    string filename = Path.GetFileName(file);
-                    //Log(filename);
+                    string filename = Path.GetFileNameWithoutExtension(file);
+                    filenames[filename] = true;
+                    Log("filename:"+filename);
                     if (filename.EndsWith(".txt"))
                     {
                         try
@@ -446,38 +453,66 @@ namespace CustomKnight
             }
             foreach (var hp in hashPaths)
             {
-                var hpSplit = hp.Split(new Char[] { '/' }, 2);
-                Dictionary<string, GameObjectProxy> scene = null;
-                if (Scenes.ContainsKey(hpSplit[0]))
-                {
-                    scene = Scenes[hpSplit[0]];
-                }
-                else
-                {
-                    scene = new Dictionary<string, GameObjectProxy>();
-                    Scenes[hpSplit[0]] = scene;
-                }
-                var goSplit = hpSplit[1].Split(new Char[] { '/' }, 2);
-                if (goSplit.Length > 0)
-                {
-                    GameObjectProxy currentGop;
-                    if (!scene.TryGetValue(goSplit[0], out currentGop))
-                    {
-                        currentGop = new GameObjectProxy()
-                        {
-                            name = goSplit[0],
-                            hasTexture = false,
-                            hasChildren = true
-                        };
-                        scene.Add(goSplit[0], currentGop);
-                    }
-                    var hash = HashWithCache.GetHashFromPath(hp);
-                    currentGop.TraverseGameObjectPath(hpSplit[1], "Global", hash, HashWithCache.GetAliasFromHash(hash));
+                AddPathToGopTree(hp, true);
+            }
+            List<string> AllScenes = ObjectNameResolver.GetScenes();
+            this.Log("Scenes.Count" + AllScenes.Count);
 
+            foreach (var scn in AllScenes)
+            {
+                List<string> paths = ObjectNameResolver.GetPathsForScene(scn);
+                foreach (var path in paths)
+                {
+                    var hash = ObjectNameResolver.GetHashFromPath($"{scn}/{path}");
+                    if (filenames.ContainsKey(hash)) { 
+                        this.Log($"{scn} adding to gop tree" + path);
+                        AddPathToGopTree($"{scn}/{path}", false);
+                    }
                 }
             }
         }
-
+        internal void AddPathToGopTree(string hashPath, bool isGlobal = true)
+        {
+            var hpSplit = hashPath.Split(new Char[] { '/' }, 2);
+            Dictionary<string, GameObjectProxy> scene = null;
+            var sceneName = hpSplit[0];
+            var path = hpSplit[1];
+            if (Scenes.ContainsKey(sceneName))
+            {
+                scene = Scenes[sceneName];
+            }
+            else
+            {
+                scene = new Dictionary<string, GameObjectProxy>();
+                Scenes[sceneName] = scene;
+            }
+            var goSplit = path.Split(new Char[] { '/' }, 2);
+            if (goSplit.Length > 0)
+            {
+                GameObjectProxy currentGop;
+                var rootGo = goSplit[0];
+                if (!scene.TryGetValue(rootGo, out currentGop))
+                {
+                    currentGop = new GameObjectProxy()
+                    {
+                        name = rootGo,
+                        hasTexture = false,
+                        hasChildren = true
+                    };
+                    scene.Add(rootGo, currentGop);
+                }
+                if (isGlobal)
+                {
+                    var hash = HashWithCache.GetHashFromPath(hashPath);
+                    currentGop.TraverseGameObjectPath(path, "Global", hash, HashWithCache.GetAliasFromHash(hash));
+                }
+                else
+                {
+                    var hash = ObjectNameResolver.GetHashFromPath(hashPath);
+                    currentGop.TraverseGameObjectPath(path, sceneName, hash, HashWithCache.GetAliasFromHash(hash));
+                }
+            }
+        }
         internal void resetAndLoadGlobalSwaps()
         {
 
@@ -566,33 +601,26 @@ namespace CustomKnight
         }
         private void UpdateTextMeshGameTexts()
         {
-            foreach(var tmpro in setTextMeshProGameTexts)
+            foreach (var tmpro in setTextMeshProGameTexts)
             {
-                if(tmpro != null)
+                if (tmpro != null)
                 {
                     tmpro.UpdateText();
                 }
             }
         }
-        internal GameObjectProxy getGop(string sceneName, GameObject go)
+        internal GameObjectProxy getGop(string sceneName, GameObject go, bool useBaseName = false)
         {
             if (go == null)
             {
                 return null;
             }
-            Transform rootGoT = go.transform;
-            List<string> path = new();
-            path.Add(rootGoT.gameObject.GetName(true));
-            while (rootGoT.parent != null)
-            {
-                rootGoT = rootGoT.parent;
-                path.Add(rootGoT.gameObject.GetName(true));
-            }
-            path.Reverse();
+            var goName = go.GetName(useBaseName);
+            List<string> path = go.GetPathAsList(useBaseName);
             GameObjectProxy Gop = null;
             if (Scenes != null && Scenes.TryGetValue(go.scene.name, out var CurrentSceneDict))
             {
-                if (CurrentSceneDict.TryGetValue(rootGoT.gameObject.GetName(true), out var gop))
+                if (CurrentSceneDict.TryGetValue(path[path.Count - 1], out var gop))
                 {
                     Gop = gop;
                 }
@@ -610,7 +638,7 @@ namespace CustomKnight
                     Gop = _Gop;
                     i++;
                 }
-                if (Gop != null && Gop.name == go.GetName(true))
+                if (Gop != null && Gop.name == goName)
                 {
                     return Gop;
                 }
@@ -728,10 +756,15 @@ namespace CustomKnight
             if (go == null) { return; }
             //applyGlobalEntityForGo(go);
             //findAndQueueTk2d(go);
-            var Gop = getGop(go.scene.name, go);
+            var Gop = getGop(go.scene.name, go, true);
             if (Gop != null)
             {
                 applySkinsUsingProxy(Gop, go);
+            }
+            var GopRaw = getGop(go.scene.name, go, false);
+            if (GopRaw != null)
+            {
+                applySkinsUsingProxy(GopRaw, go);
             }
         }
 
