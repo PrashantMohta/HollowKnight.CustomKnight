@@ -8,17 +8,6 @@ namespace CustomKnight
         private static Menu MenuRef;
         private static MenuScreen MenuScreenRef;
 
-        internal static void SetPreloadButton()
-        {
-            var btn = (MenuRef?.Find("AdditonalButtonGroup") as MenuRow)?.Find("PreloadButton");
-            btn.Name = CustomKnight.GlobalSettings.Preloads ? "Gameplay + Events" : "Gameplay only";
-            btn.Update();
-        }
-        internal static void TogglePreloads()
-        {
-            CustomKnight.GlobalSettings.Preloads = !CustomKnight.GlobalSettings.Preloads;
-            SetPreloadButton();
-        }
         internal static void SetDumpButton()
         {
             var btn = MenuRef?.Find("DumpButton");
@@ -54,7 +43,6 @@ namespace CustomKnight
                 }
                 MenuRef.OnBuilt += (_, Element) =>
                 {
-                    SetPreloadButton();
                     SetDumpButton();
                 };
                 MenuScreenRef = MenuRef.GetMenuScreen(lastMenu);
@@ -76,14 +64,12 @@ namespace CustomKnight
                     (setting) => { CustomKnight.toggleSwap(setting == 1); },
                     () => CustomKnight.swapManager.enabled ? 1 : 0,
                     Id:"SwapperEnabled"),
-                new MenuRow(
-                    new List<Element>{
-                        new MenuButton("PreloadButton","Will Preload objects for modifying events",(_)=>TogglePreloads(),Id:"PreloadButton"),
-                        new MenuButton("Fix Skins","Attempts to Fix Skin Structure",(_)=>FixSkins()),
+                Blueprints.HorizontalBoolOption(
+                    "Preload GameObjects for Events","(restart required)",
+                    (v) => {
+                        CustomKnight.GlobalSettings.Preloads = v;
                     },
-                    Id:"AdditonalButtonGroup"
-                ){ XDelta = 425f},
-
+                    () => CustomKnight.GlobalSettings.Preloads),
                 Blueprints.HorizontalBoolOption(
                     "Enable Save Huds","(restart required)",
                     (v) => {
@@ -100,7 +86,12 @@ namespace CustomKnight
                         }
                     },
                     () => CustomKnight.GlobalSettings.EnablePauseMenu),
-
+                new MenuRow(
+                    new List<Element>{
+                        new MenuButton("Fix Skins","Attempts to Fix Skin Structure",(_)=>FixSkins()),
+                    },
+                    Id:"AdditonalButtonGroup"
+                ){ XDelta = 425f},
                 new HorizontalOption(
                     "Dump Style", "Choose dump style, Names.Json is Recommended, Directory is Faster",
                     new string[] { "Names.Json", "Directory" },

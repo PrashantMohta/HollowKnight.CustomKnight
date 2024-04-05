@@ -38,6 +38,7 @@ namespace CustomKnight
                 }
             }
             isGeneratingDefaultSkin = false;
+            CustomKnight.GlobalSettings.GenerateDefaultSkin = false;
             CustomKnight.Instance.Log($"Done Generating");
         }
 
