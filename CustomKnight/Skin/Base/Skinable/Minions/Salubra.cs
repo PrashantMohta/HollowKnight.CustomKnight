@@ -4,15 +4,12 @@
     {
         public static string NAME = "Salubra";
         public Salubra() : base(NAME) { }
-        public void apply()
-        {
-        }
 
         public override void ApplyTexture(Texture2D tex)
         {
-            var GO = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing_Ghost");
-            if (GO == null) { return; }
-            var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
+            var go = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing_Ghost");
+            if (go == null) { return; }
+            var behaviour = go.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
             if (tex != null)
             {
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
@@ -28,6 +25,13 @@
             }
         }
 
-        public override void SaveDefaultTexture() { }
+        public override void SaveDefaultTexture()
+        {
+            var go = HeroController.instance.gameObject.FindGameObjectInChildren("Blessing_Ghost");
+            if (go == null) { return; }
+            var sr = go.GetComponent<SpriteRenderer>();
+            if (sr != null) { return; }
+            ckTex.defaultTex = sr.sprite.texture;
+        }
     }
 }
