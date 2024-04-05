@@ -1,12 +1,10 @@
-﻿using System.Security.Policy;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace CustomKnight.NewUI
 {
     public class UIText
     {
-        public string name,value;
+        public string name, value;
         public GameObject parent;
         public GameObject self;
         public Text text;
