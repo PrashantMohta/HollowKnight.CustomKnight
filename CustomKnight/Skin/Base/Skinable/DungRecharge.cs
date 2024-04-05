@@ -39,10 +39,6 @@ namespace CustomKnight
             {
                 enableFilter = skin.skinConfig.dungFilter;
             }
-            if (!CustomKnight.GlobalSettings.DungFilter)
-            {
-                enableFilter = false;
-            }
             Dung.FindGameObjectInChildren("Particle 1").GetComponent<ParticleSystem>().startColor = enableFilter ? DungColor : new Color(1, 1, 1, 1);
             HC.FindGameObjectInChildren("Dung Recharge").GetComponent<ParticleSystem>().startColor = enableFilter ? DungColor : new Color(1, 1, 1, 1);
             foreach (var mat in materials)
