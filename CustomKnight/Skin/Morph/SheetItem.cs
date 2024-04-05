@@ -158,7 +158,7 @@ namespace CustomKnight
             var result = skin.Exists(path);
             if (!result)
             {
-                CustomKnight.Instance.Log($"Missing {path}.png in skin {skin.GetName()}");
+                CustomKnight.Instance.Log($"Missing {path} in skin {skin.GetName()}");
             }
             return result;
         }

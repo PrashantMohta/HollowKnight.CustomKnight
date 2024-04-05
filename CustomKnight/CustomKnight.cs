@@ -77,9 +77,9 @@ namespace CustomKnight
 
         public override List<(string, string)> GetPreloadNames()
         {
+            List<(string, string)> preloadsList;
             if (GlobalSettings.Preloads || GlobalSettings.GenerateDefaultSkin)
-            {
-                return new List<(string, string)>
+            {  preloadsList = new List<(string, string)>
                 {
                     ("Abyss_10", "higher_being/Dish Plat/Knight Dummy"),
                     ("Abyss_12", "Scream 2 Get/Cutscene Knight"),
@@ -93,11 +93,19 @@ namespace CustomKnight
                     ("RestingGrounds_07", "Dream Moth/Knight Dummy"),
 
                 };
+            } else
+            {
+                preloadsList = new List<(string, string)>();
             }
-
-            return new List<(string, string)>();
+            if (GlobalSettings.GenerateDefaultSkin)
+            {
+                preloadsList.AddRange(new List<(string, string)>
+                { 
+                    ("GG_Vengefly","Giant Buzzer Col")
+                });
+            }
+            return preloadsList;
         }
-
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             if (Instance == null)
@@ -125,6 +133,12 @@ namespace CustomKnight
             // Initial load
             if (preloadedObjects != null)
             {
+                if (preloadedObjects["GG_Vengefly"].TryGetValue("Giant Buzzer Col", out var enemy))
+                {
+                    var hm = enemy.GetComponent<HealthManager>();
+                    var prefab = ReflectionHelper.GetField<HealthManager, GameObject>(hm, "largeGeoPrefab");
+                    (SkinManager.Skinables[Geo.NAME] as Geo).SetGeoDefaultTexture(prefab);
+                }
                 GameObjects.Add("Cloak", preloadedObjects["Abyss_10"]["higher_being/Dish Plat/Knight Dummy"]);
                 GameObjects.Add("Shriek", preloadedObjects["Abyss_12"]["Scream 2 Get/Cutscene Knight"]);
                 GameObjects.Add("Wings", preloadedObjects["Abyss_21"]["Shiny Item DJ/Knight Cutscene"]);

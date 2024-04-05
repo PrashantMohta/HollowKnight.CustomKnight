@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Xml.Linq;
 using UnityEngine;
 using static Satchel.IoUtils;
 namespace CustomKnight
@@ -9,15 +10,35 @@ namespace CustomKnight
         private static IEnumerator GenerateSkin()
         {
             yield return new WaitWhile(() => HeroController.instance == null || CharmIconList.Instance == null);
-            SpriteLoader.PullDefaultTextures();
-            CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
-            CustomKnight.GlobalSettings.Preloads = true;
             foreach (var skinable in SkinManager.Skinables.Values)
             {
-                skinable.DumpTexture();
+                skinable.prepare();
             }
-            CustomKnight.GlobalSettings.Preloads = false;
+            SpriteLoader.PullDefaultTextures();
+            foreach (var skinable in SkinManager.Skinables.Values)
+            {
+                CustomKnight.Instance.Log($"Trying to generate default skin for {skinable.name}");
+                yield return new WaitWhile(() => { 
+                    if (skinable.ckTex.defaultTex == null && skinable.ckTex.defaultSprite == null) {
+                        skinable.prepare();
+                        skinable.SaveTexture();
+                        return true;
+                    } 
+                    return false;
+                }
+                );
+                try
+                {
+                    skinable.DumpDefaultTexture();
+                }
+                catch (Exception ex)
+                {
+                    CustomKnight.Instance.Log($"Failed to generate default skin for {skinable.name}");
+                    CustomKnight.Instance.Log(ex);
+                }
+            }
             isGeneratingDefaultSkin = false;
+            CustomKnight.Instance.Log($"Done Generating");
         }
 
         public static void SaveSkin()
