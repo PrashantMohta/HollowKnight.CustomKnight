@@ -49,10 +49,13 @@ namespace CustomKnight
 
         public static void Save(this Texture2D texture,string path)
         {
-            var folderPath = Path.Combine(SkinManager.SKINS_FOLDER, "GeneratedDefault");
+            var folderPath = Path.Combine(SkinManager.SKINS_FOLDER, "Default");
             var itemPath = Path.Combine(folderPath, path);
             EnsureDirectory(Path.GetDirectoryName(itemPath));
-
+            if( File.Exists(itemPath) ) {
+                CustomKnight.Instance.Log($"File exists at {itemPath}, Skipping.");
+                return;
+            }
             Texture2D dupe = texture.isReadable ? texture : TextureUtils.duplicateTexture(texture);
             byte[] texBytes = dupe.EncodeToPNG();
             if (dupe != texture)
