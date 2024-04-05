@@ -192,7 +192,9 @@ namespace CustomKnight
                         }
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
                         MaterialPropertyBlock block = new MaterialPropertyBlock();
+#pragma warning disable CS0618 // Type or member is obsolete
                         block.AddTexture("_MainTex", tex);
+#pragma warning restore CS0618 // Type or member is obsolete
                         behaviour.mpb = block;
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();
@@ -602,7 +604,7 @@ namespace CustomKnight
             }
             resetAllTextures();
         }
-         private void SetTextMeshProGameText_Awake(On.SetTextMeshProGameText.orig_Awake orig, SetTextMeshProGameText self)
+        private void SetTextMeshProGameText_Awake(On.SetTextMeshProGameText.orig_Awake orig, SetTextMeshProGameText self)
         {
             orig(self);
             setTextMeshProGameTexts.Add(self);
