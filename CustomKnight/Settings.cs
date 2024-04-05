@@ -22,6 +22,8 @@ namespace CustomKnight
         public bool DumpOldSwaps { get; set; } = false;
         public bool EnablePauseMenu { get; set; } = true;
         public bool EnableSaveHuds { get; set; } = true;
+
+        public bool GenerateDefaultSkin { get; set; } = true;
     }
 
 }

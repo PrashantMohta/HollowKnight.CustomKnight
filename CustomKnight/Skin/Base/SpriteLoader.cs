@@ -120,7 +120,7 @@
 
         private static IEnumerator SetHeroTex()
         {
-            yield return new WaitWhile(() => !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
+            yield return new WaitWhile(() => DefaultSkin.isGeneratingDefaultSkin || !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
             /*foreach(var psr in GameObject.FindObjectsOfType<ParticleSystemRenderer>())
             {
                 psr.gameObject.LogWithChildren();
