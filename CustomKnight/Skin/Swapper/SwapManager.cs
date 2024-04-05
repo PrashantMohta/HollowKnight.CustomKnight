@@ -35,6 +35,13 @@ namespace CustomKnight
 
         internal bool active = false;
         internal bool enabled = false;
+
+        public static event EventHandler<SwapEvent> OnApplySkinUsingProxy;
+
+        internal Queue<GameObject> ActivationQueue = new Queue<GameObject>();
+        internal Coroutine activationCoro;
+        private List<SetTextMeshProGameText> setTextMeshProGameTexts = new List<SetTextMeshProGameText>();
+
         public SwapManager()
         {
             Load();
@@ -212,8 +219,6 @@ namespace CustomKnight
             }
         }
 
-
-        public static event EventHandler<SwapEvent> OnApplySkinUsingProxy;
 
         private void applySkinsUsingProxy(GameObjectProxy gop, GameObject go)
         {
@@ -551,7 +556,6 @@ namespace CustomKnight
             }
             CoroutineHelper.GetRunner().StartCoroutine(SwapSkinRoutine(UnityEngine.SceneManagement.SceneManager.GetActiveScene()));
         }
-
         internal void resetAllTextures()
         {
             if (materials != null)
@@ -582,8 +586,8 @@ namespace CustomKnight
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
             On.tk2dSprite.Awake += tk2dSpriteAwake;
             On.SetTextMeshProGameText.Awake += SetTextMeshProGameText_Awake;
+            activationCoro = CoroutineHelper.GetRunner().StartCoroutine(ActivationCoroutine());
         }
-
         internal void Unload()
         {
             ModHooks.LanguageGetHook -= LanguageGet;
@@ -592,10 +596,13 @@ namespace CustomKnight
             On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
             On.tk2dSprite.Awake -= tk2dSpriteAwake;
             On.SetTextMeshProGameText.Awake -= SetTextMeshProGameText_Awake;
+            if (activationCoro != null)
+            {
+                CoroutineHelper.GetRunner().StopCoroutine(activationCoro);
+            }
             resetAllTextures();
         }
-        private List<SetTextMeshProGameText> setTextMeshProGameTexts = new List<SetTextMeshProGameText>();
-        private void SetTextMeshProGameText_Awake(On.SetTextMeshProGameText.orig_Awake orig, SetTextMeshProGameText self)
+         private void SetTextMeshProGameText_Awake(On.SetTextMeshProGameText.orig_Awake orig, SetTextMeshProGameText self)
         {
             orig(self);
             setTextMeshProGameTexts.Add(self);
@@ -748,15 +755,23 @@ namespace CustomKnight
                 }
             }
         }
-        internal void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self)
+
+        internal IEnumerator ActivationCoroutine()
         {
-            orig(self);
-            if (!active && !enabled) { return; }
-            if (self.activate.Value != true) { return; }
-            var go = self.gameObject.GameObject.Value;
-            if (go == null) { return; }
-            //applyGlobalEntityForGo(go);
-            //findAndQueueTk2d(go);
+            while (true)
+            {
+                if (ActivationQueue.Count == 0)
+                {
+                    yield return new WaitUntil(() => ActivationQueue.Count != 0);
+                }
+                ProcessQueuedGo();
+                yield return 0;
+            }
+        }
+        internal void ProcessQueuedGo()
+        {
+            if (ActivationQueue.Count == 0) { return; }
+            var go = ActivationQueue.Dequeue();
             var Gop = getGop(go.scene.name, go, true);
             if (Gop != null)
             {
@@ -768,7 +783,15 @@ namespace CustomKnight
                 applySkinsUsingProxy(GopRaw, go);
             }
         }
-
+        internal void ActivateGameObject(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self)
+        {
+            orig(self);
+            if (!active && !enabled) { return; }
+            if (self.activate.Value != true) { return; }
+            var go = self.gameObject.GameObject.Value;
+            if (go == null) { return; }
+            ActivationQueue.Enqueue(go);
+        }
 
         internal void SkinChangeSwap(ISelectableSkin currSkin)
         {
@@ -783,7 +806,6 @@ namespace CustomKnight
         {
             CustomKnight.Instance.Log("[SwapManager] " + str);
         }
-
         internal void LogFine(string str)
         {
             CustomKnight.Instance.LogFine("[SwapManager] " + str);
