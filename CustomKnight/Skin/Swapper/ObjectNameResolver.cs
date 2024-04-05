@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using UnityEngine.SceneManagement;
 using static Satchel.IoUtils;
 
 namespace CustomKnight.Skin.Swapper
@@ -10,7 +9,7 @@ namespace CustomKnight.Skin.Swapper
         internal static string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR, "Dump");
         internal static Dictionary<string, Dictionary<string, List<string>>> NameDb = new();
         internal static SettingsLoader<Dictionary<string, List<string>>> NamesLoader = new();
-        internal static Dictionary<string,string> PathToHash = new();
+        internal static Dictionary<string, string> PathToHash = new();
         internal static void EnsureNameDb(string sceneName, string hash)
         {
             if (NameDb == null)
@@ -61,7 +60,7 @@ namespace CustomKnight.Skin.Swapper
                 NameDb[sceneName][kvp.Key].AddRange(kvp.Value);
                 foreach (var kv in kvp.Value)
                 {
-                    PathToHash[sceneName +"/"+ kv] = kvp.Key;
+                    PathToHash[sceneName + "/" + kv] = kvp.Key;
                 }
             }
         }
