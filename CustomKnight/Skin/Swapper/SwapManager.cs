@@ -381,7 +381,7 @@ namespace CustomKnight
                 }
             }
             List<string> hashPaths = new List<string>();
-            Dictionary<string,bool> filenames = new Dictionary<string,bool>();
+            Dictionary<string, bool> filenames = new Dictionary<string, bool>();
             foreach (string path in Directory.GetDirectories(pathToLoad))
             {
                 string directoryName = new DirectoryInfo(path).Name;
@@ -395,7 +395,7 @@ namespace CustomKnight
                 {
                     string filename = Path.GetFileNameWithoutExtension(file);
                     filenames[filename] = true;
-                    Log("filename:"+filename);
+                    Log("filename:" + filename);
                     if (filename.EndsWith(".txt"))
                     {
                         try
@@ -464,7 +464,8 @@ namespace CustomKnight
                 foreach (var path in paths)
                 {
                     var hash = ObjectNameResolver.GetHashFromPath($"{scn}/{path}");
-                    if (filenames.ContainsKey(hash)) { 
+                    if (filenames.ContainsKey(hash))
+                    {
                         this.Log($"{scn} adding to gop tree" + path);
                         AddPathToGopTree($"{scn}/{path}", false);
                     }

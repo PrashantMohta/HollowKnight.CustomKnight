@@ -19,6 +19,8 @@ namespace CustomKnight
         public bool DungFilter { get; set; } = true;
 
         public string[] saveSkins = new string[] { "Default", "Default", "Default", "Default" };
+
+        public bool DumpOldSwaps { get; set; } = false;
     }
 
 }
