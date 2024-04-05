@@ -77,7 +77,7 @@ namespace CustomKnight
 
         public override List<(string, string)> GetPreloadNames()
         {
-            if (GlobalSettings.Preloads)
+            if (GlobalSettings.Preloads || GlobalSettings.GenerateDefaultSkin)
             {
                 return new List<(string, string)>
                 {
@@ -135,6 +135,7 @@ namespace CustomKnight
                 GameObjects.Add("DreamArrival", preloadedObjects["GG_Vengefly"]["Boss Scene Controller/Dream Entry/Knight Dream Arrival"]);
                 GameObjects.Add("Dreamnail", preloadedObjects["RestingGrounds_07"]["Dream Moth/Knight Dummy"]);
             }
+
             if (CustomKnight.GlobalSettings.SwapperEnabled)
             {
                 swapManager.enabled = true;
@@ -146,6 +147,15 @@ namespace CustomKnight
             if (CustomKnight.GlobalSettings.EnablePauseMenu)
             {
                 UIController.CreateGUI();
+            }
+
+            if (CustomKnight.GlobalSettings.GenerateDefaultSkin)
+            {
+                DefaultSkin.SaveSkin();
+                CustomKnight.GlobalSettings.GenerateDefaultSkin = false;
+            } else
+            {
+                DefaultSkin.isGeneratingDefaultSkin = false;
             }
             On.HeroController.Start += HeroControllerStart;
         }

@@ -1,3 +1,6 @@
+using System.IO;
+using static Satchel.IoUtils;
+
 namespace CustomKnight
 {
 
@@ -81,6 +84,22 @@ namespace CustomKnight
         {
             CustomKnight.Instance.LogFine($"Reset skinable {name}");
             ApplyTexture(ckTex.defaultTex);
+        }
+
+        /// <summary>
+        ///     Method that Dumps the Default Texture to the disk
+        /// </summary>
+        public void DumpDefaultTexture()
+        {
+            SaveDefaultTexture();
+            if(ckTex.defaultTex != null)
+            {
+                DefaultSkin.Save(ckTex.defaultTex, $"{name}.png");
+            } else if (ckTex.defaultSprite != null)
+            {
+                var tex = SpriteUtils.ExtractTextureFromSprite(ckTex.defaultSprite);
+                DefaultSkin.Save(tex, $"{name}.png");
+            }
         }
 
 
