@@ -239,7 +239,7 @@ namespace CustomKnight
                 string OverriddenFile = GetOverride(FileName);
                 string file = ($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{OverriddenFile}").Replace("\\", "/");
                 byte[] texBytes = File.ReadAllBytes(file);
-                texture = new Texture2D(2, 2);
+                texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
                 texture.LoadImage(texBytes);
             }
             catch (Exception e)
