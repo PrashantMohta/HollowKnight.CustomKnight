@@ -11,7 +11,7 @@ namespace CustomKnight
         {
             return this.preloadGet()?.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material;
         }
-        
+
         public override void SaveDefaultTexture()
         {
             if (!CustomKnight.GlobalSettings.Preloads && !CustomKnight.GlobalSettings.GenerateDefaultSkin) { return; }

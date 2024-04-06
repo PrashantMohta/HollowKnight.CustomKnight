@@ -1,3 +1,7 @@
+
+using Modding.Converters;
+using Newtonsoft.Json;
+
 namespace CustomKnight
 {
     public class SaveModSettings
@@ -24,6 +28,20 @@ namespace CustomKnight
         public bool EnableSaveHuds { get; set; } = true;
 
         public bool GenerateDefaultSkin { get; set; } = true;
+        public List<string> FavoriteSkins { get; set; } = new();
+        public List<string> RecentSkins { get; set; } = new();
+
+        [JsonConverter(typeof(PlayerActionSetConverter))]
+        public KeyBinds Keybinds = new KeyBinds();
+        public void AddRecentSkin(string skinId)
+        {
+            RecentSkins.RemoveAll((v) => v == skinId);
+            RecentSkins.Insert(0, skinId);
+            if (RecentSkins.Count > MaxSkinCache)
+            {
+                RecentSkins = RecentSkins.GetRange(0, MaxSkinCache);
+            }
+        }
     }
 
 }

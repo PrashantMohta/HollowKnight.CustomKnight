@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System.Xml.Linq;
-using UnityEngine;
 using static Satchel.IoUtils;
 namespace CustomKnight
 {
@@ -18,12 +16,14 @@ namespace CustomKnight
             foreach (var skinable in SkinManager.Skinables.Values)
             {
                 CustomKnight.Instance.Log($"Trying to generate default skin for {skinable.name}");
-                yield return new WaitWhile(() => { 
-                    if (skinable.ckTex.defaultTex == null && skinable.ckTex.defaultSprite == null) {
+                yield return new WaitWhile(() =>
+                {
+                    if (skinable.ckTex.defaultTex == null && skinable.ckTex.defaultSprite == null)
+                    {
                         skinable.prepare();
                         skinable.SaveTexture();
                         return true;
-                    } 
+                    }
                     return false;
                 }
                 );
@@ -47,13 +47,13 @@ namespace CustomKnight
             isGeneratingDefaultSkin = true;
             CoroutineHelper.GetRunner().StartCoroutine(GenerateSkin());
         }
-
-        public static void Save(this Texture2D texture,string path)
+        public static void Save(Texture2D texture, string skinName, string path, bool overwrite = false)
         {
-            var folderPath = Path.Combine(SkinManager.SKINS_FOLDER, "Default");
+            var folderPath = Path.Combine(SkinManager.SKINS_FOLDER, skinName);
             var itemPath = Path.Combine(folderPath, path);
             EnsureDirectory(Path.GetDirectoryName(itemPath));
-            if( File.Exists(itemPath) ) {
+            if (File.Exists(itemPath) && !overwrite)
+            {
                 CustomKnight.Instance.Log($"File exists at {itemPath}, Skipping.");
                 return;
             }
@@ -73,6 +73,11 @@ namespace CustomKnight
                 CustomKnight.Instance.Log(e.ToString());
             }
 
+        }
+
+        public static void Save(Texture2D texture, string path)
+        {
+            Save(texture, "Default", path);
         }
 
     }

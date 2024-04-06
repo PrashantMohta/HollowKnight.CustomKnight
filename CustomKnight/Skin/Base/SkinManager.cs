@@ -371,6 +371,7 @@ namespace CustomKnight
         public static void SetSkinById(string id)
         {
             var Skin = GetSkinById(id);
+            CustomKnight.GlobalSettings.AddRecentSkin(id);
             CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId() + $" on save slot {GameManager.instance.profileID}");
             if (CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; }
             CurrentSkin = Skin;

@@ -80,9 +80,12 @@ namespace CustomKnight
                     "Enable Pause Menu UI","(restart required)",
                     (v) => {
                         CustomKnight.GlobalSettings.EnablePauseMenu = v;
-                        if (!CustomKnight.GlobalSettings.EnablePauseMenu)
+                        if (CustomKnight.GlobalSettings.EnablePauseMenu)
                         {
-                            UIController.hideMenu();
+                            UIController.EnableMenu();
+                        } else
+                        {
+                            UIController.DisableMenu();
                         }
                     },
                     () => CustomKnight.GlobalSettings.EnablePauseMenu),

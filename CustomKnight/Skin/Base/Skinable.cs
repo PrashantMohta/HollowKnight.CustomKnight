@@ -1,6 +1,3 @@
-using System.IO;
-using static Satchel.IoUtils;
-
 namespace CustomKnight
 {
 
@@ -92,14 +89,16 @@ namespace CustomKnight
         public void DumpDefaultTexture()
         {
             SaveDefaultTexture();
-            if(ckTex.defaultTex != null)
+            if (ckTex.defaultTex != null)
             {
                 DefaultSkin.Save(ckTex.defaultTex, $"{name}.png");
-            } else if (ckTex.defaultSprite != null)
+            }
+            else if (ckTex.defaultSprite != null)
             {
                 var tex = SpriteUtils.ExtractTextureFromSprite(ckTex.defaultSprite);
                 DefaultSkin.Save(tex, $"{name}.png");
-            } else
+            }
+            else
             {
                 CustomKnight.Instance.Log($"Failed to generate default skin for {name}");
             }

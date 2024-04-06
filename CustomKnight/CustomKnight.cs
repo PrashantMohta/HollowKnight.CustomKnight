@@ -79,7 +79,8 @@ namespace CustomKnight
         {
             List<(string, string)> preloadsList;
             if (GlobalSettings.Preloads || GlobalSettings.GenerateDefaultSkin)
-            {  preloadsList = new List<(string, string)>
+            {
+                preloadsList = new List<(string, string)>
                 {
                     ("Abyss_10", "higher_being/Dish Plat/Knight Dummy"),
                     ("Abyss_12", "Scream 2 Get/Cutscene Knight"),
@@ -93,14 +94,15 @@ namespace CustomKnight
                     ("RestingGrounds_07", "Dream Moth/Knight Dummy"),
 
                 };
-            } else
+            }
+            else
             {
                 preloadsList = new List<(string, string)>();
             }
             if (GlobalSettings.GenerateDefaultSkin)
             {
                 preloadsList.AddRange(new List<(string, string)>
-                { 
+                {
                     ("GG_Vengefly","Giant Buzzer Col")
                 });
             }
@@ -158,15 +160,17 @@ namespace CustomKnight
 
 
             GUIController.Instance.BuildMenus();
+            UIController.StartKeybindListener();
             if (CustomKnight.GlobalSettings.EnablePauseMenu)
             {
-                UIController.CreateGUI();
+                UIController.EnableMenu();
             }
 
             if (CustomKnight.GlobalSettings.GenerateDefaultSkin)
             {
                 DefaultSkin.SaveSkin();
-            } else
+            }
+            else
             {
                 DefaultSkin.isGeneratingDefaultSkin = false;
             }
