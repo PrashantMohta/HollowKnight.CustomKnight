@@ -51,7 +51,7 @@ namespace CustomKnight.NewUI
                 text.fontSize = 15;
                 text.color = Color.white;
                 text.font = UIController.trajanBold ?? UIController.arial;
-                buttonTransform.sizeDelta = new Vector2(500f, 25f);
+                buttonTransform.sizeDelta = new Vector2(500f, 35f);
             }
 
             buttonTransform.anchorMin = new Vector2(0f, 0f);
