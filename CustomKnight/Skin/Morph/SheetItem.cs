@@ -120,24 +120,30 @@ namespace CustomKnight
             }
         }
 
-        public void Overlay(Texture2D orbFull, int x, int y)
+        public static Texture2D Overlay(Texture2D basetex, Texture2D overlaytex, int x, int y)
         {
-            var xPadding = x - orbFull.width / 2;
-            var yPadding = y - orbFull.height / 2;
-            for (int i = 0; i < orbFull.width; i++)
+            var xPadding = x - overlaytex.width / 2;
+            var yPadding = y - overlaytex.height / 2;
+            for (int i = 0; i < overlaytex.width; i++)
             {
-                for (int j = 0; j < orbFull.height; j++)
+                for (int j = 0; j < overlaytex.height; j++)
                 {
-                    var c = orbFull.GetPixel(i, j);
-                    var co = texture.GetPixel(xPadding + i, yPadding + j);
+                    var c = overlaytex.GetPixel(i, j);
+                    var co = basetex.GetPixel(xPadding + i, yPadding + j);
                     c.r = c.r * c.a + co.r * (1 - c.a);
                     c.g = c.g * c.a + co.g * (1 - c.a);
                     c.b = c.b * c.a + co.b * (1 - c.a);
                     c.a = c.a + co.a * (1 - c.a);
-                    texture.SetPixel(xPadding + i, yPadding + j, c);
+                    basetex.SetPixel(xPadding + i, yPadding + j, c);
                 }
             }
-            texture.Apply();
+            basetex.Apply();
+            return basetex;
+        }
+
+        public void Overlay(Texture2D overlaytex, int x, int y)
+        {
+            texture = Overlay(texture, overlaytex, x, y);
         }
 
         public Sprite GetSpriteForSkin(ISelectableSkin skin)
