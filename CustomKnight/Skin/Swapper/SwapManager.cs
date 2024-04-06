@@ -774,6 +774,7 @@ namespace CustomKnight
         {
             if (ActivationQueue.Count == 0) { return; }
             var go = ActivationQueue.Dequeue();
+            if(go == null || go.scene == null) { return; }
             var Gop = getGop(go.scene.name, go, true);
             if (Gop != null)
             {
