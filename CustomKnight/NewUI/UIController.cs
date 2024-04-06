@@ -148,6 +148,8 @@ namespace CustomKnight.NewUI
             viewrt.anchorMax = new Vector2(1f, 0f);
             viewrt.pivot = new Vector2(1f, 0f);
             var mask = viewport.AddComponent<Mask>();
+            var bg = viewport.GetAddComponent<Image>();
+            bg.color = new Color(0,0,0,0.7f);
 
             CreateUpdateGUI();
 
@@ -163,7 +165,6 @@ namespace CustomKnight.NewUI
         public static void hideMenu()
         {
             isVisible = false;
-            content.GetAddComponent<VerticalLayoutGroup>().padding = new RectOffset() { top = 1000, bottom = 100 };
             UI.SetActive(false);
         }
         public static void showMenu()
@@ -208,6 +209,22 @@ namespace CustomKnight.NewUI
             return defaultOrb;
         }
 
+        public static void ApplySkin(ISelectableSkin skin)
+        {
+            UIManager.instance.TogglePauseGame();
+            CustomKnight.GlobalSettings.AddRecentSkin(skin.GetId());
+            UIController.CreateUpdateGUI();
+            if (HeroController.instance != null)
+            {
+                HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
+            }
+            CoroutineHelper.WaitForFramesBeforeInvoke(10, () =>
+            {
+                scrollRect.verticalNormalizedPosition = 1f;
+                SkinManager.SetSkinById(skin.GetId());
+            });
+        }
+
         public static void CreateUpdateGUI()
         {
             if (UI == null)
@@ -232,8 +249,8 @@ namespace CustomKnight.NewUI
             var group = content.AddComponent<VerticalLayoutGroup>();
             content.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             group.childForceExpandWidth = false;
-            group.childAlignment = TextAnchor.MiddleCenter;
-            group.padding = new RectOffset() { top = 1000, bottom = 100 };
+            group.childAlignment = TextAnchor.UpperCenter;
+            group.padding = new RectOffset() { top = 100, bottom = 300 };
             group.childControlHeight = false;
 
             scrollRect.content = contentrt;
@@ -262,27 +279,9 @@ namespace CustomKnight.NewUI
                 if (tex != Texture2D.blackTexture)
                 {
                     var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                    var btn = content.AddButton(skinName, sprite, (e) =>
-                    {
-                        CustomKnight.GlobalSettings.AddRecentSkin(skin.GetId());
-                        UIController.CreateUpdateGUI();
-                        CoroutineHelper.WaitForFramesBeforeInvoke(1, () =>
-                        {
-                            scrollRect.verticalNormalizedPosition = 1f;
-                            SkinManager.SetSkinById(skin.GetId());
-                        });
-                    });
+                    var btn = content.AddButton(skinName, sprite, (e) =>{ ApplySkin(skin);});
                 }
-                var txtbtn = content.AddButton($"Name_{skinName}", skinName, (e) =>
-                {
-                    CustomKnight.GlobalSettings.AddRecentSkin(skin.GetId());
-                    UIController.CreateUpdateGUI();
-                    CoroutineHelper.WaitForFramesBeforeInvoke(1, () =>
-                    {
-                        scrollRect.verticalNormalizedPosition = 1f;
-                        SkinManager.SetSkinById(skin.GetId());
-                    });
-                });
+                var txtbtn = content.AddButton($"Name_{skinName}", skinName, (e) => { ApplySkin(skin); });
             }
             foreach (var skin in SkinManager.SkinsList)
             {
@@ -293,16 +292,7 @@ namespace CustomKnight.NewUI
                 var skinName = skin.GetName();
                 skinName = skinName.Length > CustomKnight.GlobalSettings.NameLength ? skinName.Substring(0, CustomKnight.GlobalSettings.NameLength) : skinName;
 
-                var btn = content.AddButton(skinName, skinName, (e) =>
-                {
-                    CustomKnight.GlobalSettings.AddRecentSkin(skin.GetId());
-                    UIController.CreateUpdateGUI();
-                    CoroutineHelper.WaitForFramesBeforeInvoke(1, () =>
-                    {
-                        scrollRect.verticalNormalizedPosition = 1f;
-                        SkinManager.SetSkinById(skin.GetId());
-                    });
-                });
+                var btn = content.AddButton(skinName, skinName, (e) => { ApplySkin(skin); });
             }
         }
 
