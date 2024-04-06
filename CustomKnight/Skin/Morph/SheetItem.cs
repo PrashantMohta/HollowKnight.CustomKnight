@@ -174,6 +174,10 @@ namespace CustomKnight
             var skinDir = Path.Combine(SkinManager.SKINS_FOLDER, skin.GetId());
             var filepath = Path.Combine(skinDir, path);
             IoUtils.EnsureDirectory(Path.GetDirectoryName(filepath));
+            if (texture == null && sprite != null)
+            {
+                texture = SpriteUtils.ExtractTextureFromSprite(sprite);
+            }
             TextureUtils.WriteTextureToFile(texture, filepath);
         }
 
