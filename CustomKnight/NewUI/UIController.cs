@@ -244,7 +244,7 @@ namespace CustomKnight.NewUI
             favSkins.AddRange(CustomKnight.GlobalSettings.FavoriteSkins);
             favSkins.AddRange(CustomKnight.GlobalSettings.RecentSkins);
             favSkins = favSkins.Distinct().ToList();
-            for (var index = 0; favSkins.Count < CustomKnight.GlobalSettings.MaxSkinCache; index++)
+            for (var index = 0; favSkins.Count < Math.Min(CustomKnight.GlobalSettings.MaxSkinCache, SkinManager.SkinsList.Count); index++)
             {
                 var id = SkinManager.SkinsList[index].GetId();
                 if (!favSkins.Contains(id))
