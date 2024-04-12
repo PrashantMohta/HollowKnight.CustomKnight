@@ -149,7 +149,7 @@ namespace CustomKnight.NewUI
             viewrt.pivot = new Vector2(1f, 0f);
             var mask = viewport.AddComponent<Mask>();
             var bg = viewport.GetAddComponent<Image>();
-            bg.color = new Color(0,0,0,0.7f);
+            bg.color = new Color(0, 0, 0, 0.7f);
 
             CreateUpdateGUI();
 
@@ -279,7 +279,7 @@ namespace CustomKnight.NewUI
                 if (tex != Texture2D.blackTexture)
                 {
                     var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                    var btn = content.AddButton(skinName, sprite, (e) =>{ ApplySkin(skin);});
+                    var btn = content.AddButton(skinName, sprite, (e) => { ApplySkin(skin); });
                 }
                 var txtbtn = content.AddButton($"Name_{skinName}", skinName, (e) => { ApplySkin(skin); });
             }

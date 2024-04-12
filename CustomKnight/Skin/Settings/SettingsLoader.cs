@@ -19,8 +19,9 @@ namespace CustomKnight
             {
                 instance = JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
             }
-            catch
+            catch (Exception ex)
             {
+                CustomKnight.Instance.Log(ex);
                 instance = new T();
                 Save(filePath, instance);
             }

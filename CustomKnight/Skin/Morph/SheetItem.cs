@@ -181,6 +181,10 @@ namespace CustomKnight
             TextureUtils.WriteTextureToFile(texture, filepath);
         }
 
+        public void ClearCache()
+        {
+            cache = new();
+        }
     }
 
 }
