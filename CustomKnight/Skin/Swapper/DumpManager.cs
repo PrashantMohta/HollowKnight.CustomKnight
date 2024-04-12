@@ -13,26 +13,63 @@ namespace CustomKnight
         public Scene scene { get; set; }
         public GameObject go { get; set; }
     }
-    public class coroutineHelper : MonoBehaviour { }
     public class DumpManager
     {
 
-        internal bool enabled = false;
-        internal DumpManager()
-        {
-            if (CustomKnight.isSatchelInstalled())
-            {
-                ModHooks.LanguageGetHook += SaveTextDump;
-                UnityEngine.SceneManagement.SceneManager.sceneLoaded += dumpAllSprites;
-                On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += dumpAllSprites;
-            }
-        }
+        public static event EventHandler<DumpEvent> BeforeDumpingGameObject;
+
+        private bool enabled = false;
 
         internal Dictionary<string, bool> isTextureDumped = new Dictionary<string, bool>();
         internal Dictionary<GameObject, bool> isProcessed = new Dictionary<GameObject, bool>();
         internal Dictionary<int, string> MaterialProcessed = new();
 
-        public static event EventHandler<DumpEvent> BeforeDumpingGameObject;
+        internal Coroutine dumpAllSpritesCoroutineRef;
+        internal bool pending = false;
+        internal int detected = 0, done = 0;
+        internal bool DontDestroyOnLoadScene = true;
+
+        internal DumpManager()
+        {
+
+        }
+        public bool GetIsEnabled()
+        {
+            return enabled;
+        }
+        internal void Hook()
+        {
+            enabled = true;
+            ModHooks.LanguageGetHook += SaveTextDump;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += DumpAllSprites;
+            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += DumpAllSprites;
+        }
+
+        internal void Unhook()
+        {
+            enabled = false;
+            ModHooks.LanguageGetHook -= SaveTextDump;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= DumpAllSprites;
+            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= DumpAllSprites;
+        }
+        /// <summary>
+        /// Main entrypoint to start the dumping process
+        /// </summary>
+        internal void DumpAllSprites()
+        {
+            if (!enabled) { return; }
+            pending = true;
+            if (dumpAllSpritesCoroutineRef == null)
+            {
+                dumpAllSpritesCoroutineRef = CoroutineHelper.GetRunner().StartCoroutine(dumpAllSpritesCoroutine());
+            }
+        }
+
+        /// <summary>
+        /// Function that actually determines what to dump given a scene and gameobject
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="go"></param>
         internal void dumpSpriteForGo(Scene scene, GameObject go)
         {
             if (go == null) { return; }
@@ -47,29 +84,31 @@ namespace CustomKnight
 
             var mat = sr != null ? sr.material : (tk2ds != null ? tk2ds.GetCurrentSpriteDef()?.material : null);
             int crc = 0;
-            var validForGlobal = true;
+            var isMaterialUnprocessed = true;
             if (mat != null)
             {
                 crc = mat.ComputeCRC();
                 if (MaterialProcessed.TryGetValue(crc, out var _hash))
                 {
-                    validForGlobal = false;
+                    isMaterialUnprocessed = false;
                 }
             }
 
             BeforeDumpingGameObject?.Invoke(CustomKnight.Instance, new DumpEvent() { scene = scene, go = go });
             Log($"dumping {done}/{detected}");
-            Log("game object to be dumped -" + go.name);
+            Log($"game object to be dumped - {go.name}");
             Log($"gameobject path {baseName}");
             isProcessed[go] = true;
+
             if (sr != null && sr.sprite != null)
             {
+                /// Case for Sprites
                 if (scene.name == "DontDestroyOnLoad")
                 {
                     return; // dont dump sprites from DontDestroyOnLoad
                 }
                 if (!CustomKnight.GlobalSettings.DumpOldSwaps)
-                {
+                {   /// New style dumps will save sprites with hash mode for names.json
                     var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
                     var hash = tex.getHash();
                     MaterialProcessed[crc] = hash;
@@ -83,7 +122,7 @@ namespace CustomKnight
                     }
                 }
                 else
-                {
+                {   /// old style dump will dump with directory structure
                     if (anim != null || SpecialCases.childSpriteAnimatedByParent(baseName))
                     {
                         // remove the animation component
@@ -102,25 +141,35 @@ namespace CustomKnight
             }
             if (tk2ds != null)
             {
+                /// Case for tk2d 
                 var sdef = tk2ds.GetCurrentSpriteDef();
                 var tex = (Texture2D)sdef?.material?.mainTexture;
                 if (tex == null)
                 {
                     return;
                 }
-                //dump as texture hash 
                 if (!CustomKnight.GlobalSettings.DumpOldSwaps)
                 {
+                    //New style dumps will save textures with hash mode for names.json
+                    if (!isMaterialUnprocessed)
+                    {
+                        return;
+                    }
                     var dupe = TextureUtils.duplicateTexture(tex);
                     var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
                     MaterialProcessed[crc] = hash;
                     ObjectNameResolver.Add(scene.name, go.GetPath(), hash);
-                    SaveTextureDump(scene, hash, dupe);
+                    if (scene.name != "DontDestroyOnLoad")
+                    {
+                        SaveTextureDump(scene, hash, dupe);
+                    }
+                    SaveTextureByPath("Global", hash, dupe); // Also dump tk2ds in global
                     GameObject.Destroy(dupe);
                 }
                 else
                 {
-                    if (validForGlobal)
+                    /// old style dump will dump with directory structure
+                    if (isMaterialUnprocessed)
                     {
                         var dupe = TextureUtils.duplicateTexture(tex);
                         var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
@@ -140,10 +189,6 @@ namespace CustomKnight
             }
         }
 
-        internal Coroutine dumpAllSpritesCoroutineRef;
-        internal bool pending = false;
-        internal int detected = 0, done = 0;
-        internal bool DontDestroyOnLoadScene = true;
         internal void updateDumpProgressText()
         {
             SkinSwapperPanel.UpdateDumpProgressText(detected, done);
@@ -236,7 +281,7 @@ namespace CustomKnight
                             CustomKnight.Instance.Log($"Error in dumpng scene {i} with {e.ToString()}");
                         }
                         yield return new WaitForSeconds(5);
-                        dumpAllSprites();
+                        DumpAllSprites();
                         yield return new WaitForSeconds(10);
                         // Wait until the asynchronous scene fully loads & dumps
                         /*while (detected > done)
@@ -264,30 +309,23 @@ namespace CustomKnight
         {
             CoroutineHelper.GetRunner().StartCoroutine(walkScenes());
         }
-        internal void dumpAllSprites()
-        {
-            if (!enabled) { return; }
-            pending = true;
-            if (dumpAllSpritesCoroutineRef == null)
-            {
-                dumpAllSpritesCoroutineRef = CoroutineHelper.GetRunner().StartCoroutine(dumpAllSpritesCoroutine());
-            }
-        }
 
-        internal void dumpAllSprites(Scene scene, LoadSceneMode mode)
+
+
+        internal void DumpAllSprites(Scene scene, LoadSceneMode mode)
         {
             if (!enabled) { return; }
             Log($"Entered scene : Name {scene.name}");
-            dumpAllSprites();
+            DumpAllSprites();
         }
 
-        internal void dumpAllSprites(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self)
+        internal void DumpAllSprites(On.HutongGames.PlayMaker.Actions.ActivateGameObject.orig_DoActivateGameObject orig, HutongGames.PlayMaker.Actions.ActivateGameObject self)
         {
             orig(self);
             if (!enabled) { return; }
             if (self.gameObject.GameObject.Value != null)
             {
-                dumpAllSprites();
+                DumpAllSprites();
             }
         }
         internal void SaveSpriteDump(Scene scene, string objectName, Sprite sprite)
@@ -393,12 +431,6 @@ namespace CustomKnight
             return value;
         }
 
-        internal void Unload()
-        {
-            ModHooks.LanguageGetHook -= SaveTextDump;
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= dumpAllSprites;
-            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= dumpAllSprites;
-        }
         internal void Log(string str)
         {
             CustomKnight.Instance.Log("[DumpManager] " + str);

@@ -11,20 +11,24 @@ namespace CustomKnight
         internal static void SetDumpButton()
         {
             var btn = MenuRef?.Find("DumpButton");
-            btn.Name = CustomKnight.dumpManager.enabled ? "Dumping sprites" : "Dump sprites";
+            btn.Name = CustomKnight.dumpManager.GetIsEnabled() ? "Dumping sprites" : "Dump sprites";
             btn.Update();
         }
         internal static void ToggleDumping()
         {
-            CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
-            if (CustomKnight.dumpManager.enabled)
+            if (CustomKnight.dumpManager.GetIsEnabled())
             {
-                CustomKnight.swapManager.Unload();
-                CustomKnight.dumpManager.dumpAllSprites();
+                //Disable
+                CustomKnight.dumpManager.Unhook();
+                CustomKnight.swapManager.Hook();
             }
             else
             {
-                CustomKnight.swapManager.Load();
+                //Enable
+                CustomKnight.dumpManager.Hook();
+                CustomKnight.swapManager.Unhook();
+                SkinManager.SetDefaultSkin();
+                CustomKnight.dumpManager.DumpAllSprites();
             }
             SetDumpButton();
         }

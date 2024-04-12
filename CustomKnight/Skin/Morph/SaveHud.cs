@@ -16,17 +16,30 @@ namespace CustomKnight
         public static Dictionary<string, SheetItem> AreaBackgrounds = new Dictionary<string, SheetItem>();
         public static AreaBackground[] defaultAreaBackgrounds;
 
+        public static void ClearCache()
+        {
+            foreach (var zone in Enum.GetNames(typeof(GlobalEnums.MapZone)))
+            {
+                AreaBackgrounds[zone].ClearCache();
+            }
+            geoIcon.ClearCache();
+            ggSoulOrb.ClearCache();
+            hardcoreSoulOrb.ClearCache();
+            normalHealth.ClearCache();
+            normalSoulOrb.ClearCache();
+            soulOrbIcon.ClearCache();
+            steelHealth.ClearCache();
+            steelSoulOrb.ClearCache();
+        }
         public static void Hook()
         {
             foreach (var zone in Enum.GetNames(typeof(GlobalEnums.MapZone)))
             {
                 AreaBackgrounds[zone] = new SheetItem($"AreaBackgrounds/{zone}.png", 0, 0);
             }
-
             On.SaveSlotBackgrounds.GetBackground_MapZone += SaveSlotBackgrounds_GetBackground_MapZone;
             On.UnityEngine.UI.SaveSlotButton.PresentSaveSlot += SaveSlotButton_PresentSaveSlot;
         }
-
         public static void UnHook()
         {
             On.SaveSlotBackgrounds.GetBackground_MapZone -= SaveSlotBackgrounds_GetBackground_MapZone;
@@ -34,16 +47,6 @@ namespace CustomKnight
         }
         private static void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
         {
-            /*
-            SaveSprite(self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite, "ggSoulOrb");
-            SaveSprite(self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite, "hardcoreSoulOrb");
-            SaveSprite(self.soulOrbIcon.sprite, "soulOrbIcon");
-            SaveSprite(self.healthSlots.normalHealth, "normalHealth");
-            SaveSprite(self.healthSlots.steelHealth, "steelHealth");
-            SaveSprite(self.geoIcon.sprite, "geoIcon");
-            SaveSprite(self.mpSlots.normalSoulOrb, "normalSoulOrb");
-            SaveSprite(self.mpSlots.steelSoulOrb, "steelSoulOrb"); 
-            */
             var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[GetSlotIndex(self.saveSlot)]);
             if (!skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
             {
@@ -59,18 +62,9 @@ namespace CustomKnight
             self.healthSlots.normalHealth = normalHealth.GetSpriteForSkin(skin) ?? self.healthSlots.normalHealth;
             self.healthSlots.steelHealth = steelHealth.GetSpriteForSkin(skin) ?? self.healthSlots.steelHealth;
             orig(self, saveStats);
-            if (skin.GetName() == "Default")
+            if (skin.GetName() == "Default") // we dont ever want to generate area backgrounds for other skins (we will bundle for default too)
             {
-                for (int i = 0; i < defaultAreaBackgrounds.Length; i++)
-                {
-                    var areaName = defaultAreaBackgrounds[i].areaName.ToString();
-                    if (!AreaBackgrounds[areaName].Exists(skin))
-                    {
-                        var tex = SpriteUtils.ExtractTextureFromSprite(defaultAreaBackgrounds[i].backgroundImage);
-                        AreaBackgrounds[areaName].texture = tex;
-                        AreaBackgrounds[areaName].Save(skin);
-                    }
-                }
+                GenerateAreaBackgrounds(skin);
             }
             var currZone = !saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString();
             if (AreaBackgrounds.TryGetValue(currZone, out var mapzone))
@@ -101,14 +95,24 @@ namespace CustomKnight
             return index;
         }
 
-
-
         private static AreaBackground SaveSlotBackgrounds_GetBackground_MapZone(On.SaveSlotBackgrounds.orig_GetBackground_MapZone orig, SaveSlotBackgrounds self, GlobalEnums.MapZone mapZone)
         {
             defaultAreaBackgrounds = self.areaBackgrounds;
             return orig(self, mapZone);
         }
-
+        public static void GenerateAreaBackgrounds(ISelectableSkin skin)
+        {
+            for (int i = 0; i < defaultAreaBackgrounds.Length; i++)
+            {
+                var areaName = defaultAreaBackgrounds[i].areaName.ToString();
+                if (!AreaBackgrounds[areaName].Exists(skin))
+                {
+                    var tex = SpriteUtils.ExtractTextureFromSprite(defaultAreaBackgrounds[i].backgroundImage);
+                    AreaBackgrounds[areaName].texture = tex;
+                    AreaBackgrounds[areaName].Save(skin);
+                }
+            }
+        }
         public static void GenerateSaveHud(Texture2D Hudpng, Texture2D OrbFull)
         {
             GenerateSaveHud(SkinManager.GetCurrentSkin(), Hudpng, OrbFull);

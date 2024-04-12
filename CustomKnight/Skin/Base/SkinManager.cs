@@ -280,8 +280,8 @@ namespace CustomKnight
             CurrentSkin = GetDefaultSkin();
             LoadSkin();
             On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
-            CustomKnight.dumpManager.Unload();
-            CustomKnight.swapManager.Unload();
+            CustomKnight.dumpManager.Unhook();
+            CustomKnight.swapManager.Unhook();
         }
         private static IEnumerator ChangeSkinRoutine(bool skipFlash)
         {
@@ -363,6 +363,16 @@ namespace CustomKnight
             CoroutineHelper.GetRunner().StartCoroutine(ChangeSkinRoutine(skipFlash));
         }
         public static event EventHandler<EventArgs> OnSetSkin;
+
+        internal static void SetDefaultSkin()
+        {
+            var Skin = GetDefaultSkin();
+            CustomKnight.Instance.Log($"Trying to reset skin on save slot {GameManager.instance.profileID}");
+            if (CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; }
+            CurrentSkin = Skin;
+            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
+            RefreshSkin(false);
+        }
 
         /// <summary>
         ///     Change the current skin, to the one whose id is provided.

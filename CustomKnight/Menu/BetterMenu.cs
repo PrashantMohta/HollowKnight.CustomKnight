@@ -1,4 +1,5 @@
 using CustomKnight.Canvas;
+using CustomKnight.NewUI;
 using Satchel.BetterMenus;
 using System.Linq;
 
@@ -21,12 +22,6 @@ namespace CustomKnight
             selectedSkin = SkinManager.SkinsList.FindIndex(skin => skin.GetId() == skinId);
         }
 
-        internal static void DumpAll()
-        {
-            CustomKnight.dumpManager.enabled = !CustomKnight.dumpManager.enabled;
-            CustomKnight.dumpManager.walk();
-        }
-
         private static void OpenSkins()
         {
             IoUtils.OpenDefault(SkinManager.SKINS_FOLDER);
@@ -41,6 +36,8 @@ namespace CustomKnight
             CustomKnight.Instance.Log("Reapplying Skin");
             // clear texture cache
             TextureCache.clearAllTextureCache();
+            // clear SaveHud cache & reset
+            SaveHud.ClearCache();
             // reset skin folder so the same skin can be re-applied
             SkinManager.CurrentSkin = null;
             ApplySkin();
@@ -54,6 +51,7 @@ namespace CustomKnight
             {
                 ((HorizontalOption)element).Values = getSkinNameArray();
             });
+            UIController.CreateUpdateGUI();
         }
 
         internal static string[] getSkinNameArray()

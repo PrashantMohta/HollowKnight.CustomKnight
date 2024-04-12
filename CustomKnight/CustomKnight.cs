@@ -204,20 +204,16 @@ namespace CustomKnight
             swapManager.enabled = enable;
             if (!enable)
             {
-                swapManager.Unload();
-                dumpManager.enabled = false;
+                swapManager.Unhook();
+                dumpManager.Unhook();
                 SupportLazyModDevs.Disable();
             }
             else
             {
-                swapManager.Load();
+                swapManager.Hook();
+                dumpManager.Hook();
                 SupportLazyModDevs.Enable();
             }
-        }
-
-        internal static void toggleDump(bool enable)
-        {
-            dumpManager.enabled = enable;
         }
 
         public void Unload()

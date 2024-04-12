@@ -42,16 +42,58 @@ namespace CustomKnight
         internal Coroutine activationCoro;
         private List<SetTextMeshProGameText> setTextMeshProGameTexts = new List<SetTextMeshProGameText>();
 
-        public SwapManager()
-        {
-            Load();
-            var g = new GameObject();
-            GameObject.DontDestroyOnLoad(g);
-            g.AddComponent<coroutineHelper>().StartCoroutine(processTk2d());
-        }
-
         internal Queue<tk2dSprite> tk2dSpriteQueue = new();
         internal Dictionary<tk2dSprite, bool> processedGlobal = new();
+        internal bool SwapSkinRoutineRunning = false;
+        internal Dictionary<Material, string> MaterialProcessed = new();
+        public SwapManager()
+        {
+            if (CustomKnight.isSatchelInstalled())
+            {
+                Hook();
+                CoroutineHelper.GetRunner().StartCoroutine(processTk2d());
+            }
+        }
+
+        /// <summary>
+        /// Main entry point to change skins
+        /// </summary>
+        /// <param name="currSkin"></param>
+        internal void SkinChangeSwap(ISelectableSkin currSkin)
+        {
+            resetAllTextures();
+            resetAndLoadGlobalSwaps();
+            if (currSkin.hasSwapper())
+            {
+                Swap(currSkin.getSwapperPath());
+            }
+        }
+
+        internal void Hook()
+        {
+            ModHooks.LanguageGetHook += LanguageGet;
+            ModHooks.HeroUpdateHook += checkForMissedObjects;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
+            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
+            On.tk2dSprite.Awake += tk2dSpriteAwake;
+            On.SetTextMeshProGameText.Awake += SetTextMeshProGameText_Awake;
+            activationCoro = CoroutineHelper.GetRunner().StartCoroutine(ActivationCoroutine());
+        }
+        internal void Unhook()
+        {
+            ModHooks.LanguageGetHook -= LanguageGet;
+            ModHooks.HeroUpdateHook -= checkForMissedObjects;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
+            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
+            On.tk2dSprite.Awake -= tk2dSpriteAwake;
+            On.SetTextMeshProGameText.Awake -= SetTextMeshProGameText_Awake;
+            if (activationCoro != null)
+            {
+                CoroutineHelper.GetRunner().StopCoroutine(activationCoro);
+            }
+            resetAllTextures();
+        }
+
         internal bool isValidForGlobalSwap(tk2dSprite tk)
         {
             if (tk == null) { return false; }
@@ -86,7 +128,6 @@ namespace CustomKnight
                 tk2dSpriteQueue.Enqueue(tk);
             }
         }
-
         internal void findAndQueueTk2d(GameObject go)
         {
             var tks = go.GetComponentsInChildren<tk2dSprite>();
@@ -98,7 +139,6 @@ namespace CustomKnight
                 }
             }
         }
-
         internal IEnumerator processTk2d()
         {
             while (true)
@@ -121,9 +161,6 @@ namespace CustomKnight
                 }
             }
         }
-
-        internal bool SwapSkinRoutineRunning = false;
-
         private void loadTexture(GameObjectProxy gop)
         {
             this.Log(gop.name + gop.getTexturePath() + gop.getAliasPath());
@@ -161,7 +198,6 @@ namespace CustomKnight
             texture.LoadImage(buffer.ToArray(), true);
             loadedTextures[objectPath] = texture;
         }
-
         private void SwapSkinForGo(string objectPath, GameObject GO)
         {
             CustomKnight.Instance.LogDebug($"op {objectPath} {GO.name}");
@@ -220,8 +256,6 @@ namespace CustomKnight
                 _tk2dSprite.GetCurrentSpriteDef().material.mainTexture = tex;
             }
         }
-
-
         private void applySkinsUsingProxy(GameObjectProxy gop, GameObject go)
         {
             //CustomKnight.Instance.Log("Traversing : " + gop.getTexturePath());
@@ -361,6 +395,10 @@ namespace CustomKnight
             return textValue;
         }
 
+        /// <summary>
+        /// Function loads a folder as a swap (allows to centralise Global and Skin folder logic)
+        /// </summary>
+        /// <param name="pathToLoad"></param>
         internal void LoadSwapByPath(string pathToLoad)
         {
             EnsureDirectory(pathToLoad);
@@ -463,8 +501,7 @@ namespace CustomKnight
                 AddPathToGopTree(hp, true);
             }
             List<string> AllScenes = ObjectNameResolver.GetScenes();
-            this.Log("Scenes.Count" + AllScenes.Count);
-
+            this.Log($"Loading {AllScenes.Count} Scenes With names.json");
             foreach (var scn in AllScenes)
             {
                 List<string> paths = ObjectNameResolver.GetPathsForScene(scn);
@@ -580,30 +617,6 @@ namespace CustomKnight
                 QueueTk2d(self);
             }
         }
-        internal void Load()
-        {
-            ModHooks.LanguageGetHook += LanguageGet;
-            ModHooks.HeroUpdateHook += checkForMissedObjects;
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += SwapSkinForScene;
-            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += ActivateGameObject;
-            On.tk2dSprite.Awake += tk2dSpriteAwake;
-            On.SetTextMeshProGameText.Awake += SetTextMeshProGameText_Awake;
-            activationCoro = CoroutineHelper.GetRunner().StartCoroutine(ActivationCoroutine());
-        }
-        internal void Unload()
-        {
-            ModHooks.LanguageGetHook -= LanguageGet;
-            ModHooks.HeroUpdateHook -= checkForMissedObjects;
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SwapSkinForScene;
-            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= ActivateGameObject;
-            On.tk2dSprite.Awake -= tk2dSpriteAwake;
-            On.SetTextMeshProGameText.Awake -= SetTextMeshProGameText_Awake;
-            if (activationCoro != null)
-            {
-                CoroutineHelper.GetRunner().StopCoroutine(activationCoro);
-            }
-            resetAllTextures();
-        }
         private void SetTextMeshProGameText_Awake(On.SetTextMeshProGameText.orig_Awake orig, SetTextMeshProGameText self)
         {
             orig(self);
@@ -667,8 +680,6 @@ namespace CustomKnight
             }
             return Gop;
         }
-
-        internal Dictionary<Material, string> MaterialProcessed = new();
 
         internal void applyGlobalTk2dByHash(string hash, tk2dSprite tk)
         {
@@ -796,15 +807,6 @@ namespace CustomKnight
             ActivationQueue.Enqueue(go);
         }
 
-        internal void SkinChangeSwap(ISelectableSkin currSkin)
-        {
-            resetAllTextures();
-            resetAndLoadGlobalSwaps();
-            if (currSkin.hasSwapper())
-            {
-                Swap(currSkin.getSwapperPath());
-            }
-        }
         internal void Log(string str)
         {
             CustomKnight.Instance.Log("[SwapManager] " + str);
