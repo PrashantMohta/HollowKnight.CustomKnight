@@ -15,6 +15,9 @@ namespace CustomKnight
         public static CinematicsManager cinematicsManager { get; private set; } = new CinematicsManager();
 
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
+
+        public static event EventHandler<EventArgs> OnReady, OnInit, OnUnload;
+        public bool ToggleButtonInsideMenu { get; } = true;
         internal static void touchSatchelVersion()
         {
             Satchel.AssemblyUtils.Version();
@@ -38,7 +41,7 @@ namespace CustomKnight
             version = Satchel.AssemblyUtils.GetAssemblyVersionHash();
         }
         public string version;
-        new public string GetName() => "Custom Knight";
+        public new string GetName() => "Custom Knight";
         public override string GetVersion()
         {
             version = "Satchel not found";
@@ -78,9 +81,9 @@ namespace CustomKnight
 
         public CustomKnight()
         {
+            /// needs an early hook
             PreloadedTk2dSpritesHandler.Hook();
         }
-
 
 
         public override List<(string, string)> GetPreloadNames()
@@ -185,13 +188,10 @@ namespace CustomKnight
             On.HeroController.Start += HeroControllerStart;
         }
 
-        public bool ToggleButtonInsideMenu { get; } = true;
         public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggle)
         {
             return BetterMenu.GetMenu(modListMenu, toggle);
         }
-
-        public static event EventHandler<EventArgs> OnReady, OnInit, OnUnload;
 
         public void HeroControllerStart(On.HeroController.orig_Start orig, HeroController self)
         {

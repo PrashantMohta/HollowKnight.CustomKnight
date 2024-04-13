@@ -373,7 +373,7 @@ namespace CustomKnight
             if (nextCheck > 0 && (currentTime - lastTime).TotalMilliseconds > nextCheck)
             {
                 SwapSkinForAllScenes();
-                nextCheck = (int)Math.Round((float)nextCheck * BACKOFF_MULTIPLIER);
+                nextCheck = (int)Math.Round(nextCheck * BACKOFF_MULTIPLIER);
                 lastTime = currentTime;
             }
         }

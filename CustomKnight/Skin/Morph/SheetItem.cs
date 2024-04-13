@@ -15,8 +15,8 @@ namespace CustomKnight
         {
             Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, true);
             Color[] rpixels = result.GetPixels(0);
-            float incX = (1.0f / (float)targetWidth);
-            float incY = (1.0f / (float)targetHeight);
+            float incX = (1.0f / targetWidth);
+            float incY = (1.0f / targetHeight);
             for (int px = 0; px < rpixels.Length; px++)
             {
                 rpixels[px] = source.GetPixelBilinear(incX * ((float)px % targetWidth), incY * ((float)Mathf.Floor(px / targetWidth)));
@@ -107,7 +107,7 @@ namespace CustomKnight
         {
             if (size.width != texture.width || size.height != texture.height || scale != 1f)
             {
-                var aspectRatio = (float)texture.width / (float)texture.height;
+                var aspectRatio = texture.width / (float)texture.height;
                 var newWidth = size.height * aspectRatio;
                 var newHeight = size.height;
                 if (newWidth > size.width)

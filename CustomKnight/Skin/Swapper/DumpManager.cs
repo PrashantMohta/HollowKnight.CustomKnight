@@ -278,7 +278,7 @@ namespace CustomKnight
                         }
                         catch (Exception e)
                         {
-                            CustomKnight.Instance.Log($"Error in dumpng scene {i} with {e.ToString()}");
+                            CustomKnight.Instance.Log($"Error in dumpng scene {i} with {e}");
                         }
                         yield return new WaitForSeconds(5);
                         DumpAllSprites();
@@ -297,7 +297,7 @@ namespace CustomKnight
                         }
                         catch (Exception e)
                         {
-                            CustomKnight.Instance.Log($"error in dumpng scene {i} with {e.ToString()}");
+                            CustomKnight.Instance.Log($"error in dumpng scene {i} with {e}");
                         }
                         i++;
                     }
@@ -347,7 +347,7 @@ namespace CustomKnight
             }
             if (!isTextureDumped.TryGetValue(outpath, out bool path) && !File.Exists(outpath))
             {
-                Texture2D dupe = (Texture2D)SpriteUtils.ExtractTextureFromSprite(sprite);
+                Texture2D dupe = SpriteUtils.ExtractTextureFromSprite(sprite);
                 byte[] texBytes = dupe.EncodeToPNG();
                 try
                 {
@@ -437,7 +437,7 @@ namespace CustomKnight
         }
         internal static void debugDumpSprite(Sprite sprite)
         {
-            Texture2D dupe = (Texture2D)Satchel.SpriteUtils.ExtractTextureFromSprite(sprite);
+            Texture2D dupe = Satchel.SpriteUtils.ExtractTextureFromSprite(sprite);
             Satchel.TextureUtils.WriteTextureToFile(dupe, $"{Satchel.AssemblyUtils.getCurrentDirectory()}/{sprite.name}.png");
         }
         internal static void debugDumpTex(Texture2D tex, string name)
