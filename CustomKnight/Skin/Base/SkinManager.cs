@@ -3,16 +3,23 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight
 {
-
+    /// <summary>
+    /// Allows Managing the Skins
+    /// </summary>
     public static class SkinManager
     {
         internal static bool savedDefaultTextures = false;
+        /// <summary>
+        /// Name of the Data directory
+        /// </summary>
         public static string DATA_DIR { get; internal set; }
         internal static string SKINS_FOLDER;
         internal static ISelectableSkin CurrentSkin, DefaultSkin;
         internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
         internal static List<ISelectableSkin> SkinsList { get; private set; }
-
+        /// <summary>
+        /// Dictionary that holds all Skinable items
+        /// </summary>
         public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
@@ -183,9 +190,13 @@ namespace CustomKnight
             {Salubra.NAME,new Salubra() },
            // {"PinsScarab", new Pins()}
         };
+        /// <summary>
+        /// Event raised when a skin is set
+        /// </summary>
+        public static event EventHandler<EventArgs> OnSetSkin;
 
-        public static GameObject _inv;
-        public static GameObject inv
+        private static GameObject _inv;
+        internal static GameObject inv
         {
             get
             {
@@ -196,8 +207,8 @@ namespace CustomKnight
                 return _inv;
             }
         }
-        public static GameObject _equipment;
-        public static GameObject equipment
+        private static GameObject _equipment;
+        internal static GameObject equipment
         {
             get
             {
@@ -208,8 +219,8 @@ namespace CustomKnight
                 return _equipment;
             }
         }
-        public static GameObject _invitem;
-        public static GameObject invitem
+        private static GameObject _invitem;
+        internal static GameObject invitem
         {
             get
             {
@@ -362,7 +373,6 @@ namespace CustomKnight
         {
             CoroutineHelper.GetRunner().StartCoroutine(ChangeSkinRoutine(skipFlash));
         }
-        public static event EventHandler<EventArgs> OnSetSkin;
 
         internal static void SetDefaultSkin()
         {

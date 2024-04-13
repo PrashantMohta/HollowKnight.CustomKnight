@@ -22,7 +22,6 @@
         {
             GameObject hd = HeroController.instance.transform.Find("Brumm_shield").gameObject;
             ckTex.defaultSprite = hd.Find("brumm_shield_pieces_0000_Layer-2").GetAddComponent<SpriteRenderer>().sprite;
-            CustomKnight.dumpManager.SaveTextureByPath("Debug", "BrummWave", SpriteUtils.ExtractTextureFromSprite(ckTex.defaultSprite));
         }
     }
 }

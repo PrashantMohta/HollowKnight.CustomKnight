@@ -10,7 +10,6 @@
             var M = new List<Material>{
                 hd.Find("white_petal_break_particle").GetComponent<ParticleSystemRenderer>().material
             };
-            CustomKnight.dumpManager.SaveTextureByPath("Debug", "FlowerBreak", (Texture2D)M[0].mainTexture);
             return M;
         }
 

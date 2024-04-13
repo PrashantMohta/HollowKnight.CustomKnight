@@ -3,18 +3,16 @@ using UnityEngine.UI;
 
 namespace CustomKnight.NewUI
 {
-    public static class UIController
+    internal static class UIController
     {
-        public static GameObject UI, content, viewport;
-        public static ScrollRect scrollRect;
+        private static GameObject UI, content, viewport;
+        private static ScrollRect scrollRect;
 
-        public static Font arial;
-        public static Font perpetua;
-        public static Font trajanBold;
-        public static Font trajanNormal;
+        private static Font arial;
+        private static Font perpetua;
+        private static Font trajanBold;
+        private static Font trajanNormal;
         private static float lastScrollPosition;
-
-        public static bool EnableListener { get; private set; }
 
         private static void LoadResources()
         {

@@ -11,7 +11,6 @@
                 hd.Find("Ash L").GetComponent<ParticleSystemRenderer>().material,
                 hd.Find("Ash R").GetComponent<ParticleSystemRenderer>().material
             };
-            //CustomKnight.dumpManager.SaveTextureByPath("Debug", "DeathAsh", (Texture2D)M[0].mainTexture);
             return M;
         }
 

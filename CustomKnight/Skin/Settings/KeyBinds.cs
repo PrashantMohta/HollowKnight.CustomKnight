@@ -2,7 +2,7 @@
 
 namespace CustomKnight
 {
-    public class KeyBinds : PlayerActionSet
+    internal class KeyBinds : PlayerActionSet
     {
         public PlayerAction OpenSkinList;
         public PlayerAction ReloadSkins;
