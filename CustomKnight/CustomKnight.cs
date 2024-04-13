@@ -67,10 +67,18 @@ namespace CustomKnight
         {
             return CustomKnight.GlobalSettings;
         }
+        public void OnLoadLocal(SaveModSettings s)
+        {
+            CustomKnight.SaveSettings = s;
+        }
+        public SaveModSettings OnSaveLocal()
+        {
+            return CustomKnight.SaveSettings;
+        }
 
         public CustomKnight()
         {
-            SupportLazyModDevs.Hook();
+            PreloadedTk2dSpritesHandler.Hook();
         }
 
 
@@ -117,8 +125,8 @@ namespace CustomKnight
             Log($"Initializing CustomKnight {version}");
             //Making sure skinables list exists
             Log($"Found {SkinManager.Skinables.Count} Skinables");
-            SupportLazyModDevs.Unhook();
-            SupportLazyModDevs.Enable();
+            PreloadedTk2dSpritesHandler.Unhook();
+            PreloadedTk2dSpritesHandler.Enable();
             SaveHud.Hook();
             OnInit?.Invoke(this, null);
 
@@ -160,7 +168,7 @@ namespace CustomKnight
 
 
             GUIController.Instance.BuildMenus();
-            UIController.StartKeybindListener();
+            InputListener.Start();
             if (CustomKnight.GlobalSettings.EnablePauseMenu)
             {
                 UIController.EnableMenu();
@@ -194,10 +202,7 @@ namespace CustomKnight
             SkinManager.LoadSkin();
             OnReady?.Invoke(this, null);
         }
-        public void OnLoadLocal(SaveModSettings s)
-        {
-            CustomKnight.SaveSettings = s;
-        }
+
 
         internal static void toggleSwap(bool enable)
         {
@@ -206,13 +211,13 @@ namespace CustomKnight
             {
                 swapManager.Unhook();
                 dumpManager.Unhook();
-                SupportLazyModDevs.Disable();
+                PreloadedTk2dSpritesHandler.Disable();
             }
             else
             {
                 swapManager.Hook();
                 dumpManager.Hook();
-                SupportLazyModDevs.Enable();
+                PreloadedTk2dSpritesHandler.Enable();
             }
         }
 
@@ -223,10 +228,7 @@ namespace CustomKnight
             OnUnload?.Invoke(this, null);
             On.HeroController.Start -= HeroControllerStart;
         }
-        public SaveModSettings OnSaveLocal()
-        {
-            return CustomKnight.SaveSettings;
-        }
+
 
 
         public static void SaveSprite(Sprite s, string str)

@@ -1,6 +1,6 @@
 ﻿namespace CustomKnight.Skin.Swapper
 {
-    internal class SupportLazyModDevs
+    internal class PreloadedTk2dSpritesHandler
     {
         internal static void Hook()
         {
