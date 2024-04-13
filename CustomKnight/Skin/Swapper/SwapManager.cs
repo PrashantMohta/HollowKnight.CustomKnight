@@ -767,35 +767,7 @@ namespace CustomKnight
                     QueueTk2d(tk);
                 }
             }
-            //do not load any kind of sprites via hash 
-            return;
-            if (go.scene.name == "DontDestroyOnLoad")
-            {
-                return;
-            }
-            // do not load DontDestroyOnLoad sprites
-            var srs = go.GetComponentsInChildren<SpriteRenderer>();
-            if (srs != null)
-            {
-                foreach (var sr in srs)
-                {
-                    var mat = sr.material;
-                    var crc = mat;//.ComputeCRC();
-                    string hash;
-                    if (alwaysReprocessMaterial || !MaterialProcessed.TryGetValue(crc, out hash))
-                    {
-                        var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
-                        hash = tex.getHash();
-                        GameObject.Destroy(tex);
-                        MaterialProcessed[crc] = hash;
-                    }
-                    var Gop = getGopGlobal("Global", hash);
-                    if (Gop != null)
-                    {
-                        applySkinsUsingProxy(Gop, sr.gameObject);
-                    }
-                }
-            }
+            // do not load any kind of sprites via global hash 
         }
 
         internal IEnumerator ActivationCoroutine()

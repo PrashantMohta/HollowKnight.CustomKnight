@@ -102,13 +102,13 @@ namespace CustomKnight
 
             if (sr != null && sr.sprite != null)
             {
-                /// Case for Sprites
+                // Case for Sprites
                 if (scene.name == "DontDestroyOnLoad")
                 {
                     return; // dont dump sprites from DontDestroyOnLoad
                 }
                 if (!CustomKnight.GlobalSettings.DumpOldSwaps)
-                {   /// New style dumps will save sprites with hash mode for names.json
+                {   // New style dumps will save sprites with hash mode for names.json
                     var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
                     var hash = tex.getHash();
                     MaterialProcessed[crc] = hash;
@@ -122,7 +122,7 @@ namespace CustomKnight
                     }
                 }
                 else
-                {   /// old style dump will dump with directory structure
+                {   // old style dump will dump with directory structure
                     if (anim != null || SpecialCases.childSpriteAnimatedByParent(baseName))
                     {
                         // remove the animation component
@@ -141,7 +141,7 @@ namespace CustomKnight
             }
             if (tk2ds != null)
             {
-                /// Case for tk2d 
+                // Case for tk2d 
                 var sdef = tk2ds.GetCurrentSpriteDef();
                 var tex = (Texture2D)sdef?.material?.mainTexture;
                 if (tex == null)
@@ -168,7 +168,7 @@ namespace CustomKnight
                 }
                 else
                 {
-                    /// old style dump will dump with directory structure
+                    // old style dump will dump with directory structure
                     if (isMaterialUnprocessed)
                     {
                         var dupe = TextureUtils.duplicateTexture(tex);
@@ -191,7 +191,7 @@ namespace CustomKnight
 
         internal void updateDumpProgressText()
         {
-            SkinSwapperPanel.UpdateDumpProgressText(detected, done);
+            DumpUIMain.UpdateDumpProgressText(detected, done);
         }
         internal void dumpAllSpritesInScene(Scene scene)
         {

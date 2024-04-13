@@ -19,7 +19,9 @@ namespace CustomKnight.Skin.Cinematics
 
             public sealed class Params_get_EmbeddedVideoClip
             {
+#pragma warning disable CS0649 // Field 'CinematicHelper.Delegates.Params_get_EmbeddedVideoClip.self' is never assigned to, and will always have its default value null
                 public CinematicVideoReference self;
+#pragma warning restore CS0649 // Field 'CinematicHelper.Delegates.Params_get_EmbeddedVideoClip.self' is never assigned to, and will always have its default value null
             }
         }
         public static event Delegates.get_EmbeddedVideoClip_WithArgs get_EmbeddedVideoClip

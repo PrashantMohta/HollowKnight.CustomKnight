@@ -1,5 +1,4 @@
-﻿using CustomKnight.Canvas;
-using CustomKnight.NewUI;
+﻿using CustomKnight.NewUI;
 using CustomKnight.Skin.Swapper;
 
 namespace CustomKnight
@@ -81,7 +80,7 @@ namespace CustomKnight
 
         public CustomKnight()
         {
-            /// needs an early hook
+            // needs an early hook
             PreloadedTk2dSpritesHandler.Hook();
         }
 
@@ -138,7 +137,6 @@ namespace CustomKnight
                 return;
             }
             SkinManager.checkDirectoryStructure();
-
             SkinManager.getSkinNames();
             SaveHud.LoadAll();
             SkinManager.CurrentSkin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.DefaultSkin);
@@ -170,7 +168,6 @@ namespace CustomKnight
             }
 
 
-            GUIController.Instance.BuildMenus();
             InputListener.Start();
             if (CustomKnight.GlobalSettings.EnablePauseMenu)
             {
@@ -228,8 +225,6 @@ namespace CustomKnight
             OnUnload?.Invoke(this, null);
             On.HeroController.Start -= HeroControllerStart;
         }
-
-
 
         public static void SaveSprite(Sprite s, string str)
         {
