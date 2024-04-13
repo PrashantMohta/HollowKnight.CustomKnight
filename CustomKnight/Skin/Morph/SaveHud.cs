@@ -154,7 +154,7 @@ namespace CustomKnight
             if (!normalSoulOrb.Exists(skin))
             {
                 normalSoulOrb.useImage(fHudpng, 75f, 681f, 45f, 48f, false, false);
-                normalSoulOrb.rotateTexture(false);
+                normalSoulOrb.rotateTexture(true);
                 normalSoulOrb.CorrectScale();
                 normalSoulOrb.Save(skin);
             }
@@ -176,7 +176,7 @@ namespace CustomKnight
             if (!steelSoulOrb.Exists(skin))
             {
                 steelSoulOrb.useImage(fHudpng, 75f, 681f, 45f, 48f, false, false);
-                steelSoulOrb.rotateTexture(false);
+                steelSoulOrb.rotateTexture(true);
                 steelSoulOrb.CorrectScale();
                 steelSoulOrb.Save(skin);
             }

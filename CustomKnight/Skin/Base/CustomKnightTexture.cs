@@ -11,6 +11,7 @@ namespace CustomKnight
         public Sprite defaultSprite;
         public Texture2D defaultTex;
         public Texture2D tex;
+        public bool IsSprite => defaultSprite != null;
         public Texture2D currentTexture
         {
             get

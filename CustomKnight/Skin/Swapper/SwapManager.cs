@@ -24,8 +24,14 @@ namespace CustomKnight
         internal List<string> currentSkinnedSceneObjs;
         internal Dictionary<string, Texture2D> loadedTextures;
 
-        internal Dictionary<string, Material> materials;
-        internal Dictionary<string, Texture2D> defaultTextures;
+        /// <summary>
+        /// store the default textures for each material to be able to restore later
+        /// </summary>
+        internal Dictionary<Material, Texture2D> defaultTextures;
+        /// <summary>
+        /// store the default sprite for each spriterenderer to be able to restore later
+        /// </summary>
+        internal Dictionary<SpriteRenderer, Sprite> defaultSprites;
 
         internal Dictionary<string, string> Strings;
         internal Dictionary<string, string> ReplaceStrings;
@@ -238,9 +244,13 @@ namespace CustomKnight
                     }
                     else
                     {
-                        //currentSkinnedSceneObjs.Add(objectPath); re add sprites for a while
                         //some sprites are still not perfectly matched 
                         this.LogFine($"game object : {sr.name} ");
+                        if (!defaultSprites.TryGetValue(sr, out var s))
+                        {
+                            defaultSprites[sr] = sr.sprite;
+                            this.Log($"Saving default sprite for {objectPath} with sr {sr.GetInstanceID()}");
+                        }
                         var pivot = new Vector2(0.5f, 0.5f); // this needs offset sometimes
                         sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot, sr.sprite.pixelsPerUnit);
                         //Log($"pivot post application {sr.sprite.pivot/new Vector2(tex.width, tex.height)}");
@@ -251,8 +261,12 @@ namespace CustomKnight
             else
             {
                 currentSkinnedSceneObjs.Add(objectPath);
-                materials[objectPath] = _tk2dSprite.GetCurrentSpriteDef().material;
-                defaultTextures[objectPath] = (Texture2D)materials[objectPath].mainTexture;
+                var mat = _tk2dSprite.GetCurrentSpriteDef().material;
+                if (!defaultTextures.TryGetValue(mat, out var t))
+                {
+                    defaultTextures[mat] = (Texture2D)mat.mainTexture;
+                    this.Log($"Saving default texture for {objectPath} with material {mat.GetInstanceID()}");
+                }
                 _tk2dSprite.GetCurrentSpriteDef().material.mainTexture = tex;
             }
         }
@@ -439,13 +453,14 @@ namespace CustomKnight
                 foreach (string file in Directory.GetFiles(path))
                 {
                     string filename = Path.GetFileNameWithoutExtension(file);
+                    string extension = Path.GetExtension(file);
                     filenames[filename] = true;
                     Log("filename:" + filename);
-                    if (filename.EndsWith(".txt"))
+                    if (extension == ".txt")
                     {
                         try
                         {
-                            Strings[filename.Replace(".txt", "")] = File.ReadAllText(file);
+                            Strings[filename] = File.ReadAllText(file);
                         }
                         catch (Exception e)
                         {
@@ -456,7 +471,6 @@ namespace CustomKnight
                     else
                     {
                         //fileType
-                        string extension = Path.GetExtension(file);
                         string objectName = filename.Replace(extension, "");
                         GameObjectProxy GOP = new GameObjectProxy()
                         {
@@ -565,8 +579,8 @@ namespace CustomKnight
             currentSkinnedSceneObjs = new List<string>();
             loadedTextures = new Dictionary<string, Texture2D>();
 
-            materials = new Dictionary<string, Material>();
-            defaultTextures = new Dictionary<string, Texture2D>();
+            defaultTextures = new Dictionary<Material, Texture2D>();
+            defaultSprites = new Dictionary<SpriteRenderer, Sprite>();
 
             Strings = new Dictionary<string, string>();
             ReplaceStrings = new Dictionary<string, string>();
@@ -597,15 +611,30 @@ namespace CustomKnight
         }
         internal void resetAllTextures()
         {
-            if (materials != null)
+            if (defaultSprites != null)
             {
-                foreach (KeyValuePair<string, Material> kp in materials)
+                this.Log($"Resetting Sprites");
+                foreach (var kp in defaultSprites)
                 {
-                    if (kp.Value == null)
+                    if (kp.Value == null || kp.Key == null)
                     {
+                        this.Log($"Default sprite or spriterenderer is null during reset");
                         continue;
                     }
-                    kp.Value.mainTexture = defaultTextures[kp.Key];
+                    kp.Key.sprite = kp.Value;
+                }
+            }
+            if (defaultTextures != null)
+            {
+                this.Log($"Resetting Textures");
+                foreach (var kp in defaultTextures)
+                {
+                    if (kp.Value == null || kp.Key == null)
+                    {
+                        this.Log($"Default tex or material is null during reset");
+                        continue;
+                    }
+                    kp.Key.mainTexture = kp.Value;
                 }
             }
         }
