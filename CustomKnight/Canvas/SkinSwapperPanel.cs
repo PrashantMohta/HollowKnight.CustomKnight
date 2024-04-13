@@ -56,7 +56,7 @@
                 DumpingUpdatePanel.SetActive(false, true);
             }
             var text = DumpingUpdatePanel.GetText("SpriteDumpText");
-            text.UpdateText($"Dumping Sprites \n {(100f * done / detected).ToString("0.0")}%");
+            text.UpdateText($"Dumping Sprites \n {100f * done / detected:0.0}%");
         }
 
 
