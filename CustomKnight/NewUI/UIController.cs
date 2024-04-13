@@ -8,10 +8,10 @@ namespace CustomKnight.NewUI
         private static GameObject UI, content, viewport;
         private static ScrollRect scrollRect;
 
-        private static Font arial;
-        private static Font perpetua;
-        private static Font trajanBold;
-        private static Font trajanNormal;
+        internal static Font arial;
+        internal static Font perpetua;
+        internal static Font trajanBold;
+        internal static Font trajanNormal;
         private static float lastScrollPosition;
 
         private static void LoadResources()

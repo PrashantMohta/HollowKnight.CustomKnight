@@ -7,38 +7,15 @@ namespace CustomKnight.Canvas
         private static CanvasPanel DumpingUpdatePanel;
         private static GameObject canvas;
 
-        private static Font arial;
-        private static Font perpetua;
-        private static Font trajanBold;
         private static Font trajanNormal;
 
         private static void LoadResources()
         {
             foreach (Font font in Resources.FindObjectsOfTypeAll<Font>())
             {
-                if (font != null && font.name == "TrajanPro-Bold")
-                {
-                    trajanBold = font;
-                }
-
                 if (font != null && font.name == "TrajanPro-Regular")
                 {
                     trajanNormal = font;
-                }
-
-                //Just in case for some reason the computer doesn't have arial
-                if (font != null && font.name == "Perpetua")
-                {
-                    perpetua = font;
-                }
-
-                foreach (string fontName in Font.GetOSInstalledFontNames())
-                {
-                    if (fontName.ToLower().Contains("arial"))
-                    {
-                        arial = Font.CreateDynamicFontFromOSFont(fontName, 13);
-                        break;
-                    }
                 }
             }
 
@@ -68,7 +45,6 @@ namespace CustomKnight.Canvas
             int PanelWidth = 500;
 
             int OptionSize = 25;
-            int fontSize = (int)(OptionSize * 0.85f);
             int headingSize = 50;
             int headingFontSize = (int)(OptionSize * 0.85f);
 
