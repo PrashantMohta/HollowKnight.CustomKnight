@@ -31,7 +31,7 @@ namespace CustomKnight
         public List<string> RecentSkins { get; set; } = new();
 
         [JsonConverter(typeof(PlayerActionSetConverter))]
-        public KeyBinds Keybinds = new KeyBinds();
+        public KeyBinds Keybinds = new();
         public void AddRecentSkin(string skinId)
         {
             RecentSkins.RemoveAll((v) => v == skinId);

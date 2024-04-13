@@ -23,7 +23,7 @@ namespace CustomKnight
 {
     internal static class CinematicsManager
     {
-        internal static Dictionary<string, Cinematic> Cinematics = new Dictionary<string, Cinematic>(){
+        internal static Dictionary<string, Cinematic> Cinematics = new(){
             {"Prologue", new Cinematic("Prologue")},
             {"Intro", new Cinematic("Intro")},
             {"StagTunnelRun", new Cinematic("StagTunnelRun")},

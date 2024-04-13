@@ -13,7 +13,7 @@ namespace CustomKnight
         public static SheetItem soulOrbIcon = new SheetItem("SaveHud/soulOrbIcon.png", 173f, 107f);
         public static SheetItem steelHealth = new SheetItem("SaveHud/steelHealth.png", 35f, 43f);
         public static SheetItem steelSoulOrb = new SheetItem("SaveHud/steelSoulOrb.png", 21f, 21f);
-        public static Dictionary<string, SheetItem> AreaBackgrounds = new Dictionary<string, SheetItem>();
+        public static Dictionary<string, SheetItem> AreaBackgrounds = new();
         public static AreaBackground[] defaultAreaBackgrounds;
 
         public static void ClearCache()

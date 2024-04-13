@@ -31,7 +31,7 @@ namespace CustomKnight
         /// <summary>
         /// Stores Preloaded gameobjects
         /// </summary>
-        public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
+        public static readonly Dictionary<string, GameObject> GameObjects = new();
         /// <summary>
         /// Event called when CK is fully ready (after applying a skin)
         /// </summary>
@@ -290,7 +290,7 @@ namespace CustomKnight
                 PreloadedTk2dSpritesHandler.Enable();
             }
         }
-        
+
         /// <summary>
         /// Unload
         /// </summary>

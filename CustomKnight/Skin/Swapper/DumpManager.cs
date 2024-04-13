@@ -34,8 +34,8 @@ namespace CustomKnight
 
         private bool enabled = false;
 
-        internal Dictionary<string, bool> isTextureDumped = new Dictionary<string, bool>();
-        internal Dictionary<GameObject, bool> isProcessed = new Dictionary<GameObject, bool>();
+        internal Dictionary<string, bool> isTextureDumped = new();
+        internal Dictionary<GameObject, bool> isProcessed = new();
         internal Dictionary<int, string> MaterialProcessed = new();
 
         internal Coroutine dumpAllSpritesCoroutineRef;
