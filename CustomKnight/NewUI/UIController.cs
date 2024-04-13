@@ -12,7 +12,6 @@ namespace CustomKnight.NewUI
         public static Font perpetua;
         public static Font trajanBold;
         public static Font trajanNormal;
-        private static bool isVisible;
         private static float lastScrollPosition;
 
         public static bool EnableListener { get; private set; }
@@ -130,13 +129,11 @@ namespace CustomKnight.NewUI
         }
         public static void hideMenu()
         {
-            isVisible = false;
             UI.SetActive(false);
         }
         public static void showMenu()
         {
             if (!CustomKnight.GlobalSettings.EnablePauseMenu) { return; }
-            isVisible = true;
             UI.SetActive(true);
         }
 

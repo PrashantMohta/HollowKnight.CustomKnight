@@ -1,4 +1,3 @@
-using CustomKnight.Canvas;
 using CustomKnight.NewUI;
 using Satchel.BetterMenus;
 using System.Linq;
@@ -14,7 +13,6 @@ namespace CustomKnight
         {
             var skinToApply = SkinManager.SkinsList[selectedSkin];
             SkinManager.SetSkinById(skinToApply.GetId());
-            SkinSwapperPanel.hidePanel("");
         }
 
         internal static void SelectedSkin(string skinId)
