@@ -3,19 +3,50 @@ using CustomKnight.Skin.Swapper;
 
 namespace CustomKnight
 {
+    /// <summary>
+    /// Main Mod Class
+    /// </summary>
     public class CustomKnight : Mod, IGlobalSettings<GlobalModSettings>, ILocalSettings<SaveModSettings>, ICustomMenuMod, ITogglableMod
     {
+        /// <summary>
+        /// GlobalSettings
+        /// </summary>
         public static GlobalModSettings GlobalSettings { get; set; } = new GlobalModSettings();
+        /// <summary>
+        /// Settings for current save
+        /// </summary>
         public static SaveModSettings SaveSettings { get; set; } = new SaveModSettings();
+        /// <summary>
+        /// Current Mod instance
+        /// </summary>
         public static CustomKnight Instance { get; private set; }
+        /// <summary>
+        /// Current DumpManager instance
+        /// </summary>
         public static DumpManager dumpManager { get; private set; } = new DumpManager();
+        /// <summary>
+        /// Current SwapManager instance
+        /// </summary>
         public static SwapManager swapManager { get; private set; } = new SwapManager();
-        public static SpriteFlashManager spriteFlashManager { get; private set; } = new SpriteFlashManager();
-        public static CinematicsManager cinematicsManager { get; private set; } = new CinematicsManager();
-
+        /// <summary>
+        /// Stores Preloaded gameobjects
+        /// </summary>
         public static readonly Dictionary<string, GameObject> GameObjects = new Dictionary<string, GameObject>();
-
-        public static event EventHandler<EventArgs> OnReady, OnInit, OnUnload;
+        /// <summary>
+        /// Event called when CK is fully ready (after applying a skin)
+        /// </summary>
+        public static event EventHandler<EventArgs> OnReady;
+        /// <summary>
+        /// Event called when CK is initialised but before applying skin
+        /// </summary>
+        public static event EventHandler<EventArgs> OnInit;
+        /// <summary>
+        /// Event called when the mod is unloaded
+        /// </summary>
+        public static event EventHandler<EventArgs> OnUnload;
+        /// <summary>
+        /// ToggleButtonInsideMenu
+        /// </summary>
         public bool ToggleButtonInsideMenu { get; } = true;
         internal static void touchSatchelVersion()
         {
@@ -39,8 +70,17 @@ namespace CustomKnight
         {
             version = Satchel.AssemblyUtils.GetAssemblyVersionHash();
         }
-        public string version;
+
+        internal string version;
+        /// <summary>
+        /// GetName
+        /// </summary>
+        /// <returns></returns>
         public new string GetName() => "Custom Knight";
+        /// <summary>
+        /// GetVersion
+        /// </summary>
+        /// <returns></returns>
         public override string GetVersion()
         {
             version = "Satchel not found";
@@ -50,6 +90,10 @@ namespace CustomKnight
             }
             return version;
         }
+        /// <summary>
+        /// OnLoadGlobal
+        /// </summary>
+        /// <param name="s"></param>
         public void OnLoadGlobal(GlobalModSettings s)
         {
             if (s.Version == GetVersion())
@@ -64,27 +108,46 @@ namespace CustomKnight
                 CustomKnight.GlobalSettings.NameLength = DefaultSettings.NameLength;
             }
         }
-
+        /// <summary>
+        /// OnSaveGlobal
+        /// </summary>
+        /// <returns></returns>
         public GlobalModSettings OnSaveGlobal()
         {
             return CustomKnight.GlobalSettings;
         }
+        /// <summary>
+        /// OnLoadLocal
+        /// </summary>
+        /// <param name="s"></param>
         public void OnLoadLocal(SaveModSettings s)
         {
             CustomKnight.SaveSettings = s;
         }
+        /// <summary>
+        /// OnSaveLocal
+        /// </summary>
+        /// <returns></returns>
         public SaveModSettings OnSaveLocal()
         {
             return CustomKnight.SaveSettings;
         }
 
+        /// <summary>
+        /// ctor
+        /// </summary>
         public CustomKnight()
         {
             // needs an early hook
             PreloadedTk2dSpritesHandler.Hook();
+            SpriteFlashManager.Hook();
+            CinematicsManager.Hook();
         }
 
-
+        /// <summary>
+        /// GetPreloadNames
+        /// </summary>
+        /// <returns></returns>
         public override List<(string, string)> GetPreloadNames()
         {
             List<(string, string)> preloadsList;
@@ -118,6 +181,10 @@ namespace CustomKnight
             }
             return preloadsList;
         }
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        /// <param name="preloadedObjects"></param>
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             if (Instance == null)
@@ -185,12 +252,18 @@ namespace CustomKnight
             On.HeroController.Start += HeroControllerStart;
         }
 
+        /// <summary>
+        /// GetMenuScreen
+        /// </summary>
+        /// <param name="modListMenu"></param>
+        /// <param name="toggle"></param>
+        /// <returns></returns>
         public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggle)
         {
             return BetterMenu.GetMenu(modListMenu, toggle);
         }
 
-        public void HeroControllerStart(On.HeroController.orig_Start orig, HeroController self)
+        internal void HeroControllerStart(On.HeroController.orig_Start orig, HeroController self)
         {
             orig(self);
             Log("HeroControllerStart");
@@ -217,7 +290,10 @@ namespace CustomKnight
                 PreloadedTk2dSpritesHandler.Enable();
             }
         }
-
+        
+        /// <summary>
+        /// Unload
+        /// </summary>
         public void Unload()
         {
             SaveHud.UnHook();
@@ -226,7 +302,7 @@ namespace CustomKnight
             On.HeroController.Start -= HeroControllerStart;
         }
 
-        public static void SaveSprite(Sprite s, string str)
+        internal static void SaveSprite(Sprite s, string str)
         {
             var tex = SpriteUtils.ExtractTextureFromSprite(s);
             CustomKnight.dumpManager.SaveTextureByPath("Debug", str, tex);

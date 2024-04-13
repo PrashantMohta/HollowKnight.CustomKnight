@@ -6,11 +6,23 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight
 {
+    /// <summary>
+    /// SwapEvent
+    /// </summary>
     public class SwapEvent : EventArgs
     {
+        /// <summary>
+        /// Current GameObjectProxt
+        /// </summary>
         public GameObjectProxy gop { get; set; }
+        /// <summary>
+        /// GameObject being swapped
+        /// </summary>
         public GameObject go { get; set; }
     }
+    /// <summary>
+    /// Manages all Swaps
+    /// </summary>
     public class SwapManager
     {
         private bool alwaysReprocessMaterial = false; // should be false in release
@@ -41,7 +53,9 @@ namespace CustomKnight
 
         internal bool active = false;
         internal bool enabled = false;
-
+        /// <summary>
+        /// Event raised when a skin is applied using GOP
+        /// </summary>
         public static event EventHandler<SwapEvent> OnApplySkinUsingProxy;
 
         internal Queue<GameObject> ActivationQueue = new Queue<GameObject>();
@@ -52,7 +66,8 @@ namespace CustomKnight
         internal Dictionary<tk2dSprite, bool> processedGlobal = new();
         internal bool SwapSkinRoutineRunning = false;
         internal Dictionary<Material, string> MaterialProcessed = new();
-        public SwapManager()
+
+        internal SwapManager()
         {
             if (CustomKnight.isSatchelInstalled())
             {
@@ -728,7 +743,11 @@ namespace CustomKnight
                 applySkinsUsingProxy(Gop, tk.gameObject);
             }
         }
-
+        /// <summary>
+        /// Global Swap a tk2dSprite as if it were at a given path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="tk"></param>
         public void applyGlobalTk2dByPath(string path, tk2dSprite tk)
         {
             if (shouldProcessMaterial(tk))

@@ -2,15 +2,15 @@
 
 namespace CustomKnight.Canvas
 {
-    public class DumpUIMain
+    internal class DumpUIMain
     {
-        public static CanvasPanel DumpingUpdatePanel;
-        public static GameObject canvas;
+        private static CanvasPanel DumpingUpdatePanel;
+        private static GameObject canvas;
 
-        public static Font arial;
-        public static Font perpetua;
-        public static Font trajanBold;
-        public static Font trajanNormal;
+        private static Font arial;
+        private static Font perpetua;
+        private static Font trajanBold;
+        private static Font trajanNormal;
 
         private static void LoadResources()
         {
@@ -43,7 +43,7 @@ namespace CustomKnight.Canvas
             }
 
         }
-        public static void BuildMenus()
+        private static void BuildMenus()
         {
             if (!GameObject.Find("Custom Knight Dump UI"))
             {
@@ -62,7 +62,7 @@ namespace CustomKnight.Canvas
 
         private static void Log(object message) => Modding.Logger.Log("[GUI Controller] " + message);
 
-        public static void BuildDumpingUpdatePanel(GameObject canvas)
+        private static void BuildDumpingUpdatePanel(GameObject canvas)
         {
             float currentElementPosY = 150f;
             int PanelWidth = 500;
@@ -94,7 +94,7 @@ namespace CustomKnight.Canvas
             DumpingUpdatePanel.SetActive(false, true);
         }
 
-        public static void UpdateDumpProgressText(float detected, float done)
+        internal static void UpdateDumpProgressText(float detected, float done)
         {
             DumpUIMain.BuildMenus();
             if (done < detected - 1)

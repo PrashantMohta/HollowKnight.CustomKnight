@@ -7,15 +7,29 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight
 {
-
+    /// <summary>
+    /// DumpEvent
+    /// </summary>
     public class DumpEvent : EventArgs
     {
+        /// <summary>
+        /// Scene of the dump object
+        /// </summary>
         public Scene scene { get; set; }
+        /// <summary>
+        /// The dump GameObject
+        /// </summary>
         public GameObject go { get; set; }
     }
+
+    /// <summary>
+    /// Main class for managing dumping sprites
+    /// </summary>
     public class DumpManager
     {
-
+        /// <summary>
+        /// Event raised jsut before a game object is dumped
+        /// </summary>
         public static event EventHandler<DumpEvent> BeforeDumpingGameObject;
 
         private bool enabled = false;
@@ -33,6 +47,10 @@ namespace CustomKnight
         {
 
         }
+        /// <summary>
+        /// GetIsEnabled
+        /// </summary>
+        /// <returns></returns>
         public bool GetIsEnabled()
         {
             return enabled;

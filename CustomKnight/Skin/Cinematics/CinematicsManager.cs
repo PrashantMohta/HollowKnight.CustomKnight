@@ -21,9 +21,9 @@ video : Telescope:Assets/Cinematics/Telescope_cinematic_30fps.mov
 */
 namespace CustomKnight
 {
-    public class CinematicsManager
+    internal static class CinematicsManager
     {
-        internal Dictionary<string, Cinematic> Cinematics = new Dictionary<string, Cinematic>(){
+        internal static Dictionary<string, Cinematic> Cinematics = new Dictionary<string, Cinematic>(){
             {"Prologue", new Cinematic("Prologue")},
             {"Intro", new Cinematic("Intro")},
             {"StagTunnelRun", new Cinematic("StagTunnelRun")},
@@ -42,19 +42,14 @@ namespace CustomKnight
             {"MaskShatter", new Cinematic("MaskShatter")}
         };
 
-        private Dictionary<string, string> CinematicFileUrlCache = new();
-        internal CinematicsManager()
+        internal static void Hook()
         {
-            if (CustomKnight.isSatchelInstalled())
-            {
-                On.CinematicSequence.Update += CinematicSequence_Update;
-                CinematicHelper.get_EmbeddedVideoClip += WithOrig_get_EmbeddedVideoClip;
-                On.XB1CinematicVideoPlayer.ctor += XB1CinematicVideoPlayer_ctor;
-            }
-
+            On.CinematicSequence.Update += CinematicSequence_Update;
+            CinematicHelper.get_EmbeddedVideoClip += WithOrig_get_EmbeddedVideoClip;
+            On.XB1CinematicVideoPlayer.ctor += XB1CinematicVideoPlayer_ctor;
         }
 
-        private bool GetCiematicSafely(string name, out Cinematic cinematic)
+        private static bool GetCiematicSafely(string name, out Cinematic cinematic)
         {
             if (Cinematics.TryGetValue(name, out cinematic))
             {
@@ -68,23 +63,13 @@ namespace CustomKnight
         }
 
 
-        public bool HasCinematic(string CinematicName)
+        public static bool HasCinematic(string CinematicName)
         {
-            if (CinematicFileUrlCache.TryGetValue(CinematicName, out var url))
-            {
-                return url.Length > 0;
-            }
-            else
-            {
-                EnsureDirectory($"{SkinManager.DATA_DIR}/Cinematics/");
-                string file = ($"{SkinManager.DATA_DIR}/Cinematics/{CinematicName}").Replace("\\", "/");
-                CinematicFileUrlCache[CinematicName] = GetCinematicUrl(CinematicName);
-                return CinematicFileUrlCache[CinematicName].Length > 0;
-            }
-
+            var cinematicUrl = GetCinematicUrl(CinematicName);
+            return cinematicUrl.Length > 0;
         }
 
-        private void XB1CinematicVideoPlayer_ctor(On.XB1CinematicVideoPlayer.orig_ctor orig, XB1CinematicVideoPlayer self, CinematicVideoPlayerConfig config)
+        private static void XB1CinematicVideoPlayer_ctor(On.XB1CinematicVideoPlayer.orig_ctor orig, XB1CinematicVideoPlayer self, CinematicVideoPlayerConfig config)
         {
             orig(self, config);
             VideoPlayer source = ReflectionHelper.GetField<XB1CinematicVideoPlayer, VideoPlayer>(self, "videoPlayer"); ;
@@ -113,8 +98,9 @@ namespace CustomKnight
         }
 
 
-        public string GetCinematicUrl(string CinematicName)
+        public static string GetCinematicUrl(string CinematicName)
         {
+            EnsureDirectory($"{SkinManager.DATA_DIR}/Cinematics/");
             string path = "";
             string file = ($"{SkinManager.DATA_DIR}/Cinematics/{CinematicName}").Replace("\\", "/");
             if (File.Exists(file + ".webm"))
@@ -125,7 +111,7 @@ namespace CustomKnight
             return path;
         }
 
-        private void CinematicSequence_Update(On.CinematicSequence.orig_Update orig, CinematicSequence self)
+        private static void CinematicSequence_Update(On.CinematicSequence.orig_Update orig, CinematicSequence self)
         {
             var fles = new CinematicSequenceR(self);
             if (GetCiematicSafely(fles.videoReference.VideoFileName, out var cinematic))
@@ -153,7 +139,7 @@ namespace CustomKnight
             orig(self);
         }
 
-        private VideoClip WithOrig_get_EmbeddedVideoClip(Func<CinematicVideoReference, UnityEngine.Video.VideoClip> orig, CinematicVideoReference self)
+        private static VideoClip WithOrig_get_EmbeddedVideoClip(Func<CinematicVideoReference, UnityEngine.Video.VideoClip> orig, CinematicVideoReference self)
         {
             if (GetCiematicSafely(self.VideoFileName, out var cinematic))
             {
