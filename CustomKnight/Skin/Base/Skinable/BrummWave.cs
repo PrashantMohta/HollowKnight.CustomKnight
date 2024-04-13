@@ -10,8 +10,7 @@
             GameObject hd = HeroController.instance.transform.Find("Brumm_shield").gameObject;
             hd.Find("brumm_shield_pieces_0000_Layer-2").GetAddComponent<SpriteRenderer>().sprite = sprite;
             hd.Find("brumm_shield_pieces_0000_Layer-2 (1)").GetAddComponent<SpriteRenderer>().sprite = sprite;
-            var skin = SkinManager.GetCurrentSkin() as StaticSkin;
-            if (skin != null)
+            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
             {
                 hd.Find("Shield_core").GetComponent<SpriteRenderer>().color = skin.skinConfig.brummColor;
             }

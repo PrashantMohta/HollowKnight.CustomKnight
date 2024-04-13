@@ -175,10 +175,7 @@ namespace CustomKnight.NewUI
             UIManager.instance.TogglePauseGame();
             CustomKnight.GlobalSettings.AddRecentSkin(skin.GetId());
             UIController.CreateUpdateGUI();
-            if (HeroController.instance != null)
-            {
-                HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
-            }
+            HeroController.instance?.GetComponent<SpriteFlash>().flashFocusHeal();
             CoroutineHelper.WaitForFramesBeforeInvoke(10, () =>
             {
                 scrollRect.verticalNormalizedPosition = 1f;

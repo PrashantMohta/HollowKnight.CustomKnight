@@ -65,13 +65,10 @@ namespace CustomKnight
                         }
                         SkinWithOverrides.SetOverride(name, options[currentOverrideIndex]);
                         var btn = MenuRef.Find(name);
-                        if (btn != null)
-                        {
-                            btn.updateAfter((e) =>
+                        btn?.updateAfter((e) =>
                             {
                                 btn.Name = SkinWithOverrides.GetOverride(name);
                             });
-                        }
                     }
                 }
             }, Id: name)
@@ -82,10 +79,7 @@ namespace CustomKnight
         {
             if (MenuScreenRef == null)
             {
-                if (MenuRef == null)
-                {
-                    MenuRef = PrepareMenu();
-                }
+                MenuRef ??= PrepareMenu();
                 MenuScreenRef = MenuRef.GetMenuScreen(lastMenu);
 
             }

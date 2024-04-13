@@ -25,8 +25,7 @@
         private static void SpriteFlash_flashFocusHeal(On.SpriteFlash.orig_flashFocusHeal orig, global::SpriteFlash self)
         {
             orig(self);
-            var skin = SkinManager.GetCurrentSkin() as StaticSkin;
-            if (skin != null)
+            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
             {
                 var block = ReflectionHelper.GetField<SpriteFlash, MaterialPropertyBlock>(self, "block");
                 block.SetColor("_FlashColor", skin.skinConfig.flashColor);
@@ -37,8 +36,7 @@
         private static void SpriteFlash_flashDungQuick(On.SpriteFlash.orig_flashDungQuick orig, global::SpriteFlash self)
         {
             orig(self);
-            var skin = SkinManager.GetCurrentSkin() as StaticSkin;
-            if (skin != null)
+            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
             {
                 var block = ReflectionHelper.GetField<SpriteFlash, MaterialPropertyBlock>(self, "block");
                 block.SetColor("_FlashColor", skin.skinConfig.dungFlash);
@@ -49,8 +47,7 @@
         private static void SpriteFlash_flashDung(On.SpriteFlash.orig_flashDung orig, global::SpriteFlash self)
         {
             orig(self);
-            var skin = SkinManager.GetCurrentSkin() as StaticSkin;
-            if (skin != null)
+            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
             {
                 var block = ReflectionHelper.GetField<SpriteFlash, MaterialPropertyBlock>(self, "block");
                 block.SetColor("_FlashColor", skin.skinConfig.dungFlash);

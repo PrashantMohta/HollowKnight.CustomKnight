@@ -26,10 +26,7 @@ namespace CustomKnight
         {
             if (MenuScreenRef == null)
             {
-                if (MenuRef == null)
-                {
-                    MenuRef = PrepareMenu();
-                }
+                MenuRef ??= PrepareMenu();
                 MenuRef.OnBuilt += (_, Element) =>
                 {
                     SetDumpButton();

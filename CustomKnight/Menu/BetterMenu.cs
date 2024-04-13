@@ -95,10 +95,7 @@ namespace CustomKnight
         }
         internal static MenuScreen GetMenu(MenuScreen lastMenu, ModToggleDelegates? toggleDelegates)
         {
-            if (MenuRef == null)
-            {
-                MenuRef = PrepareMenu((ModToggleDelegates)toggleDelegates);
-            }
+            MenuRef ??= PrepareMenu((ModToggleDelegates)toggleDelegates);
             MenuRef.OnBuilt += (_, Element) =>
             {
                 if (SkinManager.CurrentSkin != null)

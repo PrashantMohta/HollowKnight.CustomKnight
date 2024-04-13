@@ -15,12 +15,13 @@ namespace CustomKnight
         public static string DATA_DIR { get; internal set; }
         internal static string SKINS_FOLDER;
         internal static ISelectableSkin CurrentSkin, DefaultSkin;
-        internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
+        internal static List<ISelectableSkin> ProvidedSkins = new();
         internal static List<ISelectableSkin> SkinsList { get; private set; }
         /// <summary>
         /// Dictionary that holds all Skinable items
         /// </summary>
-        public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
+        public static Dictionary<string, Skinable> Skinables = new()
+        {
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
             {Unn.NAME,new Unn()},
@@ -336,10 +337,7 @@ namespace CustomKnight
         /// <returns>an <c>ISelectableSkin</c> that represents the default skin</returns>
         public static ISelectableSkin GetDefaultSkin()
         {
-            if (DefaultSkin == null)
-            {
-                DefaultSkin = GetSkinById("Default");
-            }
+            DefaultSkin ??= GetSkinById("Default");
             return DefaultSkin;
         }
 
@@ -349,10 +347,7 @@ namespace CustomKnight
         /// <returns>an <c>ISelectableSkin</c> that represents the current skin</returns>
         public static ISelectableSkin GetCurrentSkin()
         {
-            if (CurrentSkin == null)
-            {
-                CurrentSkin = GetSkinById("Default");
-            }
+            CurrentSkin ??= GetSkinById("Default");
             return CurrentSkin;
         }
 

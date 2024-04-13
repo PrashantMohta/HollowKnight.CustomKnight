@@ -20,10 +20,7 @@ namespace CustomKnight
         {
             if (MenuScreenRef == null)
             {
-                if (MenuRef == null)
-                {
-                    MenuRef = PrepareMenu();
-                }
+                MenuRef ??= PrepareMenu();
                 MenuScreenRef = MenuRef.GetMenuScreen(lastMenu);
 
             }
