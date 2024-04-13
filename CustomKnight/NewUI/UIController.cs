@@ -12,7 +12,6 @@ namespace CustomKnight.NewUI
         public static Font perpetua;
         public static Font trajanBold;
         public static Font trajanNormal;
-        private static Coroutine inputCoroutine;
         private static bool isVisible;
         private static float lastScrollPosition;
 
@@ -49,10 +48,6 @@ namespace CustomKnight.NewUI
             }
 
         }
-        public static void StartKeybindListener()
-        {
-            inputCoroutine = CoroutineHelper.GetRunner().StartCoroutine(ListenForInput());
-        }
         static UIController()
         {
             LoadResources();
@@ -86,39 +81,10 @@ namespace CustomKnight.NewUI
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
         }
 
-        private static IEnumerator ListenForInput()
-        {
-            while (true)
-            {
-                if (GameManager.instance.isPaused)
-                {
-                    if (CustomKnight.GlobalSettings.Keybinds.OpenSkinList.WasPressed)
-                    {
-                        //EnableListener = false;
-                        if (CustomKnight.GlobalSettings.EnablePauseMenu)
-                        {
-                            DisableMenu();
-                            lastScrollPosition = scrollRect.verticalNormalizedPosition;
-                        }
-                        else
-                        {
-                            EnableMenu();
-                            showMenu();
-                            scrollRect.verticalNormalizedPosition = lastScrollPosition;
-                        }
-                    }
-                }
-
-                yield return new WaitForEndOfFrame();
-            }
-
-        }
-
         public static void DisableMenu()
         {
             CustomKnight.GlobalSettings.EnablePauseMenu = false;
             hideMenu();
-            //CoroutineHelper.GetRunner().StopCoroutine(inputCoroutine);
             On.HeroController.Pause -= OnPause;
             On.HeroController.UnPause -= OnUnpause;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= OnSceneChange;
@@ -305,6 +271,21 @@ namespace CustomKnight.NewUI
         static UIButton AddButton(this GameObject parent, string name, string displayName, Action<UIButton> callback)
         {
             return new UIButton(parent, name, displayName, callback);
+        }
+
+        internal static void ToggleSkinList()
+        {
+            if (CustomKnight.GlobalSettings.EnablePauseMenu)
+            {
+                DisableMenu();
+                lastScrollPosition = scrollRect.verticalNormalizedPosition;
+            }
+            else
+            {
+                EnableMenu();
+                showMenu();
+                scrollRect.verticalNormalizedPosition = lastScrollPosition;
+            }
         }
     }
 }

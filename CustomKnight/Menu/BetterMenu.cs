@@ -72,7 +72,7 @@ namespace CustomKnight
                 new MenuRow(
                     new List<Element>{
                         Blueprints.NavigateToMenu( "Skin List","Opens a list of Skins",()=> SkinsList.GetMenu(MenuRef.menuScreen)),
-                        Blueprints.NavigateToMenu("Alts","Configure Alternate sheets",() => AltMenu.GetMenu(MenuRef.menuScreen)),
+                        Blueprints.NavigateToMenu("Alternates","Configure Alternate sheets",() => AltMenu.GetMenu(MenuRef.menuScreen)),
                     },
                     Id:"ApplyButtonGroup"
                 ){ XDelta = 400f},
@@ -80,12 +80,19 @@ namespace CustomKnight
                 new MenuRow(
                     new List<Element>{
                         new MenuButton("Open Folder","Open skins folder",(_)=>OpenSkins()),
-                        new MenuButton("Reload","Reload Skins",(_)=>ReloadSkins()),
+                        new MenuButton("Reload","Reload all skins",(_)=>ReloadSkins()),
                         new MenuButton("Need Help?","Join the HK Modding Discord",(_)=>OpenLink("https://discord.gg/J4SV6NFxAA")),
                     },
                     Id:"HelpButtonGroup"
                 ){ XDelta = 425f},
-                Blueprints.NavigateToMenu("Advanced","Advanced Settings", ()=> AdvancedMenu.GetMenu(MenuRef.menuScreen))
+                new MenuRow(
+                    new List<Element>{
+                        Blueprints.NavigateToMenu("Advanced","Advanced Settings", ()=> AdvancedMenu.GetMenu(MenuRef.menuScreen)),
+                        Blueprints.NavigateToMenu("KeyBinds","Hotkey bindings", ()=> KeybindsMenu.GetMenu(MenuRef.menuScreen)),
+                        Blueprints.NavigateToMenu("Tools","For skin Authors", ()=> AuthorsMenu.GetMenu(MenuRef.menuScreen)),
+                    },
+                    Id:"SubMenuGroup"
+                ){ XDelta = 425f},
             });
         }
         internal static MenuScreen GetMenu(MenuScreen lastMenu, ModToggleDelegates? toggleDelegates)
