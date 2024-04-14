@@ -1,0 +1,7 @@
+markdown: GFM
+remote_theme: just-the-docs/just-the-docs
+aux_links:
+  "Github Repo":
+    - "https://github.com/PrashantMohta/HollowKnight.CustomKnight"
+  "Join Modding Discord":
+    - "https://discord.gg/RppAb2vNqz"
