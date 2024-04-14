@@ -28,6 +28,4 @@ The code is Licensed under the MIT license. But my hope is that any contribution
 
 #### Compatibility Disclaimer
 
-Any compatibility with any other mods not explicitly stated in this documentation is incidental and should not be considered as a feature in the scope of this project.
-
-CK may choose to add features that allow it to function better with other mods but this is not an out of the box guarantee. 
+Any compatibility with any other mods not explicitly stated in this documentation is incidental and should not be considered as a feature in the scope of this project.CK may choose to add features that allow it to function better with other mods but this is not an out of the box guarantee. 
