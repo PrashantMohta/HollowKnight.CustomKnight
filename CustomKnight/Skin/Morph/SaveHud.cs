@@ -13,8 +13,12 @@ namespace CustomKnight
         public static SheetItem soulOrbIcon = new SheetItem("SaveHud/soulOrbIcon.png", 173f, 107f);
         public static SheetItem steelHealth = new SheetItem("SaveHud/steelHealth.png", 35f, 43f);
         public static SheetItem steelSoulOrb = new SheetItem("SaveHud/steelSoulOrb.png", 21f, 21f);
+        public static SheetItem brokenSteelOrb = new SheetItem("SaveHud/brokenSteelOrb.png", 480f, 176f);
+        public static SheetItem defeatedBackground = new SheetItem("AreaBackgrounds/defeatedBackground.png", 735f, 119f);
         public static Dictionary<string, SheetItem> AreaBackgrounds = new();
         public static AreaBackground[] defaultAreaBackgrounds;
+        private static GameObject DefeatedBackgroundGo;
+        private static GameObject BrokenSteelOrbGo;
 
         public static void ClearCache()
         {
@@ -61,10 +65,27 @@ namespace CustomKnight
             self.mpSlots.steelSoulOrb = steelSoulOrb.GetSpriteForSkin(skin) ?? self.mpSlots.steelSoulOrb;
             self.healthSlots.normalHealth = normalHealth.GetSpriteForSkin(skin) ?? self.healthSlots.normalHealth;
             self.healthSlots.steelHealth = steelHealth.GetSpriteForSkin(skin) ?? self.healthSlots.steelHealth;
+
+            DefeatedBackgroundGo = self.gameObject.FindGameObjectInChildren("DefeatedBackground");
+            if(DefeatedBackgroundGo != null)
+            {
+                DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite = defeatedBackground.GetSpriteForSkin(skin)  ?? DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite;
+            }
+            BrokenSteelOrbGo = self.gameObject.FindGameObjectInChildren("BrokenSteelOrb");
+            if (BrokenSteelOrbGo != null)
+            {
+                BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite = brokenSteelOrb.GetSpriteForSkin(skin) ?? BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite;
+            }
             orig(self, saveStats);
             if (skin.GetName() == "Default") // we dont ever want to generate area backgrounds for other skins (we will bundle for default too)
             {
                 GenerateAreaBackgrounds(skin);
+                if (BrokenSteelOrbGo != null && !brokenSteelOrb.Exists(skin))
+                {
+                    var tex = SpriteUtils.ExtractTextureFromSprite(BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite);
+                    brokenSteelOrb.texture = tex;
+                    brokenSteelOrb.Save(skin);
+                }
             }
             var currZone = !saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString();
             if (AreaBackgrounds.TryGetValue(currZone, out var mapzone))
@@ -110,6 +131,12 @@ namespace CustomKnight
                     var tex = SpriteUtils.ExtractTextureFromSprite(defaultAreaBackgrounds[i].backgroundImage);
                     AreaBackgrounds[areaName].texture = tex;
                     AreaBackgrounds[areaName].Save(skin);
+                }
+                if (DefeatedBackgroundGo != null && !defeatedBackground.Exists(skin))
+                {
+                    var tex = SpriteUtils.ExtractTextureFromSprite(DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite);
+                    defeatedBackground.texture = tex;
+                    defeatedBackground.Save(skin);
                 }
             }
         }
@@ -179,6 +206,13 @@ namespace CustomKnight
                 steelSoulOrb.rotateTexture(true);
                 steelSoulOrb.CorrectScale();
                 steelSoulOrb.Save(skin);
+            }
+            if (!brokenSteelOrb.Exists(skin))
+            {
+                brokenSteelOrb.useImage(fHudpng, 1025f, 1860f, 480f, 201f, false, false);
+                brokenSteelOrb.texture = brokenSteelOrb.texture.Flip(false, true);
+                brokenSteelOrb.CorrectScale();
+                brokenSteelOrb.Save(skin);
             }
         }
 
