@@ -11,6 +11,7 @@ aux_links:
     - "https://github.com/PrashantMohta/HollowKnight.CustomKnight"
   "Join Modding Discord":
     - "https://discord.gg/RppAb2vNqz"
+aux_links_new_tab: true
 
 nav_external_links:
   - title: Install on Lumafly
@@ -27,7 +28,7 @@ last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https:/
 gh_edit_link: true 
 gh_edit_link_text: "Edit this page on GitHub"
 gh_edit_repository: "https://github.com/PrashantMohta/HollowKnight.CustomKnight" # the github URL for your repo
-gh_edit_branch: "main" # the branch that your docs is served from
+gh_edit_branch: "master" # the branch that your docs is served from
 gh_edit_source: docs # the source that your files originate from
 gh_edit_view_mode: "edit" # "tree" or "edit" if you want the user to jump into the editor immediately
 
