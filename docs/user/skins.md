@@ -14,7 +14,7 @@ Follow the instructions below to install a skin, or you can watch [this video tu
 
 1. Download the skin 
 2. Place the skin's images in a directory that is the same name as the skin
-3. Copy this directory to the Skins directory under the game's Mods/CustomKnight directoy (mentioned earlier)
+3. Copy this directory to the Skins directory under the game's Mods/CustomKnight directoy 
 
 Make sure that the folder you copy opens directly to the image files themselves. That is, when you double click on the folder, it opens up to the PNGs themselves and not to another folder or zip. 
 

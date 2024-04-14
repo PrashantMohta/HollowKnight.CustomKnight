@@ -14,11 +14,11 @@ You can acquire a Custom Knight release either by using [this lumafly magic link
 2. Place the output folder under the Mods/CustomKnight directory:
 Typical installation directory for your OS :
 
-> Windows	
+#### Windows	
 > `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\CustomKnight\`
-> Mac
+#### Mac
 > `~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/hollow_knight_Data/Resources/Data/Managed/Mods/CustomKnight/`
-> Linux
+#### Linux
 > `~/.local/share/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed/Mods/CustomKnight/`
 
 3. Open the game and load a save. (may take a while on first run as the mod is extracting the default skin) 
