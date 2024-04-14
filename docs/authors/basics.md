@@ -1,3 +1,9 @@
+---
+title: Authors
+nav_order: 3
+has_children: true
+---
+
 ## Basic Skins
 
 1. Edit the existing skin images in your photo editing software of choice.

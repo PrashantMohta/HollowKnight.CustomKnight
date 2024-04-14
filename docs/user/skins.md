@@ -1,10 +1,16 @@
+---
+title: Get Skins
+nav_order: 2
+parent: Users
+---
+
 ## Skins
 
 ### Installing Skins:
 
-Follow the instructions below to install a skin, or you can watch [this video tutorial by fireb0rn](https://youtu.be/z35cFvU0McQ?si=Nqurex-9Kg0I_foo&t=466)
-
 > TODO: Add a screenshot here
+
+Follow the instructions below to install a skin, or you can watch [this video tutorial by fireb0rn](https://youtu.be/z35cFvU0McQ?si=Nqurex-9Kg0I_foo&t=466)
 
 1. Download the skin 
 2. Place the skin's images in a directory that is the same name as the skin

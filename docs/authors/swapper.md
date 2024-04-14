@@ -1,4 +1,7 @@
-
+---
+title: Swapper
+parent: Authors
+---
 #### Swapper
 - Adds ability to skin bosses and any other objects that use a tk2dsprite 
 - Adds ability to skin any other non animated objects that use a sprite

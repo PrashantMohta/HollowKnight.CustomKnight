@@ -1,3 +1,7 @@
+---
+title: Cinematics
+parent: Authors
+---
 ### Cinematics
 - Allows replacing some video cutscenes in the game with custom ones 
 To use, add the appropriate file in `Mods/Custom Knight/Skins/<skinname>/Cinematics`  or if you want to replace them globally then `Mods/Custom Knight/Cinematics`

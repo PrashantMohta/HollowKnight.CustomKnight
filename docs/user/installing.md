@@ -1,3 +1,8 @@
+---
+title: Installing
+nav_order: 1
+parent: Users
+---
 
 # Installing CustomKnight
 

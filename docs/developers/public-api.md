@@ -1,3 +1,7 @@
+---
+title: Public API
+parent: Developers
+---
 
 #### CustomKnight API
 

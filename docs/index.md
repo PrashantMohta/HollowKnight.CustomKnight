@@ -6,21 +6,22 @@ nav_order: 1
 
 A Hollow Knight mod to load custom texture sheets for the player, enemies and areas.
 
-## Custom Knight as a user:  
+### Custom Knight as a user:  
 
-- [Installing CustomKnight](installing.md)
-- [Installing Skins](skins.md)
+- [Installing CustomKnight](user/installing.md)
+- [Installing Skins](user/skins.md)
   
-## Custom Knight as a skin author:
+### Custom Knight as a skin author:
 
-- [Basics](basics.md)
-- [Swapper](swapper.md)
-- [Cinematics](cinematics.md)
+- [Basics](authors/basics.md)
+- [Swapper](authors/swapper.md)
+- [Cinematics](authors/cinematics.md)
 
-## Custom Knight as a mod developer:
+### Custom Knight as a mod developer:
 
-- [Public API](public-api.md)
-- [Internal workings](internals.md)
+- [Public API](developers/public-api.md)
+- [Internal workings](developers/internals.md)
+
 
 #### License Notice
 
