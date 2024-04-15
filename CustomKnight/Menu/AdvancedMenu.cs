@@ -7,12 +7,6 @@ namespace CustomKnight
     {
         private static Menu MenuRef;
         private static MenuScreen MenuScreenRef;
-
-        private static void FixSkins()
-        {
-            FixSkinStructure.FixSkins();
-            BetterMenu.ReloadSkins();
-        }
         internal static MenuScreen GetMenu(MenuScreen lastMenu)
         {
             if (MenuScreenRef == null)
@@ -67,6 +61,7 @@ namespace CustomKnight
                     () => CustomKnight.GlobalSettings.EnablePauseMenu),
                 new MenuRow(
                     new List<Element>{
+                        new MenuButton("Make Default","Creates the default skin on next restart",(_)=>RegenerateDefaultSkin()),
                         new MenuButton("Fix Skins","Attempts to Fix Skin Structure",(_)=>FixSkins()),
                         new MenuButton("Reset Settings","Reset CustomKnight Settings",(_)=>ResetSettings()),
                     },
@@ -77,6 +72,17 @@ namespace CustomKnight
             return menu;
         }
 
+        private static void Back()
+        {
+            Utils.GoToMenuScreen(MenuRef.returnScreen);
+        }
+
+        private static void RegenerateDefaultSkin()
+        {
+            CustomKnight.GlobalSettings.GenerateDefaultSkin = true;
+            Back();
+        }
+
         private static void ResetSettings()
         {
             CustomKnight.GlobalSettings = new GlobalModSettings();
@@ -84,6 +90,16 @@ namespace CustomKnight
             {
                 CustomKnight.SaveSettings = new SaveModSettings();
             }
+            Back();
+        }
+
+
+        private static void FixSkins()
+        {
+            FixSkinStructure.FixSkins();
+            BetterMenu.ReloadSkins();
+
+            Back();
         }
     }
 }

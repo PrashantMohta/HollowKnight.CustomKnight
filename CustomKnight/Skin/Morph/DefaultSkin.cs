@@ -77,7 +77,7 @@ namespace CustomKnight
 
         public static void Save(Texture2D texture, string path)
         {
-            Save(texture, "Default", path);
+            Save(texture, "Default", path, true);
         }
 
     }

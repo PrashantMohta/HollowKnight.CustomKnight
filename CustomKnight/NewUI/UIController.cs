@@ -162,7 +162,7 @@ namespace CustomKnight.NewUI
                 {
                     tex = SheetItem.Overlay(defaultOrb, tex, 50, 65);
                 }
-                DefaultSkin.Save(tex, skin.GetId(), orbIcon, true);
+                DefaultSkin.Save(tex, skin.GetId(), orbIcon, false);
                 return tex;
             }
 
