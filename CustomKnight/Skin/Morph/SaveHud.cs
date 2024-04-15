@@ -1,4 +1,7 @@
 ﻿using GlobalEnums;
+using System.IO;
+using System.Threading;
+using System.Xml.Linq;
 using static UnityEngine.UI.SaveSlotButton;
 
 namespace CustomKnight
@@ -19,7 +22,7 @@ namespace CustomKnight
         public static AreaBackground[] defaultAreaBackgrounds;
         private static GameObject DefeatedBackgroundGo;
         private static GameObject BrokenSteelOrbGo;
-
+        private static bool PendingGeneration = true;
         public static void ClearCache()
         {
             foreach (var zone in Enum.GetNames(typeof(GlobalEnums.MapZone)))
@@ -52,7 +55,7 @@ namespace CustomKnight
         private static void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
         {
             var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[GetSlotIndex(self.saveSlot)]);
-            if (!skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
+            if (skin != SkinManager.GetDefaultSkin() && !skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
             {
                 GenerateSaveHud(skin, skin.GetTexture(SkinManager.Skinables[Hud.NAME].ckTex.fileName), skin.GetTexture(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName));
             }
@@ -77,20 +80,43 @@ namespace CustomKnight
                 BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite = brokenSteelOrb.GetSpriteForSkin(skin) ?? BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite;
             }
             orig(self, saveStats);
-            if (skin.GetName() == "Default") // we dont ever want to generate area backgrounds for other skins (we will bundle for default too)
+            if (skin == SkinManager.GetDefaultSkin() && PendingGeneration) // we dont ever want to generate area backgrounds for other skins (we will bundle for default too)
             {
-                GenerateAreaBackgrounds(skin);
-                if (BrokenSteelOrbGo != null && !brokenSteelOrb.Exists(skin))
+                var overwrite = CustomKnight.GlobalSettings.GenerateDefaultSkin;
+                ExtractDefaultSaveHud(skin, overwrite);
+                GenerateAreaBackgrounds(skin, overwrite);
+                if (DefeatedBackgroundGo != null && (!defeatedBackground.Exists(skin) || overwrite))
                 {
-                    var tex = SpriteUtils.ExtractTextureFromSprite(BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite);
+                    var defaultSprite = DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite;
+                    var tex = GetFromAssemblyOrExtract(defaultSprite, defeatedBackground.path);
+                    defeatedBackground.texture = tex;
+                    defeatedBackground.Save(skin);
+                }
+                if (BrokenSteelOrbGo != null && (!brokenSteelOrb.Exists(skin) || CustomKnight.GlobalSettings.GenerateDefaultSkin))
+                {
+                    var defaultSprite = BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite;
+                    var tex = GetFromAssemblyOrExtract(defaultSprite, brokenSteelOrb.path);
                     brokenSteelOrb.texture = tex;
                     brokenSteelOrb.Save(skin);
                 }
+                PendingGeneration = false;
             }
             var currZone = !saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString();
             if (AreaBackgrounds.TryGetValue(currZone, out var mapzone))
             {
                 self.background.sprite = mapzone.Exists(skin) ? mapzone.GetSpriteForSkin(skin) : self.background.sprite;
+            }
+        }
+
+        private static void ExtractDefaultSaveHud(ISelectableSkin skin,bool overwrite = false)
+        {
+            var sheets = new List<SheetItem>() { geoIcon, ggSoulOrb, hardcoreSoulOrb, normalHealth, normalSoulOrb, soulOrbIcon, steelHealth, steelSoulOrb };
+            foreach(var sheet in sheets)
+            {
+                if(sheet.Exists(skin) && !overwrite) continue;
+                var tex = GetFromAssemblyOrExtract(null, sheet.path);
+                sheet.texture = tex;
+                sheet.Save(skin);
             }
         }
 
@@ -121,22 +147,33 @@ namespace CustomKnight
             defaultAreaBackgrounds = self.areaBackgrounds;
             return orig(self, mapZone);
         }
-        public static void GenerateAreaBackgrounds(ISelectableSkin skin)
+        
+        internal static Texture2D GetFromAssemblyOrExtract(Sprite sprite,string name)
+        {
+            Texture2D tex = AssemblyUtils.GetTextureFromResources($"{name.Replace('/', '.')}");
+            if (tex != null)
+            {
+                CustomKnight.Instance.Log($"Extracting {name} from Assembly Resource");
+            }
+            else if(sprite != null)
+            {
+                CustomKnight.Instance.Log($"Extracting {name} from Default Sprite");
+                tex = SpriteUtils.ExtractTextureFromSprite(sprite);
+            }
+            return tex;
+        }
+        
+        public static void GenerateAreaBackgrounds(ISelectableSkin skin, bool overwrite = false)
         {
             for (int i = 0; i < defaultAreaBackgrounds.Length; i++)
             {
                 var areaName = defaultAreaBackgrounds[i].areaName.ToString();
-                if (!AreaBackgrounds[areaName].Exists(skin))
+                if (!AreaBackgrounds[areaName].Exists(skin) || overwrite)
                 {
-                    var tex = SpriteUtils.ExtractTextureFromSprite(defaultAreaBackgrounds[i].backgroundImage);
+
+                    var tex = GetFromAssemblyOrExtract(defaultAreaBackgrounds[i].backgroundImage, AreaBackgrounds[areaName].path);
                     AreaBackgrounds[areaName].texture = tex;
                     AreaBackgrounds[areaName].Save(skin);
-                }
-                if (DefeatedBackgroundGo != null && !defeatedBackground.Exists(skin))
-                {
-                    var tex = SpriteUtils.ExtractTextureFromSprite(DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite);
-                    defeatedBackground.texture = tex;
-                    defeatedBackground.Save(skin);
                 }
             }
         }

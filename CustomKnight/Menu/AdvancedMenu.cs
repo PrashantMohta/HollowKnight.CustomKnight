@@ -80,6 +80,7 @@ namespace CustomKnight
         private static void RegenerateDefaultSkin()
         {
             CustomKnight.GlobalSettings.GenerateDefaultSkin = true;
+            CustomKnight.GlobalSettings.saveSkins = new GlobalModSettings().saveSkins;
             Back();
         }
 

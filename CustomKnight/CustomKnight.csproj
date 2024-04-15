@@ -88,6 +88,9 @@
       <HintPath>$(HollowKnightModsDirectory)\Satchel\Satchel.dll</HintPath>
     </Reference>
   </ItemGroup>
+    <ItemGroup>
+	    <EmbeddedResource Include="Res\**\*" />
+    </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
   	<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightModsDirectory)\Custom Knight" SkipUnchangedFiles="true" />
   </Target>

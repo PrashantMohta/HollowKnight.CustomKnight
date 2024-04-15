@@ -17,6 +17,12 @@ namespace CustomKnight
             T instance;
             try
             {
+                if(!File.Exists(filePath))
+                {
+                    CustomKnight.Instance.Log($"{filePath} not found!, creating defaults!");
+                    instance = new T();
+                    Save(filePath, instance);
+                }
                 instance = JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
             }
             catch (Exception ex)

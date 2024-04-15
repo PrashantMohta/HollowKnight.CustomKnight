@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Reflection;
+
 namespace CustomKnight
 {
 
@@ -95,7 +98,14 @@ namespace CustomKnight
             }
             else if (ckTex.defaultSprite != null)
             {
-                var tex = SpriteUtils.ExtractTextureFromSprite(ckTex.defaultSprite);
+                Texture2D tex = AssemblyUtils.GetTextureFromResources($"{name.Replace('/','.')}.png");
+                if (tex == null)
+                {
+                    tex = SpriteUtils.ExtractTextureFromSprite(ckTex.defaultSprite);
+                } else
+                {
+                    CustomKnight.Instance.Log($"Extracting {name} from Assembly Resource");
+                }
                 DefaultSkin.Save(tex, $"{name}.png");
             }
             else
