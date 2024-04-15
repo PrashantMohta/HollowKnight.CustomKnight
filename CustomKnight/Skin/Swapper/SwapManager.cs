@@ -168,7 +168,7 @@ namespace CustomKnight
                 if (tk2dSpriteQueue.Count > 0)
                 {
                     yield return null;
-                    Log("processing global tk2ds count : " + tk2dSpriteQueue.Count);
+                    LogFine("processing global tk2ds count : " + tk2dSpriteQueue.Count);
                     while (true)
                     {
                         if (tk2dSpriteQueue.Count <= 0) { break; }
@@ -184,7 +184,7 @@ namespace CustomKnight
         }
         private void loadTexture(GameObjectProxy gop)
         {
-            this.Log(gop.name + gop.getTexturePath() + gop.getAliasPath());
+            this.LogFine(gop.name + gop.getTexturePath() + gop.getAliasPath());
             string objectPath = gop.getTexturePath();
             string aliasPath = gop.getAliasPath();
             if (loadedTextures.TryGetValue(objectPath, out var tex))
@@ -264,7 +264,7 @@ namespace CustomKnight
                         if (!defaultSprites.TryGetValue(sr, out var s))
                         {
                             defaultSprites[sr] = sr.sprite;
-                            this.Log($"Saving default sprite for {objectPath} with sr {sr.GetInstanceID()}");
+                            this.LogFine($"Saving default sprite for {objectPath} with sr {sr.GetInstanceID()}");
                         }
                         var pivot = new Vector2(0.5f, 0.5f); // this needs offset sometimes
                         sr.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot, sr.sprite.pixelsPerUnit);
@@ -280,7 +280,7 @@ namespace CustomKnight
                 if (!defaultTextures.TryGetValue(mat, out var t))
                 {
                     defaultTextures[mat] = (Texture2D)mat.mainTexture;
-                    this.Log($"Saving default texture for {objectPath} with material {mat.GetInstanceID()}");
+                    this.LogFine($"Saving default texture for {objectPath} with material {mat.GetInstanceID()}");
                 }
                 _tk2dSprite.GetCurrentSpriteDef().material.mainTexture = tex;
             }
@@ -443,7 +443,7 @@ namespace CustomKnight
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
-                    Log(line);
+                    LogFine(line);
                     int index = line.IndexOf(SEPARATOR);
                     if (index > 0 && index < line.Length - 1)
                     {
@@ -455,7 +455,6 @@ namespace CustomKnight
                 }
             }
             List<string> hashPaths = new List<string>();
-            Dictionary<string, bool> filenames = new Dictionary<string, bool>();
             foreach (string path in Directory.GetDirectories(pathToLoad))
             {
                 string directoryName = new DirectoryInfo(path).Name;
@@ -469,8 +468,7 @@ namespace CustomKnight
                 {
                     string filename = Path.GetFileNameWithoutExtension(file);
                     string extension = Path.GetExtension(file);
-                    filenames[filename] = true;
-                    Log("filename:" + filename);
+                    LogFine("filename:" + filename);
                     if (extension == ".txt")
                     {
                         try
@@ -499,10 +497,9 @@ namespace CustomKnight
                         if (directoryName == "Global")
                         {
                             var hp = HashWithCache.GetPathsFromHash(objectName);
-                            Log(filename + "|" + objectName);
+                            LogFine(filename + "|" + objectName);
                             if (hp != null)
                             {
-                                Log(hp.Count.ToString());
                                 hashPaths.AddRange(hp);
                             }
                         }
@@ -511,7 +508,7 @@ namespace CustomKnight
                 foreach (string childDirectory in Directory.GetDirectories(path))
                 {
                     string childDirectoryName = new DirectoryInfo(childDirectory).Name;
-                    Log(childDirectoryName);
+                    LogFine(childDirectoryName);
                     GameObjectProxy GOP;
                     if (!objects.TryGetValue(childDirectoryName, out GOP))
                     {
@@ -537,9 +534,9 @@ namespace CustomKnight
                 foreach (var path in paths)
                 {
                     var hash = ObjectNameResolver.GetHashFromPath($"{scn}/{path}");
-                    if (filenames.ContainsKey(hash))
+                    if (File.Exists(Path.Combine(pathToLoad, $"{scn}/{hash}.png")))
                     {
-                        this.Log($"{scn} adding to gop tree" + path);
+                        this.Log($"Adding in {scn} : {path}");
                         AddPathToGopTree($"{scn}/{path}", false);
                     }
                 }
