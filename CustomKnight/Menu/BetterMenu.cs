@@ -31,7 +31,7 @@ namespace CustomKnight
         }
         internal static void ReloadSkins()
         {
-            CustomKnight.Instance.Log("Reapplying Skin");
+            CustomKnight.Instance.Log("Re-applying Skin");
             // clear texture cache
             TextureCache.clearAllTextureCache();
             // clear SaveHud cache & reset

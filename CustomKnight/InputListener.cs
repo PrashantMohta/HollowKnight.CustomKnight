@@ -22,12 +22,10 @@ namespace CustomKnight
                         UIController.ToggleSkinList();
                     }
                 }
-                else
+                
+                if (CustomKnight.GlobalSettings.Keybinds.ReloadSkins.WasPressed)
                 {
-                    if (CustomKnight.GlobalSettings.Keybinds.ReloadSkins.WasPressed)
-                    {
-                        BetterMenu.ReloadSkins();
-                    }
+                    BetterMenu.ReloadSkins();
                 }
 
                 yield return new WaitForEndOfFrame();
