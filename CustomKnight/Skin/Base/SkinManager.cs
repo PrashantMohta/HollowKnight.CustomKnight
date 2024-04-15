@@ -386,22 +386,27 @@ namespace CustomKnight
         public static void SetSkinById(string id)
         {
             var Skin = GetSkinById(id);
-            CustomKnight.GlobalSettings.AddRecentSkin(id);
-            CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId() + $" on save slot {GameManager.instance.profileID}");
-            if (CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; }
-            CurrentSkin = Skin;
-            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
+            CustomKnight.Instance.Log( $"Trying to apply skin {id} : on save slot {GameManager.instance.profileID}");
+            if (Skin == null)
+            {
+                CustomKnight.Instance.LogError($"Skin {id} does not exist");
+                return;
+            }
+            BetterMenu.SelectedSkin(id);
             // use this when saving so you save to the right settings
             if (GameManager.instance.IsNonGameplayScene())
             {
-                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
+                CustomKnight.GlobalSettings.DefaultSkin = id;
             }
             else
             {
-                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
-                CustomKnight.SaveSettings.DefaultSkin = CurrentSkin.GetId();
-                CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID - 1] = CurrentSkin.GetId();
+                CustomKnight.GlobalSettings.DefaultSkin = id;
+                CustomKnight.SaveSettings.DefaultSkin = id;
+                CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID - 1] = id;
             };
+            if (CurrentSkin?.GetId() == Skin.GetId()) { return; }
+            CurrentSkin = Skin;
+            CustomKnight.GlobalSettings.AddRecentSkin(id);
             RefreshSkin(false);
             OnSetSkin?.Invoke(CustomKnight.Instance, new EventArgs());
         }
