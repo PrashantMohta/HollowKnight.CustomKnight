@@ -82,6 +82,9 @@ namespace CustomKnight
         /// <param name="currSkin"></param>
         internal void SkinChangeSwap(ISelectableSkin currSkin)
         {
+
+            //clear all swap data for Names.json
+            ObjectNameResolver.Clear();
             resetAllTextures();
             resetAndLoadGlobalSwaps();
             if (currSkin.hasSwapper())
@@ -112,6 +115,8 @@ namespace CustomKnight
             {
                 CoroutineHelper.GetRunner().StopCoroutine(activationCoro);
             }
+            //clear all swap data for Names.json
+            ObjectNameResolver.Clear();
             resetAllTextures();
         }
 

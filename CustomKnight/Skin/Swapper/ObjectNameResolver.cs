@@ -34,7 +34,12 @@ namespace CustomKnight.Skin.Swapper
                 DumpNameDb(sceneName);
             }
         }
-        public static List<string> GetPathAsList(this GameObject go, bool useBaseName = false)
+
+        internal static void Clear() {
+            NameDb = new();
+            PathToHash = new();
+        }
+        internal static List<string> GetPathAsList(this GameObject go, bool useBaseName = false)
         {
             Transform rootGoT = go.transform;
             List<string> path = [rootGoT.gameObject.GetName(useBaseName)];
