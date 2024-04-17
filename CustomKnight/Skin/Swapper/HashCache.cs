@@ -82,6 +82,11 @@ namespace CustomKnight
         private static void loadCacheObjFromFile()
         {
             var path = Path.Combine(AssemblyUtils.getCurrentDirectory(), "hashcache.json");
+            if (!File.Exists(path))
+            {
+                var json = AssemblyUtils.GetBytesFromResources("hashcache.json");
+                File.WriteAllBytes(path, json);
+            }
             if (File.Exists(path))
             {
                 cache = JsonConvert.DeserializeObject<CacheObj>(File.ReadAllText(path), new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace });
@@ -91,6 +96,11 @@ namespace CustomKnight
         private static void loadCacheAliasesFromFile()
         {
             var path = Path.Combine(AssemblyUtils.getCurrentDirectory(), "aliases.json");
+            if (!File.Exists(path))
+            {
+                var json = AssemblyUtils.GetBytesFromResources("aliases.json");
+                File.WriteAllBytes(path, json);
+            }
             if (File.Exists(path))
             {
                 aliases = JsonConvert.DeserializeObject<AliasObj>(File.ReadAllText(path), new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace });
