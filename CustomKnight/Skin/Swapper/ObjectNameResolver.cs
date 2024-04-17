@@ -62,7 +62,10 @@ namespace CustomKnight.Skin.Swapper
             foreach (var kvp in newData)
             {
                 EnsureNameDb(sceneName, kvp.Key);
-                NameDb[sceneName][kvp.Key].AddRange(kvp.Value);
+                foreach (var goPath in kvp.Value)
+                {
+                    Add(sceneName, goPath, kvp.Key);
+                }
                 foreach (var kv in kvp.Value)
                 {
                     PathToHash[sceneName + "/" + kv] = kvp.Key;
