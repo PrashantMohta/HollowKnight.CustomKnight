@@ -227,6 +227,7 @@ namespace CustomKnight
         private void SwapSkinForGo(string objectPath, GameObject GO)
         {
             CustomKnight.Instance.LogDebug($"op {objectPath} {GO.name}");
+            var goPath = GO.GetPath(true);
             Texture2D tex;// = loadedTextures[objectPath];
             if (!loadedTextures.TryGetValue(objectPath, out tex))
             {
@@ -245,8 +246,14 @@ namespace CustomKnight
                 }
                 else
                 {
-                    if (anim != null || SpecialCases.childSpriteAnimatedByParent(objectPath))
+                    this.Log("Sprite based " + goPath);
+                    if (anim != null || SpecialCases.childSpriteAnimatedByParent(goPath))
                     {
+                        if (SpecialCases.childSpriteAnimatedByParent(goPath))
+                        {
+                            this.Log("Matched Special case " + goPath);
+                        }
+
                         //maybe animated things can be replaced with a single sprite
                         if (anim != null)
                         {
