@@ -99,6 +99,7 @@ namespace CustomKnight
             Animator anim = go.GetComponent<Animator>();
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
             tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
+            ParticleSystemRenderer particle = go.GetComponent<ParticleSystemRenderer>();
 
             var mat = sr != null ? sr.material : (tk2ds != null ? tk2ds.GetCurrentSpriteDef()?.material : null);
             int crc = 0;
@@ -117,7 +118,15 @@ namespace CustomKnight
             Log($"game object to be dumped - {go.name}");
             Log($"gameobject path {baseName}");
             isProcessed[go] = true;
-
+            if(particle != null && particle.material != null)
+            {
+                var tex = (Texture2D) particle.material.mainTexture;
+                var dupe = TextureUtils.duplicateTexture(tex);
+                var hash = dupe.getHash();
+                SaveTextureDump(scene, hash, dupe);
+                ObjectNameResolver.Add(scene.name, go.GetPath(), hash);
+                Log($"GO with particle renderer {hash}.png");
+            }
             if (sr != null && sr.sprite != null)
             {
                 // Case for Sprites

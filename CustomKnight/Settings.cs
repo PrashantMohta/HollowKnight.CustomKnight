@@ -26,6 +26,7 @@ namespace CustomKnight
         public bool EnablePauseMenu { get; set; } = true;
         public bool EnableSaveHuds { get; set; } = true;
 
+        public bool EnableParticleSwap { get; set; } = false;
         public bool GenerateDefaultSkin { get; set; } = true;
         public List<string> FavoriteSkins { get; set; } = new();
         public List<string> RecentSkins { get; set; } = new();
