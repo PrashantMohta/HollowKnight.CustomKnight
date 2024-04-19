@@ -96,6 +96,8 @@ namespace CustomKnight
                 return;
             }
             var baseName = go.GetPath(true);
+            var goPath = go.GetPath();
+
             Animator anim = go.GetComponent<Animator>();
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
             tk2dSprite tk2ds = go.GetComponent<tk2dSprite>();
@@ -118,19 +120,19 @@ namespace CustomKnight
             Log($"game object to be dumped - {go.name}");
             Log($"gameobject path {baseName}");
             isProcessed[go] = true;
-            if(particle != null && particle.material != null)
+            if(CustomKnight.GlobalSettings.EnableParticleSwap && particle != null && particle.material != null)
             {
                 var tex = (Texture2D) particle.material.mainTexture;
                 var dupe = TextureUtils.duplicateTexture(tex);
                 var hash = dupe.getHash();
                 SaveTextureDump(scene, hash, dupe);
-                ObjectNameResolver.Add(scene.name, go.GetPath(), hash);
+                ObjectNameResolver.Add(scene.name, goPath, hash);
                 Log($"GO with particle renderer {hash}.png");
             }
             if (sr != null && sr.sprite != null)
             {
                 // Case for Sprites
-                if (scene.name == "DontDestroyOnLoad")
+                if (scene.name == "DontDestroyOnLoad" && !SpecialCases.AllowedDontDestroyOnLoad(goPath))
                 {
                     return; // dont dump sprites from DontDestroyOnLoad
                 }
@@ -139,18 +141,18 @@ namespace CustomKnight
                     var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
                     var hash = tex.getHash();
                     MaterialProcessed[crc] = hash;
-                    ObjectNameResolver.Add(scene.name, go.GetPath(), hash);
+                    ObjectNameResolver.Add(scene.name, goPath, hash);
                     SaveTextureDump(scene, hash, tex);
                     GameObject.Destroy(tex);
-                    if (anim != null || SpecialCases.childSpriteAnimatedByParent(baseName))
+                    if (anim != null || SpecialCases.ChildSpriteAnimatedByParent(baseName))
                     {
-                        ObjectNameResolver.Add(scene.name, go.GetPath(), hash);
+                        ObjectNameResolver.Add(scene.name, goPath, hash);
                         SaveTextureDump(scene, hash, tex);
                     }
                 }
                 else
                 {   // old style dump will dump with directory structure
-                    if (anim != null || SpecialCases.childSpriteAnimatedByParent(baseName))
+                    if (anim != null || SpecialCases.ChildSpriteAnimatedByParent(baseName))
                     {
                         // remove the animation component
                         //GameObject.Destroy(anim);
@@ -185,8 +187,8 @@ namespace CustomKnight
                     var dupe = TextureUtils.duplicateTexture(tex);
                     var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
                     MaterialProcessed[crc] = hash;
-                    ObjectNameResolver.Add(scene.name, go.GetPath(), hash);
-                    if (scene.name != "DontDestroyOnLoad")
+                    ObjectNameResolver.Add(scene.name, goPath, hash);
+                    if (scene.name != "DontDestroyOnLoad" || SpecialCases.AllowedDontDestroyOnLoad(goPath))
                     {
                         SaveTextureDump(scene, hash, dupe);
                     }
@@ -204,7 +206,7 @@ namespace CustomKnight
                         SaveTextureByPath("Global", hash, dupe);
                         GameObject.Destroy(dupe);
                     }
-                    if (scene.name != "DontDestroyOnLoad")
+                    if (scene.name != "DontDestroyOnLoad" || SpecialCases.AllowedDontDestroyOnLoad(goPath))
                     {
                         SaveTextureDump(scene, baseName, tex);
                     }

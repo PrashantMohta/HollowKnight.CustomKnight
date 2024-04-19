@@ -261,9 +261,9 @@ namespace CustomKnight
                 else
                 {
                     this.Log("Sprite based " + goPath);
-                    if (anim != null || SpecialCases.childSpriteAnimatedByParent(goPath))
+                    if (anim != null || SpecialCases.ChildSpriteAnimatedByParent(goPath))
                     {
-                        if (SpecialCases.childSpriteAnimatedByParent(goPath))
+                        if (SpecialCases.ChildSpriteAnimatedByParent(goPath))
                         {
                             this.Log("Matched Special case " + goPath);
                         }
