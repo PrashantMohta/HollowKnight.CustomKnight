@@ -7,7 +7,7 @@ namespace CustomKnight
         {
             if ((path.Contains("boss control") && path.Contains("shade_lord")) || (path.Contains("Boss Control") && path.Contains("Shade_Lord")))
             {
-                CustomKnight.Instance.Log("Matched Special case : " + path);
+                CustomKnight.Instance.Log("Matched Special case shade_lord : " + path);
                 return true;
             }
             return false;
@@ -19,7 +19,7 @@ namespace CustomKnight
             {
                 return false;
             }
-            return goPath.Contains("_GameManager") || goPath.Contains("_GameCameras") || goPath.Contains("CameraParent"); // || goPath.Contains("_UIManager")
+            return goPath.Contains("_GameManager") || (goPath.Contains("_GameCameras") && !goPath.Contains("Inventory")) || goPath.Contains("CameraParent"); // || goPath.Contains("_UIManager")
         }
     }
 }
