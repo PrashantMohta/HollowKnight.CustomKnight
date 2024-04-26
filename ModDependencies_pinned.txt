@@ -1,1 +1,1 @@
-Satchel from https://github.com/PrashantMohta/Satchel/releases/download/v0.8.12/Satchel.zip
+Satchel from https://github.com/PrashantMohta/Satchel/releases/download/v0.9.1/Satchel.zip

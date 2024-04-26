@@ -4,13 +4,13 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  push:
+  pull_request:
     branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  #build latest version as on scarab
-  buildModlinks:
+  #build the version that is pinned
+  buildPinned:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -23,7 +23,7 @@ jobs:
         uses: BadMagic100/setup-hk@v1
         with:
           apiPath: HKManaged
-          dependencyFilePath: ModDependencies.txt
+          dependencyFilePath: ModDependencies_pinned.txt
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
       - name: Setup ms-build
@@ -35,5 +35,5 @@ jobs:
       - name: Upload Mod
         uses: actions/upload-artifact@v2
         with:
-          name: CustomKnightModlinks
+          name: CustomKnightPinned
           path: ./CustomKnight/bin/Release
