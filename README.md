@@ -2,7 +2,7 @@
 
 Custom Knight is a Hollow Knight mod to load custom texture sheets for the player, enemies and areas. 
 
-[Installation guide]([https://prashantmohta.github.io/HollowKnight.CustomKnight/installing.html](https://prashantmohta.github.io/HollowKnight.CustomKnight/user/installing/)) 
+[Installation guide](https://prashantmohta.github.io/HollowKnight.CustomKnight/installing.html](https://prashantmohta.github.io/HollowKnight.CustomKnight/user/installing/) 
 
 ## Features
 
