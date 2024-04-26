@@ -1,26 +1,31 @@
 ﻿namespace CustomKnight
 {
-    internal class SpriteLoader {
+    internal class SpriteLoader
+    {
         private static bool texRoutineRunning;
         private static Coroutine setTexRoutine;
         internal static bool LoadComplete { get; private set; }
-        internal static void PullDefaultTextures() {
-            if (!SkinManager.savedDefaultTextures) {                
-                foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
+        internal static void PullDefaultTextures()
+        {
+            if (!SkinManager.savedDefaultTextures)
+            {
+                foreach (KeyValuePair<string, Skinable> kvp in SkinManager.Skinables)
+                {
                     kvp.Value?.SaveTexture();
                 }
             }
             SkinManager.savedDefaultTextures = true;
         }
         internal static void UnloadAll()
-        {    
+        {
             if (HeroController.instance != null)
             {
-                foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
+                foreach (KeyValuePair<string, Skinable> kvp in SkinManager.Skinables)
+                {
                     kvp.Value.Reset();
                 }
             }
-            
+
             if (texRoutineRunning && GameManager.instance != null)
             {
                 CoroutineHelper.GetRunner().StopCoroutine(setTexRoutine);
@@ -41,7 +46,7 @@
                 texRoutineRunning = true;
             }
         }
-        
+
         internal static IEnumerator Start()
         {
             CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
@@ -64,7 +69,8 @@
             LoadComplete = false;
         }
 
-        internal static void SetSkin(Dictionary<string, Skinable> SkinableMap){
+        internal static void SetSkin(Dictionary<string, Skinable> SkinableMap)
+        {
             SkinManager.Skinables = SkinableMap;
             ModifyHeroTextures();
         }
@@ -75,14 +81,16 @@
             {
                 SkinManager.CurrentSkin = SkinManager.GetDefaultSkin();
             }
-            if(SkinManager.CurrentSkin.shouldCache()){
+            if (SkinManager.CurrentSkin.shouldCache())
+            {
                 TextureCache.recentSkins.Add(SkinManager.CurrentSkin.GetId());
             }
-            foreach (KeyValuePair<string,Skinable> kvp in SkinManager.Skinables)
+            foreach (KeyValuePair<string, Skinable> kvp in SkinManager.Skinables)
             {
-                kvp.Value.prepare();
+                kvp.Value.Prepare();
                 CustomKnightTexture texture = kvp.Value.ckTex;
-                if(TextureCache.skinTextureCache.TryGetValue(SkinManager.CurrentSkin.GetId(),out var skinCache) && skinCache.TryGetValue(texture.fileName,out var cachedTex)){
+                if (TextureCache.skinTextureCache.TryGetValue(SkinManager.CurrentSkin.GetId(), out var skinCache) && skinCache.TryGetValue(texture.fileName, out var cachedTex))
+                {
                     texture.tex = cachedTex.tex;
                     texture.missing = cachedTex.missing;
                     continue;
@@ -91,21 +99,28 @@
                 if (!texture.missing)
                 {
                     texture.tex = SkinManager.CurrentSkin.GetTexture(texture.fileName);
-                    if(SkinManager.CurrentSkin.shouldCache()){
-                        TextureCache.setSkinTextureCache(SkinManager.CurrentSkin.GetId(),texture.fileName,new CustomKnightTexture(texture.fileName,texture.missing,texture.defaultTex,texture.tex));
+                    if (SkinManager.CurrentSkin.shouldCache())
+                    {
+                        TextureCache.setSkinTextureCache(SkinManager.CurrentSkin.GetId(), texture.fileName, new CustomKnightTexture(texture.fileName, texture.missing, texture.defaultTex, texture.tex));
                     }
-                } else {
+                }
+                else
+                {
                     texture.tex = null;
-                }    
+                }
             }
             TextureCache.trimTextureCache();
+            if (!SkinManager.Skinables[Hud.NAME].ckTex.missing && !SkinManager.Skinables[OrbFull.NAME].ckTex.missing)
+            {
+                SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture, SkinManager.Skinables[OrbFull.NAME].ckTex.currentTexture);
+            }
             SetSkin(SkinManager.Skinables);
             LoadComplete = true;
         }
 
         private static IEnumerator SetHeroTex()
         {
-            yield return new WaitWhile(() => !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
+            yield return new WaitWhile(() => DefaultSkin.isGeneratingDefaultSkin || !LoadComplete || HeroController.instance == null || CharmIconList.Instance == null);
             /*foreach(var psr in GameObject.FindObjectsOfType<ParticleSystemRenderer>())
             {
                 psr.gameObject.LogWithChildren();
@@ -113,12 +128,13 @@
             }*/
             PullDefaultTextures();
             CustomKnight.swapManager.SkinChangeSwap(SkinManager.CurrentSkin);
-            foreach(KeyValuePair<string,Skinable> kvp in SkinManager.Skinables){
+            foreach (KeyValuePair<string, Skinable> kvp in SkinManager.Skinables)
+            {
                 kvp.Value.Apply();
             }
             texRoutineRunning = false;
         }
-       
+
 
 
     }

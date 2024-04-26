@@ -2,7 +2,7 @@
 
 namespace CustomKnight.Canvas
 {
-    public class CanvasText
+    internal class CanvasText
     {
         private GameObject textObj;
         private Vector2 size;

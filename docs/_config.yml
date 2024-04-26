@@ -1,0 +1,37 @@
+title: CustomKnight
+description: A Hollow Knight mod to load custom texture sheets
+repository: PrashantMohta/HollowKnight.CustomKnight
+
+permalink: pretty
+
+markdown: GFM
+remote_theme: just-the-docs/just-the-docs
+aux_links:
+  "Github Repo":
+    - "https://github.com/PrashantMohta/HollowKnight.CustomKnight"
+  "Join Modding Discord":
+    - "https://discord.gg/RppAb2vNqz"
+aux_links_new_tab: true
+
+nav_external_links:
+  - title: Install on Lumafly
+    url: https://themulhima.github.io/Lumafly/commands/download/?mods=Custom%20Knight
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+last_edit_timestamp: true 
+last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https://ruby-doc.org/stdlib-2.7.0/libdoc/time/rdoc/Time.html
+
+
+
+gh_edit_link: true 
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/PrashantMohta/HollowKnight.CustomKnight" # the github URL for your repo
+gh_edit_branch: "master" # the branch that your docs is served from
+gh_edit_source: docs # the source that your files originate from
+gh_edit_view_mode: "edit" # "tree" or "edit" if you want the user to jump into the editor immediately
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-github-metadata

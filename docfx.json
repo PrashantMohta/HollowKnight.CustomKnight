@@ -1,0 +1,45 @@
+{
+    "metadata": [
+      {
+        "src": [
+          {
+            "src": "./CustomKnight",
+            "files": [
+              "**/*.csproj"
+            ]
+          }
+        ],
+        "dest": "./api_reference"
+      }
+    ],
+    "build": {
+      "content": [
+        {
+          "files": [
+            "**/*.{yml}"
+          ],
+          "exclude": [
+            "docs/**"
+          ]
+        }
+      ],
+      "resource": [
+        {
+          "files": [
+            "images/**"
+          ]
+        }
+      ],
+      "output": "./docs",
+      "template": [
+        "default",
+        "modern"
+      ],
+      "globalMetadata": {
+        "_appName": "Custom Knight",
+        "_appTitle": "Custom Knight",
+        "_enableSearch": true,
+        "pdf": false
+      }
+    }
+  }

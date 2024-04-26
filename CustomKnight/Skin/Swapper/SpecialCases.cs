@@ -1,13 +1,25 @@
 
 namespace CustomKnight
 {
-    internal class SpecialCases{
-        internal static bool childSpriteAnimatedByParent(string path){
-            if(path.Contains("boss control") && path.Contains("shade_lord")){
-                CustomKnight.Instance.Log("Matched Special case : "+path);
+    internal class SpecialCases
+    {
+        internal static bool ChildSpriteAnimatedByParent(string path)
+        {
+            if ((path.Contains("boss control") && path.Contains("shade_lord")) || (path.Contains("Boss Control") && path.Contains("Shade_Lord")))
+            {
+                CustomKnight.Instance.Log("Matched Special case shade_lord : " + path);
                 return true;
             }
             return false;
+        }
+
+        internal static bool AllowedDontDestroyOnLoad(string goPath)
+        {
+            if (!CustomKnight.GlobalSettings.EnableParticleSwap)
+            {
+                return false;
+            }
+            return goPath.Contains("_GameManager") || (goPath.Contains("_GameCameras") && !goPath.Contains("Inventory")) || goPath.Contains("CameraParent"); // || goPath.Contains("_UIManager")
         }
     }
 }

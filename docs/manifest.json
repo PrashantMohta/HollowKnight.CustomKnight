@@ -1,0 +1,312 @@
+{
+  "source_base_path": "E:/User files/serverknights/HollowKnight.CustomKnight",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Cinematic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Cinematic.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.CustomKnight.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.CustomKnight.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.CustomKnightTexture.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.CustomKnightTexture.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.DumpEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.DumpEvent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.DumpManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.DumpManager.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.GameObjectProxy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.GameObjectProxy.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.GlobalModSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.GlobalModSettings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.GlobalSwapMarker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.GlobalSwapMarker.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.ISelectableSkin.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.ISelectableSkin.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.ISupportsConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.ISupportsConfig.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.ISupportsOverrides.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.ISupportsOverrides.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.KeyBinds.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.KeyBinds.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SaveModSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SaveModSettings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SkinConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SkinConfig.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SkinManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SkinManager.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SkinSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SkinSettings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_Hook.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_Hook.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_Multiple.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_Multiple.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_Single.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_Single.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_Sprite.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_Sprite.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_Tk2d.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_Tk2d.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_Tk2ds.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_Tk2ds.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.Skinable_noCache.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.Skinable_noCache.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SpriteRendererMaterialPropertyBlock.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SpriteRendererMaterialPropertyBlock.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SwapEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SwapEvent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.SwapManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.SwapManager.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api_reference/CustomKnight.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/CustomKnight.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api_reference/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api_reference/toc.html"
+        },
+        ".json": {
+          "relative_path": "api_reference/toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

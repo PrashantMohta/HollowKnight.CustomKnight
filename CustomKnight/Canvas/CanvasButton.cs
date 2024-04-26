@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace CustomKnight.Canvas
 {
-    public class CanvasButton
+    internal class CanvasButton
     {
         private GameObject buttonObj;
         private GameObject textObj;

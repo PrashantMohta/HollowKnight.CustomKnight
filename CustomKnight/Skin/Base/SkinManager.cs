@@ -3,16 +3,25 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight
 {
-
-    public static class SkinManager{
+    /// <summary>
+    /// Allows Managing the Skins
+    /// </summary>
+    public static class SkinManager
+    {
         internal static bool savedDefaultTextures = false;
-        public static string DATA_DIR {get; internal set;}
+        /// <summary>
+        /// Name of the Data directory
+        /// </summary>
+        public static string DATA_DIR { get; internal set; }
         internal static string SKINS_FOLDER;
-        internal static ISelectableSkin CurrentSkin,DefaultSkin;
-        internal static List<ISelectableSkin> ProvidedSkins = new List<ISelectableSkin>();
-        internal static List<ISelectableSkin> SkinsList {get; private set;}
-        
-        public static Dictionary<string, Skinable> Skinables = new Dictionary<string, Skinable>{
+        internal static ISelectableSkin CurrentSkin, DefaultSkin;
+        internal static List<ISelectableSkin> ProvidedSkins = new();
+        internal static List<ISelectableSkin> SkinsList { get; private set; }
+        /// <summary>
+        /// Dictionary that holds all Skinable items
+        /// </summary>
+        public static Dictionary<string, Skinable> Skinables = new()
+        {
             {Knight.NAME,new Knight()},
             {Sprint.NAME,new Sprint()},
             {Unn.NAME,new Unn()},
@@ -27,7 +36,7 @@ namespace CustomKnight
             {Hud.NAME,new Hud()},
             {OrbFull.NAME,new OrbFull()},
             {Liquid.NAME,new Liquid()},
-            
+
             {QOrbs.NAME,new QOrbs()},
             {QOrbs2.NAME,new QOrbs2()},
             {ScrOrbs.NAME,new ScrOrbs()},
@@ -174,82 +183,98 @@ namespace CustomKnight
             {"MapQuill",new MAQ("Inventory/MapQuill") },
             {RelicBG.Name,new RelicBG() },
             {SpellBG.Name,new SpellBG() },
+            {DeathNail.NAME,new DeathNail() },
+            {DeathAsh.NAME,new DeathAsh() },
+            {BrummWave.NAME,new BrummWave() },
+            {BrummShield.NAME,new BrummShield() },
+            {FlowerBreak.NAME,new FlowerBreak() },
+            {Salubra.NAME,new Salubra() },
            // {"PinsScarab", new Pins()}
         };
+        /// <summary>
+        /// Event raised when a skin is set
+        /// </summary>
+        public static event EventHandler<EventArgs> OnSetSkin;
 
-        public static GameObject _inv;
-        public static GameObject inv
+        private static GameObject _inv;
+        internal static GameObject inv
         {
             get
             {
-                if(_inv == null)
+                if (_inv == null)
                 {
                     _inv = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Inventory").FindGameObjectInChildren("Inv");
                 }
                 return _inv;
             }
         }
-        public static GameObject _equipment;
-        public static GameObject equipment
+        private static GameObject _equipment;
+        internal static GameObject equipment
         {
             get
             {
-                if(_equipment == null)
+                if (_equipment == null)
                 {
                     _equipment = inv.FindGameObjectInChildren("Equipment");
                 }
                 return _equipment;
             }
         }
-        public static GameObject _invitem;
-        public static GameObject invitem
+        private static GameObject _invitem;
+        internal static GameObject invitem
         {
             get
             {
-                if(_invitem == null)
+                if (_invitem == null)
                 {
-                    _invitem = inv.FindGameObjectInChildren("Inv_Items"); 
+                    _invitem = inv.FindGameObjectInChildren("Inv_Items");
                 }
                 return _invitem;
             }
         }
 
-        static SkinManager(){
-            if(CustomKnight.isSatchelInstalled()){
+        static SkinManager()
+        {
+            if (CustomKnight.isSatchelInstalled())
+            {
                 SetDataDir();
             }
-        }    
-
-        internal static void SetDataDir(){
-            DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
-            SKINS_FOLDER = Path.Combine(DATA_DIR,"Skins");
         }
 
-        internal static string MaxLength(string skinName,int length){ 
-            return skinName.Length <= length ? skinName : skinName.Substring(0,length - 3) + "...";
+        internal static void SetDataDir()
+        {
+            DATA_DIR = Satchel.AssemblyUtils.getCurrentDirectory();
+            SKINS_FOLDER = Path.Combine(DATA_DIR, "Skins");
+        }
+
+        internal static string MaxLength(string skinName, int length)
+        {
+            return skinName.Length <= length ? skinName : skinName.Substring(0, length - 3) + "...";
         }
         internal static void getSkinNames()
         {
             var dirs = Directory.GetDirectories(SKINS_FOLDER);
             SkinsList = new List<ISelectableSkin>();
 
-            for (int i = 0 ; i< dirs.Length ; i++)
+            for (int i = 0; i < dirs.Length; i++)
             {
                 string directoryName = new DirectoryInfo(dirs[i]).Name;
                 SkinsList.Add(new StaticSkin(directoryName));
             }
-            for (int i = 0 ; i< ProvidedSkins.Count ; i++)
+            for (int i = 0; i < ProvidedSkins.Count; i++)
             {
                 SkinsList.Add(ProvidedSkins[i]);
             }
         }
 
-        internal static void checkDirectoryStructure(){
+        internal static void checkDirectoryStructure()
+        {
             EnsureDirectory(DATA_DIR);
             EnsureDirectory(SKINS_FOLDER);
             EnsureDirectory(Path.Combine(SKINS_FOLDER, "Default"));
         }
-        internal static void LoadSkin(){
+        internal static void LoadSkin()
+        {
             if (CurrentSkin == null)
             {
                 var CurrentSkinName = CustomKnight.SaveSettings.DefaultSkin != CustomKnight.GlobalSettings.DefaultSkin ? CustomKnight.SaveSettings.DefaultSkin : CustomKnight.GlobalSettings.DefaultSkin;
@@ -261,73 +286,77 @@ namespace CustomKnight
             ModHooks.AfterSavegameLoadHook += SpriteLoader.ModifyHeroTextures;
         }
 
-        internal static void Unload(){
+        internal static void Unload()
+        {
             //load default skin for charms and such
             CurrentSkin = GetDefaultSkin();
             LoadSkin();
             On.GeoControl.Start -= ((Geo)Skinables[Geo.NAME]).GeoControl_Start;
-            CustomKnight.dumpManager.Unload();
-            CustomKnight.swapManager.Unload();
+            CustomKnight.dumpManager.Unhook();
+            CustomKnight.swapManager.Unhook();
         }
         private static IEnumerator ChangeSkinRoutine(bool skipFlash)
         {
-            if(!skipFlash && HeroController.instance != null){
+            if (!skipFlash && HeroController.instance != null)
+            {
                 HeroController.instance.GetComponent<SpriteFlash>().flashFocusHeal();
             }
             LoadSkin();
             yield return new WaitUntil(() => SpriteLoader.LoadComplete);
         }
- 
+
         /// <summary>
         ///     Add a skin to the skin list provided by an external mod.
         /// </summary>
         /// <param name="NewSkin">an <c>ISelectableSkin</c> that represents the skin</param>
         /// <returns>true if the skin is added</returns>
-        public static bool AddSkin(ISelectableSkin NewSkin){
+        public static bool AddSkin(ISelectableSkin NewSkin)
+        {
             var Exists = SkinManager.ProvidedSkins.Exists(skin => skin.GetId() == NewSkin.GetId());
-            if(!Exists){
+            if (!Exists)
+            {
                 SkinManager.ProvidedSkins.Add(NewSkin);
                 BetterMenu.UpdateSkinList();
             }
             return !Exists;
         }
-        
+
         /// <summary>
         ///     Gets a skin from the overall skin list that matches a given id.
         /// </summary>
         /// <param name="id">a <c>string</c> that uniquely identifies the skin</param>
         /// <returns>an <c>ISelectableSkin</c> that represents the skin or the default skin</returns>
-        public static ISelectableSkin GetSkinById(string id){
-            return SkinManager.SkinsList.Find( skin => skin.GetId() == id) ?? GetDefaultSkin();
+        public static ISelectableSkin GetSkinById(string id)
+        {
+            return SkinManager.SkinsList.Find(skin => skin.GetId() == id) ?? GetDefaultSkin();
         }
-        
+
         /// <summary>
         ///     Gets the default skin.
         /// </summary>
         /// <returns>an <c>ISelectableSkin</c> that represents the default skin</returns>
-        public static ISelectableSkin GetDefaultSkin(){
-            if(DefaultSkin == null){
-                DefaultSkin = GetSkinById("Default");
-            }
+        public static ISelectableSkin GetDefaultSkin()
+        {
+            DefaultSkin ??= GetSkinById("Default");
             return DefaultSkin;
         }
-        
+
         /// <summary>
         ///     Gets the current skin.
         /// </summary>
         /// <returns>an <c>ISelectableSkin</c> that represents the current skin</returns>
-        public static ISelectableSkin GetCurrentSkin(){
-            if(CurrentSkin == null){
-                CurrentSkin = GetSkinById("Default");
-            }
+        public static ISelectableSkin GetCurrentSkin()
+        {
+            CurrentSkin ??= GetSkinById("Default");
             return CurrentSkin;
         }
-        
+
         /// <summary>
         ///     Gets all the installed skins (includes mod provided skins).
         /// </summary>
         /// <returns>an <c>ISelectableSkin[]</c> that represents all the installed skins</returns>
-        public static ISelectableSkin[] GetInstalledSkins(){
+        public static ISelectableSkin[] GetInstalledSkins()
+        {
             return SkinsList.ToArray();
         }
 
@@ -335,10 +364,20 @@ namespace CustomKnight
         ///     Refreshes the current skin, useful when the provided skin needs to change.
         /// </summary>
         /// <param name="skipFlash">a <c>bool</c> that determines if the knight should flash white</param>
-        public static void RefreshSkin(bool skipFlash){
+        public static void RefreshSkin(bool skipFlash)
+        {
             CoroutineHelper.GetRunner().StartCoroutine(ChangeSkinRoutine(skipFlash));
         }
-        public static event EventHandler<EventArgs> OnSetSkin;
+
+        internal static void SetDefaultSkin()
+        {
+            var Skin = GetDefaultSkin();
+            CustomKnight.Instance.Log($"Trying to reset skin on save slot {GameManager.instance.profileID}");
+            if (CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; }
+            CurrentSkin = Skin;
+            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
+            RefreshSkin(false);
+        }
 
         /// <summary>
         ///     Change the current skin, to the one whose id is provided.
@@ -347,22 +386,32 @@ namespace CustomKnight
         public static void SetSkinById(string id)
         {
             var Skin = GetSkinById(id);
-            CustomKnight.Instance.Log("Trying to apply skin :" + Skin.GetId());
-            if(CurrentSkin != null && CurrentSkin.GetId() == Skin.GetId()) { return; } 
-            CurrentSkin = Skin;
-            BetterMenu.SelectedSkin(SkinManager.CurrentSkin.GetId());
+            CustomKnight.Instance.Log($"Trying to apply skin {id} : on save slot {GameManager.instance.profileID}");
+            if (Skin == null)
+            {
+                CustomKnight.Instance.LogError($"Skin {id} does not exist");
+                return;
+            }
+            BetterMenu.SelectedSkin(id);
             // use this when saving so you save to the right settings
-            if(GameManager.instance.IsNonGameplayScene()){
-                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
-            } else {
-                CustomKnight.GlobalSettings.DefaultSkin = CurrentSkin.GetId();
-                CustomKnight.SaveSettings.DefaultSkin = CurrentSkin.GetId();
+            if (GameManager.instance.IsNonGameplayScene())
+            {
+                CustomKnight.GlobalSettings.DefaultSkin = id;
+            }
+            else
+            {
+                CustomKnight.GlobalSettings.DefaultSkin = id;
+                CustomKnight.SaveSettings.DefaultSkin = id;
+                CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID - 1] = id;
             };
+            if (CurrentSkin?.GetId() == Skin.GetId()) { return; }
+            CurrentSkin = Skin;
+            CustomKnight.GlobalSettings.AddRecentSkin(id);
             RefreshSkin(false);
-            OnSetSkin?.Invoke(CustomKnight.Instance,new EventArgs());
-        }      
+            OnSetSkin?.Invoke(CustomKnight.Instance, new EventArgs());
+        }
 
-   
+
     }
 
 }

@@ -335,3 +335,5 @@ CustomKnight/Vanilla
 .DS_Store
 CustomKnight/Assets
 CustomKnight/LocalBuildProperties.props
+CustomKnight/Cinematic
+api_reference/*

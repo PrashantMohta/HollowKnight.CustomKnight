@@ -1,0 +1,923 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class CustomKnight | Custom Knight </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class CustomKnight | Custom Knight ">
+      
+      <meta name="description" content="Main Mod Class">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/PrashantMohta/HollowKnight.CustomKnight/new/ck3.0/apiSpec/new?filename=CustomKnight_CustomKnight.md&amp;value=---%0Auid%3A%20CustomKnight.CustomKnight%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Custom Knight">
+            Custom Knight
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="CustomKnight.CustomKnight">
+
+
+
+  <h1 id="CustomKnight_CustomKnight" data-uid="CustomKnight.CustomKnight" class="text-break">
+Class CustomKnight  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L9"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="CustomKnight.html">CustomKnight</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>CustomKnight.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Main Mod Class</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class CustomKnight : Mod, IGlobalSettings&lt;GlobalModSettings&gt;, ILocalSettings&lt;SaveModSettings&gt;, ICustomMenuMod, ITogglableMod, IMod, ILogger</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Loggable</span></div>
+      <div><span class="xref">Mod</span></div>
+      <div><span class="xref">CustomKnight</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><span class="xref">IGlobalSettings</span>&lt;<a class="xref" href="CustomKnight.GlobalModSettings.html">GlobalModSettings</a>&gt;</div>
+      <div><span class="xref">ILocalSettings</span>&lt;<a class="xref" href="CustomKnight.SaveModSettings.html">SaveModSettings</a>&gt;</div>
+      <div><span class="xref">ICustomMenuMod</span></div>
+      <div><span class="xref">ITogglableMod</span></div>
+      <div><span class="xref">IMod</span></div>
+      <div><span class="xref">ILogger</span></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <span class="xref">Mod.Name</span>
+    </div>
+    <div>
+      <span class="xref">Mod.PreloadSceneHooks()</span>
+    </div>
+    <div>
+      <span class="xref">Mod.LoadPriority()</span>
+    </div>
+    <div>
+      <span class="xref">Mod.Initialize()</span>
+    </div>
+    <div>
+      <span class="xref">Mod.GetMenuButtonText()</span>
+    </div>
+    <div>
+      <span class="xref">Mod.SaveGlobalSettings()</span>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">Loggable.LogFine(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Loggable.LogFine(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">Loggable.LogDebug(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Loggable.LogDebug(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">Loggable.Log(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Loggable.Log(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">Loggable.LogWarn(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Loggable.LogWarn(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">Loggable.LogError(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Loggable.LogError(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="CustomKnight_CustomKnight__ctor_" data-uid="CustomKnight.CustomKnight.#ctor*"></a>
+
+  <h3 id="CustomKnight_CustomKnight__ctor" data-uid="CustomKnight.CustomKnight.#ctor">
+  CustomKnight()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>ctor</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CustomKnight()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="CustomKnight_CustomKnight_GameObjects" data-uid="CustomKnight.CustomKnight.GameObjects">
+  GameObjects
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stores Preloaded gameobjects</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly Dictionary&lt;string, GameObject&gt; GameObjects</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <span class="xref">GameObject</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="CustomKnight_CustomKnight_GlobalSettings_" data-uid="CustomKnight.CustomKnight.GlobalSettings*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_GlobalSettings" data-uid="CustomKnight.CustomKnight.GlobalSettings">
+  GlobalSettings
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>GlobalSettings</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static GlobalModSettings GlobalSettings { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.GlobalModSettings.html">GlobalModSettings</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_Instance_" data-uid="CustomKnight.CustomKnight.Instance*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_Instance" data-uid="CustomKnight.CustomKnight.Instance">
+  Instance
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Current Mod instance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CustomKnight Instance { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.CustomKnight.html">CustomKnight</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_SaveSettings_" data-uid="CustomKnight.CustomKnight.SaveSettings*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_SaveSettings" data-uid="CustomKnight.CustomKnight.SaveSettings">
+  SaveSettings
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Settings for current save</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SaveModSettings SaveSettings { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.SaveModSettings.html">SaveModSettings</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_ToggleButtonInsideMenu_" data-uid="CustomKnight.CustomKnight.ToggleButtonInsideMenu*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_ToggleButtonInsideMenu" data-uid="CustomKnight.CustomKnight.ToggleButtonInsideMenu">
+  ToggleButtonInsideMenu
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>ToggleButtonInsideMenu</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ToggleButtonInsideMenu { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_dumpManager_" data-uid="CustomKnight.CustomKnight.dumpManager*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_dumpManager" data-uid="CustomKnight.CustomKnight.dumpManager">
+  dumpManager
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Current DumpManager instance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static DumpManager dumpManager { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.DumpManager.html">DumpManager</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_swapManager_" data-uid="CustomKnight.CustomKnight.swapManager*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_swapManager" data-uid="CustomKnight.CustomKnight.swapManager">
+  swapManager
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Current SwapManager instance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SwapManager swapManager { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.SwapManager.html">SwapManager</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="CustomKnight_CustomKnight_GetMenuScreen_" data-uid="CustomKnight.CustomKnight.GetMenuScreen*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_GetMenuScreen_MenuScreen_System_Nullable_Modding_ModToggleDelegates__" data-uid="CustomKnight.CustomKnight.GetMenuScreen(MenuScreen,System.Nullable{Modding.ModToggleDelegates})">
+  GetMenuScreen(MenuScreen, ModToggleDelegates?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L261"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>GetMenuScreen</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modListMenu</code> <span class="xref">MenuScreen</span></dt>
+    <dd></dd>
+    <dt><code>toggle</code> <span class="xref">ModToggleDelegates</span>?</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">MenuScreen</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_GetName_" data-uid="CustomKnight.CustomKnight.GetName*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_GetName" data-uid="CustomKnight.CustomKnight.GetName">
+  GetName()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L79"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>GetName</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetName()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_GetPreloadNames_" data-uid="CustomKnight.CustomKnight.GetPreloadNames*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_GetPreloadNames" data-uid="CustomKnight.CustomKnight.GetPreloadNames">
+  GetPreloadNames()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L151"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>GetPreloadNames</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override List&lt;(string, string)&gt; GetPreloadNames()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;(<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>)&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_GetVersion_" data-uid="CustomKnight.CustomKnight.GetVersion*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_GetVersion" data-uid="CustomKnight.CustomKnight.GetVersion">
+  GetVersion()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>GetVersion</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string GetVersion()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_Initialize_" data-uid="CustomKnight.CustomKnight.Initialize*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_Initialize_System_Collections_Generic_Dictionary_System_String_System_Collections_Generic_Dictionary_System_String_UnityEngine_GameObject___" data-uid="CustomKnight.CustomKnight.Initialize(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,UnityEngine.GameObject}})">
+  Initialize(Dictionary&lt;string, Dictionary&lt;string, GameObject&gt;&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L188"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initialize</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Initialize(Dictionary&lt;string, Dictionary&lt;string, GameObject&gt;&gt; preloadedObjects)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>preloadedObjects</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <span class="xref">GameObject</span>&gt;&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_OnLoadGlobal_" data-uid="CustomKnight.CustomKnight.OnLoadGlobal*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_OnLoadGlobal_CustomKnight_GlobalModSettings_" data-uid="CustomKnight.CustomKnight.OnLoadGlobal(CustomKnight.GlobalModSettings)">
+  OnLoadGlobal(GlobalModSettings)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L97"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>OnLoadGlobal</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void OnLoadGlobal(GlobalModSettings s)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>s</code> <a class="xref" href="CustomKnight.GlobalModSettings.html">GlobalModSettings</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_OnLoadLocal_" data-uid="CustomKnight.CustomKnight.OnLoadLocal*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_OnLoadLocal_CustomKnight_SaveModSettings_" data-uid="CustomKnight.CustomKnight.OnLoadLocal(CustomKnight.SaveModSettings)">
+  OnLoadLocal(SaveModSettings)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L123"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>OnLoadLocal</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void OnLoadLocal(SaveModSettings s)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>s</code> <a class="xref" href="CustomKnight.SaveModSettings.html">SaveModSettings</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_OnSaveGlobal_" data-uid="CustomKnight.CustomKnight.OnSaveGlobal*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_OnSaveGlobal" data-uid="CustomKnight.CustomKnight.OnSaveGlobal">
+  OnSaveGlobal()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>OnSaveGlobal</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GlobalModSettings OnSaveGlobal()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.GlobalModSettings.html">GlobalModSettings</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_OnSaveLocal_" data-uid="CustomKnight.CustomKnight.OnSaveLocal*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_OnSaveLocal" data-uid="CustomKnight.CustomKnight.OnSaveLocal">
+  OnSaveLocal()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L131"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>OnSaveLocal</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SaveModSettings OnSaveLocal()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CustomKnight.SaveModSettings.html">SaveModSettings</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CustomKnight_CustomKnight_Unload_" data-uid="CustomKnight.CustomKnight.Unload*"></a>
+
+  <h3 id="CustomKnight_CustomKnight_Unload" data-uid="CustomKnight.CustomKnight.Unload">
+  Unload()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L298"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Unload</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Unload()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="events">Events
+</h2>
+
+
+
+  <h3 id="CustomKnight_CustomKnight_OnInit" data-uid="CustomKnight.CustomKnight.OnInit">
+  OnInit
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Event called when CK is initialised but before applying skin</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static event EventHandler&lt;EventArgs&gt; OnInit</code></pre>
+  </div>
+
+
+
+
+
+
+  <h4 class="section">Event Type</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h3 id="CustomKnight_CustomKnight_OnReady" data-uid="CustomKnight.CustomKnight.OnReady">
+  OnReady
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Event called when CK is fully ready (after applying a skin)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static event EventHandler&lt;EventArgs&gt; OnReady</code></pre>
+  </div>
+
+
+
+
+
+
+  <h4 class="section">Event Type</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h3 id="CustomKnight_CustomKnight_OnUnload" data-uid="CustomKnight.CustomKnight.OnUnload">
+  OnUnload
+  <a class="header-action link-secondary" title="View source" href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Event called when the mod is unloaded</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static event EventHandler&lt;EventArgs&gt; OnUnload</code></pre>
+  </div>
+
+
+
+
+
+
+  <h4 class="section">Event Type</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/PrashantMohta/HollowKnight.CustomKnight/blob/ck3.0/CustomKnight/CustomKnight.cs/#L9" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
