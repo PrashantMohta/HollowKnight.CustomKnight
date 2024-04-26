@@ -234,7 +234,7 @@ namespace CustomKnight
                 return;
             }
             var _tk2dSprite = GO.GetComponent<tk2dSprite>();
-            
+
             if (_tk2dSprite == null)
             {
                 var anim = GO.GetComponent<Animator>();
@@ -243,17 +243,20 @@ namespace CustomKnight
                 //assume sprite
                 if (sr == null)
                 {
-                    if (CustomKnight.GlobalSettings.EnableParticleSwap) { 
+                    if (CustomKnight.GlobalSettings.EnableParticleSwap)
+                    {
                         var particleSystem = GO.GetComponent<ParticleSystemRenderer>();
-                        if(particleSystem == null)
+                        if (particleSystem == null)
                         {
                             this.Log("No Tk2dSprite, SpriteRenderer or ParticleSystem Component found in " + objectPath);
-                        } else
+                        }
+                        else
                         {
-                            this.Log("Swapping Particle"); 
+                            this.Log("Swapping Particle");
                             particleSystem.material.mainTexture = tex;
                         }
-                    } else
+                    }
+                    else
                     {
                         this.Log("No Tk2dSprite or SpriteRenderer Component found in " + objectPath);
                     }

@@ -386,7 +386,7 @@ namespace CustomKnight
         public static void SetSkinById(string id)
         {
             var Skin = GetSkinById(id);
-            CustomKnight.Instance.Log( $"Trying to apply skin {id} : on save slot {GameManager.instance.profileID}");
+            CustomKnight.Instance.Log($"Trying to apply skin {id} : on save slot {GameManager.instance.profileID}");
             if (Skin == null)
             {
                 CustomKnight.Instance.LogError($"Skin {id} does not exist");

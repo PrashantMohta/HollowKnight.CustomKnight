@@ -17,7 +17,7 @@ namespace CustomKnight
             T instance;
             try
             {
-                if(!File.Exists(filePath))
+                if (!File.Exists(filePath))
                 {
                     CustomKnight.Instance.Log($"{filePath} not found!, creating defaults!");
                     instance = new T();

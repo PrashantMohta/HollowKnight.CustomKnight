@@ -15,7 +15,8 @@ namespace CustomKnight
         {
             while (true)
             {
-                if(GameManager.instance == null) {
+                if (GameManager.instance == null)
+                {
                     continue;
                 }
 
@@ -26,7 +27,7 @@ namespace CustomKnight
                         UIController.ToggleSkinList();
                     }
                 }
-                
+
                 if (CustomKnight.GlobalSettings.Keybinds.ReloadSkins.WasPressed)
                 {
                     BetterMenu.ReloadSkins();

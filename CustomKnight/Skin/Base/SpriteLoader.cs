@@ -87,7 +87,7 @@
             }
             foreach (KeyValuePair<string, Skinable> kvp in SkinManager.Skinables)
             {
-                kvp.Value.prepare();
+                kvp.Value.Prepare();
                 CustomKnightTexture texture = kvp.Value.ckTex;
                 if (TextureCache.skinTextureCache.TryGetValue(SkinManager.CurrentSkin.GetId(), out var skinCache) && skinCache.TryGetValue(texture.fileName, out var cachedTex))
                 {

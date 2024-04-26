@@ -3,7 +3,7 @@
 namespace CustomKnight.NewUI
 {
 
-    public class UIText
+    internal class UIText
     {
         public string name, value;
         public GameObject parent;

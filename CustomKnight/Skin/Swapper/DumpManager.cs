@@ -120,9 +120,9 @@ namespace CustomKnight
             Log($"game object to be dumped - {go.name}");
             Log($"gameobject path {baseName}");
             isProcessed[go] = true;
-            if(CustomKnight.GlobalSettings.EnableParticleSwap && particle != null && particle.material != null)
+            if (CustomKnight.GlobalSettings.EnableParticleSwap && particle != null && particle.material != null)
             {
-                var tex = (Texture2D) particle.material.mainTexture;
+                var tex = (Texture2D)particle.material.mainTexture;
                 var dupe = TextureUtils.duplicateTexture(tex);
                 var hash = dupe.getHash();
                 SaveTextureDump(scene, hash, dupe);

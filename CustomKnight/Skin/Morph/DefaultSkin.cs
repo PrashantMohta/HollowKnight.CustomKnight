@@ -10,7 +10,7 @@ namespace CustomKnight
             yield return new WaitWhile(() => HeroController.instance == null || CharmIconList.Instance == null);
             foreach (var skinable in SkinManager.Skinables.Values)
             {
-                skinable.prepare();
+                skinable.Prepare();
             }
             SpriteLoader.PullDefaultTextures();
             foreach (var skinable in SkinManager.Skinables.Values)
@@ -20,7 +20,7 @@ namespace CustomKnight
                 {
                     if (skinable.ckTex.defaultTex == null && skinable.ckTex.defaultSprite == null)
                     {
-                        skinable.prepare();
+                        skinable.Prepare();
                         skinable.SaveTexture();
                         return true;
                     }

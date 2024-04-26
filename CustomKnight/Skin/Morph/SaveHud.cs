@@ -1,7 +1,4 @@
 ﻿using GlobalEnums;
-using System.IO;
-using System.Threading;
-using System.Xml.Linq;
 using static UnityEngine.UI.SaveSlotButton;
 
 namespace CustomKnight
@@ -70,9 +67,9 @@ namespace CustomKnight
             self.healthSlots.steelHealth = steelHealth.GetSpriteForSkin(skin) ?? self.healthSlots.steelHealth;
 
             DefeatedBackgroundGo = self.gameObject.FindGameObjectInChildren("DefeatedBackground");
-            if(DefeatedBackgroundGo != null)
+            if (DefeatedBackgroundGo != null)
             {
-                DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite = defeatedBackground.GetSpriteForSkin(skin)  ?? DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite;
+                DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite = defeatedBackground.GetSpriteForSkin(skin) ?? DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite;
             }
             BrokenSteelOrbGo = self.gameObject.FindGameObjectInChildren("BrokenSteelOrb");
             if (BrokenSteelOrbGo != null)
@@ -108,12 +105,12 @@ namespace CustomKnight
             }
         }
 
-        private static void ExtractDefaultSaveHud(ISelectableSkin skin,bool overwrite = false)
+        private static void ExtractDefaultSaveHud(ISelectableSkin skin, bool overwrite = false)
         {
             var sheets = new List<SheetItem>() { geoIcon, ggSoulOrb, hardcoreSoulOrb, normalHealth, normalSoulOrb, soulOrbIcon, steelHealth, steelSoulOrb };
-            foreach(var sheet in sheets)
+            foreach (var sheet in sheets)
             {
-                if(sheet.Exists(skin) && !overwrite) continue;
+                if (sheet.Exists(skin) && !overwrite) continue;
                 var tex = GetFromAssemblyOrExtract(null, sheet.path);
                 sheet.texture = tex;
                 sheet.Save(skin);
@@ -147,22 +144,22 @@ namespace CustomKnight
             defaultAreaBackgrounds = self.areaBackgrounds;
             return orig(self, mapZone);
         }
-        
-        internal static Texture2D GetFromAssemblyOrExtract(Sprite sprite,string name)
+
+        internal static Texture2D GetFromAssemblyOrExtract(Sprite sprite, string name)
         {
             Texture2D tex = AssemblyUtils.GetTextureFromResources($"{name.Replace('/', '.')}");
             if (tex != null)
             {
                 CustomKnight.Instance.Log($"Extracting {name} from Assembly Resource");
             }
-            else if(sprite != null)
+            else if (sprite != null)
             {
                 CustomKnight.Instance.Log($"Extracting {name} from Default Sprite");
                 tex = SpriteUtils.ExtractTextureFromSprite(sprite);
             }
             return tex;
         }
-        
+
         public static void GenerateAreaBackgrounds(ISelectableSkin skin, bool overwrite = false)
         {
             if (defaultAreaBackgrounds == null)

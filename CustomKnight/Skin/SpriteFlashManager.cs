@@ -25,10 +25,10 @@
         private static void SpriteFlash_flashFocusHeal(On.SpriteFlash.orig_flashFocusHeal orig, global::SpriteFlash self)
         {
             orig(self);
-            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
+            if (SkinManager.GetCurrentSkin() is ISupportsConfig skin)
             {
                 var block = ReflectionHelper.GetField<SpriteFlash, MaterialPropertyBlock>(self, "block");
-                block.SetColor("_FlashColor", skin.skinConfig.flashColor);
+                block.SetColor("_FlashColor", skin.GetConfig().flashColor);
                 ReflectionHelper.SetField<SpriteFlash, MaterialPropertyBlock>(self, "block", block);
             }
         }
@@ -36,10 +36,10 @@
         private static void SpriteFlash_flashDungQuick(On.SpriteFlash.orig_flashDungQuick orig, global::SpriteFlash self)
         {
             orig(self);
-            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
+            if (SkinManager.GetCurrentSkin() is ISupportsConfig skin)
             {
                 var block = ReflectionHelper.GetField<SpriteFlash, MaterialPropertyBlock>(self, "block");
-                block.SetColor("_FlashColor", skin.skinConfig.dungFlash);
+                block.SetColor("_FlashColor", skin.GetConfig().dungFlash);
                 ReflectionHelper.SetField<SpriteFlash, MaterialPropertyBlock>(self, "block", block);
             }
         }
@@ -47,10 +47,10 @@
         private static void SpriteFlash_flashDung(On.SpriteFlash.orig_flashDung orig, global::SpriteFlash self)
         {
             orig(self);
-            if (SkinManager.GetCurrentSkin() is StaticSkin skin)
+            if (SkinManager.GetCurrentSkin() is ISupportsConfig skin)
             {
                 var block = ReflectionHelper.GetField<SpriteFlash, MaterialPropertyBlock>(self, "block");
-                block.SetColor("_FlashColor", skin.skinConfig.dungFlash);
+                block.SetColor("_FlashColor", skin.GetConfig().dungFlash);
                 ReflectionHelper.SetField<SpriteFlash, MaterialPropertyBlock>(self, "block", block);
             }
         }

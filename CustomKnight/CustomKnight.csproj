@@ -9,7 +9,7 @@
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>CS1591</NoWarn>
+	  <!-- <NoWarn>CS1591</NoWarn> -->
   </PropertyGroup>
 
     <!-- Create a LocalBuildProperties.props file which defines references directories

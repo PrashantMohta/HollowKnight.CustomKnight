@@ -2,7 +2,7 @@
 
 namespace CustomKnight.Canvas
 {
-    public class CanvasPanel
+    internal class CanvasPanel
     {
         private GameObject canvas;
         private Vector2 position;

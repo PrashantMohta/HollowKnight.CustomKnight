@@ -2,7 +2,7 @@
 
 namespace CustomKnight.NewUI
 {
-    public class UIButton
+    internal class UIButton
     {
         public string name, displayName;
         public GameObject parent;

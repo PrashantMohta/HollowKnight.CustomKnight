@@ -2,32 +2,82 @@ using System.IO;
 
 namespace CustomKnight
 {
+    /// <summary>
+    /// The proxy GameObject that is used to create the GO hierarchy that the swaps must be applied to
+    /// </summary>
     public class GameObjectProxy
     {
+        /// <summary>
+        /// Name/path the file
+        /// </summary>
         public string name;
+
+        /// <summary>
+        /// alias of the file
+        /// </summary>
         public string alias = "spl_ck_dndy";
+
+        /// <summary>
+        /// root path of the file (name of the folder under swap)
+        /// </summary>
         public string rootPath; //rootPath/name.png
+
+        /// <summary>
+        /// if the GOP has texture
+        /// </summary>
         public bool hasTexture;
+
+        /// <summary>
+        /// if the GOP has Children
+        /// </summary>
         public bool hasChildren;
+
+        /// <summary>
+        /// Type of the file that is detected
+        /// </summary>
         public string fileType;
+
+        /// <summary>
+        /// Direct Childern of this GOP
+        /// </summary>
         public Dictionary<string, GameObjectProxy> children = new Dictionary<string, GameObjectProxy>();
 
+        /// <summary>
+        /// Get the file Path
+        /// </summary>
+        /// <returns></returns>
         public string getObjectPath()
         {
             return Path.Combine(rootPath, name + fileType);
         }
+
+        /// <summary>
+        /// get the texture path
+        /// </summary>
+        /// <returns></returns>
         public string getTexturePath()
         {
             return Path.Combine(rootPath, name + ".png");
         }
+        /// <summary>
+        /// Get the alias Path
+        /// </summary>
+        /// <returns></returns>
         public string getAliasPath()
         {
             if (alias != "spl_ck_dndy")
             {
-                CustomKnight.Instance.Log(alias);
+                CustomKnight.Instance.LogDebug(alias);
             }
             return Path.Combine(rootPath, alias + ".png");
         }
+        /// <summary>
+        /// Create the hierarchy defined by the given path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="rootPath"></param>
+        /// <param name="name"></param>
+        /// <param name="alias"></param>
         public void TraverseGameObjectPath(string path, string rootPath, string name, string alias = "spl_ck_dndy")
         {
             CustomKnight.Instance.LogDebug($"{path}:{rootPath}:{name}");
@@ -77,6 +127,11 @@ namespace CustomKnight
 
             CustomKnight.Instance.LogDebug($"{this.hasTexture}:{this.rootPath}:{this.name}:{this.alias}:{(this.rootPath == null ? "null root" : "x")}");
         }
+
+        /// <summary>
+        /// Create the hierarchy based on detecting files and directories at a particular path
+        /// </summary>
+        /// <param name="basePath"></param>
         public void TraverseGameObjectDirectory(string basePath)
         {
             var path = Path.Combine(basePath, Path.Combine(rootPath, name));

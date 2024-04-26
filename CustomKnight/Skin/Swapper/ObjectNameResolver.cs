@@ -4,7 +4,7 @@ using static Satchel.IoUtils;
 
 namespace CustomKnight.Skin.Swapper
 {
-    public static class ObjectNameResolver
+    internal static class ObjectNameResolver
     {
         internal static string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR, "Dump");
         internal static Dictionary<string, Dictionary<string, List<string>>> NameDb = new();
@@ -35,7 +35,8 @@ namespace CustomKnight.Skin.Swapper
             }
         }
 
-        internal static void Clear() {
+        internal static void Clear()
+        {
             NameDb = new();
             PathToHash = new();
         }
