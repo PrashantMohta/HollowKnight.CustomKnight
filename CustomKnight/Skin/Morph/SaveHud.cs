@@ -165,6 +165,10 @@ namespace CustomKnight
         
         public static void GenerateAreaBackgrounds(ISelectableSkin skin, bool overwrite = false)
         {
+            if (defaultAreaBackgrounds == null)
+            {
+                return;
+            }
             for (int i = 0; i < defaultAreaBackgrounds.Length; i++)
             {
                 var areaName = defaultAreaBackgrounds[i].areaName.ToString();
