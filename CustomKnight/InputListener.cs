@@ -15,12 +15,8 @@ namespace CustomKnight
         {
             while (true)
             {
-                if (GameManager.instance == null)
-                {
-                    continue;
-                }
 
-                if (GameManager.instance.isPaused)
+                if (GameManager.instance != null && GameManager.instance.isPaused)
                 {
                     if (CustomKnight.GlobalSettings.Keybinds.OpenSkinList.WasPressed)
                     {
