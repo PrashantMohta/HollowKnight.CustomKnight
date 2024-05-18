@@ -269,6 +269,8 @@ namespace CustomKnight
             Log("HeroControllerStart");
             var currentSkinId = (SaveSettings.DefaultSkin != GlobalSettings.DefaultSkin && SaveSettings.DefaultSkin != null) ? SaveSettings.DefaultSkin : GlobalSettings.DefaultSkin;
             SkinManager.CurrentSkin = SkinManager.GetSkinById(currentSkinId);
+            if (CustomKnight.GlobalSettings.saveSkins.ContainsKey(GameManager.instance.profileID - 1) == false)
+            { CustomKnight.GlobalSettings.saveSkins.Add(GameManager.instance.profileID - 1, "Default"); }
             CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID - 1] = currentSkinId;
             SkinManager.LoadSkin();
             OnReady?.Invoke(this, null);
