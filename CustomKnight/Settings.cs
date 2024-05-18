@@ -54,8 +54,7 @@ namespace CustomKnight
         /// <summary>
         /// Skins for each of the save slots
         /// </summary>
-        public Dictionary<int, string> saveSkins = new Dictionary<int, string>() { { 0, "Default" }, { 1, "Default" }, { 2, "Default" }, { 3, "Default" } };
-        
+        public string[] saveSkins = new string[] { "Default", "Default", "Default", "Default" };
 
         /// <summary>
         /// Option to dump swaps in the old directory style
