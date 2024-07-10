@@ -45,7 +45,7 @@ namespace CustomKnight
         internal static void UpdateSkinList()
         {
             SkinManager.getSkinNames();
-            MenuRef.Find("SelectSkinOption").updateAfter((element) =>
+            MenuRef?.Find("SelectSkinOption").updateAfter((element) =>
             {
                 ((HorizontalOption)element).Values = getSkinNameArray();
             });
