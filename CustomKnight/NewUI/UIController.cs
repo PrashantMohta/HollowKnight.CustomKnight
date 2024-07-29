@@ -218,7 +218,6 @@ namespace CustomKnight.NewUI
             var favSkins = new List<string>();
             favSkins.AddRange(CustomKnight.GlobalSettings.FavoriteSkins);
             favSkins.AddRange(CustomKnight.GlobalSettings.RecentSkins);
-            favSkins = favSkins.Distinct().ToList();
             for (var index = 0; favSkins.Count < Math.Min(CustomKnight.GlobalSettings.MaxSkinCache, SkinManager.SkinsList.Count); index++)
             {
                 var id = SkinManager.SkinsList[index].GetId();
@@ -229,6 +228,10 @@ namespace CustomKnight.NewUI
             }
             foreach (var skinId in favSkins)
             {
+                if (!SkinManager.SkinExistsById(skinId))
+                {
+                    continue;
+                }
                 var skin = SkinManager.GetSkinById(skinId);
                 var tex = GetSkinIcon(skin);
                 var skinName = skin.GetName();

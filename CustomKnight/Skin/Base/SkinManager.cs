@@ -324,6 +324,16 @@ namespace CustomKnight
         }
 
         /// <summary>
+        ///    Checks if a skin from the overall skin list exists that matches a given id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> true if exists </returns>
+        public static bool SkinExistsById(string id)
+        {
+            return SkinManager.SkinsList.Exists(skin => skin.GetId() == id);
+        }
+
+        /// <summary>
         ///     Gets a skin from the overall skin list that matches a given id.
         /// </summary>
         /// <param name="id">a <c>string</c> that uniquely identifies the skin</param>
