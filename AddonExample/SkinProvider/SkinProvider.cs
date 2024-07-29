@@ -7,7 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace SkinProvider{
-    public class EmbeddedSkin : ISelectableSkin{
+    public class EmbeddedSkin : ISelectableSkin
+    {
         public string SkinName = "EmbeddedSkin";
         public Dictionary<string,Texture2D> textures = new();
         public Dictionary<string,Texture2D> Alttextures = new();
@@ -27,7 +28,7 @@ namespace SkinProvider{
         public string getSwapperPath() => "";
 
         public bool Exists(string FileName){
-            return isAlt? Alttextures.ContainsKey(FileName) : textures.ContainsKey(FileName);
+            return isAlt? Alttextures.ContainsKey("A"+FileName) : textures.ContainsKey(FileName);
         }
         public Texture2D GetTexture(string FileName){
             Texture2D texture = null;
@@ -37,18 +38,39 @@ namespace SkinProvider{
                 Modding.Logger.Log(e.ToString());
             }
             return texture;
-        } 
+        }
+
+        byte[] ISelectableSkin.GetFile(string FileName) => AssemblyUtils.GetBytesFromResources(FileName);
+
+        bool ISelectableSkin.HasCinematic(string CinematicName) => false;
+
+        string ISelectableSkin.GetCinematicUrl(string CinematicName) => throw new NotImplementedException();
     }
     public class SkinProvider : Mod {
         new public string GetName() => "Skin Provider";
-        public override string GetVersion() => "v1";
+        public override string GetVersion() => "v2";
 
         public EmbeddedSkin Skin = new EmbeddedSkin();
-        public override void Initialize()
-        {
-            CustomKnight.CustomKnight.OnReady += (_,e)=>{
+
+        public SkinProvider() {
+            /*CustomKnight.CustomKnight.OnInit += (_, e) =>
+            {
+                Log("CK  OnInit");
+            };
+            CustomKnight.CustomKnight.OnReady += (_, e) => {
+                Log("CK  OnReady");
+            };
+            CustomKnight.CustomKnight.OnUnload += (_, e) => {
+                Log("CK  OnUnload");
+            };*/
+            // mod load order can impact this, so should add the listener in constructor or set order priority
+            CustomKnight.CustomKnight.OnInit += (_, e) => {
                 SkinManager.AddSkin(Skin);
             };
+        }
+        public override void Initialize()
+        {
+
             ModHooks.HeroUpdateHook += ()=>{
                 if(Input.GetKeyDown(KeyCode.O)){
                     Skin.isAlt = !Skin.isAlt;
