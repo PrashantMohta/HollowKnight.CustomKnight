@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.IO;
 using static Satchel.IoUtils;
 
@@ -8,6 +9,7 @@ namespace CustomKnight
     /// </summary>
     public static class SkinManager
     {
+        internal static string DEFAULT_SKIN = "Default";
         internal static bool savedDefaultTextures = false;
         /// <summary>
         /// Name of the Data directory
@@ -271,7 +273,7 @@ namespace CustomKnight
         {
             EnsureDirectory(DATA_DIR);
             EnsureDirectory(SKINS_FOLDER);
-            EnsureDirectory(Path.Combine(SKINS_FOLDER, "Default"));
+            EnsureDirectory(Path.Combine(SKINS_FOLDER, DEFAULT_SKIN));
         }
         internal static void LoadSkin()
         {
@@ -337,7 +339,7 @@ namespace CustomKnight
         /// <returns>an <c>ISelectableSkin</c> that represents the default skin</returns>
         public static ISelectableSkin GetDefaultSkin()
         {
-            DefaultSkin ??= GetSkinById("Default");
+            DefaultSkin ??= GetSkinById(DEFAULT_SKIN);
             return DefaultSkin;
         }
 
@@ -347,7 +349,7 @@ namespace CustomKnight
         /// <returns>an <c>ISelectableSkin</c> that represents the current skin</returns>
         public static ISelectableSkin GetCurrentSkin()
         {
-            CurrentSkin ??= GetSkinById("Default");
+            CurrentSkin ??= GetSkinById(DEFAULT_SKIN);
             return CurrentSkin;
         }
 
@@ -402,7 +404,7 @@ namespace CustomKnight
             {
                 CustomKnight.GlobalSettings.DefaultSkin = id;
                 CustomKnight.SaveSettings.DefaultSkin = id;
-                CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID - 1] = id;
+                GlobalModSettings.SetSkinForProfileID(GameManager.instance.profileID, id);
             };
             if (CurrentSkin?.GetId() == Skin.GetId()) { return; }
             CurrentSkin = Skin;

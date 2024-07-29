@@ -51,7 +51,7 @@ namespace CustomKnight
         }
         private static void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
         {
-            var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[GetSlotIndex(self.saveSlot)]);
+            var skin = SkinManager.GetSkinById(GlobalModSettings.GetSkinForProfileID(GetSlotIndex(self.saveSlot)));
             if (skin != SkinManager.GetDefaultSkin() && !skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
             {
                 GenerateSaveHud(skin, skin.GetTexture(SkinManager.Skinables[Hud.NAME].ckTex.fileName), skin.GetTexture(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName));
@@ -258,7 +258,7 @@ namespace CustomKnight
         {
             for (var i = 0; i < 4; i++)
             {
-                var skin = SkinManager.GetSkinById(CustomKnight.GlobalSettings.saveSkins[i]);
+                var skin = SkinManager.GetSkinById(GlobalModSettings.GetSkinForProfileID(i));
                 SheetItem.PreloadForSkin(skin);
             }
         }

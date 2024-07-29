@@ -33,7 +33,7 @@ namespace CustomKnight
         /// <summary>
         /// Currently Selected Skin
         /// </summary>
-        public string DefaultSkin { get; set; } = "Default";
+        public string DefaultSkin { get; set; } = SkinManager.DEFAULT_SKIN;
 
         /// <summary>
         /// Max Length of the Skin Names that is displayed in UI
@@ -54,7 +54,8 @@ namespace CustomKnight
         /// <summary>
         /// Skins for each of the save slots
         /// </summary>
-        public Dictionary<int, string> saveSkins = new Dictionary<int, string>() { { 0, "Default" }, { 1, "Default" }, { 2, "Default" }, { 3, "Default" } };
+        [JsonProperty]
+        private Dictionary<int, string> saveSkins = new Dictionary<int, string>() { { 0, SkinManager.DEFAULT_SKIN }, { 1, SkinManager.DEFAULT_SKIN }, { 2, SkinManager.DEFAULT_SKIN }, { 3, SkinManager.DEFAULT_SKIN } };
 
         /// <summary>
         /// Option to dump swaps in the old directory style
@@ -104,6 +105,27 @@ namespace CustomKnight
             {
                 RecentSkins = RecentSkins.GetRange(0, MaxSkinCache);
             }
+        }
+
+        internal static string GetSkinForProfileID(int id)
+        {
+            if (CustomKnight.GlobalSettings.saveSkins.TryGetValue(id, out var skinName))
+            {
+                return skinName;
+            }
+            SetSkinForProfileID(id, SkinManager.DEFAULT_SKIN);
+            return SkinManager.DEFAULT_SKIN;
+        }
+
+
+        internal static void SetSkinForProfileID(int id, string skinName)
+        {
+            CustomKnight.GlobalSettings.saveSkins[GameManager.instance.profileID - 1] = skinName;
+        }
+
+        internal static void ResetProfileSkins()
+        {
+            CustomKnight.GlobalSettings.saveSkins = new GlobalModSettings().saveSkins;
         }
     }
 
