@@ -13,7 +13,6 @@ else:
     
 
 BUF_SIZE = 65536 
-md5 = hashlib.md5()
 sha256 = hashlib.sha256()
 
 with open(name, 'rb') as f:
@@ -21,7 +20,6 @@ with open(name, 'rb') as f:
         data = f.read(BUF_SIZE)
         if not data:
             break
-        md5.update(data)
         sha256.update(data)
 
 print("{0}".format(sha256.hexdigest()))

@@ -60,7 +60,7 @@ jobs:
           #install pip packages
           #cp ../../../.github/workflows/requirements.txt ./requirements.txt
           #pip install -r requirements.txt
-          curl --output $ASSET_NAME $DOWNLOAD_LINK
+          curl -L --output $ASSET_NAME $DOWNLOAD_LINK
           SHA256=$(python sha256.py $ASSET_NAME)
           python update-modlinks.py "$PROJECT_NAME" "$LATEST_TAG" "$DOWNLOAD_LINK" "$SHA256"
 
