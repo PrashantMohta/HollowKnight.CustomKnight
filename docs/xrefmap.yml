@@ -743,12 +743,6 @@ references:
   isSpec: "True"
   fullName: CustomKnight.GlobalModSettings.Version
   nameWithType: GlobalModSettings.Version
-- uid: CustomKnight.GlobalModSettings.saveSkins
-  name: saveSkins
-  href: api_reference/CustomKnight.GlobalModSettings.html#CustomKnight_GlobalModSettings_saveSkins
-  commentId: F:CustomKnight.GlobalModSettings.saveSkins
-  fullName: CustomKnight.GlobalModSettings.saveSkins
-  nameWithType: GlobalModSettings.saveSkins
 - uid: CustomKnight.GlobalSwapMarker
   name: GlobalSwapMarker
   href: api_reference/CustomKnight.GlobalSwapMarker.html
@@ -1268,6 +1262,22 @@ references:
   isSpec: "True"
   fullName: CustomKnight.SkinManager.SetSkinById
   nameWithType: SkinManager.SetSkinById
+- uid: CustomKnight.SkinManager.SkinExistsById(System.String)
+  name: SkinExistsById(string)
+  href: api_reference/CustomKnight.SkinManager.html#CustomKnight_SkinManager_SkinExistsById_System_String_
+  commentId: M:CustomKnight.SkinManager.SkinExistsById(System.String)
+  name.vb: SkinExistsById(String)
+  fullName: CustomKnight.SkinManager.SkinExistsById(string)
+  fullName.vb: CustomKnight.SkinManager.SkinExistsById(String)
+  nameWithType: SkinManager.SkinExistsById(string)
+  nameWithType.vb: SkinManager.SkinExistsById(String)
+- uid: CustomKnight.SkinManager.SkinExistsById*
+  name: SkinExistsById
+  href: api_reference/CustomKnight.SkinManager.html#CustomKnight_SkinManager_SkinExistsById_
+  commentId: Overload:CustomKnight.SkinManager.SkinExistsById
+  isSpec: "True"
+  fullName: CustomKnight.SkinManager.SkinExistsById
+  nameWithType: SkinManager.SkinExistsById
 - uid: CustomKnight.SkinManager.Skinables
   name: Skinables
   href: api_reference/CustomKnight.SkinManager.html#CustomKnight_SkinManager_Skinables
