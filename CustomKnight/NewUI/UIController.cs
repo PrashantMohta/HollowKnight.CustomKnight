@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace CustomKnight.NewUI
 {

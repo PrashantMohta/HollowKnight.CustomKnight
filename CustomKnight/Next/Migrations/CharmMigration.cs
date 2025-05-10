@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using static Satchel.IoUtils;
 
 namespace CustomKnight.Next.Migrations
@@ -12,11 +7,11 @@ namespace CustomKnight.Next.Migrations
     {
         public override void Run(MigrationContext context)
         {
-            var charmsFolder = Path.Combine(context.SkinPath, "Charms");
+            var charmsFolder = Path.Combine(context.SkinPath, "charms");
             string[] files = Directory.GetFiles(context.SkinPath);
             foreach (string file in files)
             {
-                if (!Path.GetFileName(file).StartsWith("Charm_"))
+                if (!Path.GetFileName(file).StartsWith("charm_"))
                 {
                     continue;
                 }

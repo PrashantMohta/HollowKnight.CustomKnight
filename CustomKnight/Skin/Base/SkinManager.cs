@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.IO;
 using static Satchel.IoUtils;
 
@@ -415,7 +414,8 @@ namespace CustomKnight
                 CustomKnight.GlobalSettings.DefaultSkin = id;
                 CustomKnight.SaveSettings.DefaultSkin = id;
                 GlobalModSettings.SetSkinForProfileID(GameManager.instance.profileID, id);
-            };
+            }
+            ;
             if (CurrentSkin?.GetId() == Skin.GetId()) { return; }
             CurrentSkin = Skin;
             CustomKnight.GlobalSettings.AddRecentSkin(id);

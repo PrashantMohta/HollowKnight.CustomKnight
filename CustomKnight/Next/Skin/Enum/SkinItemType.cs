@@ -6,6 +6,7 @@
         SceneTk2d,
         SceneSprite,
         SceneParticle,
+        SceneUnknown, // when auto migrating the swap directory we can't know the GO details.
         Cinematic,
         TextKeyReplace,
         TextFindReplace,

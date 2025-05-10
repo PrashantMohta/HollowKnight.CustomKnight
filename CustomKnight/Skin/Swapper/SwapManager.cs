@@ -1,7 +1,7 @@
-using CustomKnight.Skin.Swapper;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CustomKnight.Skin.Swapper;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -465,7 +465,8 @@ namespace CustomKnight
                 using (FileStream fs = File.Create(Path.Combine(pathToLoad, "replace.txt")))
                 {
                     //create and close the stream
-                };
+                }
+                ;
             }
             using (StreamReader reader = File.OpenText(Path.Combine(pathToLoad, "replace.txt")))
             {

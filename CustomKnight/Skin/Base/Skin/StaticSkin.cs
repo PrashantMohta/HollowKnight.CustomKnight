@@ -1,8 +1,8 @@
 using System.IO;
-using static Satchel.IoUtils;
+using CustomKnight.Next.Migrations;
 using CustomKnight.Next.Skin;
 using CustomKnight.Next.Skin.Enum;
-using CustomKnight.Next.Migrations;
+using static Satchel.IoUtils;
 namespace CustomKnight
 {
     /// <summary>
@@ -22,7 +22,7 @@ namespace CustomKnight
         {
             SkinDirectory = DirectoryName;
             MigrationManager.RunMigrations(new MigrationContext { SkinName = GetName(), SkinPath = GetPath() });
-            skinConfig = skinConfigLoader.Load(Path.Combine(GetPath(),"config.json"));
+            skinConfig = skinConfigLoader.Load(Path.Combine(GetPath(), "config.json"));
             skinSettings = skinSettingsLoader.Load(Path.Combine(GetPath(), "settings.json"));
         }
 

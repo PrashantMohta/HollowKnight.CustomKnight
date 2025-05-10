@@ -6,8 +6,8 @@
         Text,
         Scene,
         Cinematic,
-        UserInterface,
-        Menu,
-        Custom
+        Custom,
+        UserInterface, // unused
+        Menu, // unused
     }
 }

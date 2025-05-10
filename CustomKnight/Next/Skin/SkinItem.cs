@@ -10,10 +10,10 @@ namespace CustomKnight.Next.Skin
         public string CustomSubType { get; set; }
         public Variant[] Variants { get; set; }
 
-        public AssetItem[] GetAssetItems(Context context,string variantId)
+        public AssetItem[] GetAssetItems(Context context, string variantId)
         {
             var assets = Variants.First(i => i.Id == variantId).Assets;
-            return [.. assets.Select(asset => new AssetItem(context,this, variantId,asset))];
+            return [.. assets.Select(asset => new AssetItem(context, this, variantId, asset))];
         }
 
     }
