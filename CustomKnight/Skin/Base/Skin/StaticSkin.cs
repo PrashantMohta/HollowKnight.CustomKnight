@@ -1,49 +1,49 @@
 using System.IO;
 using static Satchel.IoUtils;
+using CustomKnight.Next.Skin;
+using CustomKnight.Next.Skin.Enum;
+using CustomKnight.Next.Migrations;
 namespace CustomKnight
 {
     /// <summary>
     ///     The Class that represents all static skins that CustomKnight manages.
     /// </summary>
-    internal class StaticSkin : ISelectableSkin, ISupportsOverrides, ISupportsConfig
+    internal class StaticSkin : ISkin, ISelectableSkin, ISupportsConfig
     {
         internal string SkinDirectory = "";
         private SkinConfig skinConfig;
         private SkinSettings skinSettings;
         private static SettingsLoader<SkinConfig> skinConfigLoader = new SettingsLoader<SkinConfig>();
         private static SettingsLoader<SkinSettings> skinSettingsLoader = new SettingsLoader<SkinSettings>();
+        private string GetPath() => Path.Combine(SkinManager.SKINS_FOLDER, SkinDirectory);
+        private List<Feature> features = new List<Feature>(); //todo populate
+        private List<ItemGroup> items = new List<ItemGroup>(); //todo populate
         public StaticSkin(string DirectoryName)
         {
             SkinDirectory = DirectoryName;
-            MigrateCharms();
-            skinConfig = skinConfigLoader.Load($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/skin-config.json".Replace("\\", "/"));
-            skinSettings = skinSettingsLoader.Load($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/skin-settings.json".Replace("\\", "/"));
-            if (skinConfig.detectAlts)
-            {
-                skinConfig.detectAlts = false;
-                DetectAlternates();
-            }
+            MigrationManager.RunMigrations(new MigrationContext { SkinName = GetName(), SkinPath = GetPath() });
+            skinConfig = skinConfigLoader.Load(Path.Combine(GetPath(),"config.json"));
+            skinSettings = skinSettingsLoader.Load(Path.Combine(GetPath(), "settings.json"));
         }
 
-        private void SaveSettings()
-        {
-            skinConfigLoader.Save($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/skin-config.json".Replace("\\", "/"), skinConfig);
-            skinSettingsLoader.Save($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/skin-settings.json".Replace("\\", "/"), skinSettings);
-        }
-
-        public bool shouldCache() => true;
+        public Feature[] GetFeatures() => [.. features];
         public string GetId() => SkinDirectory;
         public string GetName() => SkinDirectory;
-        public bool hasSwapper() => true;
-        public string getSwapperPath() => Path.Combine(SkinManager.SKINS_FOLDER, SkinDirectory);
-
+        public bool ShouldCache() => true;
         public SkinConfig GetConfig() => skinConfig;
         public SkinSettings GetSettings() => skinSettings;
+        public ItemGroup[] GetGroups() => [.. items];
+
+        // might yeet all of these afterwards
+        public bool shouldCache() => ShouldCache();
+        public bool hasSwapper() => true;
+        public string getSwapperPath() => GetPath();
+
 
         private Dictionary<string, string> CinematicFileUrlCache = new();
         public bool Exists(string FileName)
         {
-            string file = $"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{FileName}".Replace("\\", "/");
+            string file = Path.Combine(GetPath(), FileName);
             return File.Exists(file);
         }
         public Texture2D GetTexture(string FileName)
@@ -51,8 +51,7 @@ namespace CustomKnight
             Texture2D texture = null;
             try
             {
-                string OverriddenFile = GetOverride(FileName);
-                string file = $"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{OverriddenFile}".Replace("\\", "/");
+                string file = Path.Combine(GetPath(), FileName);
                 byte[] texBytes = File.ReadAllBytes(file);
                 texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
                 texture.LoadImage(texBytes);
@@ -68,8 +67,7 @@ namespace CustomKnight
             byte[] data = null;
             try
             {
-                string OverriddenFile = GetOverride(FileName);
-                string file = $"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/{OverriddenFile}".Replace("\\", "/");
+                string file = Path.Combine(GetPath(), FileName);
                 data = File.ReadAllBytes(file);
             }
             catch (Exception e)
@@ -105,133 +103,6 @@ namespace CustomKnight
             }
             CustomKnight.Instance.LogFine("[GetCinematicUrl]" + CinematicName + ":" + path);
             return path;
-        }
-
-        public bool HasOverrides(string FileName)
-        {
-            CustomKnight.Instance.Log($" {FileName} : count");
-
-            if (skinConfig.alternates != null && skinConfig.alternates.TryGetValue(FileName, out var overrides))
-            {
-                CustomKnight.Instance.Log($"{overrides.Count} : count");
-
-                return overrides.Count > 1;
-            }
-            return false;
-        }
-
-        public string[] GetAllOverrides(string FileName)
-        {
-            if (skinConfig.alternates != null && skinConfig.alternates.TryGetValue(FileName, out var overrides))
-            {
-                return overrides.ToArray();
-            }
-            return new string[] { };
-        }
-
-        public void SetOverride(string FileName, string AlternateFileName)
-        {
-            if (skinSettings.selectedAlternates == null)
-            {
-                skinSettings.selectedAlternates = new Dictionary<string, string>();
-            }
-            skinSettings.selectedAlternates[FileName] = AlternateFileName;
-            skinSettingsLoader.Save($"{SkinManager.SKINS_FOLDER}/{SkinDirectory}/skin-settings.json".Replace("\\", "/"), skinSettings);
-        }
-
-        public string GetOverride(string FileName)
-        {
-            if (skinSettings.selectedAlternates != null && skinSettings.selectedAlternates.TryGetValue(FileName, out var alternate))
-            {
-                return alternate;
-            }
-
-            var overrides = GetAllOverrides(FileName);
-            if (overrides.Length > 0)
-            {
-                return overrides[0];
-            }
-
-            return FileName;
-        }
-
-        private void MigrateCharms()
-        {
-            var skinFolder = Path.Combine(SkinManager.SKINS_FOLDER, SkinDirectory);
-            var charmsFolder = Path.Combine(skinFolder, "Charms");
-            EnsureDirectory(charmsFolder);
-            string[] files = Directory.GetFiles(skinFolder);
-            foreach (string file in files)
-            {
-                if (!Path.GetFileName(file).StartsWith("Charm_"))
-                {
-                    continue;
-                }
-                try
-                {
-                    File.Move(file, Path.Combine(charmsFolder, Path.GetFileName(file)));
-                }
-                catch (Exception e)
-                {
-                    CustomKnight.Instance.LogError("A File could not be Copied : " + e.ToString());
-                }
-            }
-        }
-
-        private void DetectAlternates()
-        {
-            var skinFolder = Path.Combine(SkinManager.SKINS_FOLDER, SkinDirectory);
-            var charmsFolder = Path.Combine(skinFolder, "Charms");
-            var inventoryFolder = Path.Combine(skinFolder, "Inventory");
-            EnsureDirectory(charmsFolder);
-            EnsureDirectory(inventoryFolder);
-
-            string[] files = Directory.GetFiles(skinFolder);
-
-            // base skin
-            foreach (var kvp in SkinManager.Skinables)
-            {
-                var name = kvp.Value.name + ".png";
-                var possibleAlts = Array.FindAll(files, (file) => Path.GetFileName(file).Contains(kvp.Value.name) && !skinConfig.alternates[name].Contains(Path.GetFileName(file)));
-                foreach (var possibleAlt in possibleAlts)
-                {
-                    skinConfig.alternates[name].Add(Path.GetFileName(possibleAlt));
-                }
-            }
-            // charms 
-            files = Directory.GetFiles(charmsFolder);
-            foreach (var kvp in SkinManager.Skinables)
-            {
-                if (!kvp.Value.name.StartsWith("Charms/"))
-                {
-                    continue;
-                }
-                var baseFileName = kvp.Value.name.Substring("Charms/".Length);
-                var name = baseFileName + ".png";
-                var possibleAlts = Array.FindAll(files, (file) => Path.GetFileName(file).Contains(baseFileName) && !skinConfig.alternates[kvp.Value.name + ".png"].Contains("Charms/" + Path.GetFileName(file)));
-                foreach (var possibleAlt in possibleAlts)
-                {
-                    skinConfig.alternates[kvp.Value.name + ".png"].Add("Charms/" + Path.GetFileName(possibleAlt));
-                }
-            }
-            // inventory
-            files = Directory.GetFiles(inventoryFolder);
-            foreach (var kvp in SkinManager.Skinables)
-            {
-
-                if (!kvp.Value.name.StartsWith("Inventory/"))
-                {
-                    continue;
-                }
-                var baseFileName = kvp.Value.name.Substring("Inventory/".Length);
-                var name = baseFileName + ".png";
-                var possibleAlts = Array.FindAll(files, (file) => Path.GetFileName(file).Contains(baseFileName) && !skinConfig.alternates[kvp.Value.name + ".png"].Contains("Inventory/" + Path.GetFileName(file)));
-                foreach (var possibleAlt in possibleAlts)
-                {
-                    skinConfig.alternates[kvp.Value.name + ".png"].Add("Inventory/" + Path.GetFileName(possibleAlt));
-                }
-            }
-            SaveSettings();
         }
 
     }

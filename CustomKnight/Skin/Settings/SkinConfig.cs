@@ -40,11 +40,13 @@ namespace CustomKnight
         /// <summary>
         /// Should the mod try to auto-detect Alts? should be disabled on authored skins
         /// </summary>
+        [Obsolete("Wont work in CK4.0+")]
         public bool detectAlts = true;
 
         /// <summary>
         /// default filename to List of available alternate filenames
         /// </summary>
+        [Obsolete("Wont work in CK4.0+")]
         public Dictionary<string, List<string>> alternates = new Dictionary<string, List<string>>();
 
         /// <summary>
@@ -52,11 +54,6 @@ namespace CustomKnight
         /// </summary>
         public SkinConfig()
         {
-            foreach (var kvp in SkinManager.Skinables)
-            {
-                var name = kvp.Value.name + ".png";
-                alternates[name] = new List<string> { name };
-            }
         }
     }
 
