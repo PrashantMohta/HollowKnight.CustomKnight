@@ -4,7 +4,7 @@ using System.IO;
 namespace CustomKnight.Next.Skin
 {
     // runtime model
-    class AssetItem(Context context, SkinItem skinItem, string variantId, AssetDefination defination)
+    public class AssetItem(Context context, SkinItem skinItem, string variantId, AssetDefination defination)
     {
         public SkinItem SkinItem { get; private set; } = skinItem;
         public string VariantId { get; set; } = variantId;

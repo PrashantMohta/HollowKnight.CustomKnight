@@ -81,7 +81,7 @@
             {
                 SkinManager.CurrentSkin = SkinManager.GetDefaultSkin();
             }
-            if (SkinManager.CurrentSkin.shouldCache())
+            if (SkinManager.CurrentSkin.ShouldCache())
             {
                 TextureCache.recentSkins.Add(SkinManager.CurrentSkin.GetId());
             }
@@ -99,7 +99,7 @@
                 if (!texture.missing)
                 {
                     texture.tex = SkinManager.CurrentSkin.GetTexture(texture.fileName);
-                    if (SkinManager.CurrentSkin.shouldCache())
+                    if (SkinManager.CurrentSkin.ShouldCache())
                     {
                         TextureCache.setSkinTextureCache(SkinManager.CurrentSkin.GetId(), texture.fileName, new CustomKnightTexture(texture.fileName, texture.missing, texture.defaultTex, texture.tex));
                     }
@@ -110,10 +110,7 @@
                 }
             }
             TextureCache.trimTextureCache();
-            if (!SkinManager.Skinables[Hud.NAME].ckTex.missing && !SkinManager.Skinables[OrbFull.NAME].ckTex.missing)
-            {
-                SaveHud.GenerateSaveHud(SkinManager.Skinables[Hud.NAME].ckTex.currentTexture, SkinManager.Skinables[OrbFull.NAME].ckTex.currentTexture);
-            }
+
             SetSkin(SkinManager.Skinables);
             LoadComplete = true;
         }

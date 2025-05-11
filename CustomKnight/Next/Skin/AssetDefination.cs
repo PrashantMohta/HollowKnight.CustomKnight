@@ -1,6 +1,6 @@
 ﻿namespace CustomKnight.Next.Skin
 {
-    class AssetDefination
+    public class AssetDefination
     {
         public string FileName;
 

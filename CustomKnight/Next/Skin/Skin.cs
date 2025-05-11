@@ -2,7 +2,7 @@
 
 namespace CustomKnight.Next.Skin
 {
-    interface ISkin
+    public interface ISkin
     {
         /// <summary>
         /// List of features supported by the skin

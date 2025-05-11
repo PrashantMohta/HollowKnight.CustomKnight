@@ -6,6 +6,7 @@
             new LowercaseSubpathMigration(),
             new CharmMigration(),
             new GroupMigration(),
+            new GenerateSaveHudMigration(),
             new KnownSwapIntegrationMigration(),
             new MigrateDirectorySwapsToNames(),
             new GenerateManifestMigration(),

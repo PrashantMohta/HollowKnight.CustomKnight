@@ -1,6 +1,6 @@
 ﻿namespace CustomKnight.Next.Skin.Enum
 {
-    enum Feature
+    public enum Feature
     {
         Traditional,
         Charms,

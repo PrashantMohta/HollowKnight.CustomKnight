@@ -1,4 +1,5 @@
 using System.IO;
+using CustomKnight.Next.Skin;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -15,9 +16,9 @@ namespace CustomKnight
         /// </summary>
         public static string DATA_DIR { get; internal set; }
         internal static string SKINS_FOLDER;
-        internal static ISelectableSkin CurrentSkin, DefaultSkin;
-        internal static List<ISelectableSkin> ProvidedSkins = new();
-        internal static List<ISelectableSkin> SkinsList { get; private set; }
+        internal static ISkin CurrentSkin, DefaultSkin;
+        internal static List<ISkin> ProvidedSkins = new();
+        internal static List<ISkin> SkinsList { get; private set; }
         /// <summary>
         /// Dictionary that holds all Skinable items
         /// </summary>
@@ -255,7 +256,7 @@ namespace CustomKnight
         internal static void getSkinNames()
         {
             var dirs = Directory.GetDirectories(SKINS_FOLDER);
-            SkinsList = new List<ISelectableSkin>();
+            SkinsList = new List<ISkin>();
 
             for (int i = 0; i < dirs.Length; i++)
             {
@@ -309,9 +310,9 @@ namespace CustomKnight
         /// <summary>
         ///     Add a skin to the skin list provided by an external mod.
         /// </summary>
-        /// <param name="NewSkin">an <c>ISelectableSkin</c> that represents the skin</param>
+        /// <param name="NewSkin">an <c>ISkin</c> that represents the skin</param>
         /// <returns>true if the skin is added</returns>
-        public static bool AddSkin(ISelectableSkin NewSkin)
+        public static bool AddSkin(ISkin NewSkin)
         {
             var Exists = SkinManager.ProvidedSkins.Exists(skin => skin.GetId() == NewSkin.GetId());
             if (!Exists)
@@ -336,8 +337,8 @@ namespace CustomKnight
         ///     Gets a skin from the overall skin list that matches a given id.
         /// </summary>
         /// <param name="id">a <c>string</c> that uniquely identifies the skin</param>
-        /// <returns>an <c>ISelectableSkin</c> that represents the skin or the default skin</returns>
-        public static ISelectableSkin GetSkinById(string id)
+        /// <returns>an <c>ISkin</c> that represents the skin or the default skin</returns>
+        public static ISkin GetSkinById(string id)
         {
             return SkinManager.SkinsList.Find(skin => skin.GetId() == id) ?? GetDefaultSkin();
         }
@@ -345,8 +346,8 @@ namespace CustomKnight
         /// <summary>
         ///     Gets the default skin.
         /// </summary>
-        /// <returns>an <c>ISelectableSkin</c> that represents the default skin</returns>
-        public static ISelectableSkin GetDefaultSkin()
+        /// <returns>an <c>ISkin</c> that represents the default skin</returns>
+        public static ISkin GetDefaultSkin()
         {
             DefaultSkin ??= GetSkinById(DEFAULT_SKIN);
             return DefaultSkin;
@@ -355,8 +356,8 @@ namespace CustomKnight
         /// <summary>
         ///     Gets the current skin.
         /// </summary>
-        /// <returns>an <c>ISelectableSkin</c> that represents the current skin</returns>
-        public static ISelectableSkin GetCurrentSkin()
+        /// <returns>an <c>ISkin</c> that represents the current skin</returns>
+        public static ISkin GetCurrentSkin()
         {
             CurrentSkin ??= GetSkinById(DEFAULT_SKIN);
             return CurrentSkin;
@@ -365,8 +366,8 @@ namespace CustomKnight
         /// <summary>
         ///     Gets all the installed skins (includes mod provided skins).
         /// </summary>
-        /// <returns>an <c>ISelectableSkin[]</c> that represents all the installed skins</returns>
-        public static ISelectableSkin[] GetInstalledSkins()
+        /// <returns>an <c>ISkin[]</c> that represents all the installed skins</returns>
+        public static ISkin[] GetInstalledSkins()
         {
             return SkinsList.ToArray();
         }

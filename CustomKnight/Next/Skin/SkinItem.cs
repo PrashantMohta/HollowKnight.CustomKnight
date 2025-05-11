@@ -3,7 +3,7 @@ using CustomKnight.Next.Skin.Enum;
 
 namespace CustomKnight.Next.Skin
 {
-    class SkinItem
+    public class SkinItem
     {
         public string Id { get; set; }
         public SkinItemType Type { get; set; }

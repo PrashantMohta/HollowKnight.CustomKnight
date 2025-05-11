@@ -1,6 +1,6 @@
 ﻿namespace CustomKnight.Next.Skin.Enum
 {
-    enum SkinItemType
+    public enum SkinItemType
     {
         Traditional, //use ID to determine :/
         SceneTk2d,

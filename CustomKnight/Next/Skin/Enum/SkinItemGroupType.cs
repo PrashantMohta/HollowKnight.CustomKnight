@@ -1,6 +1,6 @@
 ﻿namespace CustomKnight.Next.Skin.Enum
 {
-    enum SkinItemGroupType
+    public enum SkinItemGroupType
     {
         Traditional,
         Text,
