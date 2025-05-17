@@ -18,11 +18,7 @@ namespace CustomKnight
             var behaviour = finalGo.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
             if (tex != null)
             {
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
-#pragma warning disable CS0618 // Type or member is obsolete
-                block.AddTexture("_MainTex", tex);
-#pragma warning restore CS0618 // Type or member is obsolete
-                behaviour.mpb = block;
+                behaviour.SetDefault(tex);
                 behaviour.enabled = true;
             }
             else

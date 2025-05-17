@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace CustomKnight
 {
     /// <summary>
@@ -5,39 +7,76 @@ namespace CustomKnight
     /// </summary>
     public class SpriteRendererMaterialPropertyBlock : MonoBehaviour
     {
-        /// <summary>
-        /// The MaterialPropertyBlock to set
-        /// </summary>
-        public MaterialPropertyBlock mpb;
 
-        /// <summary>
-        /// The SpriteRenderer to set the block to
-        /// </summary>
-        public SpriteRenderer sr;
+        private MaterialPropertyBlock defaultPropertyBlock;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public void Update()
+        private SpriteRenderer sr;
+
+        private Dictionary<String, MaterialPropertyBlock> mpbs = new Dictionary<String, MaterialPropertyBlock>();
+
+        private bool hasCustomDefault;
+
+        private void UpdateMaterialPropertyBlock()
         {
+            
             if (sr == null)
             {
                 sr = GetComponent<SpriteRenderer>();
             }
-            if (mpb != null)
+            if (defaultPropertyBlock == null)
             {
-                sr.SetPropertyBlock(mpb);
+                defaultPropertyBlock = new MaterialPropertyBlock();
+                sr.GetPropertyBlock(defaultPropertyBlock);
+                hasCustomDefault = false;
+            }
+            if (mpbs != null)
+            {
+
+                if (mpbs.TryGetValue(sr.sprite.name, out var mpb))
+                {
+                    sr.SetPropertyBlock(mpb);
+                }
+                else {
+                    if (!hasCustomDefault) { 
+                        CustomKnight.Instance.Log($"[UpdateMaterialPropertyBlock] Unknown Animated object:{name}:sprite:{sr.sprite.name}");
+                    }
+                    sr.SetPropertyBlock(defaultPropertyBlock);
+                }
             }
         }
 
-        public void LateUpdate()
+        /// <summary>
+        /// Add a texture to this SpriteRenderer's default sprites
+        /// </summary>
+        /// <param name="tex"></param>
+        public void SetDefault(Texture2D tex)
         {
-            if (sr == null)
-            {
-                sr = GetComponent<SpriteRenderer>();
-            }
-            if (mpb != null)
-            {
-                sr.SetPropertyBlock(mpb);
-            }
+            MaterialPropertyBlock block = new MaterialPropertyBlock();
+#pragma warning disable CS0618 // Type or member is obsolete
+            block.AddTexture("_MainTex", tex);
+#pragma warning restore CS0618 // Type or member is obsolete
+            defaultPropertyBlock = block;
+            hasCustomDefault = true;
+        }
+
+        /// <summary>
+        /// Add a texture to this SpriteRenderer's possible sprites
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="tex"></param>
+        public void AddSprite(string name, Texture2D tex)
+        {
+            MaterialPropertyBlock block = new MaterialPropertyBlock();
+#pragma warning disable CS0618 // Type or member is obsolete
+            block.AddTexture("_MainTex", tex);
+#pragma warning restore CS0618 // Type or member is obsolete
+            mpbs[name] = block;
+        }
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public void OnWillRenderObject()
+        {
+            UpdateMaterialPropertyBlock();
         }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 

@@ -277,11 +277,8 @@ namespace CustomKnight
                             this.LogFine($"Animation  : {anim.name}");
                         }
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
-                        MaterialPropertyBlock block = new MaterialPropertyBlock();
-#pragma warning disable CS0618 // Type or member is obsolete
-                        block.AddTexture("_MainTex", tex);
-#pragma warning restore CS0618 // Type or member is obsolete
-                        behaviour.mpb = block;
+                        behaviour.SetDefault(tex);//todo somehow determine the sprite name and set the sprites instead
+                        
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();
                         // destroyed the animation, possibly add satchel customAnimation later

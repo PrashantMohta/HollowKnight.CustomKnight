@@ -146,10 +146,11 @@ namespace CustomKnight
                 {
                     var tex = TextureUtils.duplicateTexture(sr.sprite.texture);
                     var hash = tex.getHash();
-                    //MaterialProcessed[crc] = hash;
+                    MaterialProcessed[crc] = hash;
                     ObjectNameResolver.Add(scene.name, goPath, hash);
                     SaveTextureDump(scene, hash, tex);
                     GameObject.Destroy(tex);
+                    go.AddComponent<DumpAnimationBehavior>();
                 }
                 else
                 {
