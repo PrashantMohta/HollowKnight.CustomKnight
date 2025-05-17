@@ -9,7 +9,7 @@ namespace CustomKnight
     /// </summary>
     public static class SkinManager
     {
-        internal static string DEFAULT_SKIN = "Default";
+        internal static string DEFAULT_SKIN = "default";
         internal static bool savedDefaultTextures = false;
         /// <summary>
         /// Name of the Data directory

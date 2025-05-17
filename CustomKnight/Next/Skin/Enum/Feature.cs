@@ -9,6 +9,7 @@
         Cinematics,
         SaveSelection,
         UserInterface,
-        MainMenu
+        MainMenu,
+        Icon
     }
 }

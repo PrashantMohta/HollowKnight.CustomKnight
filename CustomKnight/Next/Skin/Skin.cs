@@ -32,6 +32,6 @@ namespace CustomKnight.Next.Skin
         /// </summary>
         /// <returns>A <c>ItemGroup</c>> representing all the item groups in the skin</returns>
         public abstract ItemGroup[] GetGroups();
-
+        Texture2D GetIcon();
     }
 }

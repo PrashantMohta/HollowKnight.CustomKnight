@@ -1,4 +1,6 @@
-﻿namespace CustomKnight
+﻿using CustomKnight.Next.Skin;
+
+namespace CustomKnight
 {
     internal class SpriteLoader
     {
@@ -95,18 +97,22 @@
                     texture.missing = cachedTex.missing;
                     continue;
                 }
-                texture.missing = !SkinManager.CurrentSkin.Exists(texture.fileName);
-                if (!texture.missing)
+                var currentSkin = SkinManager.CurrentSkin;
+                if(currentSkin is ISelectableSkin deprecatedSkin)
                 {
-                    texture.tex = SkinManager.CurrentSkin.GetTexture(texture.fileName);
-                    if (SkinManager.CurrentSkin.ShouldCache())
+                    texture.missing = !deprecatedSkin.Exists(texture.fileName);
+                    if (!texture.missing)
                     {
-                        TextureCache.setSkinTextureCache(SkinManager.CurrentSkin.GetId(), texture.fileName, new CustomKnightTexture(texture.fileName, texture.missing, texture.defaultTex, texture.tex));
+                        texture.tex = deprecatedSkin.GetTexture(texture.fileName);
+                        if (currentSkin.ShouldCache())
+                        {
+                            TextureCache.setSkinTextureCache(deprecatedSkin.GetId(), texture.fileName, new CustomKnightTexture(texture.fileName, texture.missing, texture.defaultTex, texture.tex));
+                        }
                     }
-                }
-                else
-                {
-                    texture.tex = null;
+                    else
+                    {
+                        texture.tex = null;
+                    }
                 }
             }
             TextureCache.trimTextureCache();

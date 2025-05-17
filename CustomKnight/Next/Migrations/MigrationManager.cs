@@ -7,6 +7,7 @@
             new CharmMigration(),
             new GroupMigration(),
             new GenerateSaveHudMigration(),
+            new GenerateSkinIconMigration(),
             new KnownSwapIntegrationMigration(),
             new MigrateDirectorySwapsToNames(),
             new GenerateManifestMigration(),

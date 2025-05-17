@@ -150,12 +150,15 @@ namespace CustomKnight
         public Sprite GetSpriteForSkin(ISkin skin)
         {
             if (cache.TryGetValue(skin.GetId(), out var sprite)) { return sprite; }
-            if (skin.Exists(path))
-            {
-                var tex = skin.GetTexture(path);
-                var pivot = new Vector2(0.5f, 0.5f);
-                cache[skin.GetId()] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
-                return cache[skin.GetId()];
+            if (skin is ISelectableSkin deprecatedSkin) {
+
+                if (deprecatedSkin.Exists(path))
+                {
+                    var tex = deprecatedSkin.GetTexture(path);
+                    var pivot = new Vector2(0.5f, 0.5f);
+                    cache[skin.GetId()] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
+                    return cache[skin.GetId()];
+                }
             }
             return null;
         }

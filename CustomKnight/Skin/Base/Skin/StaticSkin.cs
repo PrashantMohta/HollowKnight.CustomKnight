@@ -34,6 +34,11 @@ namespace CustomKnight
         public SkinSettings GetSettings() => skinSettings;
         public ItemGroup[] GetGroups() => [.. items];
 
+        public Texture2D GetIcon()
+        {
+            throw new NotImplementedException();
+        }
+
         // might yeet all of these afterwards
         public bool shouldCache() => ShouldCache();
         public bool hasSwapper() => true;

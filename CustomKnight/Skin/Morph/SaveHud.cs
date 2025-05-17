@@ -78,8 +78,10 @@ namespace CustomKnight
             
             var currZone = !saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString();
             if (AreaBackgrounds.TryGetValue(currZone, out var mapzone))
-            {
+            {/*
+              * todo redo
                 self.background.sprite = mapzone.Exists(skin) ? mapzone.GetSpriteForSkin(skin) : self.background.sprite;
+                */
             }
         }
 
