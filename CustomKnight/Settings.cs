@@ -57,10 +57,6 @@ namespace CustomKnight
         [JsonProperty]
         private Dictionary<int, string> saveSkins = new Dictionary<int, string>() { { 0, SkinManager.DEFAULT_SKIN }, { 1, SkinManager.DEFAULT_SKIN }, { 2, SkinManager.DEFAULT_SKIN }, { 3, SkinManager.DEFAULT_SKIN } };
 
-        /// <summary>
-        /// Option to dump swaps in the old directory style
-        /// </summary>
-        public bool DumpOldSwaps { get; set; } = false;
 
         /// <summary>
         /// Option to enable the new Pause Menu

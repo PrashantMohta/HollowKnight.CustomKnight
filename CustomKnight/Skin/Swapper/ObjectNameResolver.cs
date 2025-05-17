@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using static Satchel.IoUtils;
 
 namespace CustomKnight.Skin.Swapper
@@ -24,6 +25,10 @@ namespace CustomKnight.Skin.Swapper
             {
                 NameDb[sceneName][hash] = new List<string>();
             }
+        }
+        internal static bool Contains(string sceneName, string objectPath)
+        {
+            return GetPathsForScene(sceneName).Contains(objectPath);
         }
         internal static void Add(string sceneName, string objectPath, string hash)
         {
