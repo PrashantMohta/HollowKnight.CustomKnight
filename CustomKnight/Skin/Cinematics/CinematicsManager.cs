@@ -1,5 +1,5 @@
-using CustomKnight.Skin.Cinematics;
 using System.IO;
+using CustomKnight.Skin.Cinematics;
 using UnityEngine.Video;
 using static Satchel.IoUtils;
 /*
@@ -63,12 +63,6 @@ namespace CustomKnight
         }
 
 
-        public static bool HasCinematic(string CinematicName)
-        {
-            var cinematicUrl = GetCinematicUrl(CinematicName);
-            return cinematicUrl.Length > 0;
-        }
-
         private static void XB1CinematicVideoPlayer_ctor(On.XB1CinematicVideoPlayer.orig_ctor orig, XB1CinematicVideoPlayer self, CinematicVideoPlayerConfig config)
         {
             orig(self, config);
@@ -80,35 +74,20 @@ namespace CustomKnight
                     if (cinematicKvp.Value.OriginalVideo != null && (cinematicKvp.Value.OriginalVideo.originalPath == source.clip.originalPath))
                     {
                         cinematicKvp.Value.player = self;
-                        if (SkinManager.GetCurrentSkin().HasCinematic(cinematicKvp.Value.ClipName))
+                        var skin = SkinManager.GetCurrentSkin();
+                        if(skin is ISelectableSkin deprecatedSkin)
                         {
-                            source.clip = null;
-                            source.url = SkinManager.GetCurrentSkin().GetCinematicUrl(cinematicKvp.Value.ClipName);
-                            source.Prepare();
-                        }
-                        else if (HasCinematic(cinematicKvp.Value.ClipName))
-                        {
-                            source.clip = null;
-                            source.url = GetCinematicUrl(cinematicKvp.Value.ClipName);
-                            source.Prepare();
+
+                            if (deprecatedSkin.HasCinematic(cinematicKvp.Value.ClipName))
+                            {
+                                source.clip = null;
+                                source.url = deprecatedSkin.GetCinematicUrl(cinematicKvp.Value.ClipName);
+                                source.Prepare();
+                            }
                         }
                     }
                 }
             }
-        }
-
-
-        public static string GetCinematicUrl(string CinematicName)
-        {
-            EnsureDirectory($"{SkinManager.DATA_DIR}/Cinematics/");
-            string path = "";
-            string file = ($"{SkinManager.DATA_DIR}/Cinematics/{CinematicName}").Replace("\\", "/");
-            if (File.Exists(file + ".webm"))
-            {
-                path = file + ".webm";
-            }
-            CustomKnight.Instance.LogFine("[GetCinematicUrl]" + CinematicName + ":" + path);
-            return path;
         }
 
         private static void CinematicSequence_Update(On.CinematicSequence.orig_Update orig, CinematicSequence self)
@@ -116,23 +95,27 @@ namespace CustomKnight
             var fles = new CinematicSequenceR(self);
             if (GetCiematicSafely(fles.videoReference.VideoFileName, out var cinematic))
             {
-                if (SkinManager.GetCurrentSkin().HasCinematic(cinematic.ClipName) || HasCinematic(cinematic.ClipName))
+                var skin = SkinManager.GetCurrentSkin();
+                if (skin is ISelectableSkin deprecatedSkin)
                 {
-                    if (cinematic.player != null)
+                    if (deprecatedSkin.HasCinematic(cinematic.ClipName))
                     {
-                        VideoPlayer source = ReflectionHelper.GetField<XB1CinematicVideoPlayer, VideoPlayer>(cinematic.player, "videoPlayer"); ;
-                        if ((ulong)source.frame < source.frameCount - 1)
+                        if (cinematic.player != null)
                         {
-                            fles.framesSinceBegan = 0;
+                            VideoPlayer source = ReflectionHelper.GetField<XB1CinematicVideoPlayer, VideoPlayer>(cinematic.player, "videoPlayer"); ;
+                            if ((ulong)source.frame < source.frameCount - 1)
+                            {
+                                fles.framesSinceBegan = 0;
+                            }
+                            else
+                            {
+                                fles.framesSinceBegan = 11;
+                            }
                         }
                         else
                         {
-                            fles.framesSinceBegan = 11;
+                            fles.framesSinceBegan = 0;
                         }
-                    }
-                    else
-                    {
-                        fles.framesSinceBegan = 0;
                     }
                 }
             }

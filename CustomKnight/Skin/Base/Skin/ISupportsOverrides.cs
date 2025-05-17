@@ -4,6 +4,7 @@
     /// <summary>
     /// Interface that must be implemented for your skin to have support for overrides(alternate sheets)
     /// </summary>
+    [Obsolete("Wont work in CK4.0+")]
     public interface ISupportsOverrides
     {
 

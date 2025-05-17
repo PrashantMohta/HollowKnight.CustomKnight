@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using CustomKnight.Next.Skin;
 
 namespace CustomKnight
 {
@@ -81,7 +82,7 @@ namespace CustomKnight
             this.size = new Rect(new Vector2(0, 0), new Vector2(width, height));
             instances.Add(this);
         }
-        public static void PreloadForSkin(ISelectableSkin skin)
+        public static void PreloadForSkin(ISkin skin)
         {
             foreach (var i in instances)
             {
@@ -146,40 +147,24 @@ namespace CustomKnight
             texture = Overlay(texture, overlaytex, x, y);
         }
 
-        public Sprite GetSpriteForSkin(ISelectableSkin skin)
+        public Sprite GetSpriteForSkin(ISkin skin)
         {
             if (cache.TryGetValue(skin.GetId(), out var sprite)) { return sprite; }
-            if (skin.Exists(path))
-            {
-                var tex = skin.GetTexture(path);
-                var pivot = new Vector2(0.5f, 0.5f);
-                cache[skin.GetId()] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
-                return cache[skin.GetId()];
+            if (skin is ISelectableSkin deprecatedSkin) {
+
+                if (deprecatedSkin.Exists(path))
+                {
+                    var tex = deprecatedSkin.GetTexture(path);
+                    var pivot = new Vector2(0.5f, 0.5f);
+                    cache[skin.GetId()] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), pivot);
+                    return cache[skin.GetId()];
+                }
             }
             return null;
         }
 
-        public bool Exists(ISelectableSkin skin)
-        {
-            var result = skin.Exists(path);
-            if (!result)
-            {
-                CustomKnight.Instance.Log($"Missing {path} in skin {skin.GetName()}");
-            }
-            return result;
-        }
 
-        public void Save(ISelectableSkin skin)
-        {
-            var skinDir = Path.Combine(SkinManager.SKINS_FOLDER, skin.GetId());
-            var filepath = Path.Combine(skinDir, path);
-            IoUtils.EnsureDirectory(Path.GetDirectoryName(filepath));
-            if (texture == null && sprite != null)
-            {
-                texture = SpriteUtils.ExtractTextureFromSprite(sprite);
-            }
-            TextureUtils.WriteTextureToFile(texture, filepath);
-        }
+
 
         public void ClearCache()
         {

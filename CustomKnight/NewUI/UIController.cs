@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using CustomKnight.Next.Skin;
+using CustomKnight.Next.Skin.Enum;
 using UnityEngine.UI;
 
 namespace CustomKnight.NewUI
@@ -135,42 +137,17 @@ namespace CustomKnight.NewUI
             UI.SetActive(true);
         }
 
-        public static Texture2D GetSkinIcon(ISelectableSkin skin)
+        public static Texture2D GetSkinIcon(ISkin skin)
         {
-            var orbIcon = "orbicon.png";
-            var orbFull = "OrbFull.png";
-            var knight = "knight.png";
-            if (skin.Exists(orbIcon))
+            var hasIcon = skin.GetFeatures().Contains(Feature.Icon);
+            if (hasIcon)
             {
-                return skin.GetTexture(orbIcon);
+                return skin.GetIcon();
             }
-            Texture2D defaultOrb = Texture2D.blackTexture;
-
-            if (skin.Exists(knight))
-            {
-                var defaultSkin = SkinManager.GetDefaultSkin();
-                if (skin.Exists(orbFull))
-                {
-                    defaultOrb = skin.GetTexture(orbFull);
-                }
-                else if (defaultSkin.Exists(orbFull))
-                {
-                    defaultOrb = defaultSkin.GetTexture(orbFull);
-                }
-                var tex = skin.GetTexture(knight).GetCropped(new Rect(2802f, 4096f - 3155f, 86f, 120f));
-                if (defaultOrb != Texture2D.blackTexture)
-                {
-                    tex = SheetItem.Overlay(defaultOrb, tex, 50, 65);
-                }
-                DefaultSkin.Save(tex, skin.GetId(), orbIcon, false);
-                return tex;
-            }
-
-            //should never happen but still
-            return defaultOrb;
+            return Texture2D.blackTexture;
         }
 
-        public static void ApplySkin(ISelectableSkin skin)
+        public static void ApplySkin(ISkin skin)
         {
             UIManager.instance.TogglePauseGame();
             CustomKnight.GlobalSettings.AddRecentSkin(skin.GetId());

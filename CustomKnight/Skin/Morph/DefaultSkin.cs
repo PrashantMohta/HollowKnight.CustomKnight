@@ -47,6 +47,18 @@ namespace CustomKnight
             isGeneratingDefaultSkin = true;
             CoroutineHelper.GetRunner().StartCoroutine(GenerateSkin());
         }
+
+        public static bool Exists(string fileName)
+        {
+            var filePath = Path.Combine(SkinManager.SKINS_FOLDER, SkinManager.DEFAULT_SKIN, fileName);
+            return File.Exists(filePath);
+        }
+
+        public static Texture2D GetTexture(string fileName)
+        {
+            var filePath = Path.Combine(SkinManager.SKINS_FOLDER, SkinManager.DEFAULT_SKIN, fileName);
+            return TextureUtils.LoadTextureFromFile(filePath);
+        }
         public static void Save(Texture2D texture, string skinName, string path, bool overwrite = false)
         {
             var folderPath = Path.Combine(SkinManager.SKINS_FOLDER, skinName);

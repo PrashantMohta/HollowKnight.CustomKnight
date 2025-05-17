@@ -1,7 +1,8 @@
-using CustomKnight.Skin.Swapper;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CustomKnight.Next.Skin;
+using CustomKnight.Skin.Swapper;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -80,17 +81,17 @@ namespace CustomKnight
         /// Main entry point to change skins
         /// </summary>
         /// <param name="currSkin"></param>
-        internal void SkinChangeSwap(ISelectableSkin currSkin)
+        internal void SkinChangeSwap(ISkin currSkin)
         {
 
             //clear all swap data for Names.json
             ObjectNameResolver.Clear();
             resetAllTextures();
             resetAndLoadGlobalSwaps();
-            if (currSkin.hasSwapper())
+            /*if (currSkin.hasSwapper())
             {
                 Swap(currSkin.getSwapperPath());
-            }
+            }*/
         }
 
         internal void Hook()
@@ -465,7 +466,8 @@ namespace CustomKnight
                 using (FileStream fs = File.Create(Path.Combine(pathToLoad, "replace.txt")))
                 {
                     //create and close the stream
-                };
+                }
+                ;
             }
             using (StreamReader reader = File.OpenText(Path.Combine(pathToLoad, "replace.txt")))
             {

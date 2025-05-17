@@ -1,6 +1,6 @@
+using System.Linq;
 using CustomKnight.NewUI;
 using Satchel.BetterMenus;
-using System.Linq;
 
 namespace CustomKnight
 {

@@ -4,6 +4,7 @@
     /// <summary>
     ///     The Interface that a Class must implement to be treated as a skin.
     /// </summary>
+    [Obsolete("May no longer work as intended in CK4.0+")]
     public interface ISelectableSkin
     {
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using GlobalEnums;
+﻿using CustomKnight.Next.Skin;
+using GlobalEnums;
 using static UnityEngine.UI.SaveSlotButton;
 
 namespace CustomKnight
@@ -52,10 +53,7 @@ namespace CustomKnight
         private static void SaveSlotButton_PresentSaveSlot(On.UnityEngine.UI.SaveSlotButton.orig_PresentSaveSlot orig, UnityEngine.UI.SaveSlotButton self, SaveStats saveStats)
         {
             var skin = SkinManager.GetSkinById(GlobalModSettings.GetSkinForProfileID(GetSlotIndex(self.saveSlot)));
-            if (skin != SkinManager.GetDefaultSkin() && !skin.Exists($"SaveHud/geoIcon.png") && skin.Exists(SkinManager.Skinables[Hud.NAME].ckTex.fileName) && skin.Exists(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName))
-            {
-                GenerateSaveHud(skin, skin.GetTexture(SkinManager.Skinables[Hud.NAME].ckTex.fileName), skin.GetTexture(SkinManager.Skinables[OrbFull.NAME].ckTex.fileName));
-            }
+
             self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = ggSoulOrb.GetSpriteForSkin(skin) ?? self.ggSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
             self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite = hardcoreSoulOrb.GetSpriteForSkin(skin) ?? self.hardcoreSoulOrbCg.gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
             self.soulOrbIcon.sprite = soulOrbIcon.GetSpriteForSkin(skin) ?? self.soulOrbIcon.sprite;
@@ -77,45 +75,16 @@ namespace CustomKnight
                 BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite = brokenSteelOrb.GetSpriteForSkin(skin) ?? BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite;
             }
             orig(self, saveStats);
-            if (skin == SkinManager.GetDefaultSkin() && PendingGeneration) // we dont ever want to generate area backgrounds for other skins (we will bundle for default too)
-            {
-                var overwrite = CustomKnight.GlobalSettings.GenerateDefaultSkin;
-                ExtractDefaultSaveHud(skin, overwrite);
-                GenerateAreaBackgrounds(skin, overwrite);
-                if (DefeatedBackgroundGo != null && (!defeatedBackground.Exists(skin) || overwrite))
-                {
-                    var defaultSprite = DefeatedBackgroundGo.GetComponent<UnityEngine.UI.Image>().sprite;
-                    var tex = GetFromAssemblyOrExtract(defaultSprite, defeatedBackground.path);
-                    defeatedBackground.texture = tex;
-                    defeatedBackground.Save(skin);
-                }
-                if (BrokenSteelOrbGo != null && (!brokenSteelOrb.Exists(skin) || CustomKnight.GlobalSettings.GenerateDefaultSkin))
-                {
-                    var defaultSprite = BrokenSteelOrbGo.GetComponent<UnityEngine.UI.Image>().sprite;
-                    var tex = GetFromAssemblyOrExtract(defaultSprite, brokenSteelOrb.path);
-                    brokenSteelOrb.texture = tex;
-                    brokenSteelOrb.Save(skin);
-                }
-                PendingGeneration = false;
-            }
+            
             var currZone = !saveStats.bossRushMode ? saveStats.mapZone.ToString() : MapZone.GODS_GLORY.ToString();
             if (AreaBackgrounds.TryGetValue(currZone, out var mapzone))
-            {
+            {/*
+              * todo redo
                 self.background.sprite = mapzone.Exists(skin) ? mapzone.GetSpriteForSkin(skin) : self.background.sprite;
+                */
             }
         }
 
-        private static void ExtractDefaultSaveHud(ISelectableSkin skin, bool overwrite = false)
-        {
-            var sheets = new List<SheetItem>() { geoIcon, ggSoulOrb, hardcoreSoulOrb, normalHealth, normalSoulOrb, soulOrbIcon, steelHealth, steelSoulOrb };
-            foreach (var sheet in sheets)
-            {
-                if (sheet.Exists(skin) && !overwrite) continue;
-                var tex = GetFromAssemblyOrExtract(null, sheet.path);
-                sheet.texture = tex;
-                sheet.Save(skin);
-            }
-        }
 
         private static int GetSlotIndex(SaveSlot slot)
         {
@@ -160,99 +129,6 @@ namespace CustomKnight
             return tex;
         }
 
-        public static void GenerateAreaBackgrounds(ISelectableSkin skin, bool overwrite = false)
-        {
-            if (defaultAreaBackgrounds == null)
-            {
-                return;
-            }
-            for (int i = 0; i < defaultAreaBackgrounds.Length; i++)
-            {
-                var areaName = defaultAreaBackgrounds[i].areaName.ToString();
-                if (!AreaBackgrounds[areaName].Exists(skin) || overwrite)
-                {
-
-                    var tex = GetFromAssemblyOrExtract(defaultAreaBackgrounds[i].backgroundImage, AreaBackgrounds[areaName].path);
-                    AreaBackgrounds[areaName].texture = tex;
-                    AreaBackgrounds[areaName].Save(skin);
-                }
-            }
-        }
-        public static void GenerateSaveHud(Texture2D Hudpng, Texture2D OrbFull)
-        {
-            GenerateSaveHud(SkinManager.GetCurrentSkin(), Hudpng, OrbFull);
-        }
-        public static void GenerateSaveHud(ISelectableSkin skin, Texture2D Hudpng, Texture2D OrbFull)
-        {
-            var fHudpng = Hudpng.Flip(true, true);
-            if (!geoIcon.Exists(skin))
-            {
-                geoIcon.useImage(fHudpng, 0f, 553f, 60f, 68f, false, false);
-                geoIcon.rotateTexture(false);
-                geoIcon.CorrectScale(1.1f, 3);
-                geoIcon.Save(skin);
-            }
-            if (!ggSoulOrb.Exists(skin))
-            {
-                ggSoulOrb.useImage(fHudpng, 1507f, 1297f, 167f, 345f, false, false);
-                ggSoulOrb.rotateTexture(false);
-                ggSoulOrb.CorrectScale(2f);
-                ggSoulOrb.texture = ggSoulOrb.texture.GetCropped(new Rect(0, 75, ggSoulOrb.size.width, ggSoulOrb.size.height));
-                ggSoulOrb.Overlay(SheetItem.ScaleTexture(OrbFull, 125, 125), 83, 58);
-                ggSoulOrb.Save(skin);
-            }
-            if (!hardcoreSoulOrb.Exists(skin))
-            {
-                hardcoreSoulOrb.useImage(fHudpng, 0f, 1847f, 501f, 201f, false, false);
-                hardcoreSoulOrb.texture = hardcoreSoulOrb.texture.Flip(false, true);
-                hardcoreSoulOrb.CorrectScale();
-                hardcoreSoulOrb.Overlay(SheetItem.ScaleTexture(OrbFull, 109, 109), 128, 81);
-                hardcoreSoulOrb.Save(skin);
-            }
-            if (!normalHealth.Exists(skin))
-            {
-                normalHealth.useImage(fHudpng, 275f, 813f, 65f, 59f, false, false);
-                normalHealth.rotateTexture(false);
-                normalHealth.CorrectScale();
-                normalHealth.Save(skin);
-            }
-            if (!normalSoulOrb.Exists(skin))
-            {
-                normalSoulOrb.useImage(fHudpng, 75f, 681f, 45f, 48f, false, false);
-                normalSoulOrb.rotateTexture(true);
-                normalSoulOrb.CorrectScale();
-                normalSoulOrb.Save(skin);
-            }
-            if (!soulOrbIcon.Exists(skin))
-            {
-                soulOrbIcon.useImage(fHudpng, 1360f, 1621f, 147f, 246f, false, false);
-                soulOrbIcon.rotateTexture(false);
-                soulOrbIcon.CorrectScale(1.1f, 5);
-                soulOrbIcon.Overlay(SheetItem.ScaleTexture(OrbFull, 82, 82), 52, 42);
-                soulOrbIcon.Save(skin);
-            }
-            if (!steelHealth.Exists(skin))
-            {
-                steelHealth.useImage(fHudpng, 275f, 813f, 65f, 59f, false, false);
-                steelHealth.rotateTexture(false);
-                steelHealth.CorrectScale();
-                steelHealth.Save(skin);
-            }
-            if (!steelSoulOrb.Exists(skin))
-            {
-                steelSoulOrb.useImage(fHudpng, 75f, 681f, 45f, 48f, false, false);
-                steelSoulOrb.rotateTexture(true);
-                steelSoulOrb.CorrectScale();
-                steelSoulOrb.Save(skin);
-            }
-            if (!brokenSteelOrb.Exists(skin))
-            {
-                brokenSteelOrb.useImage(fHudpng, 1025f, 1860f, 480f, 201f, false, false);
-                brokenSteelOrb.texture = brokenSteelOrb.texture.Flip(false, true);
-                brokenSteelOrb.CorrectScale();
-                brokenSteelOrb.Save(skin);
-            }
-        }
 
         internal static void LoadAll()
         {
