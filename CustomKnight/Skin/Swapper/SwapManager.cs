@@ -303,7 +303,7 @@ namespace CustomKnight
                         }
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
                         behaviour.SetDefault(tex);//todo somehow determine the sprite name and set the sprites instead
-                        
+                        behaviour.spriteReplaceMode = SpecialCases.ChildSpriteAnimatedByParent(goPath);
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();
                         // destroyed the animation, possibly add satchel customAnimation later
