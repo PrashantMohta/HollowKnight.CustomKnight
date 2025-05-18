@@ -102,11 +102,15 @@ namespace CustomKnight.Skin.Swapper
         internal static List<string> GetPathsForScene(string scn)
         {
             List<string> paths = new List<string>();
-            foreach (var hash in NameDb[scn])
+            if(NameDb.TryGetValue(scn,out var sceneDb))
             {
-                paths.AddRange(hash.Value);
+                foreach (var hash in sceneDb)
+                {
+                    paths.AddRange(hash.Value);
+                }
+                return paths;
             }
-            return paths;
+            return new List<string>(); 
         }
 
         internal static string GetHashFromPath(string hashPath)

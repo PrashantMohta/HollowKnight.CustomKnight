@@ -22,6 +22,10 @@ namespace CustomKnight.Skin.Swapper
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public void OnWillRenderObject()
         {
+            if (sr == null)
+            {
+                sr = GetComponent<SpriteRenderer>();
+            }
             if (!sprites.ContainsKey(sr.sprite.name)) {
                 CustomKnight.Instance.Log($"[OnWillRenderObject] Animated object:{name}:sprite:{sr.sprite.name}");
                 CustomKnight.dumpManager.detected += 1;
