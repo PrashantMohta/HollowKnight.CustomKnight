@@ -258,8 +258,6 @@ namespace CustomKnight
                     var clone = new FsmObject();
                     clone.Value = sprite;
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Check", 7).sprite = clone;
-                    updateSprite.GetAction<SetSpriteRendererSprite>("Update", 3).sprite = clone;
-
                     CharmIconList.Instance.spriteList[charmNum] = sprite;
                     break; 
                 default:

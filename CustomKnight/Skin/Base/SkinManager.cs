@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.IO;
+using CustomKnight.Skin.Base.SkinableItems;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -191,6 +192,8 @@ namespace CustomKnight
             {BrummShield.NAME,new BrummShield() },
             {FlowerBreak.NAME,new FlowerBreak() },
             {Salubra.NAME,new Salubra() },
+            {FlameUI.FRONT,new FlameUI(FlameUI.FRONT) },
+            {FlameUI.BACK,new FlameUI(FlameUI.BACK) },
            // {"PinsScarab", new Pins()}
         };
         /// <summary>
