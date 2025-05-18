@@ -1,7 +1,9 @@
 using CustomKnight.Skin.Swapper;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -186,6 +188,29 @@ namespace CustomKnight
                     HashWithCache.saveIfUpdated();
                 }
             }
+        }
+        internal Texture2D GetTexture2D(Scene scene, string spriteName)
+        {
+            if(!enabled) return null;
+            var path = Path.Combine("dndy_spr_anim", spriteName+".png");
+            return GetTexture2DDirect(Path.Combine(DATA_DIR, scene.name, path));
+        }
+        private Texture2D GetTexture2DDirect(string texturePath)
+        {
+            if (loadedTextures.TryGetValue(texturePath, out var tex))
+            {
+                return tex;
+            }
+            var texture = new Texture2D(2, 2);
+            if (File.Exists(texturePath))
+            {
+                byte[] buffer = File.ReadAllBytes(texturePath);
+                texture.LoadImage(buffer.ToArray(), true);
+                loadedTextures[texturePath] = texture;
+                return texture;
+            }
+            return null;
+
         }
         private void loadTexture(GameObjectProxy gop)
         {

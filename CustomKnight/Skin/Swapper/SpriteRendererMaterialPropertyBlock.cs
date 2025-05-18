@@ -29,15 +29,23 @@ namespace CustomKnight
                 sr.GetPropertyBlock(defaultPropertyBlock);
                 hasCustomDefault = false;
             }
-            if (mpbs != null)
+            if (mpbs.TryGetValue(sr.sprite.name, out var mpb))
             {
-
-                if (mpbs.TryGetValue(sr.sprite.name, out var mpb))
+                sr.SetPropertyBlock(mpb);
+            }
+            else
+            {
+                var tex = CustomKnight.swapManager.GetTexture2D(gameObject.scene, sr.sprite.name);
+                if (tex != null)
                 {
-                    sr.SetPropertyBlock(mpb);
+                    AddSprite(sr.sprite.name, tex);
+                    sr.SetPropertyBlock(mpbs[sr.sprite.name]);
                 }
-                else {
-                    if (!hasCustomDefault) { 
+                else
+                {
+
+                    if (!hasCustomDefault)
+                    {
                         CustomKnight.Instance.Log($"[UpdateMaterialPropertyBlock] Unknown Animated object:{name}:sprite:{sr.sprite.name}");
                     }
                     sr.SetPropertyBlock(defaultPropertyBlock);
