@@ -1,5 +1,8 @@
+using System.Linq;
 using System.Security.Policy;
+using HutongGames.PlayMaker;
 using Satchel;
+using Satchel.Futils;
 using UnityEngine;
 
 namespace CustomKnight
@@ -21,14 +24,30 @@ namespace CustomKnight
         {
             CustomKnight.Instance.LogDebug($"UnHook {name}");
             On.CharmDisplay.Start -= CharmDisplay_Start;
+            ModHooks.LanguageGetHook -= ModHooks_LanguageGetHook;
         }
+
 
         private void CustomKnight_OnInit(object sender, EventArgs e)
         {
             CustomKnight.Instance.LogDebug($"Hook {name}");
-            On.CharmDisplay.Start += CharmDisplay_Start;
+            On.CharmDisplay.Start += CharmDisplay_Start; 
+            ModHooks.LanguageGetHook += ModHooks_LanguageGetHook;
+
         }
 
+        private string ModHooks_LanguageGetHook(string key, string sheetTitle, string orig)
+        {
+            if (sheetTitle == "UI" && key == "CHARM_NAME_36")
+            {
+                return "Silksong Unlocker";
+            }
+            if (sheetTitle == "UI" && key == "CHARM_DESC_36")
+            {
+                return "Custom Knight Says Hi!";
+            }
+            return orig;
+        }
         private void CharmDisplay_Start(On.CharmDisplay.orig_Start orig, CharmDisplay charmDisplay)
         {
             if (currentSprite != null)
@@ -234,7 +253,15 @@ namespace CustomKnight
                 case "Charm_40_5":
                     CharmIconList.Instance.nymmCharm = sprite;
                     break;
+                case "Charm_0":
+                    charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("36").LocateMyFSM("charm_show_if_collected");
+                    var clone = new FsmObject();
+                    clone.Value = sprite;
+                    charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Check", 7).sprite = clone;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("Update", 3).sprite = clone;
 
+                    CharmIconList.Instance.spriteList[charmNum] = sprite;
+                    break; 
                 default:
                     CharmIconList.Instance.spriteList[charmNum] = sprite;
                     break;
