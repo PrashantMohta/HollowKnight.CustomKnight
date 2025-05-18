@@ -1,13 +1,58 @@
+using System.Security.Policy;
+using Satchel;
+using UnityEngine;
+
 namespace CustomKnight
 {
     internal class Charm : Skinable_Sprite
     {
         public int charmNum;
         public string charmName;
+        private Sprite currentSprite;
         public Charm(string charmName, int charmNum) : base("Charms/" + charmName)
         {
             this.charmName = charmName;
             this.charmNum = charmNum;
+            CustomKnight.OnInit += CustomKnight_OnInit;
+            CustomKnight.OnUnload += CustomKnight_OnUnload;
+        }
+
+        private void CustomKnight_OnUnload(object sender, EventArgs e)
+        {
+            CustomKnight.Instance.LogDebug($"UnHook {name}");
+            On.CharmDisplay.Start -= CharmDisplay_Start;
+        }
+
+        private void CustomKnight_OnInit(object sender, EventArgs e)
+        {
+            CustomKnight.Instance.LogDebug($"Hook {name}");
+            On.CharmDisplay.Start += CharmDisplay_Start;
+        }
+
+        private void CharmDisplay_Start(On.CharmDisplay.orig_Start orig, CharmDisplay charmDisplay)
+        {
+            if (currentSprite != null)
+            {
+                switch (charmName)
+                {
+                    case "Charm_23_Broken":
+                        charmDisplay.brokenGlassHP = currentSprite;
+                        break;
+                    case "Charm_24_Broken":
+                        charmDisplay.brokenGlassGeo = currentSprite;
+                        break;
+                    case "Charm_25_Broken":
+                        charmDisplay.brokenGlassAttack = currentSprite;
+                        break;
+                    case "Charm_36_Full":
+                        charmDisplay.whiteCharm = currentSprite;
+                        break;
+                    case "Charm_36_Black":
+                        charmDisplay.blackCharm = currentSprite;
+                        break;
+                }
+            }
+            orig(charmDisplay);
         }
 
         public override void SaveDefaultTexture()
@@ -101,6 +146,8 @@ namespace CustomKnight
         public override void ApplySprite(Sprite sprite)
         {
             PlayMakerFSM charmShowIfCollected;
+            PlayMakerFSM updateSprite  = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Detail Sprite").LocateMyFSM("Update Sprite");
+            currentSprite = sprite;
             switch (charmName)
             {
                 case "Charm_23_Fragile":
@@ -110,6 +157,7 @@ namespace CustomKnight
                 case "Charm_23_Broken":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("Glass HP", 2).sprite.Value = sprite;
                     break;
 
                 case "Charm_23_Unbreakable":
@@ -122,6 +170,7 @@ namespace CustomKnight
                 case "Charm_24_Broken":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("Glass Geo", 2).sprite.Value = sprite;
                     break;
 
                 case "Charm_24_Unbreakable":
@@ -135,6 +184,7 @@ namespace CustomKnight
                 case "Charm_25_Broken":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("Glass Attack", 2).sprite.Value = sprite;
                     break;
 
                 case "Charm_25_Unbreakable":
@@ -144,21 +194,25 @@ namespace CustomKnight
                 case "Charm_36_Left":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("R Queen", 0).sprite.Value = sprite;
                     break;
 
                 case "Charm_36_Right":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("R King", 0).sprite.Value = sprite;
                     break;
 
                 case "Charm_36_Full":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("R Final", 0).sprite.Value = sprite;
                     break;
 
                 case "Charm_36_Black":
                     charmShowIfCollected = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren(charmNum.ToString()).LocateMyFSM("charm_show_if_collected");
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = sprite;
+                    updateSprite.GetAction<SetSpriteRendererSprite>("R Shade", 0).sprite.Value = sprite;
                     break;
 
                 case "Charm_40_1":
