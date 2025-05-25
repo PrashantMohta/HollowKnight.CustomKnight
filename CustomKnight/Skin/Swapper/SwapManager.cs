@@ -192,7 +192,7 @@ namespace CustomKnight
         internal Texture2D GetTexture2D(Scene scene, string spriteName)
         {
             if(!enabled) return null;
-            var path = Path.Combine("dndy_spr_anim", spriteName+".png");
+            var path = Path.Combine("ck_spr_anim", spriteName+".png");
             return GetTexture2DDirect(Path.Combine(DATA_DIR, scene.name, path));
         }
         private Texture2D GetTexture2DDirect(string texturePath)
