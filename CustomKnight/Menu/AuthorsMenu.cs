@@ -10,13 +10,13 @@ namespace CustomKnight
         internal static Menu PrepareMenu()
         {
             var menu = new Menu("Author Tools", new Element[]{
-            new HorizontalOption(
-                    "Dump Style", "Choose dump style, Names.Json is Recommended, Directory is Faster",
-                    new string[] { "Names.Json", "Directory" },
-                    (setting) => { CustomKnight.GlobalSettings.DumpOldSwaps = setting == 1; },
-                    () => CustomKnight.GlobalSettings.DumpOldSwaps ? 1 : 0,
-                    Id:"SelectDumpOption"),
                new MenuButton("Dump","Dumps the sprites that Swapper supports (Expect lag)",(_)=>ToggleDumping(),Id:"DumpButton"),
+               Blueprints.HorizontalBoolOption(
+                    "Disable directory swap","(restart required)",
+                    (v) => {
+                        CustomKnight.GlobalSettings.DisableDirectorySwaps = v;
+                    },
+                    () => CustomKnight.GlobalSettings.DisableDirectorySwaps),
             });
 
             return menu;

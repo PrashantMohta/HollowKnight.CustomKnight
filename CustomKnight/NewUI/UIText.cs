@@ -9,6 +9,7 @@ namespace CustomKnight.NewUI
         public GameObject parent;
         public GameObject self;
         public Text text;
+        public RectTransform textTransform;
         public UIText(GameObject parent, string name, string value)
         {
             this.name = name;
@@ -22,7 +23,7 @@ namespace CustomKnight.NewUI
             self = new GameObject(name);
             self.transform.SetParent(parent.transform, false);
             self.AddComponent<CanvasRenderer>();
-            RectTransform textTransform = self.AddComponent<RectTransform>();
+            textTransform = self.AddComponent<RectTransform>();
             text = self.AddComponent<Text>();
             text.text = this.value;
             text.fontStyle = FontStyle.Bold;

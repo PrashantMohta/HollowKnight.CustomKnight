@@ -25,15 +25,13 @@ jobs:
           apiPath: HKManaged
           dependencyFilePath: ModDependencies_pinned.txt
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-      - name: Setup ms-build
-        run: sudo apt-get install -y nuget mono-devel mono-xbuild
+        uses: actions/setup-dotnet@v3
       - name: Restore dependencies
         run: dotnet restore
       - name: Build Mod
         run: dotnet build -c Release
       - name: Upload Mod
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: CustomKnightPinned
           path: ./CustomKnight/bin/Release

@@ -57,10 +57,6 @@ namespace CustomKnight
         [JsonProperty]
         private Dictionary<int, string> saveSkins = new Dictionary<int, string>() { { 0, SkinManager.DEFAULT_SKIN }, { 1, SkinManager.DEFAULT_SKIN }, { 2, SkinManager.DEFAULT_SKIN }, { 3, SkinManager.DEFAULT_SKIN } };
 
-        /// <summary>
-        /// Option to dump swaps in the old directory style
-        /// </summary>
-        public bool DumpOldSwaps { get; set; } = false;
 
         /// <summary>
         /// Option to enable the new Pause Menu
@@ -75,7 +71,12 @@ namespace CustomKnight
         /// <summary>
         /// Option to enable swapping particles (only active when swap is enabled)
         /// </summary>
-        public bool EnableParticleSwap { get; set; } = false;
+        public bool EnableParticleSwap { get; set; } = true;
+
+        /// <summary>
+        /// Option to disable loading directory swaps, makes it possible to debug skins incompatible with names.json
+        /// </summary>
+        public bool DisableDirectorySwaps { get; set; } = false;
 
         /// <summary>
         /// Used to indicate to generate default skin on next restart

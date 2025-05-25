@@ -25,6 +25,10 @@ namespace CustomKnight.Skin.Swapper
                 NameDb[sceneName][hash] = new List<string>();
             }
         }
+        internal static bool Contains(string sceneName, string objectPath)
+        {
+            return GetPathsForScene(sceneName).Contains(objectPath);
+        }
         internal static void Add(string sceneName, string objectPath, string hash)
         {
             EnsureNameDb(sceneName, hash);
@@ -97,11 +101,15 @@ namespace CustomKnight.Skin.Swapper
         internal static List<string> GetPathsForScene(string scn)
         {
             List<string> paths = new List<string>();
-            foreach (var hash in NameDb[scn])
+            if (NameDb.TryGetValue(scn, out var sceneDb))
             {
-                paths.AddRange(hash.Value);
+                foreach (var hash in sceneDb)
+                {
+                    paths.AddRange(hash.Value);
+                }
+                return paths;
             }
-            return paths;
+            return new List<string>();
         }
 
         internal static string GetHashFromPath(string hashPath)

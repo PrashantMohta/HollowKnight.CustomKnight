@@ -1,7 +1,7 @@
-using CustomKnight.Canvas;
-using CustomKnight.Skin.Swapper;
 using System.IO;
 using System.Linq;
+using CustomKnight.Canvas;
+using CustomKnight.Skin.Swapper;
 using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
 
@@ -136,37 +136,30 @@ namespace CustomKnight
                 {
                     return; // dont dump sprites from DontDestroyOnLoad
                 }
-                if (!CustomKnight.GlobalSettings.DumpOldSwaps)
-                {   // New style dumps will save sprites with hash mode for names.json
+                // New style dumps will save sprites with hash mode for names.json
+                if (ShouldSkipDumping(scene.name, goPath))
+                {
+                    return;
+                }
+                if (anim != null || SpecialCases.ChildSpriteAnimatedByParent(baseName))
+                {
+                    var tex = TextureUtils.duplicateTexture(sr.sprite.texture);
+                    var hash = tex.getHash();
+                    MaterialProcessed[crc] = hash;
+                    ObjectNameResolver.Add(scene.name, goPath, hash);
+                    SaveTextureDump(scene, hash, tex);
+                    GameObject.Destroy(tex);
+                    go.AddComponent<DumpAnimationBehavior>();
+                }
+                else
+                {
                     var tex = SpriteUtils.ExtractTextureFromSprite(sr.sprite);
                     var hash = tex.getHash();
                     MaterialProcessed[crc] = hash;
                     ObjectNameResolver.Add(scene.name, goPath, hash);
                     SaveTextureDump(scene, hash, tex);
                     GameObject.Destroy(tex);
-                    if (anim != null || SpecialCases.ChildSpriteAnimatedByParent(baseName))
-                    {
-                        ObjectNameResolver.Add(scene.name, goPath, hash);
-                        SaveTextureDump(scene, hash, tex);
-                    }
                 }
-                else
-                {   // old style dump will dump with directory structure
-                    if (anim != null || SpecialCases.ChildSpriteAnimatedByParent(baseName))
-                    {
-                        // remove the animation component
-                        //GameObject.Destroy(anim);
-                        //go.AddComponent<Animator>();
-                        var tex1 = sr.sprite.texture;
-                        if (CustomKnight.GlobalSettings.DumpOldSwaps)
-                        {
-                            SaveTextureDump(scene, baseName, tex1);
-                        }
-                        return;
-                    }
-                    SaveSpriteDump(scene, baseName, sr.sprite);
-                }
-                return;
             }
             if (tk2ds != null)
             {
@@ -177,45 +170,41 @@ namespace CustomKnight
                 {
                     return;
                 }
-                if (!CustomKnight.GlobalSettings.DumpOldSwaps)
+                //New style dumps will save textures with hash mode for names.json
+                if (!isMaterialUnprocessed)
                 {
-                    //New style dumps will save textures with hash mode for names.json
-                    if (!isMaterialUnprocessed)
-                    {
-                        return;
-                    }
-                    var dupe = TextureUtils.duplicateTexture(tex);
-                    var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
-                    MaterialProcessed[crc] = hash;
-                    ObjectNameResolver.Add(scene.name, goPath, hash);
-                    if (scene.name != "DontDestroyOnLoad" || SpecialCases.AllowedDontDestroyOnLoad(goPath))
+                    return;
+                }
+                var dupe = TextureUtils.duplicateTexture(tex);
+                var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
+                MaterialProcessed[crc] = hash;
+                ObjectNameResolver.Add(scene.name, goPath, hash);
+                if (scene.name != "DontDestroyOnLoad" || SpecialCases.AllowedDontDestroyOnLoad(goPath))
+                {
+                    if (!ShouldSkipDumping(scene.name, goPath))
                     {
                         SaveTextureDump(scene, hash, dupe);
                     }
-                    SaveTextureByPath("Global", hash, dupe); // Also dump tk2ds in global
-                    GameObject.Destroy(dupe);
                 }
-                else
-                {
-                    // old style dump will dump with directory structure
-                    if (isMaterialUnprocessed)
-                    {
-                        var dupe = TextureUtils.duplicateTexture(tex);
-                        var hash = HashWithCache.getTk2dSpriteHash(tk2ds);
-                        MaterialProcessed[crc] = hash;
-                        SaveTextureByPath("Global", hash, dupe);
-                        GameObject.Destroy(dupe);
-                    }
-                    if (scene.name != "DontDestroyOnLoad" || SpecialCases.AllowedDontDestroyOnLoad(goPath))
-                    {
-                        SaveTextureDump(scene, baseName, tex);
-                    }
-                }
-
-
-
+                SaveTextureByPath("Global", hash, dupe); // Also dump tk2ds in global
+                GameObject.Destroy(dupe);
                 return;
             }
+        }
+
+        internal bool ShouldSkipDumping(string sceneName, string goPath)
+        {
+            if (ObjectNameResolver.Contains(sceneName, goPath))
+            {
+                var savedHash = ObjectNameResolver.GetHashFromPath($"{sceneName}/{goPath}");
+                string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR, "Dump");
+                if (File.Exists(Path.Combine(DUMP_DIR, $"{sceneName}/{savedHash}.png")))
+                {
+                    Log($"Skipping already present in names.json : {goPath}");
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal void updateDumpProgressText()
@@ -245,6 +234,13 @@ namespace CustomKnight
         {
             done = 0;
             detected = done;
+            string DUMP_DIR = Path.Combine(SkinManager.DATA_DIR, "Dump");
+
+            foreach (string path in Directory.GetDirectories(DUMP_DIR))
+            {
+                string directoryName = new DirectoryInfo(path).Name;
+                ObjectNameResolver.LoadNameDb(Path.Combine(path, "names.json"), directoryName);
+            }
             yield return new WaitForSecondsRealtime(1f);
             do
             {

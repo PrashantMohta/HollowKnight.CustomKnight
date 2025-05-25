@@ -1,7 +1,7 @@
-using CustomKnight.Skin.Swapper;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CustomKnight.Skin.Swapper;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -187,6 +187,29 @@ namespace CustomKnight
                 }
             }
         }
+        internal Texture2D GetTexture2D(Scene scene, string spriteName)
+        {
+            if (!enabled) return null;
+            var path = Path.Combine("ck_spr_anim", spriteName + ".png");
+            return GetTexture2DDirect(Path.Combine(DATA_DIR, scene.name, path));
+        }
+        private Texture2D GetTexture2DDirect(string texturePath)
+        {
+            if (loadedTextures.TryGetValue(texturePath, out var tex))
+            {
+                return tex;
+            }
+            var texture = new Texture2D(2, 2);
+            if (File.Exists(texturePath))
+            {
+                byte[] buffer = File.ReadAllBytes(texturePath);
+                texture.LoadImage(buffer.ToArray(), true);
+                loadedTextures[texturePath] = texture;
+                return texture;
+            }
+            return null;
+
+        }
         private void loadTexture(GameObjectProxy gop)
         {
             this.LogFine(gop.name + gop.getTexturePath() + gop.getAliasPath());
@@ -277,11 +300,8 @@ namespace CustomKnight
                             this.LogFine($"Animation  : {anim.name}");
                         }
                         var behaviour = GO.GetAddComponent<SpriteRendererMaterialPropertyBlock>();
-                        MaterialPropertyBlock block = new MaterialPropertyBlock();
-#pragma warning disable CS0618 // Type or member is obsolete
-                        block.AddTexture("_MainTex", tex);
-#pragma warning restore CS0618 // Type or member is obsolete
-                        behaviour.mpb = block;
+                        behaviour.SetDefault(tex);//todo somehow determine the sprite name and set the sprites instead
+                        behaviour.spriteReplaceMode = SpecialCases.ChildSpriteAnimatedByParent(goPath);
                         //GameObject.Destroy(anim);
                         //go.AddComponent<Animator>();
                         // destroyed the animation, possibly add satchel customAnimation later
@@ -465,7 +485,8 @@ namespace CustomKnight
                 using (FileStream fs = File.Create(Path.Combine(pathToLoad, "replace.txt")))
                 {
                     //create and close the stream
-                };
+                }
+                ;
             }
             using (StreamReader reader = File.OpenText(Path.Combine(pathToLoad, "replace.txt")))
             {
@@ -522,7 +543,15 @@ namespace CustomKnight
                             hasChildren = false,
                             fileType = extension
                         };
-                        objects[objectName] = GOP;
+                        if (!CustomKnight.GlobalSettings.DisableDirectorySwaps)
+                        {
+                            // do not load GOP if directory mode is disabled
+                            objects[objectName] = GOP;
+                        }
+                        else
+                        {
+                            this.Log($"[DisableDirectorySwaps] Skipping loading {directoryName}:{objectName}");
+                        }
                         if (directoryName == "Global")
                         {
                             var hp = HashWithCache.GetPathsFromHash(objectName);
@@ -534,21 +563,30 @@ namespace CustomKnight
                         }
                     }
                 }
-                foreach (string childDirectory in Directory.GetDirectories(path))
+                if (!CustomKnight.GlobalSettings.DisableDirectorySwaps)
                 {
-                    string childDirectoryName = new DirectoryInfo(childDirectory).Name;
-                    LogFine(childDirectoryName);
-                    GameObjectProxy GOP;
-                    if (!objects.TryGetValue(childDirectoryName, out GOP))
+                    // do not load GOP if directory mode is disabled
+                    foreach (string childDirectory in Directory.GetDirectories(path))
                     {
-                        GOP = new GameObjectProxy();
+                        string childDirectoryName = new DirectoryInfo(childDirectory).Name;
+                        LogFine(childDirectoryName);
+                        GameObjectProxy GOP;
+                        if (!objects.TryGetValue(childDirectoryName, out GOP))
+                        {
+                            GOP = new GameObjectProxy();
+                        }
+                        GOP.name = childDirectoryName;
+                        GOP.rootPath = directoryName;
+                        GOP.hasChildren = true;
+                        objects[childDirectoryName] = GOP;
+                        GOP.TraverseGameObjectDirectory(pathToLoad);
                     }
-                    GOP.name = childDirectoryName;
-                    GOP.rootPath = directoryName;
-                    GOP.hasChildren = true;
-                    objects[childDirectoryName] = GOP;
-                    GOP.TraverseGameObjectDirectory(pathToLoad);
                 }
+                else
+                {
+                    this.Log($"[DisableDirectorySwaps] Skipping loading subdirectories in {directoryName}");
+                }
+
                 Scenes[directoryName] = objects;
             }
             foreach (var hp in hashPaths)
@@ -628,7 +666,14 @@ namespace CustomKnight
             ReplaceCache = new Dictionary<string, List<string>>();
             nextCheck = INITAL_NEXT_CHECK;
 
-            LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR, SWAP_FOLDER)); // global strings and skins
+            if (!CustomKnight.GlobalSettings.DisableDirectorySwaps)
+            {
+                LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR, SWAP_FOLDER)); // global strings and skins
+            }
+            else
+            {
+                this.Log("[DisableDirectorySwaps] Skipping Global Directory");
+            }
         }
         internal void Swap(string skinpath)
         {
