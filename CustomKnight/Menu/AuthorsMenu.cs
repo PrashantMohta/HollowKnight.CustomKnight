@@ -11,6 +11,12 @@ namespace CustomKnight
         {
             var menu = new Menu("Author Tools", new Element[]{
                new MenuButton("Dump","Dumps the sprites that Swapper supports (Expect lag)",(_)=>ToggleDumping(),Id:"DumpButton"),
+               Blueprints.HorizontalBoolOption(
+                    "Disable directory swap","(restart required)",
+                    (v) => {
+                        CustomKnight.GlobalSettings.DisableDirectorySwaps = v;
+                    },
+                    () => CustomKnight.GlobalSettings.DisableDirectorySwaps),
             });
 
             return menu;

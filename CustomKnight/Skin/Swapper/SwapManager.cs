@@ -2,6 +2,7 @@ using CustomKnight.Skin.Swapper;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using static Satchel.IoUtils;
@@ -544,7 +545,15 @@ namespace CustomKnight
                             hasChildren = false,
                             fileType = extension
                         };
-                        objects[objectName] = GOP;
+                        if (!CustomKnight.GlobalSettings.DisableDirectorySwaps)
+                        {
+                            // do not load GOP if directory mode is disabled
+                            objects[objectName] = GOP;
+                        }
+                        else
+                        {
+                            this.Log($"[DisableDirectorySwaps] Skipping loading {directoryName}:{objectName}");
+                        }
                         if (directoryName == "Global")
                         {
                             var hp = HashWithCache.GetPathsFromHash(objectName);
@@ -556,21 +565,30 @@ namespace CustomKnight
                         }
                     }
                 }
-                foreach (string childDirectory in Directory.GetDirectories(path))
+                if (!CustomKnight.GlobalSettings.DisableDirectorySwaps)
                 {
-                    string childDirectoryName = new DirectoryInfo(childDirectory).Name;
-                    LogFine(childDirectoryName);
-                    GameObjectProxy GOP;
-                    if (!objects.TryGetValue(childDirectoryName, out GOP))
+                    // do not load GOP if directory mode is disabled
+                    foreach (string childDirectory in Directory.GetDirectories(path))
                     {
-                        GOP = new GameObjectProxy();
+                        string childDirectoryName = new DirectoryInfo(childDirectory).Name;
+                        LogFine(childDirectoryName);
+                        GameObjectProxy GOP;
+                        if (!objects.TryGetValue(childDirectoryName, out GOP))
+                        {
+                            GOP = new GameObjectProxy();
+                        }
+                        GOP.name = childDirectoryName;
+                        GOP.rootPath = directoryName;
+                        GOP.hasChildren = true;
+                        objects[childDirectoryName] = GOP;
+                        GOP.TraverseGameObjectDirectory(pathToLoad);
                     }
-                    GOP.name = childDirectoryName;
-                    GOP.rootPath = directoryName;
-                    GOP.hasChildren = true;
-                    objects[childDirectoryName] = GOP;
-                    GOP.TraverseGameObjectDirectory(pathToLoad);
                 }
+                else
+                {
+                    this.Log($"[DisableDirectorySwaps] Skipping loading subdirectories in {directoryName}");
+                }
+                
                 Scenes[directoryName] = objects;
             }
             foreach (var hp in hashPaths)
@@ -650,7 +668,13 @@ namespace CustomKnight
             ReplaceCache = new Dictionary<string, List<string>>();
             nextCheck = INITAL_NEXT_CHECK;
 
-            LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR, SWAP_FOLDER)); // global strings and skins
+            if(!CustomKnight.GlobalSettings.DisableDirectorySwaps)
+            {
+                LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR, SWAP_FOLDER)); // global strings and skins
+            } else
+            {
+                this.Log("[DisableDirectorySwaps] Skipping Global Directory");
+            }
         }
         internal void Swap(string skinpath)
         {
