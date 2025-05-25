@@ -71,7 +71,7 @@ namespace CustomKnight
         /// <summary>
         /// Option to enable swapping particles (only active when swap is enabled)
         /// </summary>
-        public bool EnableParticleSwap { get; set; } = false;
+        public bool EnableParticleSwap { get; set; } = true;
 
         /// <summary>
         /// Option to disable loading directory swaps, makes it possible to debug skins incompatible with names.json
