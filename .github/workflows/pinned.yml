@@ -33,7 +33,7 @@ jobs:
       - name: Build Mod
         run: dotnet build -c Release
       - name: Upload Mod
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: CustomKnightPinned
           path: ./CustomKnight/bin/Release
