@@ -1,10 +1,7 @@
-using CustomKnight.Skin.Swapper;
-using System;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Text.RegularExpressions;
-using UnityEngine;
+using CustomKnight.Skin.Swapper;
 using static Satchel.IoUtils;
 
 namespace CustomKnight
@@ -192,8 +189,8 @@ namespace CustomKnight
         }
         internal Texture2D GetTexture2D(Scene scene, string spriteName)
         {
-            if(!enabled) return null;
-            var path = Path.Combine("ck_spr_anim", spriteName+".png");
+            if (!enabled) return null;
+            var path = Path.Combine("ck_spr_anim", spriteName + ".png");
             return GetTexture2DDirect(Path.Combine(DATA_DIR, scene.name, path));
         }
         private Texture2D GetTexture2DDirect(string texturePath)
@@ -488,7 +485,8 @@ namespace CustomKnight
                 using (FileStream fs = File.Create(Path.Combine(pathToLoad, "replace.txt")))
                 {
                     //create and close the stream
-                };
+                }
+                ;
             }
             using (StreamReader reader = File.OpenText(Path.Combine(pathToLoad, "replace.txt")))
             {
@@ -588,7 +586,7 @@ namespace CustomKnight
                 {
                     this.Log($"[DisableDirectorySwaps] Skipping loading subdirectories in {directoryName}");
                 }
-                
+
                 Scenes[directoryName] = objects;
             }
             foreach (var hp in hashPaths)
@@ -668,10 +666,11 @@ namespace CustomKnight
             ReplaceCache = new Dictionary<string, List<string>>();
             nextCheck = INITAL_NEXT_CHECK;
 
-            if(!CustomKnight.GlobalSettings.DisableDirectorySwaps)
+            if (!CustomKnight.GlobalSettings.DisableDirectorySwaps)
             {
                 LoadSwapByPath(Path.Combine(SkinManager.DATA_DIR, SWAP_FOLDER)); // global strings and skins
-            } else
+            }
+            else
             {
                 this.Log("[DisableDirectorySwaps] Skipping Global Directory");
             }

@@ -1,8 +1,7 @@
-using CustomKnight.Canvas;
-using CustomKnight.Skin.Swapper;
 using System.IO;
 using System.Linq;
-using UnityEngine.SceneManagement;
+using CustomKnight.Canvas;
+using CustomKnight.Skin.Swapper;
 using static Satchel.GameObjectUtils;
 using static Satchel.IoUtils;
 
@@ -193,7 +192,7 @@ namespace CustomKnight
             }
         }
 
-        internal bool ShouldSkipDumping(string sceneName,string goPath)
+        internal bool ShouldSkipDumping(string sceneName, string goPath)
         {
             if (ObjectNameResolver.Contains(sceneName, goPath))
             {

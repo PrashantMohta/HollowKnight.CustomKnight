@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace CustomKnight
 {
     /// <summary>
@@ -50,7 +48,7 @@ namespace CustomKnight
         }
         private void UpdateMaterialPropertyBlock()
         {
-            
+
             if (sr == null)
             {
                 sr = GetComponent<SpriteRenderer>();
@@ -70,7 +68,7 @@ namespace CustomKnight
                 var tex = CustomKnight.swapManager.GetTexture2D(gameObject.scene, sr.sprite.name);
                 if (tex != null)
                 {
-                   
+
                     AddSprite(sr.sprite.name, tex);
                     sr.SetPropertyBlock(mpbs[sr.sprite.name]);
                 }

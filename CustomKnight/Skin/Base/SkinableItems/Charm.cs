@@ -1,9 +1,4 @@
-using System.Linq;
-using System.Security.Policy;
 using HutongGames.PlayMaker;
-using Satchel;
-using Satchel.Futils;
-using UnityEngine;
 
 namespace CustomKnight
 {
@@ -31,7 +26,7 @@ namespace CustomKnight
         private void CustomKnight_OnInit(object sender, EventArgs e)
         {
             CustomKnight.Instance.LogDebug($"Hook {name}");
-            On.CharmDisplay.Start += CharmDisplay_Start; 
+            On.CharmDisplay.Start += CharmDisplay_Start;
             ModHooks.LanguageGetHook += ModHooks_LanguageGetHook;
 
         }
@@ -165,7 +160,7 @@ namespace CustomKnight
         public override void ApplySprite(Sprite sprite)
         {
             PlayMakerFSM charmShowIfCollected;
-            PlayMakerFSM updateSprite  = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Detail Sprite").LocateMyFSM("Update Sprite");
+            PlayMakerFSM updateSprite = GameCameras.instance.hudCamera.gameObject.FindGameObjectInChildren("Detail Sprite").LocateMyFSM("Update Sprite");
             currentSprite = sprite;
             switch (charmName)
             {
@@ -259,7 +254,7 @@ namespace CustomKnight
                     clone.Value = sprite;
                     charmShowIfCollected.GetAction<SetSpriteRendererSprite>("Check", 7).sprite = clone;
                     CharmIconList.Instance.spriteList[charmNum] = sprite;
-                    break; 
+                    break;
                 default:
                     CharmIconList.Instance.spriteList[charmNum] = sprite;
                     break;

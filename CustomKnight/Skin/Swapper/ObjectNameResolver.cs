@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using static Satchel.IoUtils;
 
 namespace CustomKnight.Skin.Swapper
@@ -102,7 +101,7 @@ namespace CustomKnight.Skin.Swapper
         internal static List<string> GetPathsForScene(string scn)
         {
             List<string> paths = new List<string>();
-            if(NameDb.TryGetValue(scn,out var sceneDb))
+            if (NameDb.TryGetValue(scn, out var sceneDb))
             {
                 foreach (var hash in sceneDb)
                 {
@@ -110,7 +109,7 @@ namespace CustomKnight.Skin.Swapper
                 }
                 return paths;
             }
-            return new List<string>(); 
+            return new List<string>();
         }
 
         internal static string GetHashFromPath(string hashPath)
