@@ -215,6 +215,14 @@ namespace CustomKnight.NewUI
 
             var title = new UIText(content, "Title", "Skin List");
             title.text.fontSize = 25;
+            title.textTransform.sizeDelta = new Vector2(168f, 25f);
+
+            var keybind = CustomKnight.GlobalSettings.Keybinds.OpenSkinList.GetKeyOrMouseBinding().Key;
+            var helpText = new UIText(content, "helpText", $"Press {keybind} to toggle menu");
+            helpText.text.fontSize = 10;
+            helpText.text.alignment = TextAnchor.UpperCenter;
+            helpText.textTransform.sizeDelta = new Vector2(168f, 50f);
+
             var favSkins = new List<string>();
             favSkins.AddRange(CustomKnight.GlobalSettings.FavoriteSkins);
             favSkins.AddRange(CustomKnight.GlobalSettings.RecentSkins);
